@@ -4,13 +4,12 @@ import Jama.Matrix;
 
 public class Similarity extends AffineTransformation {
 
-    private Matrix R;
     private Matrix scale;
     private double scaleValue;
 
     public Similarity(Matrix R, Matrix T, Matrix scale) {
         super(scale.times(R), T);
-        this.R = R;
+        this.A = R;
         this.scale = scale;
     }
 
@@ -34,7 +33,7 @@ public class Similarity extends AffineTransformation {
 //    }
 
     public Matrix getR() {
-        return R;
+        return A;
     }
 
     public Matrix getT() {
@@ -60,7 +59,7 @@ public class Similarity extends AffineTransformation {
 //    }
 
     public void printSummary() {
-        switch(R.getColumnDimension()) {
+        switch(A.getColumnDimension()) {
             case 2: printSummary2D();
                 break;
             case 3: printSummary3D();
@@ -69,18 +68,18 @@ public class Similarity extends AffineTransformation {
     }
 
     private void printSummary2D() {
-        double anglexy = Math.atan2(R.get(1, 0), R.get(0, 0));
+        double anglexy = Math.atan2(A.get(1, 0), A.get(0, 0));
         anglexy = Math.round(Math.toDegrees(anglexy) * 1000.0) / 1000.0;
-        double dxt = Math.round(R.get(3, 0) * 1000.0) / 1000.0;
-        double dyt = Math.round(R.get(3, 1) * 1000.0) / 1000.0;
+        double dxt = Math.round(A.get(3, 0) * 1000.0) / 1000.0;
+        double dyt = Math.round(A.get(3, 1) * 1000.0) / 1000.0;
 //        scale = Math.round(scaleValue * 1000.0) / 1000.0;
         System.out.println("Total computed Translation x " + dxt + " Total Translation y " + dyt + " angle Oz (in degrees) " + anglexy + " Scale " + scaleValue);
     }
 
     private void printSummary3D() {
-        double angleyz = Math.atan2(R.get(2, 1), R.get(2, 2));
-        double anglexz = Math.atan2(-R.get(2, 0), Math.sqrt(R.get(2, 1) * R.get(2, 1) + R.get(2, 2) * R.get(2, 2)));
-        double anglexy = Math.atan2(R.get(1, 0), R.get(0, 0));
+        double angleyz = Math.atan2(A.get(2, 1), A.get(2, 2));
+        double anglexz = Math.atan2(-A.get(2, 0), Math.sqrt(A.get(2, 1) * A.get(2, 1) + A.get(2, 2) * A.get(2, 2)));
+        double anglexy = Math.atan2(A.get(1, 0), A.get(0, 0));
         angleyz = Math.round(Math.toDegrees(angleyz) * 1000.0) / 1000.0;
         anglexz = Math.round(Math.toDegrees(anglexz) * 1000.0) / 1000.0;
         anglexy = Math.round(Math.toDegrees(anglexy) * 1000.0) / 1000.0;

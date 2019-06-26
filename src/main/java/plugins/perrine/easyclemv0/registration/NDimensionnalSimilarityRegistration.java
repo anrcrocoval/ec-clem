@@ -9,12 +9,15 @@ import plugins.perrine.easyclemv0.model.Similarity;
 public class NDimensionnalSimilarityRegistration {
 
     public Similarity apply(Dataset source, Dataset target) {
-        Point sourceBarycentre = source.getBarycentre();
-        Point targetBarycentre = target.getBarycentre();
-        source.substractBarycentre();
-        target.substractBarycentre();
-        double scale = Math.sqrt(target.getMeanNorm() / source.getMeanNorm());
-        Matrix R = getR(source, target);
+        Dataset clonedSourceDataset = source.clone();
+        Dataset clonedTargetDataset = target.clone();
+        Point sourceBarycentre = clonedSourceDataset.getBarycentre();
+        Point targetBarycentre = clonedTargetDataset.getBarycentre();
+        clonedSourceDataset.substractBarycentre();
+        clonedTargetDataset.substractBarycentre();
+
+        double scale = Math.sqrt(clonedTargetDataset.getMeanNorm() / clonedSourceDataset.getMeanNorm());
+        Matrix R = getR(clonedSourceDataset, clonedTargetDataset);
         Matrix T = getT(sourceBarycentre.getmatrix(), targetBarycentre.getmatrix(), R, scale);
         print("R", R);
         print("T", T);
@@ -27,13 +30,13 @@ public class NDimensionnalSimilarityRegistration {
             return Matrix.identity(3, 3);
         }
 
-        Matrix S = source.getMatrix().transpose().times(target.getMatrix());
+        Matrix S = target.getMatrix().transpose().times(source.getMatrix());
         SingularValueDecomposition svd = S.svd();
         return svd.getU().times(svd.getV().transpose());
     }
 
     private Matrix getT(Matrix sourceBarycentre, Matrix targetBarycentre, Matrix R, double scale) {
-        return targetBarycentre.minus(R.times(scale).transpose().times(sourceBarycentre));
+        return targetBarycentre.minus(R.times(scale).times(sourceBarycentre));
     }
 
     private void print(String name, Matrix M) {

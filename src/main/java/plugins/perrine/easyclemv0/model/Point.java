@@ -2,6 +2,8 @@ package plugins.perrine.easyclemv0.model;
 
 import Jama.Matrix;
 
+import java.util.Arrays;
+
 public class Point {
     private Matrix coordinates;
 
@@ -47,5 +49,12 @@ public class Point {
 
     public double getSumOfSquare() {
         return coordinates.transpose().times(coordinates).get(0, 0);
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+            "coordinates=" + Arrays.deepToString(coordinates.getArray()) +
+            '}';
     }
 }

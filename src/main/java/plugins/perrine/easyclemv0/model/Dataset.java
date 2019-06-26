@@ -5,7 +5,7 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class Dataset {
+public class Dataset implements Cloneable {
     private Matrix points;
     private int dimension;
     private int n;
@@ -40,6 +40,11 @@ public class Dataset {
         this.points = new Matrix(points);
     }
 
+    @Override
+    public Dataset clone() {
+        return new Dataset(points.copy());
+    }
+
     public Point getBarycentre() {
         Matrix barycentre = new Matrix(dimension, 1);
         for(int i = 0; i < dimension; i++) {
@@ -53,9 +58,7 @@ public class Dataset {
     }
 
     public void substractBarycentre() {
-        substractRowWise(
-            getBarycentre()
-        );
+        substractRowWise(getBarycentre());
     }
 
     public double getMeanNorm() {
@@ -82,10 +85,18 @@ public class Dataset {
         return result;
     }
 
-    private void substractRowWise(Point point) {
+    public void substractRowWise(Point point) {
         for(int j = 0; j < dimension; j++) {
             for(int i = 0; i < n; i++) {
                 points.set(i, j, points.get(i, j) - point.getmatrix().get(j, 0));
+            }
+        }
+    }
+
+    public void addRowWise(Point point) {
+        for(int j = 0; j < dimension; j++) {
+            for(int i = 0; i < n; i++) {
+                points.set(i, j, points.get(i, j) + point.getmatrix().get(j, 0));
             }
         }
     }

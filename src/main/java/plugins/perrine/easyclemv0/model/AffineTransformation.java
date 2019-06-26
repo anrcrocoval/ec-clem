@@ -22,8 +22,16 @@ public class AffineTransformation {
         return new Point(A.times(point.getmatrix()).plus(T));
     }
 
+    // A then T
     public Dataset apply(Dataset dataset) {
-        Matrix M = (dataset.getHomogeneousMatrix().times(getMatrix()));
+        Matrix M = (getMatrix().times(dataset.getHomogeneousMatrix().transpose())).transpose();
+        return new Dataset(M.getArray());
+    }
+
+    // T then A
+    public Dataset applyReverseOrder(Dataset dataset) {
+        dataset.addRowWise(new Point(T));
+        Matrix M = (dataset.getMatrix().times(A));
         return new Dataset(M.getArray());
     }
 

@@ -11,14 +11,12 @@
  *
  **/
 
-
 package plugins.perrine.easyclemv0.image_transformer;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-
 import Jama.Matrix;
 import icy.gui.frame.progress.ProgressFrame;
 import icy.image.IcyBufferedImage;
@@ -29,10 +27,7 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import icy.type.DataType;
 import plugins.perrine.easyclemv0.factory.DatasetFactory;
-import plugins.perrine.easyclemv0.model.Dataset;
-import plugins.perrine.easyclemv0.model.FiducialSet;
-import plugins.perrine.easyclemv0.model.SequenceSize;
-import plugins.perrine.easyclemv0.model.Similarity;
+import plugins.perrine.easyclemv0.model.*;
 import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
 
@@ -73,35 +68,26 @@ public class ImageTransformer implements ImageTransformerInterface {
     private BufferedImage imageDest;
     private DataType oriType;
 
-//    public ImageTransformer() {
-//        transform = new AffineTransform();
-//    }
-
     public void setSourceSequence(Sequence value) {
         sequence = value;
         oriType = value.getDataType_();
     }
 
     private void setParameters(Matrix transfo) {
-        if (transfo.getRowDimension() == 3) {
-            transform = new AffineTransform(
-                transfo.get(0, 0),
-                transfo.get(1, 0),
-                transfo.get(0, 1),
-                transfo.get(1, 1),
-                transfo.get(0, 2),
-                transfo.get(1, 2)
-            );
+        transfo.print(1,5);
+        if (transfo.getRowDimension() != 3) {
+            throw new RuntimeException("Use this class for 2D transformation only");
         }
+
+        transform = new AffineTransform(
+            transfo.get(0, 0),
+            transfo.get(1, 0),
+            transfo.get(0, 1),
+            transfo.get(1, 1),
+            transfo.get(0, 2),
+            transfo.get(1, 2)
+        );
     }
-
-//    public void setParameters(double dx, double dy, double S, double C, double scale) {
-//        transform = new AffineTransform(scale * C, scale * S, -scale * S, C * scale, dx, dy);
-//    }
-
-//    public void setTargetSize(int width, int height) {
-//        imageDest = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-//    }
 
     public void setTargetSize(Sequence target) {
         imageDest = new BufferedImage(target.getWidth(), target.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -121,7 +107,6 @@ public class ImageTransformer implements ImageTransformerInterface {
         setParameters(similarity.getMatrix());
 
         System.out.println("I will apply transfo now");
-        // add the multi channel case
         int nbt = sequence.getSizeT();
         int nbz = sequence.getSizeZ();
         Sequence newseq = SequenceUtil.getCopy(sequence);
@@ -130,8 +115,6 @@ public class ImageTransformer implements ImageTransformerInterface {
         ProgressFrame progress = new ProgressFrame("Applying the transformation...");
         progress.setLength(nbt*nbz);
         try {
-            // final ArrayList<IcyBufferedImage> images =
-            // sequence.getAllImage();
             for (int t = 0; t < nbt; t++) {
                 for (int z = 0; z < nbz; z++) {
                     IcyBufferedImage image = transformIcyImage(newseq, t, z);
@@ -145,7 +128,8 @@ public class ImageTransformer implements ImageTransformerInterface {
         progress.close();
         System.out.println("have been aplied");
 
-        Dataset sourceTransformedDataset = similarity.apply(datasetFactory.getFrom(sequence));
+        Dataset from = datasetFactory.getFrom(sequence);
+        Dataset sourceTransformedDataset = similarity.apply(from);
         roiUpdater.updateRoi(sourceTransformedDataset, sequence);
     }
 
@@ -161,20 +145,7 @@ public class ImageTransformer implements ImageTransformerInterface {
         );
 
         for (int c = 0; c < nbChannels; c++) {
-            /*
-             * if data are not 8 bit, then we convert each byte in a separate channel for conversion
-             */
             if (imagetobemodified.getImage(c).getDataType_().getBitSize() == 16) {
-				/*final double[] darray = Array1DUtil.arrayToDoubleArray(imagetobemodified.getDataXY(c), imagetobemodified.isSignedDataType());
-				int[] red=new int[darray.length];
-				int[] green=new int[darray.length];
-				int[] blue=new int[darray.length];
-				for (int i=0;i< darray.length;i++){
-					red[i]   = ((int)darray[i] & 0x00ff0000) >> 16;
-				 green[i] = ((int)darray[i]  & 0x0000ff00) >> 8;
-				  blue[i]  =  (int)darray[i]  & 0x000000ff;
-				
-				}*/
 
                 IcyBufferedImage tmp = IcyBufferedImageUtil.convertToType(imagetobemodified.getImage(c), DataType.INT, false);
                 tmp.dataChanged();
@@ -195,10 +166,7 @@ public class ImageTransformer implements ImageTransformerInterface {
                         }
                     }
                 }
-                //image.dataChanged();
-
-            } else{
-                //image = IcyBufferedImageUtil.getARGBImage(imagetobemodified.getImage(c));
+            } else {
                 image=IcyBufferedImageUtil.toBufferedImage(imagetobemodified.getImage(c), BufferedImage.TYPE_INT_ARGB);
             }
 
@@ -208,29 +176,11 @@ public class ImageTransformer implements ImageTransformerInterface {
             g2d.drawImage(image, transform, null);
             g2d.dispose();
 
-            //IcyBufferedImage icyImage = IcyBufferedImage.createFrom(imageDest);
-            // convert with rescale
-            // This was the antibug which is now causing a bug since 1.6.11 icy core update
-            // double boundsDst[] = imagetobemodified.getImage(c)
-            //		.getChannelsGlobalBounds();
-            //;
-            //double boundsSrc[] = icyImage.getChannelsGlobalBounds();
-
-            // icyImage=IcyBufferedImageUtil.convertToType(icyImage, oriType,
-            // false);// rescale for now intensity
-            //Scaler scaler = new Scaler(boundsSrc[0], boundsSrc[1],
-            //		boundsDst[0], boundsDst[1], false);
-            // ICI: se debrouiller pour que l'instensit� reste la meme qu'avant
-            //icyImage = IcyBufferedImageUtil.convertToType(icyImage, oriType,
-            //scaler);
             if (imagetobemodified.getImage(c).getDataType_().getBitSize()==16){
-                //copy data: not optimized for now.
                 if (imagetobemodified.isSignedDataType()){
                     for (int x=0;x<imageDest.getWidth();x++)
                         for (int y=0;y<imageDest.getHeight();y++){
-                            //back to short signed
                             imagetobekept.setData(x, y, c, -(imageDest.getRGB(x, y))-32767);//short max
-
                         }
                 }
                 else{
@@ -245,40 +195,21 @@ public class ImageTransformer implements ImageTransformerInterface {
             }
             else{
                 IcyBufferedImage icyImage = IcyBufferedImage.createFrom(imageDest);
-                if (icyImage.getDataType_()!=oriType)
-                {
-
-                    //double boundsDst[] = oriType.getBounds();
+                if (icyImage.getDataType_()!=oriType) {
                     double boundsDst[] = imagetobemodified.getImage(c).getChannelsGlobalBounds();
                     Scaler scaler= new Scaler(0, 255,boundsDst[0], boundsDst[1], false);
-                    //Scaler arrayScaler[]=new Scaler[1];
-                    //arrayScaler[0]=scaler;
                     final IcyBufferedImage tmp= IcyBufferedImageUtil.convertToType(icyImage, oriType, scaler);
                     tmp.dataChanged();
                     imagetobekept.copyData(tmp, 0, c);
                     imagetobekept.dataChanged();
-                }
-                else{
+                } else {
                     final IcyBufferedImage tmp=IcyBufferedImageUtil.getCopy(icyImage);
                     tmp.dataChanged();
                     imagetobekept.copyData(tmp, 0, c);
                     imagetobekept.dataChanged();
                 }
             }
-
-            // sequence.setImage(0, 0, icyImage);
-            // Object dataArraydest =icyImage.getDataXY(0);
-            // double[] tocopy=Array1DUtil.arrayToDoubleArray(dataArraydest,
-            // seq.isSignedDataType());
-            // Object dataArraysource =imagetobemodified.getDataXY(c);
-            // double[] result=Array1DUtil.arrayToDoubleArray(dataArraysource,
-            // seq.isSignedDataType());
-            // ArrayMath.add(tocopy,0.0,result);
-            // Array1DUtil.doubleArrayToArray(result,
-            // imagetobemodified.getDataXY(c));
         }
-
-        //imagetobekept.dataChanged();
         return imagetobekept;
     }
 }

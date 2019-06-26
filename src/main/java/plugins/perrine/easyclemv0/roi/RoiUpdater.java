@@ -20,11 +20,20 @@ public class RoiUpdater {
         for (ROI roi : listfiducials) {
             i++;
             Point5D position = roi.getPosition5D();
-            position.setX(dataset.getMatrix().get(i, 0));
-            position.setY(dataset.getMatrix().get(i, 1));
-            position.setZ(dataset.getMatrix().get(i, 2));
+
+            for(int j = 0; j < dataset.getDimension(); j++) {
+                if(j == 0) {
+                    position.setX(dataset.getMatrix().get(i, j));
+                }
+                if(j == 1) {
+                    position.setY(dataset.getMatrix().get(i, j));
+                }
+                if(j == 2) {
+                    position.setZ(dataset.getMatrix().get(i, j));
+                }
+            }
             roi.setPosition5D(position);
-            System.out.println(roi.getName() + " " + dataset.getMatrix().get(i, 0) + " " + dataset.getMatrix().get(i, 1) + " " + dataset.getMatrix().get(i, 2));
+//            System.out.println(roi.getName() + " " + dataset.getMatrix().get(i, 0) + " " + dataset.getMatrix().get(i, 1) + " " + dataset.getMatrix().get(i, 2));
         }
     }
 
