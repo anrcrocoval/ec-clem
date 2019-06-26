@@ -8,7 +8,7 @@ public class Point {
     private Matrix coordinates;
 
     public Point(int dimension) {
-        coordinates = new Matrix(dimension, 1);
+        coordinates = new Matrix(dimension, 1, 0);
     }
 
     public Point(Matrix matrix) {

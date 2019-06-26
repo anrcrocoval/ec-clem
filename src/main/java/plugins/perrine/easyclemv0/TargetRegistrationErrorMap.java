@@ -45,10 +45,12 @@ import plugins.kernel.roi.descriptor.measure.ROIMassCenterDescriptorsPlugin;
 //import icy.main.Icy;
 //import icy.math.Scaler;
 import plugins.perrine.easyclemv0.error.TREComputer;
+import plugins.perrine.easyclemv0.factory.SequenceSizeFactory;
 import plugins.perrine.easyclemv0.factory.TREComputerFactory;
 import plugins.perrine.easyclemv0.inertia.InertiaMatrixComputer;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Point;
+import plugins.perrine.easyclemv0.model.SequenceSize;
 import plugins.perrine.easyclemv0.roi.RoiProcessor;
 import plugins.stef.tools.overlay.ColorBarOverlay;
 /** author: Perrine.paul-gilloteaux@curie.fr
@@ -60,6 +62,8 @@ public class TargetRegistrationErrorMap implements Runnable {
     private ProgressFrame myprogressbar;
     private Sequence sequence;
     private IcyBufferedImage image;
+
+    private SequenceSizeFactory sequenceSizeFactory = new SequenceSizeFactory();
 
     private RoiProcessor roiProcessor = new RoiProcessor();
 //    private TREComputerFactory treComputerFactory = new TREComputerFactory();
@@ -140,8 +144,10 @@ public class TargetRegistrationErrorMap implements Runnable {
 
         Map<Future<IcyBufferedImage>, Integer> resultMap = new HashMap<>();
 
+        SequenceSize sequenceSize = sequenceSizeFactory.getFrom(sequence);
+
         for (int z = 0; z < sequence.getSizeZ(); z++) {
-            Point point = new Point(new Matrix(new double[][] {{ 0 }, { 0 }, { z }}));
+            Point point = new Point(sequenceSize.getN());
             resultMap.put(completionService.submit(() -> {
                 float[] dataArray = new float[image.getSizeX() * image.getSizeY()];
 
