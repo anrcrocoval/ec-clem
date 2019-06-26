@@ -74,6 +74,16 @@ public class GuiCLEMButtons2 extends JPanel {
 		showpredictederror.setOverlay(new PredictedErrorInPositionOverlay(workspace));
 	}
 
+	public void disableButtons() {
+		computeErrorMapButton.setEnabled(false);
+		btnNewButton5.setEnabled(false);
+	}
+
+	public void enableButtons() {
+		computeErrorMapButton.setEnabled(true);
+		btnNewButton5.setEnabled(true);
+	}
+
 	protected void removespecificrigidbutton(){
 		Component[] listcomp = this.getComponents();
 		// we keep only the first component

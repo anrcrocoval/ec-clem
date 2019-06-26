@@ -57,6 +57,7 @@ import plugins.perrine.easyclemv0.sequence_listener.RoiAdded;
 
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
+	private Thread currentThread;
 	private RoiProcessor roiProcessor = new RoiProcessor();
 	private Workspace workspace;
 	private WorkspaceTransformer workspaceTransformer;
@@ -218,10 +219,11 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		choiceinputsection.addVisibilityTriggerTo(showgrid, "non rigid (2D or 3D)");
 
 		guiCLEMButtons = new GuiCLEMButtons();
-
+		guiCLEMButtons.disableButtons();
 		addComponent(guiCLEMButtons);
 
 		rigidspecificbutton = new GuiCLEMButtons2();
+		rigidspecificbutton.disableButtons();
 		addComponent(rigidspecificbutton);
 	}
 
@@ -341,14 +343,15 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
 		new AnnounceFrame("Select point on image" + targetSequence.getName() + ", then drag it on source image and RIGHT CLICK", 5);
 
-		while (!workspace.getWorkspaceState().isStopFlag()) {
-			ThreadUtil.sleep(10);
-		}
+		guiCLEMButtons.enableButtons();
+		rigidspecificbutton.enableButtons();
+
+		currentThread = Thread.currentThread();
+		currentThread.suspend();
 
 //		sourceSequence.removeListener(roiChangedListener);
 		targetSequence.removeListener(roiAddedListener);
 		System.out.println("Listeners off now");
-
 		sourceSequence.removeOverlay(myoverlaysource);
 		sourceSequence.removeOverlay(messageSource);
 		targetSequence.removeOverlay(myoverlaytarget);
@@ -383,6 +386,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	@Override
 	public void stopExecution() {
+		guiCLEMButtons.disableButtons();
+		rigidspecificbutton.disableButtons();
+		currentThread.resume();
 		workspace.getWorkspaceState().setStopFlag(true);
 //		try {
 			choiceinputsection.setEnabled(true);

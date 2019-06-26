@@ -48,4 +48,18 @@ public class GuiCLEMButtons extends JPanel {
         undoButton.setWorkspace(workspace);
         showPointsButton.setWorkspace(workspace);
     }
+
+    public void disableButtons() {
+        updateTransformationButton.setEnabled(false);
+        clearLandmarksButton.setEnabled(false);
+        undoButton.setEnabled(false);
+        showPointsButton.setEnabled(false);
+    }
+
+    public void enableButtons() {
+        updateTransformationButton.setEnabled(true);
+        clearLandmarksButton.setEnabled(true);
+        undoButton.setEnabled(true);
+        showPointsButton.setEnabled(true);
+    }
 }
