@@ -19,20 +19,14 @@ public class AffineTransformation {
     }
 
     public Point apply(Point point) {
-        return new Point(A.times(point.getmatrix()).plus(T));
+        return new Point(A.times(point.getMatrix()).plus(T));
     }
 
     // A then T
     public Dataset apply(Dataset dataset) {
         Matrix M = (getMatrix().times(dataset.getHomogeneousMatrix().transpose())).transpose();
-        return new Dataset(M.getArray());
-    }
-
-    // T then A
-    public Dataset applyReverseOrder(Dataset dataset) {
-        dataset.addRowWise(new Point(T));
-        Matrix M = (dataset.getMatrix().times(A));
-        return new Dataset(M.getArray());
+        M = M.getMatrix(0, M.getRowDimension() - 1, 0, M.getColumnDimension() - 2);
+        return new Dataset(M);
     }
 
     public Matrix getMatrix() {

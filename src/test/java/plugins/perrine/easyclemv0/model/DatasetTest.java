@@ -23,9 +23,9 @@ class DatasetTest {
     @Test
     void getBarycentreTest() {
         Point barycentre = subjectUnderTest.getBarycentre();
-        assertEquals(4, barycentre.getmatrix().get(0, 0));
-        assertEquals(5, barycentre.getmatrix().get(1, 0));
-        assertEquals(6, barycentre.getmatrix().get(2, 0));
+        assertEquals(4, barycentre.getMatrix().get(0, 0));
+        assertEquals(5, barycentre.getMatrix().get(1, 0));
+        assertEquals(6, barycentre.getMatrix().get(2, 0));
         assertEquals(3, barycentre.getDimension());
     }
 

@@ -22,4 +22,12 @@ public class Transformation {
     public SequenceSize getTargetSize() {
         return targetSize;
     }
+
+    public Transformation inverse() {
+        return new Transformation(
+            new FiducialSet(fiducialSet.getTargetDataset(), fiducialSet.getSourceDataset()),
+            transformationType,
+            targetSize
+        );
+    }
 }

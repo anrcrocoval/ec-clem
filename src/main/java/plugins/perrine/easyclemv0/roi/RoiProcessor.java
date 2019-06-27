@@ -6,6 +6,7 @@ import plugins.kernel.roi.descriptor.measure.ROIMassCenterDescriptorsPlugin;
 import plugins.kernel.roi.roi3d.ROI3DPoint;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class RoiProcessor {
 
@@ -46,20 +47,21 @@ public class RoiProcessor {
     }
 
     public void sort(ArrayList<ROI> roiList) {
-        int longueur = roiList.size();
-        ROI tampon;
-        boolean permut;
-        do {
-            permut = false;
-            for (int i = 0; i < longueur - 1; i++) {
-                if (roiList.get(i).getName().compareTo(roiList.get(i + 1).getName()) > 0) {
-                    tampon = roiList.get(i);
-                    roiList.set(i, roiList.get(i + 1));
-                    roiList.set(i + 1, tampon);
-                    permut = true;
-                }
-            }
-        } while (permut);
+        roiList.sort(Comparator.comparing(ROI::getName));
+//        int longueur = roiList.size();
+//        ROI tampon;
+//        boolean permut;
+//        do {
+//            permut = false;
+//            for (int i = 0; i < longueur - 1; i++) {
+//                if (roiList.get(i).getName().compareTo(roiList.get(i + 1).getName()) > 0) {
+//                    tampon = roiList.get(i);
+//                    roiList.set(i, roiList.get(i + 1));
+//                    roiList.set(i + 1, tampon);
+//                    permut = true;
+//                }
+//            }
+//        } while (permut);
     }
 
     public void convert(ArrayList<ROI> roiList) {

@@ -39,16 +39,16 @@ public class ErrorInPositionOverlay extends Overlay {
                     double w = 3;
 
                     plotarrow(
-                        sourceDataset.getPoint(index).getmatrix().get(0, 0),
-                        sourceDataset.getPoint(index).getmatrix().get(1, 0),
-                        targetDataset.getPoint(index).getmatrix().get(0, 0),
-                        targetDataset.getPoint(index).getmatrix().get(1, 0),
+                        sourceDataset.getPoint(index).getMatrix().get(0, 0),
+                        sourceDataset.getPoint(index).getMatrix().get(1, 0),
+                        targetDataset.getPoint(index).getMatrix().get(0, 0),
+                        targetDataset.getPoint(index).getMatrix().get(1, 0),
                         l, w, g
                     );
                 } else if(sourceDataset.getDimension() == 3) {
                     g.drawOval(
-                        (int) Math.round(sourceDataset.getPoint(index).getmatrix().get(0, 0) - error),
-                        (int) Math.round(sourceDataset.getPoint(index).getmatrix().get(1, 0) - error),
+                        (int) Math.round(sourceDataset.getPoint(index).getMatrix().get(0, 0) - error),
+                        (int) Math.round(sourceDataset.getPoint(index).getMatrix().get(1, 0) - error),
                         (int) Math.round(error * 2), (int) Math.round(error * 2)
                     );
                 }

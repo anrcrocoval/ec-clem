@@ -15,7 +15,6 @@ import static plugins.perrine.easyclemv0.storage.xml.XmlTransformation.transform
 
 public class XmlTransformationElementListReader {
 
-    private SequenceSizeXmlReader sequenceSizeXmlReader = new SequenceSizeXmlReader();
     private XmlTransformationReader xmlTransformationReader = new XmlTransformationReader();
 
     public Element getLastTransformationElement(Document document) {
@@ -28,9 +27,8 @@ public class XmlTransformationElementListReader {
         List<Transformation> transformationList = new ArrayList<>();
         List<Element> elementList = read(document);
         sortTransformationElementsByDate(elementList);
-        SequenceSize sequenceSize = sequenceSizeXmlReader.readSize(document);
         for(Element element : elementList) {
-            transformationList.add(xmlTransformationReader.read(element, sequenceSize));
+            transformationList.add(xmlTransformationReader.read(element));
         }
         return transformationList;
     }

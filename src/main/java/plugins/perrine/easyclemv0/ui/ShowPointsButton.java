@@ -27,8 +27,6 @@ public class ShowPointsButton extends JButton {
     private XmlFileReader xmlFileReader = new XmlFileReader();
     private XmlTransformationReader xmlTransformationReader = new XmlTransformationReader();
     private RoiUpdater roiUpdater = new RoiUpdater();
-    private SequenceSizeXmlReader sequenceSizeXmlReader = new SequenceSizeXmlReader();
-    private SequenceSizeXmlWriter sequenceSizeXmlWriter;
     private TransformationDatasetTransformer transformationDatasetTransformer = new TransformationDatasetTransformer();
 
     public ShowPointsButton() {
@@ -73,7 +71,7 @@ public class ShowPointsButton extends JButton {
             Document document = xmlFileReader.loadFile(workspace.getXMLFile());
             ArrayList<Element> transformationElements = XMLUtil.getElements(document.getDocumentElement(), transformationElementName);
             for(Element element : transformationElements) {
-                Transformation transformation = xmlTransformationReader.read(element, sequenceSizeXmlReader.readSize(document));
+                Transformation transformation = xmlTransformationReader.read(element);
                 sourceDataset = transformationDatasetTransformer.apply(transformation, sourceDataset);
                 roiUpdater.updateRoi(sourceDataset, workspace.getSourceSequence());
             }
@@ -95,8 +93,8 @@ public class ShowPointsButton extends JButton {
                 e.printStackTrace();
             }
 
-            sequenceSizeXmlWriter = new SequenceSizeXmlWriter(xmlFileReader.loadFile(workspace.getXMLFile()));
-            sequenceSizeXmlWriter.writeSizeOf(workspace.getTargetSequence());
+//            sequenceSizeXmlWriter = new SequenceSizeXmlWriter(xmlFileReader.loadFile(workspace.getXMLFile()));
+//            sequenceSizeXmlWriter.writeSizeOf(workspace.getTargetSequence());
 
             saveRois(workspace.getSourceSequence());
             saveRois(workspace.getTargetSequence());

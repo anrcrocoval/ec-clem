@@ -21,7 +21,7 @@ public class TREComputerFactory {
     }
 
     public TREComputer getFrom(Dataset sourceDataset, Dataset targetDataset) {
-        Matrix barycentre = sourceDataset.getBarycentre().getmatrix();
+        Matrix barycentre = sourceDataset.getBarycentre().getMatrix();
         Matrix eigenVectors = inertiaMatrixComputer.getInertiaMatrix(sourceDataset).eig().getV();
         double[] f = getF(sourceDataset, eigenVectors);
         return new TREComputer(
@@ -39,7 +39,7 @@ public class TREComputerFactory {
     }
 
     public TREComputer getFrom(Dataset dataset, double expectedSquareFLE) {
-        Matrix barycentre = dataset.getBarycentre().getmatrix();
+        Matrix barycentre = dataset.getBarycentre().getMatrix();
         Matrix eigenVectors = inertiaMatrixComputer.getInertiaMatrix(dataset).eig().getV();
         double[] f = getF(dataset, eigenVectors);
         return new TREComputer(
@@ -62,7 +62,7 @@ public class TREComputerFactory {
                         eigenVectors.getMatrix(
                             0, eigenVectors.getRowDimension() - 1, j, j
                         ),
-                        dataset.getBarycentre().getmatrix()
+                        dataset.getBarycentre().getMatrix()
                     )
                 );
             }

@@ -29,7 +29,7 @@ public class Dataset implements Cloneable {
         this.points = new Matrix(n, dimension);
         for(int i = 0; i < n; i++) {
             for(int j = 0; j < dimension; j++) {
-                this.points.set(i, j, points.get(i).getmatrix().get(j, 0));
+                this.points.set(i, j, points.get(i).getMatrix().get(j, 0));
             }
         }
     }
@@ -88,7 +88,7 @@ public class Dataset implements Cloneable {
     public void substractRowWise(Point point) {
         for(int j = 0; j < dimension; j++) {
             for(int i = 0; i < n; i++) {
-                points.set(i, j, points.get(i, j) - point.getmatrix().get(j, 0));
+                points.set(i, j, points.get(i, j) - point.getMatrix().get(j, 0));
             }
         }
     }
@@ -96,7 +96,7 @@ public class Dataset implements Cloneable {
     public void addRowWise(Point point) {
         for(int j = 0; j < dimension; j++) {
             for(int i = 0; i < n; i++) {
-                points.set(i, j, points.get(i, j) + point.getmatrix().get(j, 0));
+                points.set(i, j, points.get(i, j) + point.getMatrix().get(j, 0));
             }
         }
     }
@@ -133,7 +133,7 @@ public class Dataset implements Cloneable {
     public Dataset addPoint(Point point) {
         Matrix M = new Matrix(n + 1, dimension);
         M.setMatrix(0, n - 1, 0, dimension - 1, points);
-        M.setMatrix(n, n, 0, point.getDimension() - 1, point.getmatrix().transpose());
+        M.setMatrix(n, n, 0, point.getDimension() - 1, point.getMatrix().transpose());
         points = M;
         n = points.getRowDimension();
         return this;

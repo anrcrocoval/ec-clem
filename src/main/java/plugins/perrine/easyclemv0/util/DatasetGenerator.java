@@ -25,7 +25,7 @@ public class DatasetGenerator {
         for (int i = 0; i < n; i++) {
             Point point = new Point(result.getDimension());
             for(int d = 0; d < point.getDimension(); d++) {
-                point.getmatrix().set(d, 0, center.getmatrix().get(d, 0) + (random.nextGaussian() * radius));
+                point.getMatrix().set(d, 0, center.getMatrix().get(d, 0) + (random.nextGaussian() * radius));
             }
             result.addPoint(point);
         }

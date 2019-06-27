@@ -1,20 +1,20 @@
 /**
  * Copyright 2010-2017 Perrine Paul-Gilloteaux, CNRS.
  * Perrine.Paul-Gilloteaux@univ-nantes.fr
- * 
+ *
  * This file is part of EC-CLEM.
- * 
+ *
  * you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  **/
 
 
 /**
  * AUthor: Perrine.Paul-Gilloteaux@curie.fr
- * Main Class can be used alone or call from another plugin: 
+ * Main Class can be used alone or call from another plugin:
  * will apply the transform content in an xml file as in easyclem
  */
 
@@ -55,7 +55,7 @@ import plugins.adufour.ezplug.EzLabel;
 import static plugins.perrine.easyclemv0.storage.xml.XmlTransformation.transformationElementName;
 
 public class ApplyTransformation extends EzPlug implements Block {
-	
+
 	private EzVarSequence source = new EzVarSequence("Select Source Image (will be transformed from xml file)");
 	private EzVarFile xmlFile=new EzVarFile("Xml file containing list of transformation", ApplicationPreferences.getPreferences().node("frame/imageLoader").get("path", "."));;
 	private int extentx;
@@ -73,11 +73,10 @@ public class ApplyTransformation extends EzPlug implements Block {
 	private int auto;
 
 	private XmlFileReader xmlFileReader = new XmlFileReader();
-	private SequenceSizeXmlReader sequenceSizeXmlReader = new SequenceSizeXmlReader();
 	private XmlTransformationReader xmlTransformationReader = new XmlTransformationReader();
 	private WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer();
 
-	
+
 	@Override
 	protected void initialize() {
 		EzLabel textinfo = new EzLabel("Please select the image on which you want to apply a transformation, and the xml file containing the transformations (likely your file name _transfo.xml)");
@@ -86,7 +85,7 @@ public class ApplyTransformation extends EzPlug implements Block {
 			xmlFile=new EzVarFile(varName, source.getValue().getFilename());
 		else
 			xmlFile=new EzVarFile(varName, ApplicationPreferences.getPreferences().node("frame/imageLoader").get("path", "."));
-		
+
 		addEzComponent(textinfo);
 		addEzComponent(source);
 		addEzComponent(xmlFile);
@@ -108,8 +107,8 @@ public class ApplyTransformation extends EzPlug implements Block {
 				Document document = xmlFileReader.loadFile(xmlFile.getValue());
 				ArrayList<Element> transformationElements = XMLUtil.getElements(document.getDocumentElement(), transformationElementName);
 				for(Element element : transformationElements) {
-					Transformation transformation = xmlTransformationReader.read(element, sequenceSizeXmlReader.readSize(document));
-					workspaceTransformer.apply(sourceseq, transformation);
+					Transformation transformation = xmlTransformationReader.read(element);
+					//workspaceTransformer.apply(sourceseq, transformation);
 				}
 
 				if (!isHeadLess()) {
