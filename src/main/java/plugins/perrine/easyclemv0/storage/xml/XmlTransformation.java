@@ -13,4 +13,10 @@ public class XmlTransformation {
     public static String pointIdAttributeName = "id";
     public static String coordinateElementName = "coordinate";
     public static String coordinateDimensionAttributeName = "dimension";
+
+    public static String imageSizeElementName = "TargetSize";
+    public static String dimensionSizeElementName = "dimensionSize";
+    public static String dimensionpixelSizeAttributeName = "pixelSize";
+    public static String imageDimensionAttributeName = "dimension";
+    public static String imageDimensionNameAttributeName = "name";
 }

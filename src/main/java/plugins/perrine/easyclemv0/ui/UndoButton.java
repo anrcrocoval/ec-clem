@@ -26,7 +26,6 @@ public class UndoButton extends JButton {
     private DatasetTransformer datasetTransformer = new DatasetTransformer();
     private RoiUpdater roiUpdater = new RoiUpdater();
     private ImageTransformerFactory imageTransformerFactory = new ImageTransformerFactory();
-    private SequenceSizeXmlReader sequenceSizeXmlReader = new SequenceSizeXmlReader();
     private TransformationDatasetTransformer transformationDatasetTransformer = new TransformationDatasetTransformer();
     private XmlTransformationElementListReader xmlTransformationElementListReader = new XmlTransformationElementListReader();
     private XmlTransformationElementListWriter xmlTransformationElementListWriter = new XmlTransformationElementListWriter();

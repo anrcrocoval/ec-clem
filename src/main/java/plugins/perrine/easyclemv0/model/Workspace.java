@@ -11,6 +11,7 @@ public class Workspace {
     private Sequence sourceSequence;
     private Sequence targetSequence;
     private Sequence sourceBackup;
+    private Transformation transformation;
     private File XMLFile;
     private WorkspaceState workspaceState;
     private TransformationConfiguration transformationConfiguration;
@@ -77,5 +78,13 @@ public class Workspace {
 
     public void setTransformationConfiguration(TransformationConfiguration transformationConfiguration) {
         this.transformationConfiguration = transformationConfiguration;
+    }
+
+    public Transformation getTransformation() {
+        return transformation;
+    }
+
+    public void setTransformation(Transformation transformation) {
+        this.transformation = transformation;
     }
 }

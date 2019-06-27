@@ -39,7 +39,7 @@ public class InertiaMatrixComputer {
         Point point = new Point(dataset.getDimension());
         for (int i = 0; i < dataset.getN(); i++) {
             for (int j = 0; j < dataset.getDimension(); j++) {
-                point.getmatrix().set(j, 0, dataset.getMatrix().get(i, j));
+                point.getMatrix().set(j, 0, dataset.getMatrix().get(i, j));
             }
             result += point.getSquareDistance(u, new Matrix(dataset.getDimension(), 1, 0));
         }

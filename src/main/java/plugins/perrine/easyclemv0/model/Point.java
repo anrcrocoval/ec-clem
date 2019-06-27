@@ -26,12 +26,16 @@ public class Point {
         return coordinates.getRowDimension();
     }
 
-    public Matrix getmatrix() {
+    public double get(int i) {
+        return coordinates.get(i, 0);
+    }
+
+    public Matrix getMatrix() {
         return coordinates;
     }
 
     public double getDistance(Point point) {
-        return coordinates.minus(point.getmatrix()).norm2();
+        return coordinates.minus(point.getMatrix()).norm2();
     }
 
     public double getSquareDistance(Matrix axis, Matrix pointOnTheAxis) {
@@ -44,7 +48,7 @@ public class Point {
     }
 
     public Point minus(Point point) {
-        return new Point(coordinates.minus(point.getmatrix()));
+        return new Point(coordinates.minus(point.getMatrix()));
     }
 
     public double getSumOfSquare() {

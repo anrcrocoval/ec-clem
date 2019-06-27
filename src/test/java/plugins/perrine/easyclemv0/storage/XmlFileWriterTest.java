@@ -1,5 +1,6 @@
 package plugins.perrine.easyclemv0.storage;
 
+import icy.sequence.DimensionId;
 import icy.util.XMLUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,7 @@ class XmlFileWriterTest {
     void writeAndRead() {
         Dataset sourceDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }});
         Dataset targetDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }});
+        sequenceSize.add(new DimensionSize(DimensionId.X, 10, 1));
         Transformation transformation = new Transformation(
             new FiducialSet(sourceDataset, targetDataset),
             TransformationType.RIGID,
@@ -60,8 +62,7 @@ class XmlFileWriterTest {
     private Transformation read() {
         Document document = xmlFileReader.loadFile(file);
         return xmlReader.read(
-            XMLUtil.getElement(document.getDocumentElement(), transformationElementName),
-            sequenceSize
+            XMLUtil.getElement(document.getDocumentElement(), transformationElementName)
         );
     }
 }

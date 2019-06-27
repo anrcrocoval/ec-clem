@@ -60,8 +60,8 @@ public class MonitorTargetOverlay extends Overlay {
     @Override
     public void paint(Graphics2D g, Sequence sequence, IcyCanvas canvas) {
         if ((canvas instanceof IcyCanvas2D) && (g != null)) {
-            int xm = (int) monitoringConfiguration.getMonitoringPoint().getmatrix().get(0, 0);
-            int ym = (int) monitoringConfiguration.getMonitoringPoint().getmatrix().get(1, 0);
+            int xm = (int) monitoringConfiguration.getMonitoringPoint().getMatrix().get(0, 0);
+            int ym = (int) monitoringConfiguration.getMonitoringPoint().getMatrix().get(1, 0);
             g.setColor(Color.GREEN);
             g.setStroke(new BasicStroke(3));
             int diameter=Math.round(sequence.getWidth()/25);

@@ -2,6 +2,9 @@ package plugins.perrine.easyclemv0.storage.xml;
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.io.File;
 
 public class XmlFileWriter {
@@ -16,6 +19,10 @@ public class XmlFileWriter {
 
     public void write() {
         XMLUtil.saveDocument(document, file);
+    }
+
+    public void clear() {
+
     }
 
     public Document getDocument() {

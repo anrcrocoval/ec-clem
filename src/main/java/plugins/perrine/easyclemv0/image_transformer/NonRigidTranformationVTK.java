@@ -475,7 +475,7 @@ public class NonRigidTranformationVTK implements ImageTransformerInterface {
         vtkPoints points = new vtkPoints();
         points.SetNumberOfPoints(dataset.getN());
         for (int i = 0; i < dataset.getN(); i++) {
-            points.SetPoint(i,dataset.getPoint(i).getmatrix().transpose().getArray()[0]);
+            points.SetPoint(i,dataset.getPoint(i).getMatrix().transpose().getArray()[0]);
         }
         return points;
     }

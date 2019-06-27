@@ -102,7 +102,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private EzVarSequence source = new EzVarSequence("Select image that will be transformed and resized (likely FM)");
 	private EzGroup grp = new EzGroup("Images to process", source, target);
 	private Sequence backupsource;
-	private boolean mode3D = false;
 
 	public static Color[] Colortab = new Color[] {
 		Color.RED,
@@ -186,11 +185,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see plugins.adufour.ezplug.EzPlug#initialize()
-	 */
 	@Override
 	protected void initialize() {
 		new ToolTipFrame("<html>" + "<br> Press Play when ready. " + "<br> <li> Add point (2D or 3D ROI) on target image only.</li> "
@@ -227,15 +221,11 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		addComponent(rigidspecificbutton);
 	}
 
-	/**
-	 * happening when pressing the play button: read the settings and launch the
-	 * interactive mode of placing the points TODO: add the installation of the
-	 * EDF easy plugin when needed
-	 * 
-	 */
 	@Override
 	protected void execute() {
 		boolean pause = false;
+		source.setEnabled(false);
+		target.setEnabled(false);
 		Sequence sourceSequence = source.getValue();
 		Sequence targetSequence = target.getValue();
 
@@ -254,47 +244,31 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		choiceinputsection.setEnabled(false);
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_2D)) {
-//			mode3D = false;
 			nonrigid = false;
 			pause = false;
 		}
 
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_2D_UPDATE)) {
-//			mode3D = false;
 			nonrigid = false;
 			pause = true;
 		}
 
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_3D)) {
-//			mode3D = true;
 			nonrigid = false;
 			pause = false;
 		}
 
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_3D_UPDATE)) {
-//			mode3D = true;
 			nonrigid = false;
 			pause = true;
 		}
 
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_NON_RIGID)) {
-//			mode3D = false;
 			nonrigid = true;
 			pause = true;
 			checkgrid = showgrid.getValue();
 			rigidspecificbutton.removespecificrigidbutton();
 		}
-
-//		if (mode3D) {
-//			new AnnounceFrame("Computation will be done in 3D, it can lead to instability in case of planar transformation", 5);
-//			convertTo8Bit(sourceSequence);
-//			convertTo8Bit(targetSequence);
-//			new AnnounceFrame("Warning:" + sourceSequence.getName() + "and " + targetSequence.getName() + " have been converted to 8 bytes (to save memory in 3D)", 5);
-//
-//			if (sourceSequence.getSizeZ() == 1) {
-//				sourceSequence.setPixelSizeZ(targetSequence.getPixelSizeZ());
-//			}
-//		}
 
 		backupsource = SequenceUtil.getCopy(sourceSequence);
 		sourceSequence.setName(sourceSequence.getName() + " (transformed)");
@@ -347,7 +321,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		currentThread = Thread.currentThread();
 		currentThread.suspend();
 
-
 //		sourceSequence.removeListener(roiChangedListener);
 		targetSequence.removeListener(roiAddedListener);
 		System.out.println("Listeners off now");
@@ -387,6 +360,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	public void stopExecution() {
 		guiCLEMButtons.disableButtons();
 		rigidspecificbutton.disableButtons();
+		source.setEnabled(true);
+		target.setEnabled(true);
 		currentThread.resume();
 		workspace.getWorkspaceState().setStopFlag(true);
 //		try {

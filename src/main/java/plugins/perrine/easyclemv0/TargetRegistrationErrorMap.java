@@ -153,8 +153,8 @@ public class TargetRegistrationErrorMap implements Runnable {
 
                 for (int x = 0; x < image.getSizeX(); x++) {
                     for (int y = 0; y < image.getSizeY(); y++) {
-                        point.getmatrix().set(0, 0, x);
-                        point.getmatrix().set(1, 0, y);
+                        point.getMatrix().set(0, 0, x);
+                        point.getMatrix().set(1, 0, y);
                         dataArray[image.getOffset(x, y)] = (float) treComputer.getExpectedSquareTRE(point);
                     }
                 }
