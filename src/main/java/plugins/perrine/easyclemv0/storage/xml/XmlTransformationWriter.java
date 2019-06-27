@@ -6,8 +6,6 @@ import org.w3c.dom.Element;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.Transformation;
-
-import java.time.DateTimeException;
 import java.time.ZonedDateTime;
 
 import static plugins.perrine.easyclemv0.storage.xml.XmlTransformation.*;
@@ -24,13 +22,14 @@ public class XmlTransformationWriter {
         Element transformationElement = XMLUtil.addElement(document.getDocumentElement(), transformationElementName);
         transformationElement.setAttribute(transformationTypeAttributeName, transformation.getTransformationType().name());
         transformationElement.setAttribute(transformationDateAttributeName, ZonedDateTime.now().toString());
-        Element sourceDatasetElement = XMLUtil.addElement(transformationElement, datasetElementName);
-        sourceDatasetElement.setAttribute(datasetTypeAttributeName, "source");
-        write(transformation.getFiducialSet().getSourceDataset(), sourceDatasetElement);
+        write(transformation.getFiducialSet().getSourceDataset(), "source", transformationElement);
+        write(transformation.getFiducialSet().getTargetDataset(), "target", transformationElement);
+    }
 
-        Element targetDatasetElement = XMLUtil.addElement(transformationElement, datasetElementName);
-        sourceDatasetElement.setAttribute(datasetTypeAttributeName, "target");
-        write(transformation.getFiducialSet().getTargetDataset(), targetDatasetElement);
+    private void write(Dataset dataset, String type, Element transformationElement) {
+        Element sourceDatasetElement = XMLUtil.addElement(transformationElement, datasetElementName);
+        sourceDatasetElement.setAttribute(datasetTypeAttributeName, type);
+        write(dataset, sourceDatasetElement);
     }
 
     private void write(Dataset dataset, Element datasetElement) {
@@ -38,6 +37,7 @@ public class XmlTransformationWriter {
         datasetElement.setAttribute(datasetDimensionAttributeName, String.valueOf(dataset.getDimension()));
         for(int i = 0; i < dataset.getN(); i++) {
             Element point = XMLUtil.addElement(datasetElement, pointElementName);
+            point.setAttribute(pointIdAttributeName, String.valueOf(i));
             write(dataset.getPoint(i), point);
         }
     }
@@ -49,5 +49,4 @@ public class XmlTransformationWriter {
             coordinate.setTextContent(String.valueOf(point.getmatrix().get(i, 0)));
         }
     }
-
 }

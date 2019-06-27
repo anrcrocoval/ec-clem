@@ -235,8 +235,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	 */
 	@Override
 	protected void execute() {
-		workspace = new Workspace();
-
 		boolean pause = false;
 		Sequence sourceSequence = source.getValue();
 		Sequence targetSequence = target.getValue();
@@ -302,6 +300,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		sourceSequence.setName(sourceSequence.getName() + " (transformed)");
 		String name = sourceSequence.getFilename() + "_transfo.xml";
 
+		workspace = new Workspace();
 		workspace.setSourceSequence(sourceSequence);
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(backupsource);
@@ -310,7 +309,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(nonrigid, checkgrid));
 
 		guiCLEMButtons.setworkspace(workspace);
-
 		rigidspecificbutton.setWorkspace(workspace);
 
 //		RoiChanged roiChangedListener = new RoiChanged(workspace.getWorkspaceState(), workspaceTransformer);
@@ -348,6 +346,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		currentThread = Thread.currentThread();
 		currentThread.suspend();
+
 
 //		sourceSequence.removeListener(roiChangedListener);
 		targetSequence.removeListener(roiAddedListener);

@@ -10,6 +10,7 @@ public class XmlTransformation {
     public static String datasetDimensionAttributeName = "dimension";
     public static String datasetNAttributeName = "n";
     public static String pointElementName = "point";
+    public static String pointIdAttributeName = "id";
     public static String coordinateElementName = "coordinate";
     public static String coordinateDimensionAttributeName = "dimension";
 }
