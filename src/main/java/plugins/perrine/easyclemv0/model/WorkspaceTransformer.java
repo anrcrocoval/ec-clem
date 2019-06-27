@@ -40,7 +40,6 @@ public class WorkspaceTransformer {
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();
 
-    private XmlFileReader xmlFileReader = new XmlFileReader();
     private XmlFileWriter xmlFileWriter;
     private XmlTransformationWriter xmlWriter;
 
@@ -59,14 +58,7 @@ public class WorkspaceTransformer {
 //            SequenceListener[] sourceSequenceListeners = removeListeners(workspace.getSourceSequence());
             SequenceListener[] targetSequenceListeners = removeListeners(workspace.getTargetSequence());
 
-            if(workspace.getTransformation() != null) {
-                Dataset reversed = transformationDatasetTransformer.apply(
-                    workspace.getTransformation().inverse(),
-                    datasetFactory.getFrom(workspace.getSourceSequence())
-                );
-                restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
-                roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
-            }
+            resetToOriginalImage(workspace);
 
             workspace.setTransformation(transformationFactory.getFrom(workspace));
             if (!workspace.getWorkspaceState().isPause()) {
@@ -120,6 +112,17 @@ public class WorkspaceTransformer {
     private void addListeners(Sequence sequence, SequenceListener[] listeners) {
         for(SequenceListener listener : listeners) {
             sequence.addListener(listener);
+        }
+    }
+
+    public void resetToOriginalImage(Workspace workspace) {
+        if(workspace.getTransformation() != null) {
+            Dataset reversed = transformationDatasetTransformer.apply(
+                workspace.getTransformation().inverse(),
+                datasetFactory.getFrom(workspace.getSourceSequence())
+            );
+            restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
+            roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
         }
     }
 

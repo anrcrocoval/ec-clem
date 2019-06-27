@@ -8,6 +8,7 @@ import plugins.perrine.easyclemv0.error.TREComputer;
 import plugins.perrine.easyclemv0.inertia.InertiaMatrixComputer;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.FiducialSet;
+import plugins.perrine.easyclemv0.model.Workspace;
 
 public class TREComputerFactory {
 
@@ -15,9 +16,24 @@ public class TREComputerFactory {
     private InertiaMatrixComputer inertiaMatrixComputer = new InertiaMatrixComputer();
     private FREComputer freComputer = new FREComputer();
     private FLEComputer fleComputer = new FLEComputer();
+    private DatasetFactory datasetFactory = new DatasetFactory();
 
     public TREComputer getFrom(FiducialSet fiducialSet) {
         return getFrom(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());
+    }
+
+    public TREComputer getFrom(Workspace workspace) {
+        if(workspace.getTransformation() != null) {
+            return getFrom(
+                workspace.getTransformation().getFiducialSet().getSourceDataset(),
+                workspace.getTransformation().getFiducialSet().getTargetDataset()
+            );
+        }
+
+        return getFrom(
+            datasetFactory.getFrom(workspace.getSourceSequence()),
+            datasetFactory.getFrom(workspace.getTargetSequence())
+        );
     }
 
     public TREComputer getFrom(Dataset sourceDataset, Dataset targetDataset) {

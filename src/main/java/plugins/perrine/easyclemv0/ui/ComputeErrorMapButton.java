@@ -15,7 +15,6 @@ public class ComputeErrorMapButton extends JButton {
     private Workspace workspace;
     private TREComputer treComputer;
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
-    private DatasetFactory datasetFactory = new DatasetFactory();
 
     public ComputeErrorMapButton() {
         super("Compute the whole predicted error map ");
@@ -28,10 +27,7 @@ public class ComputeErrorMapButton extends JButton {
     }
 
     private void action() {
-        treComputer = treComputerFactory.getFrom(
-            datasetFactory.getFrom(workspace.getSourceSequence()),
-            datasetFactory.getFrom(workspace.getTargetSequence())
-        );
+        treComputer = treComputerFactory.getFrom(workspace);
         TargetRegistrationErrorMap myTREmap = new TargetRegistrationErrorMap(treComputer);
         if (workspace.getSourceSequence() != null) {
             if (workspace.getSourceSequence().getROIs().size() < 3) {
