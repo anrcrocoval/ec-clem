@@ -90,6 +90,7 @@ public class WorkspaceTransformer {
                 }
 
                 workspace.getSourceSequence().getFirstViewer().getLutViewer().setAutoBound(false);
+                workspace.getTargetSequence().getFirstViewer().getLutViewer().setAutoBound(false);
                 new AnnounceFrame("Transformation Updated", 5);
             } else {
                 new AnnounceFrame("You are in pause mode, click on update transfo", 3);
@@ -101,7 +102,7 @@ public class WorkspaceTransformer {
         });
     }
 
-    private SequenceListener[] removeListeners(Sequence sequence) {
+    public SequenceListener[] removeListeners(Sequence sequence) {
         SequenceListener[] listeners = sequence.getListeners();
         for(SequenceListener listener : listeners) {
             sequence.removeListener(listener);
@@ -109,7 +110,7 @@ public class WorkspaceTransformer {
         return listeners;
     }
 
-    private void addListeners(Sequence sequence, SequenceListener[] listeners) {
+    public void addListeners(Sequence sequence, SequenceListener[] listeners) {
         for(SequenceListener listener : listeners) {
             sequence.addListener(listener);
         }
@@ -123,6 +124,7 @@ public class WorkspaceTransformer {
             );
             restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
             roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
+            workspace.setTransformation(null);
         }
     }
 

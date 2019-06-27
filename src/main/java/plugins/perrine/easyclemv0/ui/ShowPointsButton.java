@@ -42,7 +42,6 @@ public class ShowPointsButton extends JButton {
 
     private void action() {
         workspaceTransformer.resetToOriginalImage(workspace);
-        workspace.setTransformation(null);
 
 //        if (workspace.getSourceSequence() == null || workspace.getTargetSequence() == null) {
 //            MessageDialog.showDialog("Make sure source and target image are openned and selected");

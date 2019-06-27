@@ -3,6 +3,7 @@ package plugins.perrine.easyclemv0.ui;
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI;
+import icy.sequence.SequenceListener;
 import org.w3c.dom.Document;
 import plugins.perrine.easyclemv0.dataset_transformer.TransformationDatasetTransformer;
 import plugins.perrine.easyclemv0.factory.DatasetFactory;
@@ -30,6 +31,7 @@ public class UndoButton extends JButton {
     private XmlTransformationElementListReader xmlTransformationElementListReader = new XmlTransformationElementListReader();
     private XmlTransformationElementListWriter xmlTransformationElementListWriter = new XmlTransformationElementListWriter();
     private SequenceUpdater sequenceUpdater = new SequenceUpdater();
+    private WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer();
 
     public UndoButton() {
         super("Undo last point");
@@ -53,33 +55,40 @@ public class UndoButton extends JButton {
             return;
         }
 
-        List<ROI> listRoitarget = workspace.getTargetSequence().getROIs(true);
-        ROI roitoremove = listRoisource.get(listRoisource.size() - 1);
-        roitoremove.remove();
-        if (listRoitarget.size() >= listRoisource.size()) {
-            ROI roitoremovet = listRoitarget.get(listRoisource.size() - 1);
-            roitoremovet.remove();
-        }
+        SequenceListener[] targetSequenceListeners = workspaceTransformer.removeListeners(workspace.getTargetSequence());
+        workspaceTransformer.resetToOriginalImage(workspace);
 
-        workspace.getSourceSequence().beginUpdate();
-        workspace.getSourceSequence().removeAllImages();
+        Dataset sourceDataset = datasetFactory.getFrom(workspace.getSourceSequence());
+        sourceDataset.removePoint(sourceDataset.getN() - 1);
 
-        if (workspace.getSourceBackup() == null) {
-            MessageDialog.showDialog("Argh.");
-            return;
-        }
+        Dataset targetDataset = datasetFactory.getFrom(workspace.getTargetSequence());
+        targetDataset.removePoint(targetDataset.getN() - 1);
 
-        try {
-            for (int t = 0; t < workspace.getSourceBackup().getSizeT(); t++) {
-                for (int z = 0; z < workspace.getSourceBackup().getSizeZ(); z++) {
-                    workspace.getSourceSequence().setImage(t, z,
-                        workspace.getSourceBackup().getImage(t, z)
-                    );
-                }
-            }
-        } finally {
-            workspace.getSourceSequence().endUpdate();
-        }
+        roiUpdater.updateRoi(sourceDataset, workspace.getSourceSequence());
+        roiUpdater.updateRoi(targetDataset, workspace.getTargetSequence());
+        workspaceTransformer.addListeners(workspace.getTargetSequence(), targetSequenceListeners);
+
+        workspaceTransformer.apply(workspace);
+
+//        workspace.getSourceSequence().beginUpdate();
+//        workspace.getSourceSequence().removeAllImages();
+//
+//        if (workspace.getSourceBackup() == null) {
+//            MessageDialog.showDialog("Argh.");
+//            return;
+//        }
+//
+//        try {
+//            for (int t = 0; t < workspace.getSourceBackup().getSizeT(); t++) {
+//                for (int z = 0; z < workspace.getSourceBackup().getSizeZ(); z++) {
+//                    workspace.getSourceSequence().setImage(t, z,
+//                        workspace.getSourceBackup().getImage(t, z)
+//                    );
+//                }
+//            }
+//        } finally {
+//            workspace.getSourceSequence().endUpdate();
+//        }
 
 //        Dataset sourceDataset = datasetFactory.getFrom(workspace.getSourceSequence());
 //        Document document = xmlFileReader.loadFile(workspace.getXMLFile());
@@ -91,10 +100,10 @@ public class UndoButton extends JButton {
 //            roiUpdater.updateRoi(sourceDataset, workspace.getSourceSequence());
 //        }
 
-        Document document = xmlFileReader.loadFile(workspace.getXMLFile());
-        xmlTransformationElementListWriter.removeLastTransformationElement(document);
-        xmlFileWriter = new XmlFileWriter(document, workspace.getXMLFile());
-        xmlFileWriter.write();
+//        Document document = xmlFileReader.loadFile(workspace.getXMLFile());
+//        xmlTransformationElementListWriter.removeLastTransformationElement(document);
+//        xmlFileWriter = new XmlFileWriter(document, workspace.getXMLFile());
+//        xmlFileWriter.write();
 
 //            Element newsizeelement = XMLUtil.getElements( root , "TargetSize" ).get(0);
 //            int width = XMLUtil.getAttributeIntValue( newsizeelement, "width" , -1 );
@@ -102,9 +111,9 @@ public class UndoButton extends JButton {
 //
 //            int nbz = XMLUtil.getAttributeIntValue( newsizeelement, "nz" , -1 );
 
-        List<Transformation> transformationList = xmlTransformationElementListReader.getTransformationList(document);
-        for(Transformation transformation : transformationList) {
-            sequenceUpdater.update(workspace.getSourceSequence(), transformation);
-        }
+//        List<Transformation> transformationList = xmlTransformationElementListReader.getTransformationList(document);
+//        for(Transformation transformation : transformationList) {
+//            sequenceUpdater.update(workspace.getSourceSequence(), transformation);
+//        }
     }
 }
