@@ -74,7 +74,6 @@ public class ImageTransformer implements ImageTransformerInterface {
     }
 
     private void setParameters(Matrix transfo) {
-        transfo.print(1,5);
         if (transfo.getRowDimension() != 3) {
             throw new RuntimeException("Use this class for 2D transformation only");
         }

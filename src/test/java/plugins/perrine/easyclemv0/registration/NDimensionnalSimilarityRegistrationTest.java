@@ -22,7 +22,6 @@ class NDimensionnalSimilarityRegistrationTest {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
         Dataset source = new Dataset(sourcePoints);
-        source.getMatrix().print(1,5);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ -2 }, { 1 }, { 1 }})));
@@ -30,7 +29,6 @@ class NDimensionnalSimilarityRegistrationTest {
         targetPoints.add(new Point(new Matrix(new double[][] {{  2 }, { 0 }, { 3 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -2 }, { 1 }, { 3 }})));
         Dataset target = new Dataset(targetPoints);
-        target.getMatrix().print(1,5);
 
         Similarity result = subjectUnderTest.apply(source, target);
         assertEquals(3, result.getR().getRowDimension());

@@ -11,6 +11,10 @@ import java.util.Comparator;
 public class RoiProcessor {
 
     public double[][] getPointsFromRoi(ArrayList<ROI> roiList) {
+        if(roiList.size() == 0) {
+            throw new RuntimeException("Empty list");
+        }
+
         int dimension = roiList.get(0).getDimension();
         sort(roiList);
         double [][] result = new double[roiList.size()][dimension];
@@ -24,14 +28,6 @@ public class RoiProcessor {
 
     public double[] getPointFromRoi(ROI roi) {
         double[] result = new double[roi.getDimension()];
-//        Point5D p3D = ROIMassCenterDescriptorsPlugin.computeMassCenter(roi);
-//        if (roi.getClassName().equals("plugins.kernel.roi.roi3d.ROI3DPoint"))
-//            p3D = roi.getPosition5D();
-//        if (Double.isNaN(p3D.getX()))
-//            p3D = roi.getPosition5D();
-//        result[0] = p3D.getX();
-//        result[1] = p3D.getY();
-//        result[2] = p3D.getZ();
         for(int i = 0; i < roi.getDimension(); i++) {
             if(i == 0) {
                 result[i] = roi.getPosition5D().getX();
@@ -48,20 +44,6 @@ public class RoiProcessor {
 
     public void sort(ArrayList<ROI> roiList) {
         roiList.sort(Comparator.comparing(ROI::getName));
-//        int longueur = roiList.size();
-//        ROI tampon;
-//        boolean permut;
-//        do {
-//            permut = false;
-//            for (int i = 0; i < longueur - 1; i++) {
-//                if (roiList.get(i).getName().compareTo(roiList.get(i + 1).getName()) > 0) {
-//                    tampon = roiList.get(i);
-//                    roiList.set(i, roiList.get(i + 1));
-//                    roiList.set(i + 1, tampon);
-//                    permut = true;
-//                }
-//            }
-//        } while (permut);
     }
 
     public void convert(ArrayList<ROI> roiList) {

@@ -10,12 +10,12 @@ public class SequenceUpdater {
     private ImageTransformerFactory imageTransformerFactory = new ImageTransformerFactory();
 
     public void update(Sequence sourceSequence, Transformation transformation) {
-        FiducialSet fiducialSet = transformation.getFiducialSet();
-        if (fiducialSet.getN() <= fiducialSet.getSourceDataset().getDimension()) {
-            System.out.println("One more point");
-            new AnnounceFrame("No transformation will be computed with less than " + (fiducialSet.getSourceDataset().getDimension() + 1) + " points. You have placed " + fiducialSet.getN() + " points", 2);
-            return;
-        }
+//        FiducialSet fiducialSet = transformation.getFiducialSet();
+//        if (fiducialSet.getN() <= fiducialSet.getSourceDataset().getDimension()) {
+//            System.out.println("One more point");
+//            new AnnounceFrame("No transformation will be computed with less than " + (fiducialSet.getSourceDataset().getDimension() + 1) + " points. You have placed " + fiducialSet.getN() + " points", 2);
+//            return;
+//        }
 
 //        if (fiducialSet.getSourceDataset().isCoplanar() || fiducialSet.getTargetDataset().isCoplanar() || fiducialSet.getN() < 4) {
 //            System.out.println("Instability: One more point");

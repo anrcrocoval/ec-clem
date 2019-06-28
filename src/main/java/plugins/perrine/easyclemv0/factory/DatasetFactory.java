@@ -15,7 +15,6 @@ public class DatasetFactory {
     private RoiProcessor roiProcessor = new RoiProcessor();
 
     public Dataset getFrom(Sequence sequence) {
-//        convertAllROI(sequence);
         return new Dataset(roiProcessor.getPointsFromRoi(sequence.getROIs()));
     }
 

@@ -6,13 +6,28 @@ import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.Similarity;
 
+import static java.lang.Math.max;
+
 public class NDimensionnalSimilarityRegistration {
 
     public Similarity apply(Dataset source, Dataset target) {
+        if (source.getN() < 2) {
+            int dimension = max(source.getDimension(), target.getDimension());
+            return new Similarity(
+                Matrix.identity(
+                    dimension,
+                    dimension
+                ),
+                new Matrix(dimension, 1, 0),
+                1
+            );
+        }
+
         Dataset clonedSourceDataset = source.clone();
         Dataset clonedTargetDataset = target.clone();
         Point sourceBarycentre = clonedSourceDataset.getBarycentre();
         Point targetBarycentre = clonedTargetDataset.getBarycentre();
+
         clonedSourceDataset.substractBarycentre();
         clonedTargetDataset.substractBarycentre();
 
@@ -26,10 +41,6 @@ public class NDimensionnalSimilarityRegistration {
     }
 
     private Matrix getR(Dataset source, Dataset target) {
-        if (source.getN() < 3) {
-            return Matrix.identity(3, 3);
-        }
-
         Matrix S = target.getMatrix().transpose().times(source.getMatrix());
         SingularValueDecomposition svd = S.svd();
         return svd.getU().times(svd.getV().transpose());

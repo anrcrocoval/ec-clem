@@ -60,10 +60,14 @@ public class WorkspaceTransformer {
         executorService.submit(() -> {
 //            SequenceListener[] sourceSequenceListeners = removeListeners(workspace.getSourceSequence());
             List<SequenceListener> targetSequenceListeners = removeListeners(workspace.getTargetSequence());
-
             resetToOriginalImage(workspace);
 
-            workspace.setTransformation(transformationFactory.getFrom(workspace));
+            try {
+                workspace.setTransformation(transformationFactory.getFrom(workspace));
+            } catch (RuntimeException e) {
+                addListeners(workspace.getTargetSequence(), targetSequenceListeners);
+            }
+
             if (!workspace.getWorkspaceState().isPause()) {
                 sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformation());
                 Document document = XMLUtil.createDocument(true);

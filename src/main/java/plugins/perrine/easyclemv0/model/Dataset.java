@@ -5,6 +5,8 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static java.lang.Math.sqrt;
+
 public class Dataset implements Cloneable {
     private Matrix points;
     private int dimension;
@@ -64,7 +66,7 @@ public class Dataset implements Cloneable {
     public double getMeanNorm() {
         mean.clear();
         for(int i = 0; i < n; i++) {
-            mean.increment(points.getMatrix(i, i, 0, dimension - 1).norm2());
+            mean.increment(sqrt(getPoint(i).getSumOfSquare()));
         }
         return mean.getResult();
     }
