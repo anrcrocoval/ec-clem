@@ -10,15 +10,15 @@ public class SequenceSizeFactory {
     public SequenceSize getFrom(Sequence sequence) {
         SequenceSize sequenceSize = new SequenceSize();
 
-        if(sequence.getSizeX() > 1) {
+        if(sequence.getSizeX() > 0) {
             sequenceSize.add(new DimensionSize(DimensionId.X, sequence.getSizeX(), sequence.getPixelSizeX()));
         }
 
-        if(sequence.getSizeY() > 1) {
+        if(sequence.getSizeY() > 0) {
             sequenceSize.add(new DimensionSize(DimensionId.Y, sequence.getSizeY(), sequence.getPixelSizeY()));
         }
 
-        if(sequence.getSizeZ() > 1) {
+        if(sequence.getSizeZ() > 0) {
             sequenceSize.add(new DimensionSize(DimensionId.Z, sequence.getSizeZ(), sequence.getPixelSizeZ()));
         }
 

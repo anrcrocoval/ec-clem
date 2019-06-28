@@ -1,11 +1,14 @@
 package plugins.perrine.easyclemv0.sequence_listener;
 
 import icy.gui.frame.progress.AnnounceFrame;
+import icy.main.Icy;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
 import icy.type.point.Point5D;
+import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
+import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import plugins.perrine.easyclemv0.factory.DatasetFactory;
 import plugins.perrine.easyclemv0.model.WorkspaceState;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
@@ -72,10 +75,20 @@ public class RoiAdded implements SequenceListener {
         sequence.addROI(roisource);
         workspaceState.setFlagReadyToMove(true);
         workspaceState.setDone(false);
+
+        Icy.getMainInterface().setSelectedTool(getSelectedTool(roi).getName());
     }
 
     @Override
     public void sequenceClosed(Sequence sequence) {
 
+    }
+
+    private Class getSelectedTool(ROI roi) {
+        switch (roi.getDimension()) {
+            case 2 : return ROI2DPointPlugin.class;
+            case 3 : return ROI3DPointPlugin.class;
+            default: throw new RuntimeException("Unsupported dimension");
+        }
     }
 }
