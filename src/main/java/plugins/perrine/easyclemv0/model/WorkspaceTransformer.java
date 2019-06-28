@@ -17,14 +17,17 @@ import plugins.perrine.easyclemv0.factory.TransformationFactory;
 import plugins.perrine.easyclemv0.image_transformer.SequenceUpdater;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
+import plugins.perrine.easyclemv0.sequence_listener.RoiAdded;
 import plugins.perrine.easyclemv0.storage.xml.XmlFileReader;
 import plugins.perrine.easyclemv0.storage.xml.XmlFileWriter;
 import plugins.perrine.easyclemv0.storage.xml.XmlTransformationWriter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class WorkspaceTransformer {
 
@@ -56,7 +59,7 @@ public class WorkspaceTransformer {
 
         executorService.submit(() -> {
 //            SequenceListener[] sourceSequenceListeners = removeListeners(workspace.getSourceSequence());
-            SequenceListener[] targetSequenceListeners = removeListeners(workspace.getTargetSequence());
+            List<SequenceListener> targetSequenceListeners = removeListeners(workspace.getTargetSequence());
 
             resetToOriginalImage(workspace);
 
@@ -89,8 +92,6 @@ public class WorkspaceTransformer {
                     MonitorTargetPoint.UpdatePoint(TREValues);
                 }
 
-                workspace.getSourceSequence().getFirstViewer().getLutViewer().setAutoBound(false);
-                workspace.getTargetSequence().getFirstViewer().getLutViewer().setAutoBound(false);
                 new AnnounceFrame("Transformation Updated", 5);
             } else {
                 new AnnounceFrame("You are in pause mode, click on update transfo", 3);
@@ -102,15 +103,16 @@ public class WorkspaceTransformer {
         });
     }
 
-    public SequenceListener[] removeListeners(Sequence sequence) {
-        SequenceListener[] listeners = sequence.getListeners();
+    public List<SequenceListener> removeListeners(Sequence sequence) {
+        List<SequenceListener> listeners = Arrays.asList(sequence.getListeners())
+            .stream().filter((listener) -> listener instanceof RoiAdded).collect(Collectors.toList());
         for(SequenceListener listener : listeners) {
             sequence.removeListener(listener);
         }
         return listeners;
     }
 
-    public void addListeners(Sequence sequence, SequenceListener[] listeners) {
+    public void addListeners(Sequence sequence, List<SequenceListener> listeners) {
         for(SequenceListener listener : listeners) {
             sequence.addListener(listener);
         }

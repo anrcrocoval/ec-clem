@@ -55,7 +55,8 @@ public class UndoButton extends JButton {
             return;
         }
 
-        SequenceListener[] targetSequenceListeners = workspaceTransformer.removeListeners(workspace.getTargetSequence());
+        List<SequenceListener> targetSequenceListeners = workspaceTransformer.removeListeners(workspace.getTargetSequence());
+        System.out.println(targetSequenceListeners.size());
         workspaceTransformer.resetToOriginalImage(workspace);
 
         Dataset sourceDataset = datasetFactory.getFrom(workspace.getSourceSequence());
@@ -66,6 +67,7 @@ public class UndoButton extends JButton {
 
         roiUpdater.updateRoi(sourceDataset, workspace.getSourceSequence());
         roiUpdater.updateRoi(targetDataset, workspace.getTargetSequence());
+
         workspaceTransformer.addListeners(workspace.getTargetSequence(), targetSequenceListeners);
 
         workspaceTransformer.apply(workspace);
