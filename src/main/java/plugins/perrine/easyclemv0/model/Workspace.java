@@ -17,11 +17,11 @@ public class Workspace {
     private TransformationConfiguration transformationConfiguration;
 
     public Workspace() {
-        workspaceState = new WorkspaceState(false, false, false, false);
+        workspaceState = new WorkspaceState(false, false, false);
         monitoringConfiguration = new MonitoringConfiguration(false, false);
     }
 
-    public Workspace(Sequence sourceSequence, Sequence targetSequence, Sequence sourceBackup, File XMLFile, boolean nonRigid, WorkspaceState workspaceState, MonitoringConfiguration monitoringConfiguration) {
+    public Workspace(Sequence sourceSequence, Sequence targetSequence, Sequence sourceBackup, File XMLFile, WorkspaceState workspaceState, MonitoringConfiguration monitoringConfiguration) {
         this.sourceSequence = sourceSequence;
         this.targetSequence = targetSequence;
         this.sourceBackup = sourceBackup;

@@ -47,16 +47,6 @@ public class WorkspaceTransformer {
     private XmlTransformationWriter xmlWriter;
 
     public void apply(Workspace workspace) {
-
-        if (workspace.getWorkspaceState().isStopFlag()) {
-            return;
-        }
-
-        if (workspace.getSourceBackup() == null) {
-            MessageDialog.showDialog("Please press the Play button to initialize process first");
-            return;
-        }
-
         executorService.submit(() -> {
 //            SequenceListener[] sourceSequenceListeners = removeListeners(workspace.getSourceSequence());
             List<SequenceListener> targetSequenceListeners = removeListeners(workspace.getTargetSequence());

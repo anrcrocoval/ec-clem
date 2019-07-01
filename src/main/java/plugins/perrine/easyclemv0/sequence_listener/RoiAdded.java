@@ -34,10 +34,6 @@ public class RoiAdded implements SequenceListener {
             return;
         }
 
-        if (workspaceState.isStopFlag()) {
-            return;
-        }
-
         workspaceState.setFlagReadyToMove(false);
         double z = event.getSequence().getFirstViewer().getPositionZ();
 
