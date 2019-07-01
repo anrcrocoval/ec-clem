@@ -40,7 +40,7 @@ public class MonitorTargetOverlay extends Overlay {
         if (notplacedyet) {
             if ((canvas instanceof IcyCanvas2D) && (imagePoint != null)) {
                 monitoringConfiguration.setMonitoringPoint(new Point(new Matrix(new double[][] {
-                    { imagePoint.getX() }, { imagePoint.getY() }
+                    { imagePoint.getX() }, { imagePoint.getY() }, { imagePoint.getZ() }
                 })));
                 painterChanged();
                 notplacedyet = false;

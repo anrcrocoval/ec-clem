@@ -147,14 +147,15 @@ public class TargetRegistrationErrorMap implements Runnable {
         SequenceSize sequenceSize = sequenceSizeFactory.getFrom(sequence);
 
         for (int z = 0; z < sequence.getSizeZ(); z++) {
+            final double finalz = z;
             Point point = new Point(sequenceSize.getN());
             resultMap.put(completionService.submit(() -> {
                 float[] dataArray = new float[image.getSizeX() * image.getSizeY()];
-
                 for (int x = 0; x < image.getSizeX(); x++) {
                     for (int y = 0; y < image.getSizeY(); y++) {
                         point.getMatrix().set(0, 0, x);
                         point.getMatrix().set(1, 0, y);
+                        point.getMatrix().set(2, 0, finalz);
                         dataArray[image.getOffset(x, y)] = (float) treComputer.getExpectedSquareTRE(point);
                     }
                 }
