@@ -40,13 +40,13 @@ public class GuiCLEMButtons2 extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
 	private ComputeErrorMapButton computeErrorMapButton;
-	private MonitorTargetPointButton btnNewButton5;
+	private MonitorTargetPointButton monitorTargetPointButton;
 	private ShowOverlayCheckbox showerror;
 	private ShowOverlayCheckbox showpredictederror;
 
 	public GuiCLEMButtons2() {
 		computeErrorMapButton = new ComputeErrorMapButton();
-		btnNewButton5 = new MonitorTargetPointButton();
+		monitorTargetPointButton = new MonitorTargetPointButton();
 		showerror = new ShowOverlayCheckbox(
 			null,
 			"Show Difference in Positions",
@@ -61,13 +61,13 @@ public class GuiCLEMButtons2 extends JPanel {
 		add(showerror);
 		add(showpredictederror);
 		add(computeErrorMapButton);
-		add(btnNewButton5);
+		add(monitorTargetPointButton);
 	}
 
 	public void setWorkspace(Workspace workspace) {
 		this.workspace = workspace;
 		computeErrorMapButton.setWorkspace(workspace);
-		btnNewButton5.setWorkspace(workspace);
+		monitorTargetPointButton.setWorkspace(workspace);
 		showerror.setWorkspace(workspace);
 		showerror.setOverlay(new ErrorInPositionOverlay(workspace));
 		showpredictederror.setWorkspace(workspace);
@@ -76,12 +76,12 @@ public class GuiCLEMButtons2 extends JPanel {
 
 	public void disableButtons() {
 		computeErrorMapButton.setEnabled(false);
-		btnNewButton5.setEnabled(false);
+		monitorTargetPointButton.setEnabled(false);
 	}
 
 	public void enableButtons() {
 		computeErrorMapButton.setEnabled(true);
-		btnNewButton5.setEnabled(true);
+		monitorTargetPointButton.setEnabled(true);
 	}
 
 	protected void removespecificrigidbutton(){

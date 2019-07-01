@@ -177,21 +177,6 @@ public class TargetRegistrationErrorMap implements Runnable {
         return newsequence;
     }
 
-//    Dataset ReadFiducials(double[][] points, Sequence seq)	{
-//        fiducials = new double[points.length][3];
-//        for(int i = 0; i < points.length; i++){
-//            for (int j=0;j<3;j++)
-//                fiducials[i][j] = points[i][j];
-//        }
-//        this.sequence = seq;
-//        return new Dataset(fiducials);
-//    }
-//
-//    Dataset ReadFiducials(Sequence seq) {
-//        setSequence(seq);
-//        return new Dataset(roiProcessor.getPointsFromRoi(seq.getROIs()));
-//    }
-
     public void setSequence(Sequence sequence) {
         this.sequence = sequence;
     }

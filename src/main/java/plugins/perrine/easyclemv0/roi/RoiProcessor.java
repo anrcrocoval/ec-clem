@@ -15,7 +15,8 @@ public class RoiProcessor {
             throw new RuntimeException("Empty list");
         }
 
-        int dimension = roiList.get(0).getDimension();
+//        int dimension = roiList.get(0).getDimension();
+        int dimension = 3;
         sort(roiList);
         double [][] result = new double[roiList.size()][dimension];
         int i = -1;
@@ -27,7 +28,7 @@ public class RoiProcessor {
     }
 
     public double[] getPointFromRoi(ROI roi) {
-        double[] result = new double[roi.getDimension()];
+        double[] result = new double[3];
         for(int i = 0; i < roi.getDimension(); i++) {
             if(i == 0) {
                 result[i] = roi.getPosition5D().getX();

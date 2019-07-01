@@ -26,9 +26,9 @@ public class MonitorTargetOverlay extends Overlay {
     public void mouseMove(MouseEvent e, Point5D.Double imagePoint, IcyCanvas canvas) {
         if (notplacedyet) {
             if ((canvas instanceof IcyCanvas2D) && (imagePoint != null)) {
-//                monitoringConfiguration.setMonitoringPoint(new Point(new Matrix(new double[][] {
-//                    { imagePoint.getX() }, { imagePoint.getY() }
-//                })));
+                monitoringConfiguration.setMonitoringPoint(new Point(new Matrix(new double[][] {
+                    { imagePoint.getX() }, { imagePoint.getY() }
+                })));
                 Icy.getMainInterface().setSelectedTool("none");
                 painterChanged();
             }
@@ -45,6 +45,7 @@ public class MonitorTargetOverlay extends Overlay {
                 painterChanged();
                 notplacedyet = false;
                 monitoringConfiguration.setWaitfortarget(false);
+                monitoringConfiguration.setMonitor(true);
 //                if (canvas.getSequence().getName().equals(easyCLEMv0.target.getValue().getName())){
 //                    easyCLEMv0.source.getValue().removeOverlay(myoverlaytarget);
 //                }
@@ -52,7 +53,7 @@ public class MonitorTargetOverlay extends Overlay {
 //                    easyCLEMv0.target.getValue().removeOverlay(myoverlaytarget);
 //                    easyCLEMv0.monitortargetonsource = true;
 //                }
-                canvas.getSequence().removeOverlay(this);
+//                canvas.getSequence().removeOverlay(this);
             }
         }
     }
@@ -71,9 +72,9 @@ public class MonitorTargetOverlay extends Overlay {
             g.drawLine(xm-diameter/2 , ym + diameter/2, xm + diameter/2, ym - diameter/2);
             g.drawLine(xm -diameter/2, ym -diameter/2, xm + diameter/2, ym + diameter/2);
             g.drawLine(xm-diameter/2, ym + diameter/2, xm + diameter/2, ym -diameter/2);
-            if (!monitoringConfiguration.isWaitfortarget()) {
-                Icy.getMainInterface().setSelectedTool(ROI2DPointPlugin.class.getName());
-            }
+//            if (!monitoringConfiguration.isWaitfortarget()) {
+//                Icy.getMainInterface().setSelectedTool(ROI2DPointPlugin.class.getName());
+//            }
         }
     }
 }
