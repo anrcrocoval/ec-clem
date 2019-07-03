@@ -14,6 +14,7 @@ public class TransformationFactory {
         return new Transformation(
             fiducialSet,
             workspace.getTransformationConfiguration().getTransformationType(),
+            sequenceSizeFactory.getFrom(workspace.getSourceSequence()),
             sequenceSizeFactory.getFrom(workspace.getTargetSequence())
         );
     }

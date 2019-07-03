@@ -19,13 +19,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static plugins.perrine.easyclemv0.storage.xml.XmlTransformation.transformationElementName;
 
 class XmlFileWriterTest {
-    private FiducialSetFactory fiducialSetFactory = new FiducialSetFactory();
     private File file = new File("XmlFileWriterTest.xml");
     private XmlFileReader xmlFileReader = new XmlFileReader();
     private XmlFileWriter xmlFileWriter;
     private XmlTransformationReader xmlReader = new XmlTransformationReader();
     private XmlTransformationWriter xmlWriter;
-    private SequenceSize sequenceSize = new SequenceSize();
+    private SequenceSize sourceSequenceSize = new SequenceSize();
+    private SequenceSize targetSequenceSize = new SequenceSize();
 
     @BeforeEach
     @AfterEach
@@ -37,11 +37,13 @@ class XmlFileWriterTest {
     void writeAndRead() {
         Dataset sourceDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }});
         Dataset targetDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }});
-        sequenceSize.add(new DimensionSize(DimensionId.X, 10, 1));
+        sourceSequenceSize.add(new DimensionSize(DimensionId.X, 10, 1));
+        targetSequenceSize.add(new DimensionSize(DimensionId.X, 10, 1));
         Transformation transformation = new Transformation(
             new FiducialSet(sourceDataset, targetDataset),
             TransformationType.RIGID,
-            sequenceSize
+            sourceSequenceSize,
+            targetSequenceSize
         );
         write(transformation);
         Transformation read = read();

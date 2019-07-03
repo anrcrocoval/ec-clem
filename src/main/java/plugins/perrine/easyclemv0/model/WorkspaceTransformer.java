@@ -114,12 +114,7 @@ public class WorkspaceTransformer {
 
     public void resetToOriginalImage(Workspace workspace) {
         if(workspace.getTransformation() != null) {
-            Dataset reversed = transformationDatasetTransformer.apply(
-                workspace.getTransformation().inverse(),
-                datasetFactory.getFrom(workspace.getSourceSequence())
-            );
-            restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
-            roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
+            sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformation().inverse());
             workspace.setTransformation(null);
         }
     }

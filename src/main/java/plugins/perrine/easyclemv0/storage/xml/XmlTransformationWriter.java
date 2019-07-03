@@ -21,18 +21,20 @@ public class XmlTransformationWriter {
         Element transformationElement = XMLUtil.addElement(document.getDocumentElement(), transformationElementName);
         transformationElement.setAttribute(transformationTypeAttributeName, transformation.getTransformationType().name());
         transformationElement.setAttribute(transformationDateAttributeName, ZonedDateTime.now().toString());
-        write(transformation.getTargetSize(), transformationElement);
+        write(transformation.getSourceSize(), "source", transformationElement);
+        write(transformation.getTargetSize(), "target", transformationElement);
         write(transformation.getFiducialSet().getSourceDataset(), "source", transformationElement);
         write(transformation.getFiducialSet().getTargetDataset(), "target", transformationElement);
     }
 
-    private void write(SequenceSize sequenceSize, Element transformationElement) {
-        Element element = XMLUtil.addElement(transformationElement, imageSizeElementName);
-        XMLUtil.setAttributeValue(element, imageDimensionAttributeName, String.valueOf(sequenceSize.getN()));
+    private void write(SequenceSize sequenceSize, String type, Element transformationElement) {
+        Element element = XMLUtil.addElement(transformationElement, sequenceSizeElementName);
+        XMLUtil.setAttributeValue(element, sequenceSizeDimensionAttributeName, String.valueOf(sequenceSize.getN()));
+        XMLUtil.setAttributeValue(element, sequenceSizeTypeAttributeName, type);
         for(DimensionSize entry : sequenceSize.getDimensions()) {
             Element value = XMLUtil.addElement(element, dimensionSizeElementName);
-            value.setAttribute(imageDimensionNameAttributeName, entry.getDimensionId().name());
-            value.setAttribute(dimensionpixelSizeAttributeName, String.valueOf(entry.getPixelSizeInMicrometer()));
+            value.setAttribute(dimensionSizeDimensionNameAttributeName, entry.getDimensionId().name());
+            value.setAttribute(dimensionSizePixelSizeAttributeName, String.valueOf(entry.getPixelSizeInMicrometer()));
             value.setTextContent(String.valueOf(entry.getSize()));
             element.appendChild(value);
         }

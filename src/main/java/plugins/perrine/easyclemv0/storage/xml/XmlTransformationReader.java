@@ -15,21 +15,27 @@ public class XmlTransformationReader {
         if(datasetElements.size() != 2) {
             throw new RuntimeException("Element should contain exactly 2 dataset");
         }
-        Dataset dataset1 = readDataset(datasetElements.get(0));
-        Dataset dataset2 = readDataset(datasetElements.get(1));
+        Dataset sourceDataset = readDataset(datasetElements.get(0));
+        Dataset targetDataset = readDataset(datasetElements.get(1));
         FiducialSet fiducialSet;
         if(datasetElements.get(0).getAttribute(datasetTypeAttributeName).equals("source")) {
-            fiducialSet =  new FiducialSet(dataset1, dataset2);
+            fiducialSet =  new FiducialSet(sourceDataset, targetDataset);
         } else {
-            fiducialSet =  new FiducialSet(dataset2, dataset1);
+            fiducialSet =  new FiducialSet(targetDataset, sourceDataset);
         }
 
-        ArrayList<Element> sequenceSizeElements = XMLUtil.getElements(transformationElement, imageSizeElementName);
-        if(sequenceSizeElements.size() != 1) {
-            throw new RuntimeException("Element should contain exactly 1 imageSize");
+        ArrayList<Element> sequenceSizeElements = XMLUtil.getElements(transformationElement, sequenceSizeElementName);
+        if(sequenceSizeElements.size() != 2) {
+            throw new RuntimeException("Element should contain exactly 2 sequenceSize");
         }
-        SequenceSize sequenceSize = readSequenceSize(sequenceSizeElements.get(0));
-        return new Transformation(fiducialSet, transformationType, sequenceSize);
+        SequenceSize sourceSequenceSize = readSequenceSize(sequenceSizeElements.get(0));
+        SequenceSize targetSequenceSize = readSequenceSize(sequenceSizeElements.get(1));
+
+        if(sequenceSizeElements.get(0).getAttribute(sequenceSizeTypeAttributeName).equals("source")) {
+            return new Transformation(fiducialSet, transformationType, sourceSequenceSize, targetSequenceSize);
+        } else {
+            return new Transformation(fiducialSet, transformationType, targetSequenceSize, sourceSequenceSize);
+        }
     }
 
     private SequenceSize readSequenceSize(Element sequenceSizeElement) {
@@ -37,9 +43,9 @@ public class XmlTransformationReader {
         ArrayList<Element> elements = XMLUtil.getElements(sequenceSizeElement);
         for(Element dimension : elements) {
             sequenceSize.add(new DimensionSize(
-                DimensionId.valueOf(dimension.getAttribute(imageDimensionNameAttributeName)),
+                DimensionId.valueOf(dimension.getAttribute(dimensionSizeDimensionNameAttributeName)),
                 Integer.valueOf(dimension.getTextContent()),
-                Double.valueOf(dimension.getAttribute(dimensionpixelSizeAttributeName))
+                Double.valueOf(dimension.getAttribute(dimensionSizePixelSizeAttributeName))
             ));
         }
         return sequenceSize;
