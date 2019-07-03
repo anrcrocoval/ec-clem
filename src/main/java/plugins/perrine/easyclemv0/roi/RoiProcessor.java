@@ -15,7 +15,6 @@ public class RoiProcessor {
             throw new RuntimeException("Empty list");
         }
 
-//        int dimension = roiList.get(0).getDimension();
         int dimension = 3;
         sort(roiList);
         double [][] result = new double[roiList.size()][dimension];
@@ -43,7 +42,7 @@ public class RoiProcessor {
         return result;
     }
 
-    public void sort(ArrayList<ROI> roiList) {
+    private void sort(ArrayList<ROI> roiList) {
         roiList.sort(Comparator.comparing(ROI::getName));
     }
 

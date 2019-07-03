@@ -456,9 +456,9 @@ public class NonRigidTranformationVTK implements ImageTransformerInterface {
             targetSize.get(DimensionId.X).getSize(),
             targetSize.get(DimensionId.Y).getSize(),
             targetSize.get(DimensionId.Z).getSize(),
-            targetSize.get(DimensionId.X).getPixelSizeInNanometer(),
-            targetSize.get(DimensionId.Y).getPixelSizeInNanometer(),
-            targetSize.get(DimensionId.Z).getPixelSizeInNanometer()
+            targetSize.get(DimensionId.X).getPixelSizeInMicrometer(),
+            targetSize.get(DimensionId.Y).getPixelSizeInMicrometer(),
+            targetSize.get(DimensionId.Z).getPixelSizeInMicrometer()
         );
     }
 

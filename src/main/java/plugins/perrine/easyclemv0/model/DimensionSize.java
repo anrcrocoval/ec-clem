@@ -5,12 +5,12 @@ import icy.sequence.DimensionId;
 public class DimensionSize {
     private DimensionId dimensionId;
     private int size;
-    private double pixelSizeInNanometer;
+    private double pixelSizeInMicrometer;
 
-    public DimensionSize(DimensionId dimensionId, int size, double pixelSizeInNanometer) {
+    public DimensionSize(DimensionId dimensionId, int size, double pixelSizeInMicrometer) {
         this.dimensionId = dimensionId;
         this.size = size;
-        this.pixelSizeInNanometer = pixelSizeInNanometer;
+        this.pixelSizeInMicrometer = pixelSizeInMicrometer;
     }
 
     public DimensionId getDimensionId() {
@@ -21,7 +21,7 @@ public class DimensionSize {
         return size;
     }
 
-    public double getPixelSizeInNanometer() {
-        return pixelSizeInNanometer;
+    public double getPixelSizeInMicrometer() {
+        return pixelSizeInMicrometer;
     }
 }

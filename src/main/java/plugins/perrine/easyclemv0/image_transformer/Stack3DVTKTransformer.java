@@ -42,10 +42,7 @@ import vtk.vtkUnsignedIntArray;
 import vtk.vtkUnsignedShortArray;
 
 /**
- * 
- * @author Perrine
- * TODO: going on with all conversion, test further in particular output sampling etc...
- * The difference with 2D transform is that the tranform is computed in REAL UNITS, because vtk apply it in real unit, 
+ * The difference with 2D transform is that the tranform is computed in REAL UNITS, because vtk apply it in real unit,
  * which can be quite convenient for dealing with anisotropy!
  */
 public class Stack3DVTKTransformer implements ImageTransformerInterface {
@@ -53,7 +50,6 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 	private vtkImageReslice ImageReslice;
 	private vtkMatrix4x4 transfo3D;
 	private Sequence sequence;
-	private DataType oriType;
 	private vtkDataSet[] imageData;
 	private int extentx;
 	private int extenty;
@@ -64,7 +60,6 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 	private double InputSpacingz;
 	private double InputSpacingx;
 	private double InputSpacingy;
-	private int recenter = 0;
 
 	private RigidTransformationComputer rigidTransformationComputer = new RigidTransformationComputer();
 	private RoiUpdater roiUpdater = new RoiUpdater();
@@ -73,17 +68,12 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 	public void setSourceSequence(Sequence sequence) {
 		this.sequence = sequence;
 		setSourceSize(sequence.getPixelSizeX(), sequence.getPixelSizeY(), sequence.getPixelSizeZ());
-		setSourceType(sequence.getDataType_());
 	}
 
 	public void setSourceSize(double pixelSizeX, double pixelSizeY, double pixelSizeZ) {
-		InputSpacingx = 1;
-		InputSpacingy = 1;
-		InputSpacingz = 1;
-	}
-
-	public void setSourceType(DataType type) {
-		this.oriType = type;
+		InputSpacingx = pixelSizeX;
+		InputSpacingy = pixelSizeY;
+		InputSpacingz = pixelSizeZ;
 	}
 
 	public void setTargetSize(Sequence sequence) {
@@ -102,9 +92,9 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 			sequenceSize.get(DimensionId.X).getSize(),
 			sequenceSize.get(DimensionId.Y).getSize(),
 			sequenceSize.get(DimensionId.Z).getSize(),
-			sequenceSize.get(DimensionId.X).getPixelSizeInNanometer(),
-			sequenceSize.get(DimensionId.Y).getPixelSizeInNanometer(),
-			sequenceSize.get(DimensionId.Z).getPixelSizeInNanometer()
+			sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer(),
+			sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer(),
+			sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer()
 		);
 	}
 
@@ -112,13 +102,9 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 		this.extentx = sizeX;
 		this.extenty = sizeY;
 		this.extentz = sizeZ;
-		this.spacingx = 1;
-		this.spacingy = 1;
-		this.spacingz = 1;
-	}
-
-	public void setRecenter(int recenter) {
-		this.recenter = recenter;
+		this.spacingx = pixelSizeX;
+		this.spacingy = pixelSizeY;
+		this.spacingz = pixelSizeZ;
 	}
 
 	private void setParameters(Matrix transformationMatrix) {
@@ -137,6 +123,7 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 	public void run(FiducialSet fiducialSet) {
 
 		Similarity similarity = rigidTransformationComputer.compute(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());
+		Dataset sourceTransformedDataset = similarity.apply(datasetFactory.getFrom(sequence));
 		setParameters(similarity.getMatrix());
 
 		System.out.println("I will apply transfo now");
@@ -343,8 +330,6 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 
 		progress.close();
 		System.out.println("have been applied");
-
-		Dataset sourceTransformedDataset = similarity.apply(datasetFactory.getFrom(sequence));
 		roiUpdater.updateRoi(sourceTransformedDataset, sequence);
 	}
 

@@ -117,11 +117,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 //		this.monitoringConfiguration = monitoringConfiguration;
 //	}
 
-	/**
-	 * Overlay surdefined for paint would happen at each paint: will make the
-	 * points more visible.
-	 * 
-	 */
 	private class VisiblepointsOverlay extends Overlay {
 		public VisiblepointsOverlay() {
 			super("Visible points");
@@ -151,12 +146,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		}
 	}
 
-	/**
-	 * Display an informative image on the top of sequences
-	 * 
-	 * @author Perrine
-	 *
-	 */
 	private class MessageOverlay extends Overlay {
 		String mytext;
 
@@ -359,9 +348,5 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		currentThread.resume();
 		choiceinputsection.setEnabled(true);
 		rigidspecificbutton.reshowspecificrigidbutton();
-	}
-
-	public RoiProcessor getRoiProcessor() {
-		return roiProcessor;
 	}
 }

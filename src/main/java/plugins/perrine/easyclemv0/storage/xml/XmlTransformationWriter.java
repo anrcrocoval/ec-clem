@@ -32,7 +32,7 @@ public class XmlTransformationWriter {
         for(DimensionSize entry : sequenceSize.getDimensions()) {
             Element value = XMLUtil.addElement(element, dimensionSizeElementName);
             value.setAttribute(imageDimensionNameAttributeName, entry.getDimensionId().name());
-            value.setAttribute(dimensionpixelSizeAttributeName, String.valueOf(entry.getPixelSizeInNanometer()));
+            value.setAttribute(dimensionpixelSizeAttributeName, String.valueOf(entry.getPixelSizeInMicrometer()));
             value.setTextContent(String.valueOf(entry.getSize()));
             element.appendChild(value);
         }

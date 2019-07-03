@@ -33,8 +33,6 @@ import plugins.perrine.easyclemv0.roi.RoiUpdater;
 
 /**
  *
- * @author Perrine
- *
  *         This class ImageTransformer is part of EasyClem but could be used as
  *         a library. In this beta version, it makes use of Graphics2D This one was created
  *         during Icy coding party, with the help of St�phane and Fabrice 2D!
@@ -171,7 +169,7 @@ public class ImageTransformer implements ImageTransformerInterface {
 
             imageDest = new BufferedImage(imagetobekept.getWidth(), imagetobekept.getHeight(), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = imageDest.createGraphics();
-            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);// BICUBIC plutot? was bilinear
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             g2d.drawImage(image, transform, null);
             g2d.dispose();
 
