@@ -20,7 +20,7 @@
  * as well as launching the computation of the error map.
  */
 
-package plugins.perrine.easyclemv0;
+package plugins.perrine.easyclemv0.ui;
 
 import java.awt.Component;
 import javax.swing.JCheckBox;
@@ -84,7 +84,7 @@ public class GuiCLEMButtons2 extends JPanel {
 		monitorTargetPointButton.setEnabled(true);
 	}
 
-	protected void removespecificrigidbutton(){
+	public void removespecificrigidbutton(){
 		Component[] listcomp = this.getComponents();
 		// we keep only the first component
 		for (int c = 1; c < listcomp.length; c++){
@@ -93,7 +93,7 @@ public class GuiCLEMButtons2 extends JPanel {
 		}
 	}
 
-	protected void reshowspecificrigidbutton(){
+	public void reshowspecificrigidbutton(){
 		Component[] listcomp = this.getComponents();
 		// we keep only the first component
 		for (int c = 1; c < listcomp.length; c++){

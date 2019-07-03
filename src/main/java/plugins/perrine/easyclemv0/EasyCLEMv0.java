@@ -18,11 +18,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import plugins.adufour.ezplug.EzButton;
+
 import plugins.adufour.ezplug.EzGroup;
 import plugins.adufour.ezplug.EzLabel;
 import plugins.adufour.ezplug.EzPlug;
@@ -39,21 +37,17 @@ import icy.gui.frame.progress.ToolTipFrame;
 import icy.gui.util.FontUtil;
 import icy.image.IcyBufferedImage;
 import icy.painter.Overlay;
-import icy.plugin.PluginDescriptor;
-import icy.plugin.PluginLauncher;
-import icy.plugin.PluginLoader;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
-import icy.system.thread.ThreadUtil;
 import icy.type.DataType;
 import icy.type.point.Point5D;
-import plugins.perrine.easyclemv0.factory.TREComputerFactory;
 import plugins.perrine.easyclemv0.factory.TransformationConfigurationFactory;
 import plugins.perrine.easyclemv0.model.*;
-import plugins.perrine.easyclemv0.model.configuration.TransformationConfiguration;
 import plugins.perrine.easyclemv0.roi.RoiProcessor;
 import plugins.perrine.easyclemv0.sequence_listener.RoiAdded;
+import plugins.perrine.easyclemv0.ui.GuiCLEMButtons;
+import plugins.perrine.easyclemv0.ui.GuiCLEMButtons2;
 
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 

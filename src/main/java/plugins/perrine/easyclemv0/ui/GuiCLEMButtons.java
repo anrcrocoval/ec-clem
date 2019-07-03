@@ -16,7 +16,7 @@
  * one second set of button: this one is to call the update transformation
  *  and the clear landmarks methods
  */
-package plugins.perrine.easyclemv0;
+package plugins.perrine.easyclemv0.ui;
 
 import javax.swing.JPanel;
 import plugins.perrine.easyclemv0.model.Workspace;
