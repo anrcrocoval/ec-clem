@@ -206,12 +206,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	@Override
 	protected void execute() {
-		boolean pause = false;
-		source.setEnabled(false);
-		target.setEnabled(false);
 		Sequence sourceSequence = source.getValue();
 		Sequence targetSequence = target.getValue();
-
 		if (sourceSequence == targetSequence) {
 			MessageDialog.showDialog("You have selected the same sequence for target sequence and source sequence. \n Check the IMAGES to PROCESS selection");
 			return;
@@ -224,6 +220,10 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			MessageDialog.showDialog("No sequence selected for Target. \n Check the IMAGES to PROCESS selection");
 			return;
 		}
+
+		boolean pause = false;
+		source.setEnabled(false);
+		target.setEnabled(false);
 
 		choiceinputsection.setEnabled(false);
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_2D)) {

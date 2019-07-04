@@ -1,7 +1,5 @@
 package plugins.perrine.easyclemv0.model;
 
-import javax.sound.midi.Sequence;
-
 public class Transformation {
     private FiducialSet fiducialSet;
     private TransformationType transformationType;

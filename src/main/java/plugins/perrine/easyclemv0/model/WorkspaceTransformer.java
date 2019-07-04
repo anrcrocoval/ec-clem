@@ -1,6 +1,5 @@
 package plugins.perrine.easyclemv0.model;
 
-import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.main.Icy;
 import icy.sequence.Sequence;
@@ -8,20 +7,15 @@ import icy.sequence.SequenceListener;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
 import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
-import plugins.perrine.easyclemv0.dataset_transformer.TransformationDatasetTransformer;
 import plugins.perrine.easyclemv0.error.TREComputer;
-import plugins.perrine.easyclemv0.factory.DatasetFactory;
 import plugins.perrine.easyclemv0.factory.FiducialSetFactory;
 import plugins.perrine.easyclemv0.factory.TREComputerFactory;
 import plugins.perrine.easyclemv0.factory.TransformationFactory;
 import plugins.perrine.easyclemv0.image_transformer.SequenceUpdater;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
-import plugins.perrine.easyclemv0.roi.RoiUpdater;
 import plugins.perrine.easyclemv0.sequence_listener.RoiAdded;
-import plugins.perrine.easyclemv0.storage.xml.XmlFileReader;
 import plugins.perrine.easyclemv0.storage.xml.XmlFileWriter;
 import plugins.perrine.easyclemv0.storage.xml.XmlTransformationWriter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,9 +30,6 @@ public class WorkspaceTransformer {
     private TransformationFactory transformationFactory = new TransformationFactory();
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
     private FiducialSetFactory fiducialSetFactory = new FiducialSetFactory();
-    private TransformationDatasetTransformer transformationDatasetTransformer = new TransformationDatasetTransformer();
-    private DatasetFactory datasetFactory = new DatasetFactory();
-    private RoiUpdater roiUpdater = new RoiUpdater();
 
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();

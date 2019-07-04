@@ -10,7 +10,6 @@ public class TREComputer {
     private double[] f;
     private Matrix eigenVectors;
     private Matrix barycentre;
-
     private Mean mean = new Mean();
 
     public TREComputer(double n, double[] f, Matrix eigenVectors, Matrix barycentre, double expectedSquareFLE) {

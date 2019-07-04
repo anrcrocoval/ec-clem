@@ -62,12 +62,7 @@ public class TargetRegistrationErrorMap implements Runnable {
     private ProgressFrame myprogressbar;
     private Sequence sequence;
     private IcyBufferedImage image;
-
     private SequenceSizeFactory sequenceSizeFactory = new SequenceSizeFactory();
-
-    private RoiProcessor roiProcessor = new RoiProcessor();
-//    private TREComputerFactory treComputerFactory = new TREComputerFactory();
-
     private TREComputer treComputer;
 
     private CompletionService<IcyBufferedImage> completionService = new ExecutorCompletionService<>(
