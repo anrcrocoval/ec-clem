@@ -18,6 +18,7 @@ import icy.image.IcyBufferedImage;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import icy.type.DataType;
+import icy.type.collection.array.ArrayUtil;
 import plugins.perrine.easyclemv0.factory.DatasetFactory;
 import plugins.perrine.easyclemv0.factory.vtk.VtkAbstractTransformFactory;
 import plugins.perrine.easyclemv0.model.Dataset;
@@ -26,13 +27,15 @@ import plugins.perrine.easyclemv0.model.transformation.Transformation;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
 import vtk.*;
 
+import java.lang.reflect.Array;
+
 /**
  * The difference with 2D transform is that the tranform is computed in REAL UNITS, because vtk apply it in real unit,
  * which can be quite convenient for dealing with anisotropy!
  */
-public class Stack3DVTKTransformer implements ImageTransformerInterface {
+public class Stack3DVTKTransformer implements ImageTransformer {
 
-	private vtkImageReslice ImageReslice;
+	private vtkImageReslice imageReslice;
 	private Sequence sequence;
 	private vtkDataSet[] imageData;
 	private int extentx;
@@ -80,6 +83,28 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 		this.spacingz = pixelSizeZ;
 	}
 
+	private Object getPrimitiveArray(DataType datatype, vtkDataArray myvtkarray) {
+		switch(datatype) {
+			case UBYTE:
+				return ((vtkUnsignedCharArray) myvtkarray).GetJavaArray();
+			case BYTE:
+				return ((vtkCharArray) myvtkarray).GetJavaArray();
+			case USHORT:
+				return ((vtkUnsignedShortArray) myvtkarray).GetJavaArray();
+			case SHORT:
+				return ((vtkShortArray) myvtkarray).GetJavaArray();
+			case INT:
+				return ((vtkIntArray) myvtkarray).GetJavaArray();
+			case UINT:
+				return ((vtkUnsignedIntArray) myvtkarray).GetJavaArray();
+			case FLOAT:
+				return ((vtkFloatArray) myvtkarray).GetJavaArray();
+			case DOUBLE:
+				return ((vtkDoubleArray) myvtkarray).GetJavaArray();
+			default : throw new RuntimeException("Unsupported type");
+		}
+	}
+
 	public void run(Transformation transformation) {
 		Dataset sourceTransformedDataset = transformation.apply(datasetFactory.getFrom(sequence));
 
@@ -88,20 +113,20 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 
 		vtkAbstractTransform mytransfo = vtkAbstractTransformFactory.getFrom(transformation);
 
-		ImageReslice = new vtkImageReslice();
-		ImageReslice.SetOutputDimensionality(3);
-		ImageReslice.SetOutputOrigin(0, 0, 0);
-		ImageReslice.SetOutputSpacing(spacingx, spacingy, spacingz);
-		ImageReslice.SetOutputExtent(0, extentx - 1, 0, extenty - 1, 0, extentz - 1);
-		ImageReslice.SetResliceTransform(mytransfo.GetInverse());
-		ImageReslice.SetInterpolationModeToLinear();
+		imageReslice = new vtkImageReslice();
+		imageReslice.SetOutputDimensionality(3);
+		imageReslice.SetOutputOrigin(0, 0, 0);
+		imageReslice.SetOutputSpacing(spacingx, spacingy, spacingz);
+		imageReslice.SetOutputExtent(0, extentx - 1, 0, extenty - 1, 0, extentz - 1);
+		imageReslice.SetResliceTransform(mytransfo.GetInverse());
+		imageReslice.SetInterpolationModeToLinear();
 
 		imageData = new vtkDataSet[sequence.getSizeC()];
 		for (int c = 0; c < sequence.getSizeC(); c++) {
 			converttoVtkImageData(c);
-			ImageReslice.SetInputData(imageData[c]);
-			ImageReslice.Update();
-			imageData[c] = ImageReslice.GetOutput();
+			imageReslice.SetInputData(imageData[c]);
+			imageReslice.Update();
+			imageData[c] = imageReslice.GetOutput();
 		}
 
 		int nbc = sequence.getSizeC();
@@ -112,172 +137,27 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 		DataType datatype = sequence.getDataType_();
 		sequence.beginUpdate();
 		sequence.removeAllImages();
+
 		try {
-			switch(datatype) {
-				case UBYTE:
-					for (int t = 0; t < nbt; t++) {
-						for (int z = 0; z < nbz; z++) {
-							IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
-							progress.setPosition(z);
-							for (int c = 0; c < nbc; c++) {
-								vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
-								final byte[] inData = ((vtkUnsignedCharArray) myvtkarray).GetJavaArray();
-								byte[] outData = new byte[w * h];
-								for (int i = 0; i < h; i++) {
-									for (int j = 0; j < w; j++) {
-										outData[i * w + j] =  inData[z * w * h + i * w + j];
-									}
-								}
-								image.setDataXYAsByte(c, outData);
+			for (int t = 0; t < nbt; t++) {
+				for (int z = 0; z < nbz; z++) {
+					IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
+					progress.setPosition(z);
+					for (int c = 0; c < nbc; c++) {
+						vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
+						Object inData = getPrimitiveArray(datatype, myvtkarray);
+						Object outData = Array.newInstance(datatype.toPrimitiveClass(), w * h);
+
+						for (int i = 0; i < h; i++) {
+							for (int j = 0; j < w; j++) {
+								Array.set(outData, i * w + j, Array.get(inData, z * w * h + i * w + j));
 							}
-							sequence.setImage(t, z, image);
 						}
+						image.setDataXY(c, outData);
 					}
-					break;
-				case BYTE:
-					for (int t = 0; t < nbt; t++) {
-						for (int z = 0; z < nbz; z++) {
-							IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
-							progress.setPosition(z);
-							for (int c=0; c < nbc; c++){
-								vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
-								final byte[] inData=((vtkUnsignedCharArray) myvtkarray).GetJavaArray();
-								byte[] outData=new byte[w*h];
-								for (int i = 0; i < h; i++) {
-									for (int j = 0; j < w; j++) {
-										outData[i * w + j] =  inData[z * w * h + i * w + j];
-									}
-								}
-								image.setDataXYAsByte(c, outData);
-							}
-							sequence.setImage(t, z, image);
-						}
-					}
-					break;
-				case USHORT:
-					for (int t = 0; t < nbt; t++) {
-						for (int z = 0; z < nbz; z++) {
-							IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
-							progress.setPosition(z);
-							for (int c=0; c < nbc; c++){
-								vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
-								final short[] inData=((vtkUnsignedShortArray) myvtkarray).GetJavaArray();
-								short[] outData=new short[w*h];
-								for (int i = 0; i < h; i++) {
-									for (int j = 0; j < w; j++) {
-										outData[i * w + j] =  inData[z * w * h + i * w + j];
-									}
-								}
-								image.setDataXYAsShort(c, outData);
-							}
-							sequence.setImage(t, z, image);
-						}
-					}
-					break;
-				case SHORT:
-					for (int t = 0; t < nbt; t++) {
-						for (int z = 0; z < nbz; z++) {
-							IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
-							progress.setPosition(z);
-							for (int c=0; c < nbc; c++){
-								vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
-								final short[] inData=((vtkShortArray) myvtkarray).GetJavaArray();
-								short[] outData=new short[w*h];
-								for (int i = 0; i < h; i++) {
-									for (int j = 0; j < w; j++) {
-										outData[i * w + j] =  inData[z * w * h + i * w + j];
-									}
-								}
-								image.setDataXYAsShort(c, outData);
-							}
-							sequence.setImage(t, z, image);
-						}
-					}
-					break;
-				case INT:
-					for (int t = 0; t < nbt; t++) {
-						for (int z = 0; z < nbz; z++) {
-							IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
-							progress.setPosition(z);
-							for (int c=0; c < nbc; c++){
-								vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
-								final int[] inData=((vtkIntArray) myvtkarray).GetJavaArray();
-								int[] outData=new int[w*h];
-								for (int i = 0; i < h; i++) {
-									for (int j = 0; j < w; j++) {
-										outData[i * w + j] =  inData[z * w * h + i * w + j];
-									}
-								}
-								image.setDataXYAsInt(c, outData);
-							}
-							sequence.setImage(t, z, image);
-						}
-					}
-					break;
-				case UINT:
-					for (int t = 0; t < nbt; t++) {
-						for (int z = 0; z < nbz; z++) {
-							IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
-							progress.setPosition(z);
-							for (int c=0; c < nbc; c++){
-								vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
-								final int[] inData=((vtkUnsignedIntArray) myvtkarray).GetJavaArray();
-								int[] outData=new int[w*h];
-								for (int i = 0; i < h; i++) {
-									for (int j = 0; j < w; j++) {
-										outData[i * w + j] =  inData[z * w * h + i * w + j];
-									}
-								}
-								image.setDataXYAsInt(c, outData);
-							}
-							sequence.setImage(t, z, image);
-						}
-					}
-					break;
-				case FLOAT:
-					for (int t = 0; t < nbt; t++) {
-						for (int z = 0; z < nbz; z++) {
-							IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
-							progress.setPosition(z);
-							for (int c=0; c < nbc; c++){
-								vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
-								final float[] inData=((vtkFloatArray) myvtkarray).GetJavaArray();
-								float[] outData=new float[w*h];
-								for (int i = 0; i < h; i++) {
-									for (int j = 0; j < w; j++) {
-										outData[i * w + j] =  inData[z * w * h + i * w + j];
-									}
-								}
-								image.setDataXYAsFloat(c, outData);
-							}
-							sequence.setImage(t, z, image);
-						}
-					}
-					break;
-				case DOUBLE:
-					for (int t = 0; t < nbt; t++) {
-						for (int z = 0; z < nbz; z++) {
-							IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
-							progress.setPosition(z);
-							for (int c=0; c < nbc; c++){
-								vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
-								final double[] inData=((vtkDoubleArray) myvtkarray).GetJavaArray();
-								double[] outData=new double[w*h];
-								for (int i = 0; i < h; i++) {
-									for (int j = 0; j < w; j++) {
-										outData[i * w + j] =  inData[z * w * h + i * w + j];
-									}
-								}
-								image.setDataXYAsDouble(c, outData);
-							}
-							sequence.setImage(t, z, image);
-						}
-					}
-					break;
-				default:
-					break;
+					sequence.setImage(t, z, image);
+				}
 			}
-		
 			sequence.setPixelSizeX(spacingx);
 			sequence.setPixelSizeY(spacingy);
 			sequence.setPixelSizeZ(spacingz);
@@ -304,9 +184,7 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 		final vtkImageData newImageData = new vtkImageData();
 		newImageData.SetDimensions(sizeX, sizeY, sizeZ);
 		newImageData.SetSpacing(InputSpacingx, InputSpacingy, InputSpacingz);
-
 		vtkDataArray array;
-
 		switch (dataType) {
 		case UBYTE:
 			newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_CHAR, 1);

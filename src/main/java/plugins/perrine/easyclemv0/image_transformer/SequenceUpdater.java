@@ -6,7 +6,7 @@ import plugins.perrine.easyclemv0.model.TransformationSchema;
 
 public class SequenceUpdater {
 
-    private ImageTransformerInterface imageTransformer = new Stack3DVTKTransformer();
+    private ImageTransformer imageTransformer = new Stack3DVTKTransformer();
     private TransformationFactory transformationFactory = new TransformationFactory();
 
     public void update(Sequence sourceSequence, TransformationSchema transformationSchema) {
