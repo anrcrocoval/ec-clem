@@ -1,16 +1,14 @@
 package plugins.perrine.easyclemv0.model;
 
 import icy.gui.frame.progress.AnnounceFrame;
-import icy.main.Icy;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceListener;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
-import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
 import plugins.perrine.easyclemv0.error.TREComputer;
 import plugins.perrine.easyclemv0.factory.FiducialSetFactory;
 import plugins.perrine.easyclemv0.factory.TREComputerFactory;
-import plugins.perrine.easyclemv0.factory.TransformationFactory;
+import plugins.perrine.easyclemv0.factory.TransformationSchemaFactory;
 import plugins.perrine.easyclemv0.image_transformer.SequenceUpdater;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
 import plugins.perrine.easyclemv0.sequence_listener.RoiAdded;
@@ -27,7 +25,7 @@ public class WorkspaceTransformer {
 
     private SequenceUpdater sequenceUpdater = new SequenceUpdater();
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private TransformationFactory transformationFactory = new TransformationFactory();
+    private TransformationSchemaFactory transformationSchemaFactory = new TransformationSchemaFactory();
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
     private FiducialSetFactory fiducialSetFactory = new FiducialSetFactory();
 
@@ -44,44 +42,39 @@ public class WorkspaceTransformer {
             resetToOriginalImage(workspace);
 
             try {
-                workspace.setTransformation(transformationFactory.getFrom(workspace));
+                workspace.setTransformationSchema(transformationSchemaFactory.getFrom(workspace));
             } catch (RuntimeException e) {
                 addListeners(workspace.getTargetSequence(), targetSequenceListeners);
             }
 
-            if (!workspace.getWorkspaceState().isPause()) {
-                sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformation());
-                Document document = XMLUtil.createDocument(true);
-                xmlWriter = new XmlTransformationWriter(document);
-                xmlWriter.write(workspace.getTransformation());
-                xmlFileWriter = new XmlFileWriter(document, workspace.getXMLFile());
-                xmlFileWriter.write();
+            sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformationSchema());
+            Document document = XMLUtil.createDocument(true);
+            xmlWriter = new XmlTransformationWriter(document);
+            xmlWriter.write(workspace.getTransformationSchema());
+            xmlFileWriter = new XmlFileWriter(document, workspace.getXMLFile());
+            xmlFileWriter.write();
 
-                if (workspace.getMonitoringConfiguration().isMonitor()) {
-                    FiducialSet fiducialSet = fiducialSetFactory.getFrom(workspace);
-                    TREComputer treComputer = treComputerFactory.getFrom(fiducialSet);
+            if (workspace.getMonitoringConfiguration().isMonitor()) {
+                FiducialSet fiducialSet = fiducialSetFactory.getFrom(workspace);
+                TREComputer treComputer = treComputerFactory.getFrom(fiducialSet);
 
-                    listofNvalues.add(listofNvalues.size(), fiducialSet.getN());
-                    listoftrevalues.add(
-                        listoftrevalues.size(),
-                        treComputer.getExpectedSquareTRE(workspace.getMonitoringConfiguration().getMonitoringPoint())
-                    );
+                listofNvalues.add(listofNvalues.size(), fiducialSet.getN());
+                listoftrevalues.add(
+                    listoftrevalues.size(),
+                    treComputer.getExpectedSquareTRE(workspace.getMonitoringConfiguration().getMonitoringPoint())
+                );
 
-                    double[][] TREValues = new double[listofNvalues.size()][2];
+                double[][] TREValues = new double[listofNvalues.size()][2];
 
-                    for (int i = 0; i < listofNvalues.size(); i++) {
-                        TREValues[i][0] = listofNvalues.get(i);
-                        TREValues[i][1] = listoftrevalues.get(i);
-                        System.out.println("N=" + TREValues[i][0] + ", TRE=" + TREValues[i][1]);
-                    }
-                    MonitorTargetPoint.UpdatePoint(TREValues);
+                for (int i = 0; i < listofNvalues.size(); i++) {
+                    TREValues[i][0] = listofNvalues.get(i);
+                    TREValues[i][1] = listoftrevalues.get(i);
+                    System.out.println("N=" + TREValues[i][0] + ", TRE=" + TREValues[i][1]);
                 }
-
-                new AnnounceFrame("Transformation Updated", 5);
-            } else {
-                new AnnounceFrame("You are in pause mode, click on update transfo", 3);
-                Icy.getMainInterface().setSelectedTool(ROI2DPointPlugin.class.getName());
+                MonitorTargetPoint.UpdatePoint(TREValues);
             }
+
+            new AnnounceFrame("TransformationSchema Updated", 5);
 
 //            addListeners(workspace.getSourceSequence(), sourceSequenceListeners);
             addListeners(workspace.getTargetSequence(), targetSequenceListeners);
@@ -89,8 +82,7 @@ public class WorkspaceTransformer {
     }
 
     public List<SequenceListener> removeListeners(Sequence sequence) {
-        List<SequenceListener> listeners = Arrays.asList(sequence.getListeners())
-            .stream().filter((listener) -> listener instanceof RoiAdded).collect(Collectors.toList());
+        List<SequenceListener> listeners = Arrays.stream(sequence.getListeners()).filter((listener) -> listener instanceof RoiAdded).collect(Collectors.toList());
         for(SequenceListener listener : listeners) {
             sequence.removeListener(listener);
         }
@@ -104,9 +96,9 @@ public class WorkspaceTransformer {
     }
 
     public void resetToOriginalImage(Workspace workspace) {
-        if(workspace.getTransformation() != null) {
-            sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformation().inverse());
-            workspace.setTransformation(null);
+        if(workspace.getTransformationSchema() != null) {
+            sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformationSchema().inverse());
+            workspace.setTransformationSchema(null);
         }
     }
 

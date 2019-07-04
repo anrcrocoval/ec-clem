@@ -2,6 +2,7 @@ package plugins.perrine.easyclemv0.model;
 
 import Jama.Matrix;
 import org.junit.jupiter.api.Test;
+import plugins.perrine.easyclemv0.model.transformation.Similarity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

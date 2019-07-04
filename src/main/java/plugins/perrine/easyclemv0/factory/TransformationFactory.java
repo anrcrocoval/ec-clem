@@ -1,21 +1,20 @@
 package plugins.perrine.easyclemv0.factory;
 
-import plugins.perrine.easyclemv0.model.FiducialSet;
-import plugins.perrine.easyclemv0.model.Transformation;
-import plugins.perrine.easyclemv0.model.Workspace;
+import plugins.perrine.easyclemv0.model.TransformationSchema;
+import plugins.perrine.easyclemv0.model.transformation.Transformation;
+import plugins.perrine.easyclemv0.registration.NonRigidTransformationComputer;
+import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
 
 public class TransformationFactory {
 
-    private FiducialSetFactory fiducialSetFactory = new FiducialSetFactory();
-    private SequenceSizeFactory sequenceSizeFactory = new SequenceSizeFactory();
+    private RigidTransformationComputer rigidTransformationComputer = new RigidTransformationComputer();
+    private NonRigidTransformationComputer nonRigidTransformationComputer = new NonRigidTransformationComputer();
 
-    public Transformation getFrom(Workspace workspace) {
-        FiducialSet fiducialSet = fiducialSetFactory.getFrom(workspace);
-        return new Transformation(
-            fiducialSet,
-            workspace.getTransformationConfiguration().getTransformationType(),
-            sequenceSizeFactory.getFrom(workspace.getSourceSequence()),
-            sequenceSizeFactory.getFrom(workspace.getTargetSequence())
-        );
+    public Transformation getFrom(TransformationSchema transformationSchema) {
+        switch (transformationSchema.getTransformationType()) {
+            case RIGID: return rigidTransformationComputer.compute(transformationSchema.getFiducialSet());
+            case NON_RIGID: return  nonRigidTransformationComputer.compute(transformationSchema.getFiducialSet());
+            default : throw new RuntimeException("Case not implemented");
+        }
     }
 }

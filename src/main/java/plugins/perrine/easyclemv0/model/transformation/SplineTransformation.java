@@ -1,10 +1,11 @@
-package plugins.perrine.easyclemv0.model;
+package plugins.perrine.easyclemv0.model.transformation;
 
 import plugins.perrine.easyclemv0.factory.DatasetFactory;
-import plugins.perrine.easyclemv0.factory.VtkPointsFactory;
+import plugins.perrine.easyclemv0.factory.vtk.VtkPointsFactory;
+import plugins.perrine.easyclemv0.model.Dataset;
 import vtk.*;
 
-public class SplineTransformation {
+public class SplineTransformation implements Transformation {
 
     private vtkThinPlateSplineTransform splineTransform;
     private VtkPointsFactory vtkPointsFactory = new VtkPointsFactory();

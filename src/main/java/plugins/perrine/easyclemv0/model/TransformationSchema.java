@@ -1,12 +1,12 @@
 package plugins.perrine.easyclemv0.model;
 
-public class Transformation {
+public class TransformationSchema {
     private FiducialSet fiducialSet;
     private TransformationType transformationType;
     private SequenceSize sourceSize;
     private SequenceSize targetSize;
 
-    public Transformation(FiducialSet fiducialSet, TransformationType transformationType, SequenceSize sourceSize, SequenceSize targetSize) {
+    public TransformationSchema(FiducialSet fiducialSet, TransformationType transformationType, SequenceSize sourceSize, SequenceSize targetSize) {
         this.fiducialSet = fiducialSet;
         this.transformationType = transformationType;
         this.sourceSize = sourceSize;
@@ -29,8 +29,8 @@ public class Transformation {
         return targetSize;
     }
 
-    public Transformation inverse() {
-        return new Transformation(
+    public TransformationSchema inverse() {
+        return new TransformationSchema(
             new FiducialSet(fiducialSet.getTargetDataset(), fiducialSet.getSourceDataset()),
             transformationType,
             targetSize,

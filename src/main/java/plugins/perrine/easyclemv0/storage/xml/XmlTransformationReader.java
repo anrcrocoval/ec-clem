@@ -9,7 +9,7 @@ import static plugins.perrine.easyclemv0.storage.xml.XmlTransformation.*;
 
 public class XmlTransformationReader {
 
-    public Transformation read(Element transformationElement) {
+    public TransformationSchema read(Element transformationElement) {
         TransformationType transformationType = TransformationType.valueOf(transformationElement.getAttribute(transformationTypeAttributeName));
         ArrayList<Element> datasetElements = XMLUtil.getElements(transformationElement, datasetElementName);
         if(datasetElements.size() != 2) {
@@ -32,9 +32,9 @@ public class XmlTransformationReader {
         SequenceSize targetSequenceSize = readSequenceSize(sequenceSizeElements.get(1));
 
         if(sequenceSizeElements.get(0).getAttribute(sequenceSizeTypeAttributeName).equals("source")) {
-            return new Transformation(fiducialSet, transformationType, sourceSequenceSize, targetSequenceSize);
+            return new TransformationSchema(fiducialSet, transformationType, sourceSequenceSize, targetSequenceSize);
         } else {
-            return new Transformation(fiducialSet, transformationType, targetSequenceSize, sourceSequenceSize);
+            return new TransformationSchema(fiducialSet, transformationType, targetSequenceSize, sourceSequenceSize);
         }
     }
 

@@ -3,8 +3,7 @@ package plugins.perrine.easyclemv0.storage.xml;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import plugins.perrine.easyclemv0.model.SequenceSize;
-import plugins.perrine.easyclemv0.model.Transformation;
+import plugins.perrine.easyclemv0.model.TransformationSchema;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -23,14 +22,14 @@ public class XmlTransformationElementListReader {
         return list.get(list.size() - 1);
     }
 
-    public List<Transformation> getTransformationList(Document document) {
-        List<Transformation> transformationList = new ArrayList<>();
+    public List<TransformationSchema> getTransformationList(Document document) {
+        List<TransformationSchema> transformationSchemaList = new ArrayList<>();
         List<Element> elementList = read(document);
         sortTransformationElementsByDate(elementList);
         for(Element element : elementList) {
-            transformationList.add(xmlTransformationReader.read(element));
+            transformationSchemaList.add(xmlTransformationReader.read(element));
         }
-        return transformationList;
+        return transformationSchemaList;
     }
 
     private List<Element> read(Document document) {

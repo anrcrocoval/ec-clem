@@ -25,18 +25,12 @@ import java.util.ArrayList;
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
-import Jama.Matrix;
 import org.w3c.dom.Element;
 import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
 import plugins.adufour.ezplug.EzVarSequence;
 import plugins.adufour.vars.lang.VarSequence;
-import plugins.perrine.easyclemv0.image_transformer.ImageTransformer;
-import plugins.perrine.easyclemv0.image_transformer.NonRigidTranformationVTK;
-import plugins.perrine.easyclemv0.image_transformer.Stack3DVTKTransformer;
-import plugins.perrine.easyclemv0.model.FiducialSet;
-import plugins.perrine.easyclemv0.model.SequenceSize;
-import plugins.perrine.easyclemv0.model.Transformation;
+import plugins.perrine.easyclemv0.model.TransformationSchema;
 import plugins.perrine.easyclemv0.model.WorkspaceTransformer;
 import plugins.perrine.easyclemv0.storage.xml.*;
 import vtk.vtkDataSet;
@@ -44,7 +38,6 @@ import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.file.Saver;
 import icy.gui.dialog.MessageDialog;
-import icy.gui.frame.progress.ProgressFrame;
 import icy.preferences.ApplicationPreferences;
 import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;
@@ -107,8 +100,8 @@ public class ApplyTransformation extends EzPlug implements Block {
 				Document document = xmlFileReader.loadFile(xmlFile.getValue());
 				ArrayList<Element> transformationElements = XMLUtil.getElements(document.getDocumentElement(), transformationElementName);
 				for(Element element : transformationElements) {
-					Transformation transformation = xmlTransformationReader.read(element);
-					//workspaceTransformer.apply(sourceseq, transformation);
+					TransformationSchema transformationSchema = xmlTransformationReader.read(element);
+					//workspaceTransformer.apply(sourceseq, transformationSchema);
 				}
 
 				if (!isHeadLess()) {
@@ -126,7 +119,7 @@ public class ApplyTransformation extends EzPlug implements Block {
 				Saver.save(sourceseq, file, multipleFiles, showProgress);
 
 				if (!ApplyTransformation.this.isHeadLess()) {
-					MessageDialog.showDialog("Transformation have been applied. Image has been renamed and saved, use this one for going on with your alignments");
+					MessageDialog.showDialog("TransformationSchema have been applied. Image has been renamed and saved, use this one for going on with your alignments");
 				}
 			}
 		};

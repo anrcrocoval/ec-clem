@@ -17,14 +17,14 @@ public class XmlTransformationWriter {
         this.document = document;
     }
 
-    public void write(Transformation transformation) {
+    public void write(TransformationSchema transformationSchema) {
         Element transformationElement = XMLUtil.addElement(document.getDocumentElement(), transformationElementName);
-        transformationElement.setAttribute(transformationTypeAttributeName, transformation.getTransformationType().name());
+        transformationElement.setAttribute(transformationTypeAttributeName, transformationSchema.getTransformationType().name());
         transformationElement.setAttribute(transformationDateAttributeName, ZonedDateTime.now().toString());
-        write(transformation.getSourceSize(), "source", transformationElement);
-        write(transformation.getTargetSize(), "target", transformationElement);
-        write(transformation.getFiducialSet().getSourceDataset(), "source", transformationElement);
-        write(transformation.getFiducialSet().getTargetDataset(), "target", transformationElement);
+        write(transformationSchema.getSourceSize(), "source", transformationElement);
+        write(transformationSchema.getTargetSize(), "target", transformationElement);
+        write(transformationSchema.getFiducialSet().getSourceDataset(), "source", transformationElement);
+        write(transformationSchema.getFiducialSet().getTargetDataset(), "target", transformationElement);
     }
 
     private void write(SequenceSize sequenceSize, String type, Element transformationElement) {

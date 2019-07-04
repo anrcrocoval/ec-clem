@@ -18,28 +18,13 @@ import icy.image.IcyBufferedImage;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import icy.type.DataType;
-import Jama.Matrix;
 import plugins.perrine.easyclemv0.factory.DatasetFactory;
+import plugins.perrine.easyclemv0.factory.vtk.VtkAbstractTransformFactory;
 import plugins.perrine.easyclemv0.model.Dataset;
-import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.SequenceSize;
-import plugins.perrine.easyclemv0.model.Similarity;
-import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
+import plugins.perrine.easyclemv0.model.transformation.Transformation;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
-import vtk.vtkDataArray;
-import vtk.vtkDataSet;
-import vtk.vtkDoubleArray;
-import vtk.vtkFloatArray;
-import vtk.vtkImageData;
-import vtk.vtkImageReslice;
-import vtk.vtkIntArray;
-import vtk.vtkMatrix4x4;
-import vtk.vtkPointData;
-import vtk.vtkShortArray;
-import vtk.vtkTransform;
-import vtk.vtkUnsignedCharArray;
-import vtk.vtkUnsignedIntArray;
-import vtk.vtkUnsignedShortArray;
+import vtk.*;
 
 /**
  * The difference with 2D transform is that the tranform is computed in REAL UNITS, because vtk apply it in real unit,
@@ -48,7 +33,6 @@ import vtk.vtkUnsignedShortArray;
 public class Stack3DVTKTransformer implements ImageTransformerInterface {
 
 	private vtkImageReslice ImageReslice;
-	private vtkMatrix4x4 transfo3D;
 	private Sequence sequence;
 	private vtkDataSet[] imageData;
 	private int extentx;
@@ -61,30 +45,19 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 	private double InputSpacingx;
 	private double InputSpacingy;
 
-	private RigidTransformationComputer rigidTransformationComputer = new RigidTransformationComputer();
 	private RoiUpdater roiUpdater = new RoiUpdater();
 	private DatasetFactory datasetFactory = new DatasetFactory();
+	private VtkAbstractTransformFactory vtkAbstractTransformFactory = new VtkAbstractTransformFactory();
 
 	public void setSourceSequence(Sequence sequence) {
 		this.sequence = sequence;
 		setSourceSize(sequence.getPixelSizeX(), sequence.getPixelSizeY(), sequence.getPixelSizeZ());
 	}
 
-	public void setSourceSize(double pixelSizeX, double pixelSizeY, double pixelSizeZ) {
+	private void setSourceSize(double pixelSizeX, double pixelSizeY, double pixelSizeZ) {
 		InputSpacingx = pixelSizeX;
 		InputSpacingy = pixelSizeY;
 		InputSpacingz = pixelSizeZ;
-	}
-
-	public void setTargetSize(Sequence sequence) {
-		setTargetSize(
-			sequence.getSizeX(),
-			sequence.getSizeY(),
-			sequence.getSizeZ(),
-			sequence.getPixelSizeX(),
-			sequence.getPixelSizeY(),
-			sequence.getPixelSizeZ()
-		);
 	}
 
 	public void setTargetSize(SequenceSize sequenceSize) {
@@ -107,30 +80,14 @@ public class Stack3DVTKTransformer implements ImageTransformerInterface {
 		this.spacingz = pixelSizeZ;
 	}
 
-	private void setParameters(Matrix transformationMatrix) {
-		if (transformationMatrix.getRowDimension() != 4) {
-			throw new RuntimeException("Use this class for 3D transformation only");
-		}
-
-		transfo3D = new vtkMatrix4x4();
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				transfo3D.SetElement(i, j, transformationMatrix.get(i, j));
-			}
-		}
-	}
-
-	public void run(FiducialSet fiducialSet) {
-
-		Similarity similarity = rigidTransformationComputer.compute(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());
-		Dataset sourceTransformedDataset = similarity.apply(datasetFactory.getFrom(sequence));
-		setParameters(similarity.getMatrix());
+	public void run(Transformation transformation) {
+		Dataset sourceTransformedDataset = transformation.apply(datasetFactory.getFrom(sequence));
 
 		System.out.println("I will apply transfo now");
 		ProgressFrame progress = new ProgressFrame("Applying the transformation...");
 
-		vtkTransform mytransfo = new vtkTransform();
-		mytransfo.SetMatrix(transfo3D);
+		vtkAbstractTransform mytransfo = vtkAbstractTransformFactory.getFrom(transformation);
+
 		ImageReslice = new vtkImageReslice();
 		ImageReslice.SetOutputDimensionality(3);
 		ImageReslice.SetOutputOrigin(0, 0, 0);

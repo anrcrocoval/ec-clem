@@ -1,8 +1,10 @@
-package plugins.perrine.easyclemv0.model;
+package plugins.perrine.easyclemv0.model.transformation;
 
 import Jama.Matrix;
+import plugins.perrine.easyclemv0.model.Dataset;
+import plugins.perrine.easyclemv0.model.Point;
 
-public class AffineTransformation {
+public class AffineTransformation implements Transformation {
     protected Matrix A;
     protected Matrix T;
 

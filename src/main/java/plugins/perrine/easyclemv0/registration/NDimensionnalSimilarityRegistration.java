@@ -4,7 +4,7 @@ import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Point;
-import plugins.perrine.easyclemv0.model.Similarity;
+import plugins.perrine.easyclemv0.model.transformation.Similarity;
 
 import static java.lang.Math.max;
 

@@ -13,7 +13,7 @@ public class UpdateTransformationButton extends JButton {
     private Workspace workspace;
 
     public UpdateTransformationButton() {
-        super("Update Transformation");
+        super("Update TransformationSchema");
         setToolTipText("Press this button if you have moved the points, prepared set of points, \n or obtained some black part of the image. This will refresh it");
         addActionListener((arg0) -> action());
     }

@@ -23,10 +23,10 @@ public class TREComputerFactory {
     }
 
     public TREComputer getFrom(Workspace workspace) {
-        if(workspace.getTransformation() != null) {
+        if(workspace.getTransformationSchema() != null) {
             return getFrom(
-                workspace.getTransformation().getFiducialSet().getSourceDataset(),
-                workspace.getTransformation().getFiducialSet().getTargetDataset()
+                workspace.getTransformationSchema().getFiducialSet().getSourceDataset(),
+                workspace.getTransformationSchema().getFiducialSet().getTargetDataset()
             );
         }
 

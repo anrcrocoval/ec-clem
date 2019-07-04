@@ -1,6 +1,8 @@
 package plugins.perrine.easyclemv0.model;
 
 import Jama.Matrix;
+import plugins.perrine.easyclemv0.model.transformation.AffineTransformation;
+import plugins.perrine.easyclemv0.model.transformation.Similarity;
 
 public class DatasetTransformer {
 

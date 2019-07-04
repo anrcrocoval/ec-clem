@@ -1,4 +1,4 @@
-package plugins.perrine.easyclemv0.factory;
+package plugins.perrine.easyclemv0.factory.vtk;
 
 import plugins.perrine.easyclemv0.model.Dataset;
 import vtk.vtkPoints;
