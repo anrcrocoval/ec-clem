@@ -8,7 +8,6 @@ import org.w3c.dom.Document;
 import plugins.perrine.easyclemv0.error.TREComputer;
 import plugins.perrine.easyclemv0.factory.*;
 import plugins.perrine.easyclemv0.image_transformer.SequenceUpdater;
-import plugins.perrine.easyclemv0.model.transformation.Transformation;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
 import plugins.perrine.easyclemv0.sequence_listener.RoiAdded;
@@ -28,8 +27,6 @@ public class WorkspaceTransformer {
     private TransformationSchemaFactory transformationSchemaFactory = new TransformationSchemaFactory();
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
     private FiducialSetFactory fiducialSetFactory = new FiducialSetFactory();
-    private DatasetFactory datasetFactory = new DatasetFactory();
-    private TransformationFactory transformationFactory = new TransformationFactory();
     private RoiUpdater roiUpdater = new RoiUpdater();
 
     private List<Integer> listofNvalues = new ArrayList<>();

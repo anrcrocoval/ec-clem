@@ -13,13 +13,11 @@
 
 package plugins.perrine.easyclemv0.image_transformer;
 
-import icy.gui.frame.progress.ProgressFrame;
-import icy.image.IcyBufferedImage;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import icy.type.DataType;
-import icy.type.collection.array.ArrayUtil;
 import plugins.perrine.easyclemv0.factory.DatasetFactory;
+import plugins.perrine.easyclemv0.factory.SequenceFactory;
 import plugins.perrine.easyclemv0.factory.vtk.VtkAbstractTransformFactory;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.SequenceSize;
@@ -51,6 +49,7 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 	private RoiUpdater roiUpdater = new RoiUpdater();
 	private DatasetFactory datasetFactory = new DatasetFactory();
 	private VtkAbstractTransformFactory vtkAbstractTransformFactory = new VtkAbstractTransformFactory();
+	private SequenceFactory sequenceFactory = new SequenceFactory();
 
 	public void setSourceSequence(Sequence sequence) {
 		this.sequence = sequence;
@@ -83,36 +82,9 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 		this.spacingz = pixelSizeZ;
 	}
 
-	private Object getPrimitiveArray(DataType datatype, vtkDataArray myvtkarray) {
-		switch(datatype) {
-			case UBYTE:
-				return ((vtkUnsignedCharArray) myvtkarray).GetJavaArray();
-			case BYTE:
-				return ((vtkCharArray) myvtkarray).GetJavaArray();
-			case USHORT:
-				return ((vtkUnsignedShortArray) myvtkarray).GetJavaArray();
-			case SHORT:
-				return ((vtkShortArray) myvtkarray).GetJavaArray();
-			case INT:
-				return ((vtkIntArray) myvtkarray).GetJavaArray();
-			case UINT:
-				return ((vtkUnsignedIntArray) myvtkarray).GetJavaArray();
-			case FLOAT:
-				return ((vtkFloatArray) myvtkarray).GetJavaArray();
-			case DOUBLE:
-				return ((vtkDoubleArray) myvtkarray).GetJavaArray();
-			default : throw new RuntimeException("Unsupported type");
-		}
-	}
-
 	public void run(Transformation transformation) {
 		Dataset sourceTransformedDataset = transformation.apply(datasetFactory.getFrom(sequence));
-
-		System.out.println("I will apply transfo now");
-		ProgressFrame progress = new ProgressFrame("Applying the transformation...");
-
 		vtkAbstractTransform mytransfo = vtkAbstractTransformFactory.getFrom(transformation);
-
 		imageReslice = new vtkImageReslice();
 		imageReslice.SetOutputDimensionality(3);
 		imageReslice.SetOutputOrigin(0, 0, 0);
@@ -129,44 +101,7 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 			imageData[c] = imageReslice.GetOutput();
 		}
 
-		int nbc = sequence.getSizeC();
-		int nbt = sequence.getSizeT();
-		int nbz = extentz;
-		int w = extentx;
-		int h = extenty;
-		DataType datatype = sequence.getDataType_();
-		sequence.beginUpdate();
-		sequence.removeAllImages();
-
-		try {
-			for (int t = 0; t < nbt; t++) {
-				for (int z = 0; z < nbz; z++) {
-					IcyBufferedImage image = new IcyBufferedImage(w, h, nbc, datatype);
-					progress.setPosition(z);
-					for (int c = 0; c < nbc; c++) {
-						vtkDataArray myvtkarray = imageData[c].GetPointData().GetScalars();
-						Object inData = getPrimitiveArray(datatype, myvtkarray);
-						Object outData = Array.newInstance(datatype.toPrimitiveClass(), w * h);
-
-						for (int i = 0; i < h; i++) {
-							for (int j = 0; j < w; j++) {
-								Array.set(outData, i * w + j, Array.get(inData, z * w * h + i * w + j));
-							}
-						}
-						image.setDataXY(c, outData);
-					}
-					sequence.setImage(t, z, image);
-				}
-			}
-			sequence.setPixelSizeX(spacingx);
-			sequence.setPixelSizeY(spacingy);
-			sequence.setPixelSizeZ(spacingz);
-		} finally {
-			sequence.endUpdate();
-		}
-
-		progress.close();
-		System.out.println("have been applied");
+		sequence = sequenceFactory.getFrom(sequence, imageData, extentx, extenty, extentz, sequence.getSizeT(), spacingx, spacingy, spacingz);
 		roiUpdater.updateRoi(sourceTransformedDataset, sequence);
 	}
 
