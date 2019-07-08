@@ -43,7 +43,7 @@ public class ComputeErrorMapButton extends JButton {
 //							MessageDialog.showDialog("Please Initialize EC-Clem first by pressing the Play button");
 //							return;
 //						}
-                myTREmap.apply(workspace.getSourceSequence(), workspace.getSourceSequence().getFirstImage());
+                myTREmap.apply(workspace.getTargetSequence(), workspace.getTargetSequence().getFirstImage());
             }
         } else {
             MessageDialog.showDialog("Source and target were closed. Please open one of them and try again");

@@ -30,7 +30,6 @@ public class TREComputer {
 
     public double getExpectedSquareTRE(Point point) {
         double[] d = new double[point.getDimension()];
-
         for (int i = 0; i < point.getDimension(); i++) {
             d[i] += point.getSquareDistance(eigenVectors.getMatrix(0, eigenVectors.getRowDimension() - 1, i, i), barycentre);
         }

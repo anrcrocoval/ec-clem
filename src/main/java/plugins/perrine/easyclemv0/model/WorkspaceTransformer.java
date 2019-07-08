@@ -72,10 +72,9 @@ public class WorkspaceTransformer {
             xmlFileWriter.write();
 
             if (workspace.getMonitoringConfiguration().isMonitor()) {
-                FiducialSet fiducialSet = fiducialSetFactory.getFrom(workspace);
-                TREComputer treComputer = treComputerFactory.getFrom(fiducialSet);
+                TREComputer treComputer = treComputerFactory.getFrom(workspace);
 
-                listofNvalues.add(listofNvalues.size(), fiducialSet.getN());
+                listofNvalues.add(listofNvalues.size(), workspace.getTransformationSchema().getFiducialSet().getN());
                 listoftrevalues.add(
                     listoftrevalues.size(),
                     treComputer.getExpectedSquareTRE(workspace.getMonitoringConfiguration().getMonitoringPoint())

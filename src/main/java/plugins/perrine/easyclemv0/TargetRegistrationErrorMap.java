@@ -84,7 +84,7 @@ public class TargetRegistrationErrorMap implements Runnable {
     @Override
     public void run() {
         //added to avoid a bug report when no ROI or not enough ROI.
-        if (this.sequence.getROIs().size() < 3) {
+        if (sequence.getROIs().size() < 3) {
             MessageDialog.showDialog("You need at least 4 points to compute an error map ");
         }
 //        Dataset sourceDataset = ReadFiducials(this.sequence);
@@ -133,12 +133,14 @@ public class TargetRegistrationErrorMap implements Runnable {
 
     private Sequence ComputeTREMAP(Sequence sequence, IcyBufferedImage image, TREComputer treComputer) {
         Sequence newsequence = new Sequence();
+        newsequence.setPixelSizeX(sequence.getPixelSizeX());
+        newsequence.setPixelSizeY(sequence.getPixelSizeY());
+        newsequence.setPixelSizeZ(sequence.getPixelSizeZ());
         if (image == null) {
             return null;
         }
 
         Map<Future<IcyBufferedImage>, Integer> resultMap = new HashMap<>();
-
         SequenceSize sequenceSize = sequenceSizeFactory.getFrom(sequence);
 
         for (int z = 0; z < sequence.getSizeZ(); z++) {
@@ -148,9 +150,10 @@ public class TargetRegistrationErrorMap implements Runnable {
                 float[] dataArray = new float[image.getSizeX() * image.getSizeY()];
                 for (int x = 0; x < image.getSizeX(); x++) {
                     for (int y = 0; y < image.getSizeY(); y++) {
-                        point.getMatrix().set(0, 0, x);
-                        point.getMatrix().set(1, 0, y);
-                        point.getMatrix().set(2, 0, finalz);
+                        point.getMatrix().set(0, 0, x * sequence.getPixelSizeX());
+                        point.getMatrix().set(1, 0, y * sequence.getPixelSizeY());
+                        point.getMatrix().set(2, 0, finalz * sequence.getPixelSizeZ());
+//                        dataArray[image.getOffset(x, y)] = (float) treComputer.getExpectedSquareTRE(point);
                         dataArray[image.getOffset(x, y)] = (float) treComputer.getExpectedSquareTRE(point);
                     }
                 }

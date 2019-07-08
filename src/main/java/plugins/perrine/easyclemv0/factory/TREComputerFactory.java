@@ -8,6 +8,7 @@ import plugins.perrine.easyclemv0.error.TREComputer;
 import plugins.perrine.easyclemv0.inertia.InertiaMatrixComputer;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.FiducialSet;
+import plugins.perrine.easyclemv0.model.TransformationSchema;
 import plugins.perrine.easyclemv0.model.Workspace;
 
 public class TREComputerFactory {
@@ -16,40 +17,45 @@ public class TREComputerFactory {
     private InertiaMatrixComputer inertiaMatrixComputer = new InertiaMatrixComputer();
     private FREComputer freComputer = new FREComputer();
     private FLEComputer fleComputer = new FLEComputer();
+    private TransformationSchemaFactory transformationSchemaFactory = new TransformationSchemaFactory();
     private DatasetFactory datasetFactory = new DatasetFactory();
 
-    public TREComputer getFrom(FiducialSet fiducialSet) {
-        return getFrom(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());
+    public TREComputer getFrom(TransformationSchema transformationSchema) {
+        return getFrom(
+            datasetFactory.getFrom(
+                transformationSchema.getFiducialSet().getSourceDataset(),
+                transformationSchema
+            ),
+            transformationSchema.getFiducialSet().getTargetDataset()
+        );
     }
 
     public TREComputer getFrom(Workspace workspace) {
         if(workspace.getTransformationSchema() != null) {
-            return getFrom(
-                workspace.getTransformationSchema().getFiducialSet().getSourceDataset(),
-                workspace.getTransformationSchema().getFiducialSet().getTargetDataset()
-            );
+            return getFrom(workspace.getTransformationSchema());
         }
 
-        return getFrom(
-            datasetFactory.getFrom(workspace.getSourceSequence()),
-            datasetFactory.getFrom(workspace.getTargetSequence())
-        );
+        return getFrom(transformationSchemaFactory.getFrom(workspace));
     }
 
-    public TREComputer getFrom(Dataset sourceDataset, Dataset targetDataset) {
-        Matrix barycentre = sourceDataset.getBarycentre().getMatrix();
-        Matrix eigenVectors = inertiaMatrixComputer.getInertiaMatrix(sourceDataset).eig().getV();
-        double[] f = getF(sourceDataset, eigenVectors);
+    public TREComputer getFrom(Dataset sourceTransformedDataset, Dataset targetDataset) {
+        Matrix barycentre = targetDataset.getBarycentre().getMatrix();
+        barycentre.print(1,5);
+        Dataset clone = targetDataset.clone();
+        clone.substractBarycentre();
+        Matrix eigenVectors = inertiaMatrixComputer.getInertiaMatrix(clone).eig().getV();
+        eigenVectors.print(1,5);
+        double[] f = getF(clone, eigenVectors);
         return new TREComputer(
-            sourceDataset.getN(),
+            targetDataset.getN(),
             f,
             eigenVectors,
             barycentre,
             fleComputer.getExpectedSquareFLE(
                 freComputer.getExpectedSquareFRE(
-                    sourceDataset,
+                    sourceTransformedDataset,
                     targetDataset
-                ), sourceDataset.getN()
+                ), targetDataset.getN()
             )
         );
     }
@@ -69,7 +75,6 @@ public class TREComputerFactory {
 
     private double[] getF(Dataset dataset, Matrix eigenVectors) {
         double[] f = new double[dataset.getDimension()];
-
         for(int j = 0; j < dataset.getDimension(); j++) {
             mean.clear();
             for (int i = 0; i < dataset.getN(); i++) {
@@ -83,6 +88,7 @@ public class TREComputerFactory {
                 );
             }
             f[j] += mean.getResult();
+            System.out.println(f[j]);
         }
         return f;
     }

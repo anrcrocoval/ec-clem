@@ -17,13 +17,7 @@ public class SequenceUpdater {
 
     public void update(Sequence sourceSequence, TransformationSchema transformationSchema) {
         Transformation transformation = transformationFactory.getFrom(transformationSchema);
-        Dataset sourceDataset = datasetFactory.getFrom(sourceSequence);
-        Dataset sourceTransformedDataset;
-        try {
-            sourceTransformedDataset = transformation.apply(sourceDataset);
-        } catch (Exception e) {
-            sourceTransformedDataset = sourceDataset;
-        }
+        Dataset sourceTransformedDataset = datasetFactory.getFrom(datasetFactory.getFrom(sourceSequence), transformationSchema);
         imageTransformer.setSourceSequence(sourceSequence);
         imageTransformer.setTargetSize(transformationSchema.getTargetSize());
         imageTransformer.run(transformation);
