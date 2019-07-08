@@ -21,8 +21,6 @@
 package plugins.perrine.easyclemv0;
 
 import java.io.File;
-import java.util.ArrayList;
-
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -30,10 +28,9 @@ import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
 import plugins.adufour.ezplug.EzVarSequence;
 import plugins.adufour.vars.lang.VarSequence;
+import plugins.perrine.easyclemv0.image_transformer.SequenceUpdater;
 import plugins.perrine.easyclemv0.model.TransformationSchema;
-import plugins.perrine.easyclemv0.model.WorkspaceTransformer;
 import plugins.perrine.easyclemv0.storage.xml.*;
-import vtk.vtkDataSet;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.file.Saver;
@@ -44,30 +41,17 @@ import icy.system.thread.ThreadUtil;
 import plugins.adufour.blocks.lang.Block;
 import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.EzLabel;
-
 import static plugins.perrine.easyclemv0.storage.xml.XmlTransformation.transformationElementName;
 
 public class ApplyTransformation extends EzPlug implements Block {
 
 	private EzVarSequence source = new EzVarSequence("Select Source Image (will be transformed from xml file)");
 	private EzVarFile xmlFile=new EzVarFile("Xml file containing list of transformation", ApplicationPreferences.getPreferences().node("frame/imageLoader").get("path", "."));;
-	private int extentx;
-	private int extenty;
-	private int extentz;
-	private double spacingx;
-	private double spacingy;
-	private double spacingz;
-	private vtkDataSet[] imageData;
-	private double Inputspacingx;
-	private double Inputspacingy;
-	private double Inputspacingz;
-	private Runnable transformer;
 	private VarSequence out = new VarSequence("output sequence", null);
-	private int auto;
+	private SequenceUpdater sequenceUpdater = new SequenceUpdater();
 
 	private XmlFileReader xmlFileReader = new XmlFileReader();
 	private XmlTransformationReader xmlTransformationReader = new XmlTransformationReader();
-	private WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer();
 
 
 	@Override
@@ -92,35 +76,29 @@ public class ApplyTransformation extends EzPlug implements Block {
 			return;
 		}
 
-		transformer = new Runnable() {
+		Runnable transformer = () -> {
 
-	        @Override
-	        public void run() {
+			Document document = xmlFileReader.loadFile(xmlFile.getValue());
+			Element transformationElement = XMLUtil.getElement(document.getDocumentElement(), transformationElementName);
+			TransformationSchema transformationSchema = xmlTransformationReader.read(transformationElement);
+			sequenceUpdater.update(sourceseq, transformationSchema);
 
-				Document document = xmlFileReader.loadFile(xmlFile.getValue());
-				ArrayList<Element> transformationElements = XMLUtil.getElements(document.getDocumentElement(), transformationElementName);
-				for(Element element : transformationElements) {
-					TransformationSchema transformationSchema = xmlTransformationReader.read(element);
-					//workspaceTransformer.apply(sourceseq, transformationSchema);
+			if (!isHeadLess()) {
+				IcyCanvas sourcecanvas = source.getValue().getFirstViewer().getCanvas();
+				if (sourcecanvas instanceof IcyCanvas2D) {
+					((IcyCanvas2D) sourcecanvas).fitCanvasToImage();
 				}
+			}
+			sourceseq.setFilename(sourceseq.getFilename() + " (transformed)");
+			sourceseq.setName(sourceseq.getName() + " (transformed)");
+			File file = new File(sourceseq.getFilename());
+			boolean multipleFiles = false;
+			boolean showProgress = true;
+			System.out.println("Transformed Image will be saved as " + sourceseq.getFilename());
+			Saver.save(sourceseq, file, multipleFiles, showProgress);
 
-				if (!isHeadLess()) {
-					IcyCanvas sourcecanvas = source.getValue().getFirstViewer().getCanvas();
-					if (sourcecanvas instanceof IcyCanvas2D) {
-						((IcyCanvas2D) sourcecanvas).fitCanvasToImage();
-					}
-				}
-				sourceseq.setFilename(sourceseq.getFilename() + " (transformed)");
-				sourceseq.setName(sourceseq.getName() + " (transformed)");
-				File file = new File(sourceseq.getFilename());
-				boolean multipleFiles = false;
-				boolean showProgress = true;
-				System.out.println("Transformed Image will be saved as " +sourceseq.getFilename());
-				Saver.save(sourceseq, file, multipleFiles, showProgress);
-
-				if (!ApplyTransformation.this.isHeadLess()) {
-					MessageDialog.showDialog("TransformationSchema have been applied. Image has been renamed and saved, use this one for going on with your alignments");
-				}
+			if (!ApplyTransformation.this.isHeadLess()) {
+				MessageDialog.showDialog("TransformationSchema have been applied. Image has been renamed and saved, use this one for going on with your alignments");
 			}
 		};
 
@@ -128,9 +106,6 @@ public class ApplyTransformation extends EzPlug implements Block {
 			ThreadUtil.bgRun(transformer);
 		} else {
 			ThreadUtil.invokeNow(transformer);
-			if (auto!=1) {
-				out.setValue(sourceseq);
-			}
 		}
 	}
 

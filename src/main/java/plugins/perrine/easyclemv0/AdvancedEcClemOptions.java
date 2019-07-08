@@ -12,9 +12,6 @@
  **/
 package plugins.perrine.easyclemv0;
 
-
-
-
 import icy.gui.frame.progress.ToolTipFrame;
 import icy.plugin.PluginDescriptor;
 import icy.plugin.PluginLauncher;
@@ -22,15 +19,8 @@ import icy.plugin.PluginLoader;
 import icy.system.thread.ThreadUtil;
 import plugins.adufour.ezplug.EzLabel;
 import plugins.adufour.ezplug.EzPlug;
-
 import plugins.adufour.ezplug.EzVarText;
 
-
-
-/**
- * @author Perrine
- *
- */
 public class AdvancedEcClemOptions extends EzPlug  {
 	
 	EzVarText choiceplugin = new EzVarText("List of plugin utilities", new String[] {
@@ -42,10 +32,7 @@ public class AdvancedEcClemOptions extends EzPlug  {
 			"Study errors (study influence of N and FLE)"}, 0, false);
 	
 	@Override
-	public void clean() {
-		
-		
-	}
+	public void clean() {}
 
 	@Override
 	protected void execute() {
@@ -156,25 +143,12 @@ public class AdvancedEcClemOptions extends EzPlug  {
 				}
 			}
 		}
-		
-		
-}
-		
-		
-		
-	
+	}
 
 	@Override
 	protected void initialize() {
-		
 		EzLabel textinfo=new EzLabel("Here is a list of additional features you may find useful.");
-		
 		addEzComponent(textinfo);
-		
 		addEzComponent(choiceplugin);
-		
-		
-		
 	}
-	
-	}
+}
