@@ -60,7 +60,7 @@ public class WorkspaceTransformer {
             sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformationSchema());
             ThreadUtil.invokeLater(() -> new Viewer(gridSequence));
             sequenceUpdater.update(gridSequence, workspace.getTransformationSchema());
-            
+
             Document document = XMLUtil.createDocument(true);
             xmlWriter = new XmlTransformationWriter(document);
             xmlWriter.write(workspace.getTransformationSchema());

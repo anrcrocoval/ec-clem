@@ -21,6 +21,9 @@ import java.awt.Graphics2D;
 import java.io.File;
 import java.util.ArrayList;
 
+import icy.gui.viewer.Viewer;
+import icy.image.lut.LUT;
+import icy.system.thread.ThreadUtil;
 import plugins.adufour.ezplug.EzGroup;
 import plugins.adufour.ezplug.EzLabel;
 import plugins.adufour.ezplug.EzPlug;
@@ -42,6 +45,7 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import icy.type.DataType;
 import icy.type.point.Point5D;
+import plugins.perrine.easyclemv0.factory.SequenceFactory;
 import plugins.perrine.easyclemv0.factory.TransformationConfigurationFactory;
 import plugins.perrine.easyclemv0.model.*;
 import plugins.perrine.easyclemv0.roi.RoiProcessor;
@@ -52,19 +56,10 @@ import plugins.perrine.easyclemv0.ui.GuiCLEMButtons2;
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	private Thread currentThread;
-	private RoiProcessor roiProcessor = new RoiProcessor();
-	private Workspace workspace;
-	private WorkspaceTransformer workspaceTransformer;
 	private TransformationConfigurationFactory transformationConfigurationFactory = new TransformationConfigurationFactory();
+	private SequenceFactory sequenceFactory = new SequenceFactory();
 
-//	private ActionListener actionbutton = new ActionListener() {
-//		@Override
-//		public void actionPerformed(ActionEvent arg0) {
-//			PluginDescriptor plugin = PluginLoader.getPlugin(TransformBasedonCameraView.class.getName());
-//			PluginLauncher.start(plugin);
-//		}
-//	};
-//	private EzButton prealign = new EzButton("I want to prealign (rotate in 3D) my data)", actionbutton);
+	private Workspace workspace;
 
 	private Overlay myoverlaysource;
 	private Overlay myoverlaytarget;
@@ -95,7 +90,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private EzVarSequence target = new EzVarSequence("Select image that will not be modified (likely EM)");
 	private EzVarSequence source = new EzVarSequence("Select image that will be transformed and resized (likely FM)");
 	private EzGroup grp = new EzGroup("Images to process", source, target);
-	private Sequence backupsource;
 
 	public static Color[] Colortab = new Color[] {
 		Color.RED,
@@ -112,10 +106,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private boolean checkgrid = false;
 	private GuiCLEMButtons guiCLEMButtons;
 	private GuiCLEMButtons2 rigidspecificbutton;
-
-//	public void setMonitoringConfiguration(MonitoringConfiguration monitoringConfiguration) {
-//		this.monitoringConfiguration = monitoringConfiguration;
-//	}
 
 	private class VisiblepointsOverlay extends Overlay {
 		public VisiblepointsOverlay() {
@@ -253,14 +243,13 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			rigidspecificbutton.removespecificrigidbutton();
 		}
 
-		backupsource = SequenceUtil.getCopy(sourceSequence);
 		sourceSequence.setName(sourceSequence.getName() + " (transformed)");
 		String name = sourceSequence.getFilename() + "_transfo.xml";
 
 		workspace = new Workspace();
 		workspace.setSourceSequence(sourceSequence);
 		workspace.setTargetSequence(targetSequence);
-		workspace.setSourceBackup(backupsource);
+		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
 		workspace.setXMLFile(new File(name));
 		workspace.getWorkspaceState().setPause(pause);
 		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(nonrigid, checkgrid));
@@ -306,7 +295,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 //		sourceSequence.removeListener(roiChangedListener);
 		targetSequence.removeListener(roiAddedListener);
-		System.out.println("Listeners off now");
 		sourceSequence.removeOverlay(myoverlaysource);
 		sourceSequence.removeOverlay(messageSource);
 		targetSequence.removeOverlay(myoverlaytarget);
@@ -341,6 +329,11 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	@Override
 	public void stopExecution() {
+
+		ThreadUtil.invokeLater(() -> new Viewer(
+				sequenceFactory.getMergeSequence(workspace.getSourceSequence(), workspace.getTargetSequence())
+		));
+
 		guiCLEMButtons.disableButtons();
 		rigidspecificbutton.disableButtons();
 		source.setEnabled(true);

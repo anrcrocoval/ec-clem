@@ -1,7 +1,10 @@
 package plugins.perrine.easyclemv0.factory;
 
+import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
+import icy.image.lut.LUT;
 import icy.sequence.Sequence;
+import icy.sequence.SequenceUtil;
 import icy.type.DataType;
 import plugins.perrine.easyclemv0.factory.vtk.VtkImageGridSourceFactory;
 import vtk.*;
@@ -12,11 +15,45 @@ public class SequenceFactory {
 
     private VtkImageGridSourceFactory vtkImageGridSourceFactory = new VtkImageGridSourceFactory();
 
+    public Sequence getMergeSequence(Sequence source, Sequence target) {
+        Sequence result1 = SequenceUtil.extractSlice(source, source.getFirstViewer().getPositionZ());
+        result1 = SequenceUtil.extractFrame(result1, source.getFirstViewer().getPositionT());
+
+        Sequence result2;
+        if (target.getSizeZ() >= source.getSizeZ()) {
+            result2 = SequenceUtil.extractSlice(target, source.getFirstViewer().getPositionZ());
+        } else {
+            result2 = SequenceUtil.extractSlice(target, target.getFirstViewer().getPositionZ());
+        }
+        result2 = SequenceUtil.extractFrame(result2, target.getFirstViewer().getPositionT());
+
+        if (result1.getDataType_() != result2.getDataType_()) {
+            result2 = SequenceUtil.convertToType(result2, result1.getDataType_(), true);
+        }
+
+        Sequence[] sequences = new Sequence[result1.getSizeC() + result2.getSizeC()];
+        for (int c = 0; c < result1.getSizeC(); c++) {
+            sequences[c] = SequenceUtil.extractChannel(result1, c);
+        }
+
+        for (int c = result1.getSizeC(); c < result1.getSizeC() + result2.getSizeC(); c++) {
+            sequences[c] = SequenceUtil.extractChannel(result2, c - result1.getSizeC());
+        }
+
+        int[] channels = new int[sequences.length];
+        Sequence result = SequenceUtil.concatC(sequences, channels, false, false, null);
+
+        result.setName("Merged");
+
+        return result;
+    }
+
     public Sequence getGridSequence(int xSize, int ySize, int zSize, double spacingX, double spacingY, double spacingZ) {
         vtkImageGridSource sourceGrid = vtkImageGridSourceFactory.getFrom(xSize, ySize, zSize, spacingX, spacingY, spacingZ);
         Sequence grid = new Sequence();
         grid.setImage(0, 0, new IcyBufferedImage(xSize, ySize, 1, UBYTE));
         grid = getFrom(grid, new vtkDataSet[] { sourceGrid.GetOutput() }, xSize, ySize, zSize, grid.getSizeT(), spacingX, spacingY, spacingZ);
+        grid.setName("Grid");
         return grid;
     }
 
