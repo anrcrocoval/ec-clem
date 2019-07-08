@@ -112,14 +112,12 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			}
 			
 			}
-			finally{
-			
-			tobeprocessed.endUpdate();
-			tobeprocessed.setChannelName(0, extractedchannelname);
-			tobeprocessed.setFilename(tobeprocessed.getFilename()+ " ("+extractedchannelname+")");
-			tobeprocessed.setName(tobeprocessed.getName()+" ("+extractedchannelname+")");
+			finally {
+				tobeprocessed.endUpdate();
+				tobeprocessed.setChannelName(0, extractedchannelname);
+				tobeprocessed.setFilename(tobeprocessed.getFilename()+ " ("+extractedchannelname+")");
+				tobeprocessed.setName(tobeprocessed.getName()+" ("+extractedchannelname+")");
 			}
-
 		}
 		// Apply denoising if asked
 		if (denoise.getValue()==true){

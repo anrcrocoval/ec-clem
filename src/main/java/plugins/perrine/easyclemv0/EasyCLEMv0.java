@@ -65,10 +65,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private Overlay myoverlaytarget;
 	private Overlay messageSource;
 	private Overlay messageTarget;
-	private boolean nonrigid;
 
 	static String[] listofRegistrationchoice = new String[] { "From Live to EM", "From Section to EM", "From Live to Section" };
-	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", false);
+	private EzLabel versioninfo = new EzLabel("Version " + getDescriptor().getVersion());
 
 	private static String INPUT_SELECTION_2D = "2D (X,Y,[T])";
 	private static String INPUT_SELECTION_2D_UPDATE = "2D but let me update myself";
@@ -85,11 +84,10 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 				INPUT_SELECTION_NON_RIGID
 			}, 0, false
 	);
-
-	private EzLabel versioninfo = new EzLabel("Version " + this.getDescriptor().getVersion());
+	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", true);
 	private EzVarSequence target = new EzVarSequence("Select image that will not be modified (likely EM)");
 	private EzVarSequence source = new EzVarSequence("Select image that will be transformed and resized (likely FM)");
-	private EzGroup grp = new EzGroup("Images to process", source, target);
+	private EzGroup inputGroup = new EzGroup("Images to process", source, target, choiceinputsection, showgrid);
 
 	public static Color[] Colortab = new Color[] {
 		Color.RED,
@@ -103,7 +101,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		Color.ORANGE
 	};
 
-	private boolean checkgrid = false;
 	private GuiCLEMButtons guiCLEMButtons;
 	private GuiCLEMButtons2 rigidspecificbutton;
 
@@ -171,9 +168,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 				+ "<br> <li> When working in 3D mode, make sure metadata (pixel size) are correctly calibrated, see Sequence Properties.</li> "
 				+ "</html>","startmessage");
 		addEzComponent(versioninfo);
-		addEzComponent(choiceinputsection);
-		addEzComponent(showgrid);
-
 //		prealign.setToolTipText("Volume can be turned in order to generate a new and still calibrated stack");
 //		choiceinputsection.addVisibilityTriggerTo(prealign, "3D (X,Y,Z,[T])", "3D but let me update myself");
 //		addEzComponent(prealign);
@@ -181,7 +175,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		//addComponent(new GuiCLEMButtonPreprocess());
 		addComponent(new GuiCLEMButtonApply());
 		addComponent(new advancedmodules(this));
-		addEzComponent(grp);
+		addEzComponent(inputGroup);
+
 		choiceinputsection.setToolTipText("2D transform will be only in the plane XY " + "but can be applied to all dimensions.\n WARNING make sure to have the metadata correctly set in 3D");
 		//choiceinputsection.addVisibilityTriggerTo(showgrid, "non rigid (2D or 3D)");
 
@@ -214,32 +209,33 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		boolean pause = false;
 		source.setEnabled(false);
 		target.setEnabled(false);
-
 		choiceinputsection.setEnabled(false);
+		showgrid.setEnabled(false);
+
+		TransformationType transformationType = TransformationType.RIGID;
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_2D)) {
-			nonrigid = false;
+			transformationType = TransformationType.RIGID;
 			pause = false;
 		}
 
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_2D_UPDATE)) {
-			nonrigid = false;
+			transformationType = TransformationType.RIGID;
 			pause = true;
 		}
 
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_3D)) {
-			nonrigid = false;
+			transformationType = TransformationType.RIGID;
 			pause = false;
 		}
 
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_3D_UPDATE)) {
-			nonrigid = false;
+			transformationType = TransformationType.RIGID;
 			pause = true;
 		}
 
 		if (choiceinputsection.getValue().equals(INPUT_SELECTION_NON_RIGID)) {
-			nonrigid = true;
+			transformationType = TransformationType.NON_RIGID;
 			pause = true;
-			checkgrid = showgrid.getValue();
 			rigidspecificbutton.removespecificrigidbutton();
 		}
 
@@ -252,7 +248,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
 		workspace.setXMLFile(new File(name));
 		workspace.getWorkspaceState().setPause(pause);
-		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(nonrigid, checkgrid));
+		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(transformationType, showgrid.getValue()));
 
 		guiCLEMButtons.setworkspace(workspace);
 		rigidspecificbutton.setWorkspace(workspace);
@@ -338,8 +334,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		rigidspecificbutton.disableButtons();
 		source.setEnabled(true);
 		target.setEnabled(true);
-		currentThread.resume();
 		choiceinputsection.setEnabled(true);
+		showgrid.setEnabled(true);
 		rigidspecificbutton.reshowspecificrigidbutton();
+		currentThread.resume();
 	}
 }

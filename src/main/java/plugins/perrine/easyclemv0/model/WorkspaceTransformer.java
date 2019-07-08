@@ -49,17 +49,21 @@ public class WorkspaceTransformer {
             } catch (RuntimeException e) {
                 addListeners(workspace.getTargetSequence(), targetSequenceListeners);
             }
-            Sequence gridSequence = sequenceFactory.getGridSequence(
-                    workspace.getSourceSequence().getSizeX(),
-                    workspace.getSourceSequence().getSizeY(),
-                    workspace.getSourceSequence().getSizeZ(),
-                    workspace.getSourceSequence().getPixelSizeX(),
-                    workspace.getSourceSequence().getPixelSizeY(),
-                    workspace.getSourceSequence().getPixelSizeZ()
-            );
+
+            if(workspace.getTransformationConfiguration().isShowGrid()) {
+                Sequence gridSequence = sequenceFactory.getGridSequence(
+                        workspace.getSourceSequence().getSizeX(),
+                        workspace.getSourceSequence().getSizeY(),
+                        workspace.getSourceSequence().getSizeZ(),
+                        workspace.getSourceSequence().getPixelSizeX(),
+                        workspace.getSourceSequence().getPixelSizeY(),
+                        workspace.getSourceSequence().getPixelSizeZ()
+                );
+                sequenceUpdater.update(gridSequence, workspace.getTransformationSchema());
+                ThreadUtil.invokeLater(() -> new Viewer(gridSequence));
+            }
+
             sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformationSchema());
-            ThreadUtil.invokeLater(() -> new Viewer(gridSequence));
-            sequenceUpdater.update(gridSequence, workspace.getTransformationSchema());
 
             Document document = XMLUtil.createDocument(true);
             xmlWriter = new XmlTransformationWriter(document);
