@@ -38,7 +38,6 @@ import plugins.perrine.easyclemv0.ui.ShowOverlayCheckbox;
 public class GuiCLEMButtons2 extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Workspace workspace;
 	private ComputeErrorMapButton computeErrorMapButton;
 	private MonitorTargetPointButton monitorTargetPointButton;
 	private ShowOverlayCheckbox showerror;
@@ -65,7 +64,6 @@ public class GuiCLEMButtons2 extends JPanel {
 	}
 
 	public void setWorkspace(Workspace workspace) {
-		this.workspace = workspace;
 		computeErrorMapButton.setWorkspace(workspace);
 		monitorTargetPointButton.setWorkspace(workspace);
 		showerror.setWorkspace(workspace);
@@ -77,11 +75,15 @@ public class GuiCLEMButtons2 extends JPanel {
 	public void disableButtons() {
 		computeErrorMapButton.setEnabled(false);
 		monitorTargetPointButton.setEnabled(false);
+		showerror.setEnabled(false);
+		showpredictederror.setEnabled(false);
 	}
 
 	public void enableButtons() {
 		computeErrorMapButton.setEnabled(true);
 		monitorTargetPointButton.setEnabled(true);
+		showerror.setEnabled(true);
+		showpredictederror.setEnabled(true);
 	}
 
 	public void removespecificrigidbutton(){

@@ -17,7 +17,7 @@ public class ShowOverlayCheckbox extends JCheckBox {
         this.overlay = overlay;
         setToolTipText(tooltip);
         addActionListener((arg0) -> action(arg0));
-        setVisible(false);
+        setVisible(true);
     }
 
     public void setWorkspace(Workspace workspace) {
