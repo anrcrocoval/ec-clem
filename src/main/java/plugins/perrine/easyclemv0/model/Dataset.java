@@ -15,7 +15,7 @@ public class Dataset implements Cloneable {
 
     public Dataset(int dimension) {
         this.dimension = dimension;
-        this.n = 0;
+        n = 0;
         points = new Matrix(n, dimension);
     }
 

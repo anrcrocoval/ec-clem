@@ -16,7 +16,13 @@ public class DatasetFactory {
     private RoiProcessor roiProcessor = new RoiProcessor();
 
     public Dataset getFrom(Sequence sequence) {
-        return toMicroMeter(new Dataset(roiProcessor.getPointsFromRoi(sequence.getROIs())), sequence);
+        Dataset dataset;
+        try {
+            dataset = new Dataset(roiProcessor.getPointsFromRoi(sequence.getROIs()));
+        } catch (Exception e) {
+            dataset = new Dataset(0);
+        }
+        return toMicroMeter(dataset, sequence);
     }
 
     public Dataset getFrom(vtkPolyData points) {

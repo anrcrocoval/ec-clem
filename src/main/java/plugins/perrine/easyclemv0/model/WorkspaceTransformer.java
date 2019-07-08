@@ -1,8 +1,10 @@
 package plugins.perrine.easyclemv0.model;
 
 import icy.gui.frame.progress.AnnounceFrame;
+import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceListener;
+import icy.system.thread.ThreadUtil;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
 import plugins.perrine.easyclemv0.error.TREComputer;
@@ -28,6 +30,7 @@ public class WorkspaceTransformer {
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
     private FiducialSetFactory fiducialSetFactory = new FiducialSetFactory();
     private RoiUpdater roiUpdater = new RoiUpdater();
+    private SequenceFactory sequenceFactory = new SequenceFactory();
 
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();
@@ -46,8 +49,18 @@ public class WorkspaceTransformer {
             } catch (RuntimeException e) {
                 addListeners(workspace.getTargetSequence(), targetSequenceListeners);
             }
-
+            Sequence gridSequence = sequenceFactory.getGridSequence(
+                    workspace.getSourceSequence().getSizeX(),
+                    workspace.getSourceSequence().getSizeY(),
+                    workspace.getSourceSequence().getSizeZ(),
+                    workspace.getSourceSequence().getPixelSizeX(),
+                    workspace.getSourceSequence().getPixelSizeY(),
+                    workspace.getSourceSequence().getPixelSizeZ()
+            );
             sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformationSchema());
+            ThreadUtil.invokeLater(() -> new Viewer(gridSequence));
+            sequenceUpdater.update(gridSequence, workspace.getTransformationSchema());
+            
             Document document = XMLUtil.createDocument(true);
             xmlWriter = new XmlTransformationWriter(document);
             xmlWriter.write(workspace.getTransformationSchema());

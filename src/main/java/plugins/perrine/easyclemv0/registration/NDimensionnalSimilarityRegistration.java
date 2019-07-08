@@ -31,7 +31,6 @@ public class NDimensionnalSimilarityRegistration {
         clonedSourceDataset.substractBarycentre();
         clonedTargetDataset.substractBarycentre();
 
-//        double scale = Math.sqrt(clonedTargetDataset.getMeanNorm() / clonedSourceDataset.getMeanNorm());
         double scale = clonedTargetDataset.getMeanNorm() / clonedSourceDataset.getMeanNorm();
         Matrix R = getR(clonedSourceDataset, clonedTargetDataset);
         Matrix T = getT(sourceBarycentre.getMatrix(), targetBarycentre.getMatrix(), R, scale);

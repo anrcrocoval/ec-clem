@@ -12,7 +12,7 @@ public class RoiProcessor {
 
     public double[][] getPointsFromRoi(ArrayList<ROI> roiList) {
         if(roiList.size() == 0) {
-            throw new RuntimeException("Empty list");
+            return null;
         }
 
         int dimension = 3;

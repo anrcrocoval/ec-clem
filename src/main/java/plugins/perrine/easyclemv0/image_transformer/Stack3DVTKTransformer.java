@@ -16,16 +16,11 @@ package plugins.perrine.easyclemv0.image_transformer;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import icy.type.DataType;
-import plugins.perrine.easyclemv0.factory.DatasetFactory;
 import plugins.perrine.easyclemv0.factory.SequenceFactory;
 import plugins.perrine.easyclemv0.factory.vtk.VtkAbstractTransformFactory;
-import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.SequenceSize;
 import plugins.perrine.easyclemv0.model.transformation.Transformation;
-import plugins.perrine.easyclemv0.roi.RoiUpdater;
 import vtk.*;
-
-import java.lang.reflect.Array;
 
 /**
  * The difference with 2D transform is that the tranform is computed in REAL UNITS, because vtk apply it in real unit,
@@ -46,8 +41,6 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 	private double InputSpacingx;
 	private double InputSpacingy;
 
-	private RoiUpdater roiUpdater = new RoiUpdater();
-	private DatasetFactory datasetFactory = new DatasetFactory();
 	private VtkAbstractTransformFactory vtkAbstractTransformFactory = new VtkAbstractTransformFactory();
 	private SequenceFactory sequenceFactory = new SequenceFactory();
 
@@ -83,7 +76,6 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 	}
 
 	public void run(Transformation transformation) {
-		Dataset sourceTransformedDataset = transformation.apply(datasetFactory.getFrom(sequence));
 		vtkAbstractTransform mytransfo = vtkAbstractTransformFactory.getFrom(transformation);
 		imageReslice = new vtkImageReslice();
 		imageReslice.SetOutputDimensionality(3);
@@ -102,7 +94,6 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 		}
 
 		sequence = sequenceFactory.getFrom(sequence, imageData, extentx, extenty, extentz, sequence.getSizeT(), spacingx, spacingy, spacingz);
-		roiUpdater.updateRoi(sourceTransformedDataset, sequence);
 	}
 
 	private void converttoVtkImageData(int posC) {

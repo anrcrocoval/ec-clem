@@ -6,7 +6,7 @@ import icy.type.DataType;
 import plugins.perrine.easyclemv0.factory.vtk.VtkImageGridSourceFactory;
 import vtk.*;
 import java.lang.reflect.Array;
-import static icy.type.DataType.BYTE;
+import static icy.type.DataType.UBYTE;
 
 public class SequenceFactory {
 
@@ -15,7 +15,7 @@ public class SequenceFactory {
     public Sequence getGridSequence(int xSize, int ySize, int zSize, double spacingX, double spacingY, double spacingZ) {
         vtkImageGridSource sourceGrid = vtkImageGridSourceFactory.getFrom(xSize, ySize, zSize, spacingX, spacingY, spacingZ);
         Sequence grid = new Sequence();
-        grid.setImage(0, 0, new IcyBufferedImage(xSize, ySize, 1, BYTE));
+        grid.setImage(0, 0, new IcyBufferedImage(xSize, ySize, 1, UBYTE));
         grid = getFrom(grid, new vtkDataSet[] { sourceGrid.GetOutput() }, xSize, ySize, zSize, grid.getSizeT(), spacingX, spacingY, spacingZ);
         return grid;
     }
