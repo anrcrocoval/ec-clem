@@ -24,16 +24,17 @@ class NDimensionnalSimilarityRegistrationTest {
         Dataset source = new Dataset(sourcePoints);
 
         List<Point> targetPoints = new ArrayList<>();
-        targetPoints.add(new Point(new Matrix(new double[][] {{ -2 }, { 1 }, { 1 }})));
-        targetPoints.add(new Point(new Matrix(new double[][] {{ -2 }, { -1 }, { 2 }})));
-        targetPoints.add(new Point(new Matrix(new double[][] {{  2 }, { 0 }, { 3 }})));
-        targetPoints.add(new Point(new Matrix(new double[][] {{ -2 }, { 1 }, { 3 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { 2 }, { 2 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { -2 }, { 4 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{  4 }, { 0 }, { 6 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { 2 }, { 6 }})));
         Dataset target = new Dataset(targetPoints);
 
         Similarity result = subjectUnderTest.apply(source, target);
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
         assertEquals(0, result.getR().get(0, 0), 0.0000000001);
+        assertEquals(1, result.getR().get(1, 0), 0.0000000001);
         assertEquals(0, result.getR().get(2, 0), 0.0000000001);
         assertEquals(-1, result.getR().get(0, 1), 0.0000000001);
         assertEquals(0, result.getR().get(1, 1), 0.0000000001);
@@ -46,7 +47,7 @@ class NDimensionnalSimilarityRegistrationTest {
         assertEquals(0, result.getT().get(0, 0), 0.0000000001);
         assertEquals(0, result.getT().get(1, 0), 0.0000000001);
         assertEquals(0, result.getT().get(2, 0), 0.0000000001);
-        assertEquals(1, result.getScale(), 0.0000000001);
+        assertEquals(2, result.getScale(), 0.0000000001);
     }
 
     @Test
