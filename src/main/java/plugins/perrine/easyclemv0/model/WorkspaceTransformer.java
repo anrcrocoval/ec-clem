@@ -28,7 +28,7 @@ public class WorkspaceTransformer {
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private TransformationSchemaFactory transformationSchemaFactory = new TransformationSchemaFactory();
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
-    private FiducialSetFactory fiducialSetFactory = new FiducialSetFactory();
+    private DatasetFactory datasetFactory = new DatasetFactory();
     private RoiUpdater roiUpdater = new RoiUpdater();
     private SequenceFactory sequenceFactory = new SequenceFactory();
 
@@ -113,8 +113,12 @@ public class WorkspaceTransformer {
 
     public void resetToOriginalImage(Workspace workspace) {
         if(workspace.getTransformationSchema() != null) {
+            Dataset reversed = datasetFactory.getFrom(
+                    datasetFactory.getFrom(workspace.getSourceSequence()),
+                    workspace.getTransformationSchema().inverse()
+            );
             restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
-            roiUpdater.updateRoi(workspace.getTransformationSchema().getFiducialSet().getSourceDataset(), workspace.getSourceSequence());
+            roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
             workspace.setTransformationSchema(null);
         }
     }

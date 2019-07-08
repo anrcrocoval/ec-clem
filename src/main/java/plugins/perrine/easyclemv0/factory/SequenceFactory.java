@@ -1,8 +1,6 @@
 package plugins.perrine.easyclemv0.factory;
 
-import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
-import icy.image.lut.LUT;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import icy.type.DataType;
@@ -90,7 +88,6 @@ public class SequenceFactory {
             System.arraycopy(inData, z * t * xSize * ySize, outData, 0, xSize * ySize);
             image.setDataXY(c, outData);
         }
-        System.out.println("");
         return image;
     }
 

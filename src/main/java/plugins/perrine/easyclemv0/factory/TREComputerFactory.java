@@ -40,11 +40,9 @@ public class TREComputerFactory {
 
     public TREComputer getFrom(Dataset sourceTransformedDataset, Dataset targetDataset) {
         Matrix barycentre = targetDataset.getBarycentre().getMatrix();
-        barycentre.print(1,5);
         Dataset clone = targetDataset.clone();
         clone.substractBarycentre();
         Matrix eigenVectors = inertiaMatrixComputer.getInertiaMatrix(clone).eig().getV();
-        eigenVectors.print(1,5);
         double[] f = getF(clone, eigenVectors);
         return new TREComputer(
             targetDataset.getN(),
@@ -88,7 +86,6 @@ public class TREComputerFactory {
                 );
             }
             f[j] += mean.getResult();
-            System.out.println(f[j]);
         }
         return f;
     }
