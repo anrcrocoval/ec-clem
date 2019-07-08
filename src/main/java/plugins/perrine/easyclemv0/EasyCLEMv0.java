@@ -178,12 +178,12 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 //		choiceinputsection.addVisibilityTriggerTo(prealign, "3D (X,Y,Z,[T])", "3D but let me update myself");
 //		addEzComponent(prealign);
 
-		addComponent(new GuiCLEMButtonPreprocess());
+		//addComponent(new GuiCLEMButtonPreprocess());
 		addComponent(new GuiCLEMButtonApply());
 		addComponent(new advancedmodules(this));
 		addEzComponent(grp);
 		choiceinputsection.setToolTipText("2D transform will be only in the plane XY " + "but can be applied to all dimensions.\n WARNING make sure to have the metadata correctly set in 3D");
-		choiceinputsection.addVisibilityTriggerTo(showgrid, "non rigid (2D or 3D)");
+		//choiceinputsection.addVisibilityTriggerTo(showgrid, "non rigid (2D or 3D)");
 
 		guiCLEMButtons = new GuiCLEMButtons();
 		guiCLEMButtons.disableButtons();
