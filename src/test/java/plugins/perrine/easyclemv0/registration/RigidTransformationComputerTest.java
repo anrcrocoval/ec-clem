@@ -3,16 +3,15 @@ package plugins.perrine.easyclemv0.registration;
 import Jama.Matrix;
 import org.junit.jupiter.api.Test;
 import plugins.perrine.easyclemv0.model.Dataset;
+import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.transformation.Similarity;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class NDimensionnalSimilarityRegistrationTest {
-    private NDimensionnalSimilarityRegistration subjectUnderTest = new NDimensionnalSimilarityRegistration();
+class RigidTransformationComputerTest {
+    private RigidTransformationComputer subjectUnderTest = new RigidTransformationComputer();
 
     @Test
     void simpleRotation() {
@@ -30,7 +29,7 @@ class NDimensionnalSimilarityRegistrationTest {
         targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { 2 }, { 6 }})));
         Dataset target = new Dataset(targetPoints);
 
-        Similarity result = subjectUnderTest.apply(source, target);
+        Similarity result = subjectUnderTest.compute(new FiducialSet(source, target));
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
         assertEquals(0, result.getR().get(0, 0), 0.0000000001);
@@ -66,7 +65,7 @@ class NDimensionnalSimilarityRegistrationTest {
         targetPoints.add(new Point(new Matrix(new double[][] {{ 2 }, { 3 }, { 4 }})));
         Dataset target = new Dataset(targetPoints);
 
-        Similarity result = subjectUnderTest.apply(source, target);
+        Similarity result = subjectUnderTest.compute(new FiducialSet(source, target));
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
         assertEquals(1, result.getR().get(0, 0), 0.0000000001);
@@ -102,7 +101,7 @@ class NDimensionnalSimilarityRegistrationTest {
         targetPoints.add(new Point(new Matrix(new double[][] {{ -3.5355340 }, { 1 }, { 0.7071068 }})));
         Dataset target = new Dataset(targetPoints);
 
-        Similarity result = subjectUnderTest.apply(source, target);
+        Similarity result = subjectUnderTest.compute(new FiducialSet(source, target));
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
         assertEquals(0, result.getR().get(0, 0), 0.0000001);
