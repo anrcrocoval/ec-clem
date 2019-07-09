@@ -77,7 +77,6 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 
 	public void run(Transformation transformation) {
 		vtkAbstractTransform mytransfo = vtkAbstractTransformFactory.getFrom(transformation);
-		//mytransfo.Inverse();
 		imageReslice = new vtkImageReslice();
 		imageReslice.SetOutputDimensionality(3);
 		imageReslice.SetOutputOrigin(0, 0, 0);
