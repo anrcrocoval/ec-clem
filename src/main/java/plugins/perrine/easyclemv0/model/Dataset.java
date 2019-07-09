@@ -113,6 +113,12 @@ public class Dataset implements Cloneable {
         return M;
     }
 
+    public Matrix getHomogeneousMatrix2() {
+        Matrix M = new Matrix(points.getRowDimension(), points.getColumnDimension() + 1, 1);
+        M.setMatrix(0, points.getRowDimension() - 1, 1, points.getColumnDimension(), points);
+        return M;
+    }
+
     public int getN() {
         return n;
     }

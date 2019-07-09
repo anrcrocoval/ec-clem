@@ -74,6 +74,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private static String INPUT_SELECTION_3D = "3D (X,Y,Z,[T])";
 	private static String INPUT_SELECTION_3D_UPDATE = "3D but let me update myself";
 	private static String INPUT_SELECTION_NON_RIGID = "non rigid (2D or 3D)";
+	private static String INPUT_SELECTION_AFFINE = "Affine";
 	private EzVarText choiceinputsection = new EzVarText(
 		"I want to compute the transformation in:",
 			new String[] {
@@ -81,7 +82,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 				INPUT_SELECTION_2D_UPDATE,
 				INPUT_SELECTION_3D,
 				INPUT_SELECTION_3D_UPDATE,
-				INPUT_SELECTION_NON_RIGID
+				INPUT_SELECTION_NON_RIGID,
+				INPUT_SELECTION_AFFINE
 			}, 0, false
 	);
 	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", true);
@@ -237,6 +239,11 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			transformationType = TransformationType.NON_RIGID;
 			pause = true;
 			rigidspecificbutton.removespecificrigidbutton();
+		}
+
+		if (choiceinputsection.getValue().equals(INPUT_SELECTION_AFFINE)) {
+			transformationType = TransformationType.AFFINE;
+			pause = false;
 		}
 
 		sourceSequence.setName(sourceSequence.getName() + " (transformed)");
