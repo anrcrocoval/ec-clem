@@ -61,11 +61,19 @@ public class SequenceFactory {
         sequence.beginUpdate();
         sequence.removeAllImages();
         try {
-            for (int t = 0; t < tSize; t++) {
-                for (int z = 0; z < zSize; z++) {
-                    sequence.setImage(t, z, getImage(
-                            vtkDataSetArray, dataType, xSize, ySize, z, t, channels
-                    ));
+            for (int c = 0; c < channels; c++) {
+                Object inData = getPrimitiveArray(dataType, vtkDataSetArray[c].GetPointData().GetScalars());
+                for (int t = 0; t < tSize; t++) {
+                    for (int z = 0; z < zSize; z++) {
+                        IcyBufferedImage image = sequence.getImage(t, z);
+                        if(image == null) {
+                            image = new IcyBufferedImage(xSize, ySize, channels, dataType);
+                            sequence.setImage(t, z, image);
+                        }
+                        Object outData = Array.newInstance(dataType.toPrimitiveClass(), xSize * ySize);
+                        System.arraycopy(inData, z * t * xSize * ySize, outData, 0, xSize * ySize);
+                        image.setDataXY(c, outData);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -77,18 +85,6 @@ public class SequenceFactory {
         sequence.setPixelSizeY(spacingY);
         sequence.setPixelSizeZ(spacingZ);
         return sequence;
-    }
-
-    private IcyBufferedImage getImage(vtkDataSet[] vtkDataSetArray, DataType dataType, int xSize, int ySize, int z, int t, int channels) {
-        IcyBufferedImage image = new IcyBufferedImage(xSize, ySize, channels, dataType);
-        for (int c = 0; c < channels; c++) {
-            vtkDataArray dataArray = vtkDataSetArray[c].GetPointData().GetScalars();
-            Object inData = getPrimitiveArray(dataType, dataArray);
-            Object outData = Array.newInstance(dataType.toPrimitiveClass(), xSize * ySize);
-            System.arraycopy(inData, z * t * xSize * ySize, outData, 0, xSize * ySize);
-            image.setDataXY(c, outData);
-        }
-        return image;
     }
 
     private Object getPrimitiveArray(DataType datatype, vtkDataArray dataArray) {
