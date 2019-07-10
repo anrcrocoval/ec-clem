@@ -9,18 +9,19 @@ import icy.sequence.SequenceListener;
 import icy.type.point.Point5D;
 import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-import plugins.perrine.easyclemv0.factory.DatasetFactory;
 import plugins.perrine.easyclemv0.model.WorkspaceState;
-import plugins.perrine.easyclemv0.roi.RoiUpdater;
+import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
+import java.util.List;
 
 import static plugins.perrine.easyclemv0.EasyCLEMv0.Colortab;
 
-public class RoiAdded implements SequenceListener {
+public class RoiDuplicator implements SequenceListener {
 
     private Sequence sequence;
     private WorkspaceState workspaceState;
+    private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
 
-    public RoiAdded(Sequence sequence, WorkspaceState workspaceState) {
+    public RoiDuplicator(Sequence sequence, WorkspaceState workspaceState) {
         this.sequence = sequence;
         this.workspaceState = workspaceState;
     }
@@ -68,7 +69,9 @@ public class RoiAdded implements SequenceListener {
         roisource.setName(roi.getName());
         roisource.setStroke(roi.getStroke());
         roisource.setFocused(false);
+        List<SequenceListener> sequenceListeners = sequenceListenerUtil.removeListeners(sequence, RoiDuplicator.class);
         sequence.addROI(roisource);
+        sequenceListenerUtil.addListeners(sequence, sequenceListeners);
         workspaceState.setFlagReadyToMove(true);
         workspaceState.setDone(false);
 

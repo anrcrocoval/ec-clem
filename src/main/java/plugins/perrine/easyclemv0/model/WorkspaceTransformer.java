@@ -12,15 +12,15 @@ import plugins.perrine.easyclemv0.factory.*;
 import plugins.perrine.easyclemv0.image_transformer.SequenceUpdater;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
-import plugins.perrine.easyclemv0.sequence_listener.RoiAdded;
+import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
 import plugins.perrine.easyclemv0.storage.xml.XmlFileWriter;
 import plugins.perrine.easyclemv0.storage.xml.XmlTransformationWriter;
+import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 public class WorkspaceTransformer {
 
@@ -31,6 +31,7 @@ public class WorkspaceTransformer {
     private DatasetFactory datasetFactory = new DatasetFactory();
     private RoiUpdater roiUpdater = new RoiUpdater();
     private SequenceFactory sequenceFactory = new SequenceFactory();
+    private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
 
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();
@@ -41,13 +42,13 @@ public class WorkspaceTransformer {
     public void apply(Workspace workspace) {
         executorService.submit(() -> {
 //            SequenceListener[] sourceSequenceListeners = removeListeners(workspace.getSourceSequence());
-            List<SequenceListener> targetSequenceListeners = removeListeners(workspace.getTargetSequence());
+            List<SequenceListener> targetSequenceListeners = sequenceListenerUtil.removeListeners(workspace.getTargetSequence(), RoiDuplicator.class);
             resetToOriginalImage(workspace);
 
             try {
                 workspace.setTransformationSchema(transformationSchemaFactory.getFrom(workspace));
             } catch (RuntimeException e) {
-                addListeners(workspace.getTargetSequence(), targetSequenceListeners);
+                sequenceListenerUtil.addListeners(workspace.getTargetSequence(), targetSequenceListeners);
             }
 
             if(workspace.getTransformationConfiguration().isShowGrid()) {
@@ -93,22 +94,8 @@ public class WorkspaceTransformer {
             new AnnounceFrame("TransformationSchema Updated", 5);
 
 //            addListeners(workspace.getSourceSequence(), sourceSequenceListeners);
-            addListeners(workspace.getTargetSequence(), targetSequenceListeners);
+            sequenceListenerUtil.addListeners(workspace.getTargetSequence(), targetSequenceListeners);
         });
-    }
-
-    public List<SequenceListener> removeListeners(Sequence sequence) {
-        List<SequenceListener> listeners = Arrays.stream(sequence.getListeners()).filter((listener) -> listener instanceof RoiAdded).collect(Collectors.toList());
-        for(SequenceListener listener : listeners) {
-            sequence.removeListener(listener);
-        }
-        return listeners;
-    }
-
-    public void addListeners(Sequence sequence, List<SequenceListener> listeners) {
-        for(SequenceListener listener : listeners) {
-            sequence.addListener(listener);
-        }
     }
 
     public void resetToOriginalImage(Workspace workspace) {

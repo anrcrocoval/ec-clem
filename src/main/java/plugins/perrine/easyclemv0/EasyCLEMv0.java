@@ -22,7 +22,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import icy.gui.viewer.Viewer;
-import icy.image.lut.LUT;
 import icy.system.thread.ThreadUtil;
 import plugins.adufour.ezplug.EzGroup;
 import plugins.adufour.ezplug.EzLabel;
@@ -48,16 +47,17 @@ import icy.type.point.Point5D;
 import plugins.perrine.easyclemv0.factory.SequenceFactory;
 import plugins.perrine.easyclemv0.factory.TransformationConfigurationFactory;
 import plugins.perrine.easyclemv0.model.*;
-import plugins.perrine.easyclemv0.roi.RoiProcessor;
-import plugins.perrine.easyclemv0.sequence_listener.RoiAdded;
+import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
 import plugins.perrine.easyclemv0.ui.GuiCLEMButtons;
 import plugins.perrine.easyclemv0.ui.GuiCLEMButtons2;
+import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
 
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	private Thread currentThread;
 	private TransformationConfigurationFactory transformationConfigurationFactory = new TransformationConfigurationFactory();
 	private SequenceFactory sequenceFactory = new SequenceFactory();
+	private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
 
 	private Workspace workspace;
 
@@ -265,9 +265,12 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 //			roiChangedListener
 //		);
 
-		RoiAdded roiAddedListener = new RoiAdded(sourceSequence, workspace.getWorkspaceState());
+		sourceSequence.addListener(
+				new RoiDuplicator(targetSequence, workspace.getWorkspaceState())
+		);
+
 		targetSequence.addListener(
-			roiAddedListener
+				new RoiDuplicator(sourceSequence, workspace.getWorkspaceState())
 		);
 
 		myoverlaysource = new VisiblepointsOverlay();
@@ -297,7 +300,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		currentThread.suspend();
 
 //		sourceSequence.removeListener(roiChangedListener);
-		targetSequence.removeListener(roiAddedListener);
+		sequenceListenerUtil.removeListeners(sourceSequence, RoiDuplicator.class);
+		sequenceListenerUtil.removeListeners(targetSequence, RoiDuplicator.class);
 		sourceSequence.removeOverlay(myoverlaysource);
 		sourceSequence.removeOverlay(messageSource);
 		targetSequence.removeOverlay(myoverlaytarget);

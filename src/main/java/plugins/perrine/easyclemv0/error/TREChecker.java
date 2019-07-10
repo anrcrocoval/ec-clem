@@ -3,18 +3,23 @@ package plugins.perrine.easyclemv0.error;
 import plugins.perrine.easyclemv0.factory.TREComputerFactory;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Point;
+import plugins.perrine.easyclemv0.model.TransformationSchema;
 
 public class TREChecker {
 
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
 
-    public boolean check(Dataset sourceDataset, Dataset targetDataset) {
+    public boolean check(TransformationSchema transformationSchema) {
         boolean check = false;
 
-        TREComputer treComputer = treComputerFactory.getFrom(sourceDataset, targetDataset);
+        TREComputer treComputer = treComputerFactory.getFrom(transformationSchema);
 
-        for (int index = 0; index < sourceDataset.getN(); index++) {
-            check |= isEmpiricTreGreaterThanPredictedTre(sourceDataset.getPoint(index), targetDataset.getPoint(index), treComputer);
+        for (int index = 0; index < transformationSchema.getFiducialSet().getN(); index++) {
+            check |= isEmpiricTreGreaterThanPredictedTre(
+                transformationSchema.getFiducialSet().getSourceDataset().getPoint(index),
+                transformationSchema.getFiducialSet().getTargetDataset().getPoint(index),
+                treComputer
+            );
         }
 
         return check;

@@ -7,6 +7,9 @@ import icy.sequence.SequenceListener;
 import plugins.perrine.easyclemv0.factory.DatasetFactory;
 import plugins.perrine.easyclemv0.model.*;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
+import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
+import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
+
 import javax.swing.*;
 import java.util.List;
 
@@ -16,6 +19,7 @@ public class UndoButton extends JButton {
     private DatasetFactory datasetFactory = new DatasetFactory();
     private RoiUpdater roiUpdater = new RoiUpdater();
     private WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer();
+    private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
 
     public UndoButton() {
         super("Undo last point");
@@ -39,7 +43,7 @@ public class UndoButton extends JButton {
             return;
         }
 
-        List<SequenceListener> targetSequenceListeners = workspaceTransformer.removeListeners(workspace.getTargetSequence());
+        List<SequenceListener> targetSequenceListeners = sequenceListenerUtil.removeListeners(workspace.getTargetSequence(), RoiDuplicator.class);
         workspaceTransformer.resetToOriginalImage(workspace);
         Dataset sourceDataset = datasetFactory.getFrom(workspace.getSourceSequence());
         sourceDataset.removePoint(sourceDataset.getN() - 1);
@@ -47,7 +51,7 @@ public class UndoButton extends JButton {
         targetDataset.removePoint(targetDataset.getN() - 1);
         roiUpdater.updateRoi(sourceDataset, workspace.getSourceSequence());
         roiUpdater.updateRoi(targetDataset, workspace.getTargetSequence());
-        workspaceTransformer.addListeners(workspace.getTargetSequence(), targetSequenceListeners);
+        sequenceListenerUtil.addListeners(workspace.getTargetSequence(), targetSequenceListeners);
         workspaceTransformer.apply(workspace);
     }
 }

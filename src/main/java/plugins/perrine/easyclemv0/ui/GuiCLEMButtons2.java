@@ -23,17 +23,10 @@
 package plugins.perrine.easyclemv0.ui;
 
 import java.awt.Component;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import plugins.perrine.easyclemv0.error.FLEComputer;
-import plugins.perrine.easyclemv0.error.TREComputer;
-import plugins.perrine.easyclemv0.factory.DatasetFactory;
 import plugins.perrine.easyclemv0.model.Workspace;
 import plugins.perrine.easyclemv0.overlay.ErrorInPositionOverlay;
 import plugins.perrine.easyclemv0.overlay.PredictedErrorInPositionOverlay;
-import plugins.perrine.easyclemv0.ui.ComputeErrorMapButton;
-import plugins.perrine.easyclemv0.ui.MonitorTargetPointButton;
-import plugins.perrine.easyclemv0.ui.ShowOverlayCheckbox;
 
 public class GuiCLEMButtons2 extends JPanel {
 

@@ -20,11 +20,6 @@ package plugins.perrine.easyclemv0.ui;
 
 import javax.swing.JPanel;
 import plugins.perrine.easyclemv0.model.Workspace;
-import plugins.perrine.easyclemv0.model.WorkspaceTransformer;
-import plugins.perrine.easyclemv0.ui.ClearLandmarksButton;
-import plugins.perrine.easyclemv0.ui.ShowPointsButton;
-import plugins.perrine.easyclemv0.ui.UndoButton;
-import plugins.perrine.easyclemv0.ui.UpdateTransformationButton;
 
 public class GuiCLEMButtons extends JPanel {
 

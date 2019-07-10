@@ -38,7 +38,7 @@ public class TREComputerFactory {
         return getFrom(transformationSchemaFactory.getFrom(workspace));
     }
 
-    public TREComputer getFrom(Dataset sourceTransformedDataset, Dataset targetDataset) {
+    private TREComputer getFrom(Dataset sourceTransformedDataset, Dataset targetDataset) {
         Matrix barycentre = targetDataset.getBarycentre().getMatrix();
         Dataset clone = targetDataset.clone();
         clone.substractBarycentre();
