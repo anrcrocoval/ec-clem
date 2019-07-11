@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import icy.gui.viewer.Viewer;
+import icy.main.Icy;
 import icy.system.thread.ThreadUtil;
 import plugins.adufour.ezplug.EzGroup;
 import plugins.adufour.ezplug.EzLabel;
@@ -44,6 +45,7 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import icy.type.DataType;
 import icy.type.point.Point5D;
+import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import plugins.perrine.easyclemv0.factory.SequenceFactory;
 import plugins.perrine.easyclemv0.factory.TransformationConfigurationFactory;
 import plugins.perrine.easyclemv0.model.*;
@@ -278,8 +280,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		messageSource = new MessageOverlay("SourceImage: will be transformed. Do not add point here but drag the points added from target");
 		messageTarget = new MessageOverlay("Target Message: add Roi points here");
-		sourceSequence.addOverlay(messageSource);
-		targetSequence.addOverlay(messageTarget);
+		//sourceSequence.addOverlay(messageSource);
+		//targetSequence.addOverlay(messageTarget);
 		sourceSequence.addOverlay(myoverlaysource);
 		targetSequence.addOverlay(myoverlaytarget);
 
@@ -295,7 +297,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		guiCLEMButtons.enableButtons();
 		rigidspecificbutton.enableButtons();
-
+		Icy.getMainInterface().setSelectedTool(ROI3DPointPlugin.class.getName());
 		currentThread = Thread.currentThread();
 		currentThread.suspend();
 
@@ -303,9 +305,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		sequenceListenerUtil.removeListeners(sourceSequence, RoiDuplicator.class);
 		sequenceListenerUtil.removeListeners(targetSequence, RoiDuplicator.class);
 		sourceSequence.removeOverlay(myoverlaysource);
-		sourceSequence.removeOverlay(messageSource);
+		//sourceSequence.removeOverlay(messageSource);
 		targetSequence.removeOverlay(myoverlaytarget);
-		targetSequence.removeOverlay(messageTarget);
+		//targetSequence.removeOverlay(messageTarget);
 //		sourceSequence.removeOverlay(myoverlayerror);
 //		sourceSequence.removeOverlay(myoverlaypredictederror);
 	}

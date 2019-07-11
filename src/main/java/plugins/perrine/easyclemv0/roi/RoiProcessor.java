@@ -1,14 +1,15 @@
 package plugins.perrine.easyclemv0.roi;
 
 import icy.roi.ROI;
-import icy.type.point.Point5D;
-import plugins.kernel.roi.descriptor.measure.ROIMassCenterDescriptorsPlugin;
 import plugins.kernel.roi.roi3d.ROI3DPoint;
-
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RoiProcessor {
+
+    private Pattern pattern = Pattern.compile(".*?(\\d+)$");
 
     public double[][] getPointsFromRoi(ArrayList<ROI> roiList) {
         if(roiList.size() == 0) {
@@ -43,7 +44,12 @@ public class RoiProcessor {
     }
 
     private void sort(ArrayList<ROI> roiList) {
-        roiList.sort(Comparator.comparing(ROI::getName));
+        roiList.sort(Comparator.comparing((roi) -> {
+            Matcher matcher = pattern.matcher(roi.getName());
+            matcher.matches();
+            String group = matcher.group(1);
+            return Integer.parseInt(group);
+        }));
     }
 
     public void convert(ArrayList<ROI> roiList) {
