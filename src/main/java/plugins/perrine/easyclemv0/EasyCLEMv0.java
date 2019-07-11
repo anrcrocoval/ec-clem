@@ -175,8 +175,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 //		prealign.setToolTipText("Volume can be turned in order to generate a new and still calibrated stack");
 //		choiceinputsection.addVisibilityTriggerTo(prealign, "3D (X,Y,Z,[T])", "3D but let me update myself");
 //		addEzComponent(prealign);
-
-		//addComponent(new GuiCLEMButtonPreprocess());
+//		addComponent(new GuiCLEMButtonPreprocess());
 		addComponent(new GuiCLEMButtonApply());
 		addComponent(new advancedmodules(this));
 		addEzComponent(inputGroup);
@@ -280,17 +279,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		messageSource = new MessageOverlay("SourceImage: will be transformed. Do not add point here but drag the points added from target");
 		messageTarget = new MessageOverlay("Target Message: add Roi points here");
-		//sourceSequence.addOverlay(messageSource);
-		//targetSequence.addOverlay(messageTarget);
 		sourceSequence.addOverlay(myoverlaysource);
 		targetSequence.addOverlay(myoverlaytarget);
-
-//		if (predictederrorselected) {
-//			sourceSequence.addOverlay(myoverlaypredictederror);
-//		}
-//		if (overlayerrorselected) {
-//			sourceSequence.addOverlay(myoverlayerror);
-//		}
 
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
 		new AnnounceFrame("Select point on image" + targetSequence.getName() + ", then drag it on source image and RIGHT CLICK", 5);
@@ -305,11 +295,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		sequenceListenerUtil.removeListeners(sourceSequence, RoiDuplicator.class);
 		sequenceListenerUtil.removeListeners(targetSequence, RoiDuplicator.class);
 		sourceSequence.removeOverlay(myoverlaysource);
-		//sourceSequence.removeOverlay(messageSource);
 		targetSequence.removeOverlay(myoverlaytarget);
-		//targetSequence.removeOverlay(messageTarget);
-//		sourceSequence.removeOverlay(myoverlayerror);
-//		sourceSequence.removeOverlay(myoverlaypredictederror);
 	}
 
 	private void convertTo8Bit(Sequence sequence) {
