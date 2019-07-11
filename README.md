@@ -6,6 +6,6 @@ This project is an [Icy](http://icy.bioimageanalysis.org/) plugin for point base
 + Install `java` and `maven`
 + Download Icy from [here](http://icy.bioimageanalysis.org/download/)
 + Create a shortcut to the icy directory under the `libs` folder : `libs/icy -> <your-icy-directory>`
-+ Run `mvn package`
++ Run `mvn clean` and `mvn install`
 + Copy the artifact `target/ec-clem-<version>.jar` to `libs/icy/plugins/perrine/easyclemv0`
 + Run icy and use `easyclemv0` plugin
