@@ -40,7 +40,7 @@ class XmlFileWriterTest {
         targetSequenceSize.add(new DimensionSize(DimensionId.X, 10, 1));
         TransformationSchema transformationSchema = new TransformationSchema(
             new FiducialSet(sourceDataset, targetDataset),
-            TransformationType.RIGID,
+            TransformationType.SIMILARITY,
             sourceSequenceSize,
             targetSequenceSize
         );

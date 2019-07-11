@@ -17,7 +17,7 @@ public class Workspace {
     private TransformationConfiguration transformationConfiguration;
 
     public Workspace() {
-        workspaceState = new WorkspaceState(false, false, false);
+        workspaceState = new WorkspaceState(false, false);
         monitoringConfiguration = new MonitoringConfiguration(false, false);
     }
 

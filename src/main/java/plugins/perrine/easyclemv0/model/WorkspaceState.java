@@ -2,22 +2,12 @@ package plugins.perrine.easyclemv0.model;
 
 public class WorkspaceState {
 
-    private boolean pause;
     private boolean flagReadyToMove;
     private boolean done;
 
-    public WorkspaceState(boolean pause, boolean flagReadyToMove, boolean done) {
-        this.pause = pause;
+    public WorkspaceState(boolean flagReadyToMove, boolean done) {
         this.flagReadyToMove = flagReadyToMove;
         this.done = done;
-    }
-
-    public boolean isPause() {
-        return pause;
-    }
-
-    public void setPause(boolean pause) {
-        this.pause = pause;
     }
 
     public boolean isFlagReadyToMove() {

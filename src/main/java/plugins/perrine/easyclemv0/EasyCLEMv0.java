@@ -65,27 +65,19 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	private Overlay myoverlaysource;
 	private Overlay myoverlaytarget;
-	private Overlay messageSource;
-	private Overlay messageTarget;
 
 	static String[] listofRegistrationchoice = new String[] { "From Live to EM", "From Section to EM", "From Live to Section" };
 	private EzLabel versioninfo = new EzLabel("Version " + getDescriptor().getVersion());
 
-	private static String INPUT_SELECTION_2D = "2D (X,Y,[T])";
-	private static String INPUT_SELECTION_2D_UPDATE = "2D but let me update myself";
-	private static String INPUT_SELECTION_3D = "3D (X,Y,Z,[T])";
-	private static String INPUT_SELECTION_3D_UPDATE = "3D but let me update myself";
-	private static String INPUT_SELECTION_NON_RIGID = "non rigid (2D or 3D)";
-	private static String INPUT_SELECTION_AFFINE = "Affine";
+	private static String INPUT_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
+	private static String INPUT_SELECTION_AFFINE = TransformationType.AFFINE.name();
+	private static String INPUT_SELECTION_SPLINE = TransformationType.SPLINE.name();
 	private EzVarText choiceinputsection = new EzVarText(
 		"I want to compute the transformation in:",
 			new String[] {
-				INPUT_SELECTION_2D,
-				INPUT_SELECTION_2D_UPDATE,
-				INPUT_SELECTION_3D,
-				INPUT_SELECTION_3D_UPDATE,
-				INPUT_SELECTION_NON_RIGID,
-				INPUT_SELECTION_AFFINE
+				INPUT_SELECTION_SIMILARITY,
+				INPUT_SELECTION_AFFINE,
+				INPUT_SELECTION_SPLINE
 			}, 0, false
 	);
 	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", true);
@@ -209,42 +201,13 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			return;
 		}
 
-		boolean pause = false;
 		source.setEnabled(false);
 		target.setEnabled(false);
 		choiceinputsection.setEnabled(false);
 		showgrid.setEnabled(false);
 
-		TransformationType transformationType = TransformationType.RIGID;
-		if (choiceinputsection.getValue().equals(INPUT_SELECTION_2D)) {
-			transformationType = TransformationType.RIGID;
-			pause = false;
-		}
-
-		if (choiceinputsection.getValue().equals(INPUT_SELECTION_2D_UPDATE)) {
-			transformationType = TransformationType.RIGID;
-			pause = true;
-		}
-
-		if (choiceinputsection.getValue().equals(INPUT_SELECTION_3D)) {
-			transformationType = TransformationType.RIGID;
-			pause = false;
-		}
-
-		if (choiceinputsection.getValue().equals(INPUT_SELECTION_3D_UPDATE)) {
-			transformationType = TransformationType.RIGID;
-			pause = true;
-		}
-
-		if (choiceinputsection.getValue().equals(INPUT_SELECTION_NON_RIGID)) {
-			transformationType = TransformationType.NON_RIGID;
-			pause = true;
+		if (!choiceinputsection.getValue().equals(INPUT_SELECTION_SIMILARITY)) {
 			rigidspecificbutton.removespecificrigidbutton();
-		}
-
-		if (choiceinputsection.getValue().equals(INPUT_SELECTION_AFFINE)) {
-			transformationType = TransformationType.AFFINE;
-			pause = false;
 		}
 
 		sourceSequence.setName(sourceSequence.getName() + " (transformed)");
@@ -255,8 +218,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
 		workspace.setXMLFile(new File(name));
-		workspace.getWorkspaceState().setPause(pause);
-		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(transformationType, showgrid.getValue()));
+		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(TransformationType.valueOf(choiceinputsection.getValue()), showgrid.getValue()));
 
 		guiCLEMButtons.setworkspace(workspace);
 		rigidspecificbutton.setWorkspace(workspace);
@@ -276,9 +238,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		myoverlaysource = new VisiblepointsOverlay();
 		myoverlaytarget = new VisiblepointsOverlay();
-
-		messageSource = new MessageOverlay("SourceImage: will be transformed. Do not add point here but drag the points added from target");
-		messageTarget = new MessageOverlay("Target Message: add Roi points here");
 		sourceSequence.addOverlay(myoverlaysource);
 		targetSequence.addOverlay(myoverlaytarget);
 

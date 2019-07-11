@@ -14,9 +14,9 @@ public class TransformationFactory {
 
     public Transformation getFrom(TransformationSchema transformationSchema) {
         switch (transformationSchema.getTransformationType()) {
-            case RIGID: return rigidTransformationComputer.compute(transformationSchema.getFiducialSet());
+            case SIMILARITY: return rigidTransformationComputer.compute(transformationSchema.getFiducialSet());
             case AFFINE: return affineTransformationComputer.compute(transformationSchema.getFiducialSet());
-            case NON_RIGID: return  nonRigidTransformationComputer.compute(transformationSchema.getFiducialSet());
+            case SPLINE: return  nonRigidTransformationComputer.compute(transformationSchema.getFiducialSet());
             default : throw new RuntimeException("Case not implemented");
         }
     }
