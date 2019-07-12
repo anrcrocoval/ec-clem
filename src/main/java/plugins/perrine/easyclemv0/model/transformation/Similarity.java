@@ -5,18 +5,12 @@ import Jama.Matrix;
 public class Similarity extends AffineTransformation {
 
     private Matrix R;
-    private Matrix scale;
-    private double scaleValue;
+    private Matrix S;
 
-    public Similarity(Matrix R, Matrix T, Matrix scale) {
-        super(scale.times(R), T);
+    public Similarity(Matrix R, Matrix T, Matrix S) {
+        super(S.times(R), T);
         this.R = R;
-        this.scale = scale;
-    }
-
-    public Similarity(Matrix R, Matrix T, double scale) {
-        this(R, T, Matrix.identity(T.getRowDimension(), T.getRowDimension()).times(scale));
-        scaleValue = scale;
+        this.S = S;
     }
 
     public Matrix getR() {
@@ -27,7 +21,7 @@ public class Similarity extends AffineTransformation {
         return T;
     }
 
-    public double getScale() {
-        return scaleValue;
+    public Matrix getS() {
+        return S;
     }
 }

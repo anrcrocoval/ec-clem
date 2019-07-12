@@ -2,10 +2,12 @@ package plugins.perrine.easyclemv0.registration;
 
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
+import org.apache.commons.math3.util.FastMath;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.transformation.Similarity;
+import plugins.perrine.easyclemv0.util.MatrixUtil;
 
 import static java.lang.Math.max;
 
@@ -24,7 +26,7 @@ public class RigidTransformationComputer implements TransformationComputer {
                             dimension
                     ),
                     new Matrix(dimension, 1, 0),
-                    1
+                    Matrix.identity(dimension, dimension)
             );
         }
 
@@ -36,19 +38,35 @@ public class RigidTransformationComputer implements TransformationComputer {
         clonedSourceDataset.substractBarycentre();
         clonedTargetDataset.substractBarycentre();
 
-        double scale = clonedTargetDataset.getMeanNorm() / clonedSourceDataset.getMeanNorm();
         Matrix R = getR(clonedSourceDataset, clonedTargetDataset);
-        Matrix T = getT(sourceBarycentre.getMatrix(), targetBarycentre.getMatrix(), R, scale);
-        return new Similarity(R, T, scale);
+        Matrix S = getS(clonedSourceDataset.getMatrix(), clonedTargetDataset.getMatrix(), R);
+        Matrix T = getT(sourceBarycentre.getMatrix(), targetBarycentre.getMatrix(), R, S);
+        return new Similarity(R, T, S);
     }
 
     private Matrix getR(Dataset source, Dataset target) {
         Matrix S = target.getMatrix().transpose().times(source.getMatrix());
         SingularValueDecomposition svd = S.svd();
-        return svd.getU().times(svd.getV().transpose());
+        Matrix E = Matrix.identity(svd.getS().getRowDimension(), svd.getS().getColumnDimension());
+        E.set(E.getRowDimension() - 1, E.getColumnDimension() - 1, Math.signum(svd.getU().times(svd.getV().transpose()).det()));
+        return svd.getU().times(E).times(svd.getV().transpose());
     }
 
-    private Matrix getT(Matrix sourceBarycentre, Matrix targetBarycentre, Matrix R, double scale) {
+    private Matrix getS(Matrix sourceDataset, Matrix targetDataset, Matrix R) {
+        Dataset ratioDataset = new Dataset(targetDataset.arrayRightDivide(R.times(sourceDataset.transpose()).transpose()));
+        Point ratioPoint = ratioDataset.getBarycentre();
+        Matrix scale = Matrix.identity(R.getRowDimension(), R.getColumnDimension());
+        for(int i = 0; i < R.getRowDimension(); i++) {
+            if(Double.isNaN(ratioPoint.get(i)) || ratioPoint.get(i) == 0) {
+                scale.set(i, i, 1);
+            } else {
+                scale.set(i, i, ratioPoint.get(i));
+            }
+        }
+        return scale;
+    }
+
+    private Matrix getT(Matrix sourceBarycentre, Matrix targetBarycentre, Matrix R, Matrix scale) {
         return targetBarycentre.minus(R.times(scale).times(sourceBarycentre));
     }
 }

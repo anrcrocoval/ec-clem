@@ -16,7 +16,6 @@ import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
 import plugins.perrine.easyclemv0.storage.xml.XmlFileWriter;
 import plugins.perrine.easyclemv0.storage.xml.XmlTransformationWriter;
 import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -100,12 +99,8 @@ public class WorkspaceTransformer {
 
     public void resetToOriginalImage(Workspace workspace) {
         if(workspace.getTransformationSchema() != null) {
-            Dataset reversed = datasetFactory.getFrom(
-                    datasetFactory.getFrom(workspace.getSourceSequence()),
-                    workspace.getTransformationSchema().inverse()
-            );
             restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
-            roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
+            roiUpdater.updateRoi(workspace.getTransformationSchema().getFiducialSet().getSourceDataset(), workspace.getSourceSequence());
             workspace.setTransformationSchema(null);
         }
     }

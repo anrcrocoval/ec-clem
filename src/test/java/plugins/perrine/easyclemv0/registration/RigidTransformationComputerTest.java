@@ -41,12 +41,24 @@ class RigidTransformationComputerTest {
         assertEquals(0, result.getR().get(0, 2), 0.0000000001);
         assertEquals(0, result.getR().get(1, 2), 0.0000000001);
         assertEquals(1, result.getR().get(2, 2), 0.0000000001);
+
+        assertEquals(3, result.getS().getRowDimension());
+        assertEquals(3, result.getS().getColumnDimension());
+        assertEquals(2, result.getS().get(0, 0), 0.0000000001);
+        assertEquals(0, result.getS().get(1, 0), 0.0000000001);
+        assertEquals(0, result.getS().get(2, 0), 0.0000000001);
+        assertEquals(0, result.getS().get(0, 1), 0.0000000001);
+        assertEquals(2, result.getS().get(1, 1), 0.0000000001);
+        assertEquals(0, result.getS().get(2, 1), 0.0000000001);
+        assertEquals(0, result.getS().get(0, 2), 0.0000000001);
+        assertEquals(0, result.getS().get(1, 2), 0.0000000001);
+        assertEquals(2, result.getS().get(2, 2), 0.0000000001);
+
         assertEquals(3, result.getT().getRowDimension());
         assertEquals(1, result.getT().getColumnDimension());
         assertEquals(0, result.getT().get(0, 0), 0.0000000001);
         assertEquals(0, result.getT().get(1, 0), 0.0000000001);
         assertEquals(0, result.getT().get(2, 0), 0.0000000001);
-        assertEquals(2, result.getScale(), 0.0000000001);
     }
 
     @Test
@@ -77,12 +89,24 @@ class RigidTransformationComputerTest {
         assertEquals(0, result.getR().get(0, 2), 0.0000000001);
         assertEquals(0, result.getR().get(1, 2), 0.0000000001);
         assertEquals(1, result.getR().get(2, 2), 0.0000000001);
+
+        assertEquals(3, result.getS().getRowDimension());
+        assertEquals(3, result.getS().getColumnDimension());
+        assertEquals(1, result.getS().get(0, 0), 0.0000000001);
+        assertEquals(0, result.getS().get(1, 0), 0.0000000001);
+        assertEquals(0, result.getS().get(2, 0), 0.0000000001);
+        assertEquals(0, result.getS().get(0, 1), 0.0000000001);
+        assertEquals(1, result.getS().get(1, 1), 0.0000000001);
+        assertEquals(0, result.getS().get(2, 1), 0.0000000001);
+        assertEquals(0, result.getS().get(0, 2), 0.0000000001);
+        assertEquals(0, result.getS().get(1, 2), 0.0000000001);
+        assertEquals(1, result.getS().get(2, 2), 0.0000000001);
+
         assertEquals(3, result.getT().getRowDimension());
         assertEquals(1, result.getT().getColumnDimension());
         assertEquals(1, result.getT().get(0, 0), 0.0000001);
         assertEquals(1, result.getT().get(1, 0), 0.0000000001);
         assertEquals(1, result.getT().get(2, 0), 0.0000000001);
-        assertEquals(1, result.getScale(), 0.0000000001);
     }
 
     @Test
@@ -113,11 +137,23 @@ class RigidTransformationComputerTest {
         assertEquals(-0.7071068, result.getR().get(0, 2), 0.0000001);
         assertEquals(0, result.getR().get(1, 2), 0.0000001);
         assertEquals(0.7071068, result.getR().get(2, 2), 0.0000001);
+
+        assertEquals(3, result.getS().getRowDimension());
+        assertEquals(3, result.getS().getColumnDimension());
+        assertEquals(1, result.getS().get(0, 0), 0.0000001);
+        assertEquals(0, result.getS().get(1, 0), 0.0000001);
+        assertEquals(0, result.getS().get(2, 0), 0.0000001);
+        assertEquals(0, result.getS().get(0, 1), 0.0000001);
+        assertEquals(1, result.getS().get(1, 1), 0.0000001);
+        assertEquals(0, result.getS().get(2, 1), 0.0000001);
+        assertEquals(0, result.getS().get(0, 2), 0.0000001);
+        assertEquals(0, result.getS().get(1, 2), 0.0000001);
+        assertEquals(1, result.getS().get(2, 2), 0.0000001);
+
         assertEquals(3, result.getT().getRowDimension());
         assertEquals(1, result.getT().getColumnDimension());
         assertEquals(0, result.getT().get(0, 0), 0.0000001);
         assertEquals(0, result.getT().get(1, 0), 0.0000001);
         assertEquals(0, result.getT().get(2, 0), 0.000001);
-        assertEquals(1, result.getScale(), 0.0000001);
     }
 }

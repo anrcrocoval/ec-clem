@@ -15,6 +15,7 @@ public class VtkAbstractTransformFactory {
 
     public vtkAbstractTransform getFrom(Transformation transformation) {
         if(transformation instanceof AffineTransformation) {
+            ((AffineTransformation) transformation).getMatrix().print(1,5);
             Matrix matrixInverse = matrixUtil.pseudoInverse(((AffineTransformation) transformation).getMatrix());
             if (matrixInverse.getRowDimension() != 4) {
                 throw new RuntimeException("Use this class for 3D transformation only");

@@ -24,8 +24,7 @@ public class SimilarityTest {
                 { 3 }
             }
         );
-        double scale = 2;
-        Similarity S = new Similarity(R, T, scale);
+        Similarity S = new Similarity(R, T, Matrix.identity(3,3).times(2));
         Matrix M = S.getMatrix();
         assertEquals(0, M.get(0, 0));
         assertEquals(2, M.get(1, 0));
