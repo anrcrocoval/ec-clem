@@ -32,6 +32,7 @@ class RigidTransformationComputerTest {
         Similarity result = subjectUnderTest.compute(new FiducialSet(source, target));
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
+        assertEquals(1, result.getR().det(), 0.0000000001);
         assertEquals(0, result.getR().get(0, 0), 0.0000000001);
         assertEquals(1, result.getR().get(1, 0), 0.0000000001);
         assertEquals(0, result.getR().get(2, 0), 0.0000000001);
@@ -80,6 +81,7 @@ class RigidTransformationComputerTest {
         Similarity result = subjectUnderTest.compute(new FiducialSet(source, target));
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
+        assertEquals(1, result.getR().det(), 0.0000000001);
         assertEquals(1, result.getR().get(0, 0), 0.0000000001);
         assertEquals(0, result.getR().get(1, 0), 0.0000000001);
         assertEquals(0, result.getR().get(2, 0), 0.0000000001);
@@ -128,6 +130,7 @@ class RigidTransformationComputerTest {
         Similarity result = subjectUnderTest.compute(new FiducialSet(source, target));
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
+        assertEquals(1, result.getR().det(), 0.0000000001);
         assertEquals(0, result.getR().get(0, 0), 0.0000001);
         assertEquals(1, result.getR().get(1, 0), 0.0000001);
         assertEquals(0, result.getR().get(2, 0), 0.0000001);
