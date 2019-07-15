@@ -11,7 +11,7 @@ public class AffineTransformationComputer implements TransformationComputer {
 
     @Override
     public AffineTransformation compute(FiducialSet fiducialSet) {
-        Matrix A = fiducialSet.getSourceDataset().getHomogeneousMatrix2();
+        Matrix A = fiducialSet.getSourceDataset().getHomogeneousMatrixLeft();
         Matrix B = fiducialSet.getTargetDataset().getMatrix();
         Matrix result = matrixUtil.pseudoInverse(A.transpose().times(A)).times(A.transpose()).times(B).transpose();
         return new AffineTransformation(

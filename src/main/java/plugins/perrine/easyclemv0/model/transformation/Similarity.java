@@ -8,7 +8,7 @@ public class Similarity extends AffineTransformation {
     private Matrix S;
 
     public Similarity(Matrix R, Matrix T, Matrix S) {
-        super(S.times(R), T);
+        super(R.times(S), T);
         this.R = R;
         this.S = S;
     }

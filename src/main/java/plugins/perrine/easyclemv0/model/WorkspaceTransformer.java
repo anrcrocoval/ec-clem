@@ -6,6 +6,7 @@ import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
+import plugins.perrine.easyclemv0.error.ErrorComputer;
 import plugins.perrine.easyclemv0.error.TREComputer;
 import plugins.perrine.easyclemv0.factory.*;
 import plugins.perrine.easyclemv0.image_transformer.SequenceUpdater;
@@ -26,6 +27,7 @@ public class WorkspaceTransformer {
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
     private RoiUpdater roiUpdater = new RoiUpdater();
     private SequenceFactory sequenceFactory = new SequenceFactory();
+    private ErrorComputer errorComputer = new ErrorComputer();
 
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();
@@ -49,8 +51,8 @@ public class WorkspaceTransformer {
                 sequenceUpdater.update(gridSequence, workspace.getTransformationSchema());
                 ThreadUtil.invokeLater(() -> new Viewer(gridSequence));
             }
-
             sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformationSchema());
+            errorComputer.showError(workspace.getTransformationSchema());
             Document document = XMLUtil.createDocument(true);
             xmlWriter = new XmlTransformationWriter(document);
             xmlWriter.write(workspace.getTransformationSchema());

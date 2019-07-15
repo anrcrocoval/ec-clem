@@ -30,24 +30,24 @@ class AffineTransformationComputerTest {
         Dataset target = new Dataset(targetPoints);
 
         AffineTransformation result = subjectUnderTest.compute(new FiducialSet(source, target));
-        assertEquals(4, result.getMatrix().getRowDimension());
-        assertEquals(4, result.getMatrix().getColumnDimension());
-        assertEquals(0, result.getMatrix().get(0, 0), 0.0000000001);
-        assertEquals(2, result.getMatrix().get(1, 0), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(2, 0), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(3, 0), 0.0000000001);
-        assertEquals(-2, result.getMatrix().get(0, 1), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(1, 1), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(2, 1), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(3, 1), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(0, 2), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(1, 2), 0.0000000001);
-        assertEquals(2, result.getMatrix().get(2, 2), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(3, 2), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(0, 3), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(1, 3), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(2, 3), 0.0000000001);
-        assertEquals(1, result.getMatrix().get(3, 3), 0.0000000001);
+        assertEquals(4, result.getHomogeneousMatrix().getRowDimension());
+        assertEquals(4, result.getHomogeneousMatrix().getColumnDimension());
+        assertEquals(0, result.getHomogeneousMatrix().get(0, 0), 0.0000000001);
+        assertEquals(2, result.getHomogeneousMatrix().get(1, 0), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(2, 0), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(3, 0), 0.0000000001);
+        assertEquals(-2, result.getHomogeneousMatrix().get(0, 1), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(1, 1), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(2, 1), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(3, 1), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(0, 2), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(1, 2), 0.0000000001);
+        assertEquals(2, result.getHomogeneousMatrix().get(2, 2), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(3, 2), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(0, 3), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(1, 3), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(2, 3), 0.0000000001);
+        assertEquals(1, result.getHomogeneousMatrix().get(3, 3), 0.0000000001);
     }
 
     @Test
@@ -67,24 +67,24 @@ class AffineTransformationComputerTest {
         Dataset target = new Dataset(targetPoints);
 
         AffineTransformation result = subjectUnderTest.compute(new FiducialSet(source, target));
-        assertEquals(4, result.getMatrix().getRowDimension());
-        assertEquals(4, result.getMatrix().getColumnDimension());
-        assertEquals(1, result.getMatrix().get(0, 0), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(1, 0), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(2, 0), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(3, 0), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(0, 1), 0.0000000001);
-        assertEquals(1, result.getMatrix().get(1, 1), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(2, 1), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(3, 1), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(0, 2), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(1, 2), 0.0000000001);
-        assertEquals(1, result.getMatrix().get(2, 2), 0.0000000001);
-        assertEquals(0, result.getMatrix().get(3, 2), 0.0000000001);
-        assertEquals(1, result.getMatrix().get(0, 3), 0.0000001);
-        assertEquals(1, result.getMatrix().get(1, 3), 0.0000000001);
-        assertEquals(1, result.getMatrix().get(2, 3), 0.0000000001);
-        assertEquals(1, result.getMatrix().get(3, 3), 0.0000000001);
+        assertEquals(4, result.getHomogeneousMatrix().getRowDimension());
+        assertEquals(4, result.getHomogeneousMatrix().getColumnDimension());
+        assertEquals(1, result.getHomogeneousMatrix().get(0, 0), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(1, 0), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(2, 0), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(3, 0), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(0, 1), 0.0000000001);
+        assertEquals(1, result.getHomogeneousMatrix().get(1, 1), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(2, 1), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(3, 1), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(0, 2), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(1, 2), 0.0000000001);
+        assertEquals(1, result.getHomogeneousMatrix().get(2, 2), 0.0000000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(3, 2), 0.0000000001);
+        assertEquals(1, result.getHomogeneousMatrix().get(0, 3), 0.0000001);
+        assertEquals(1, result.getHomogeneousMatrix().get(1, 3), 0.0000000001);
+        assertEquals(1, result.getHomogeneousMatrix().get(2, 3), 0.0000000001);
+        assertEquals(1, result.getHomogeneousMatrix().get(3, 3), 0.0000000001);
     }
 
     @Test
@@ -104,24 +104,23 @@ class AffineTransformationComputerTest {
         Dataset target = new Dataset(targetPoints);
 
         AffineTransformation result = subjectUnderTest.compute(new FiducialSet(source, target));
-        result.getMatrix().print(1,5);
-        assertEquals(4, result.getMatrix().getRowDimension());
-        assertEquals(4, result.getMatrix().getColumnDimension());
-        assertEquals(0, result.getMatrix().get(0, 0), 0.0000001);
-        assertEquals(1, result.getMatrix().get(1, 0), 0.0000001);
-        assertEquals(0, result.getMatrix().get(2, 0), 0.0000001);
-        assertEquals(0, result.getMatrix().get(3, 0), 0.0000001);
-        assertEquals(-0.7071068, result.getMatrix().get(0, 1), 0.0000001);
-        assertEquals(0, result.getMatrix().get(1, 1), 0.0000001);
-        assertEquals(-0.7071068, result.getMatrix().get(2, 1), 0.0000001);
-        assertEquals(0, result.getMatrix().get(3, 1), 0.0000001);
-        assertEquals(-0.7071068, result.getMatrix().get(0, 2), 0.0000001);
-        assertEquals(0, result.getMatrix().get(1, 2), 0.0000001);
-        assertEquals(0.7071068, result.getMatrix().get(2, 2), 0.0000001);
-        assertEquals(0, result.getMatrix().get(3, 2), 0.0000001);
-        assertEquals(0, result.getMatrix().get(0, 3), 0.0000001);
-        assertEquals(0, result.getMatrix().get(1, 3), 0.0000001);
-        assertEquals(0, result.getMatrix().get(2, 3), 0.000001);
-        assertEquals(1, result.getMatrix().get(3, 3), 0.000001);
+        assertEquals(4, result.getHomogeneousMatrix().getRowDimension());
+        assertEquals(4, result.getHomogeneousMatrix().getColumnDimension());
+        assertEquals(0, result.getHomogeneousMatrix().get(0, 0), 0.0000001);
+        assertEquals(1, result.getHomogeneousMatrix().get(1, 0), 0.0000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(2, 0), 0.0000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(3, 0), 0.0000001);
+        assertEquals(-0.7071068, result.getHomogeneousMatrix().get(0, 1), 0.0000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(1, 1), 0.0000001);
+        assertEquals(-0.7071068, result.getHomogeneousMatrix().get(2, 1), 0.0000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(3, 1), 0.0000001);
+        assertEquals(-0.7071068, result.getHomogeneousMatrix().get(0, 2), 0.0000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(1, 2), 0.0000001);
+        assertEquals(0.7071068, result.getHomogeneousMatrix().get(2, 2), 0.0000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(3, 2), 0.0000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(0, 3), 0.0000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(1, 3), 0.0000001);
+        assertEquals(0, result.getHomogeneousMatrix().get(2, 3), 0.000001);
+        assertEquals(1, result.getHomogeneousMatrix().get(3, 3), 0.000001);
     }
 }

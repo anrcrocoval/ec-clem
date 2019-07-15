@@ -107,13 +107,13 @@ public class Dataset implements Cloneable {
         return points;
     }
 
-    public Matrix getHomogeneousMatrix() {
+    public Matrix getHomogeneousMatrixRight() {
         Matrix M = new Matrix(points.getRowDimension(), points.getColumnDimension() + 1, 1);
         M.setMatrix(0, points.getRowDimension() - 1, 0, points.getColumnDimension() - 1, points);
         return M;
     }
 
-    public Matrix getHomogeneousMatrix2() {
+    public Matrix getHomogeneousMatrixLeft() {
         Matrix M = new Matrix(points.getRowDimension(), points.getColumnDimension() + 1, 1);
         M.setMatrix(0, points.getRowDimension() - 1, 1, points.getColumnDimension(), points);
         return M;
