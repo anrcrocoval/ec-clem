@@ -55,7 +55,7 @@
 //import plugins.perrine.easyclemv0.factory.TREComputerFactory;
 //import plugins.perrine.easyclemv0.model.*;
 //import plugins.perrine.easyclemv0.model.transformation.Similarity;
-//import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
+//import plugins.perrine.easyclemv0.registration.SimilarityTransformationComputer;
 //import plugins.perrine.easyclemv0.util.DatasetGenerator;
 //
 //// mode 3D is not implemented here
@@ -81,7 +81,7 @@
 //	private String namep;
 //
 //	private DatasetFactory datasetFactory = new DatasetFactory();
-//	private RigidTransformationComputer rigidTransformationComputer = new RigidTransformationComputer();
+//	private SimilarityTransformationComputer rigidTransformationComputer = new SimilarityTransformationComputer();
 //	private TREComputerFactory treComputerFactory = new TREComputerFactory();
 //	private TREChecker treChecker = new TREChecker();
 //	private DatasetGenerator datasetGenerator = new DatasetGenerator();

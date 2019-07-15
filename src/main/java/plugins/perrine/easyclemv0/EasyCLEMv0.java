@@ -69,12 +69,14 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	static String[] listofRegistrationchoice = new String[] { "From Live to EM", "From Section to EM", "From Live to Section" };
 	private EzLabel versioninfo = new EzLabel("Version " + getDescriptor().getVersion());
 
+	private static String INPUT_SELECTION_RIGID = TransformationType.RIGID.name();
 	private static String INPUT_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
 	private static String INPUT_SELECTION_AFFINE = TransformationType.AFFINE.name();
 	private static String INPUT_SELECTION_SPLINE = TransformationType.SPLINE.name();
 	private EzVarText choiceinputsection = new EzVarText(
 		"I want to compute the transformation in:",
 			new String[] {
+				INPUT_SELECTION_RIGID,
 				INPUT_SELECTION_SIMILARITY,
 				INPUT_SELECTION_AFFINE,
 				INPUT_SELECTION_SPLINE
@@ -206,7 +208,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		choiceinputsection.setEnabled(false);
 		showgrid.setEnabled(false);
 
-		if (!choiceinputsection.getValue().equals(INPUT_SELECTION_SIMILARITY)) {
+		if (!choiceinputsection.getValue().equals(INPUT_SELECTION_RIGID)) {
 			rigidspecificbutton.removespecificrigidbutton();
 		}
 

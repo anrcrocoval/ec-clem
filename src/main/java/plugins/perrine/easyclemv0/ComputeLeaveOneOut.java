@@ -39,7 +39,7 @@
 //import plugins.perrine.easyclemv0.model.Dataset;
 //import plugins.perrine.easyclemv0.model.Point;
 //import plugins.perrine.easyclemv0.model.transformation.Similarity;
-//import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
+//import plugins.perrine.easyclemv0.registration.SimilarityTransformationComputer;
 //
 //// mode 3D is not implemented here
 //public class ComputeLeaveOneOut extends EzPlug {
@@ -58,7 +58,7 @@
 //	private JPanel mainPanel = GuiUtil.generatePanel("Graph");
 //	private IcyFrame mainFrame = GuiUtil.generateTitleFrame("Target Registration Error (predicted)", mainPanel, new Dimension(300, 100), true, true, true, true);
 //
-//	private RigidTransformationComputer rigidTransformationComputer = new RigidTransformationComputer();
+//	private SimilarityTransformationComputer rigidTransformationComputer = new SimilarityTransformationComputer();
 //	private DatasetFactory datasetFactory = new DatasetFactory();
 //	private TREComputerFactory treComputerFactory = new TREComputerFactory();
 //	private TREChecker treChecker = new TREChecker();

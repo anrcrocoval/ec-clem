@@ -78,7 +78,7 @@
 //import plugins.perrine.easyclemv0.factory.TREComputerFactory;
 //import plugins.perrine.easyclemv0.model.*;
 //import plugins.perrine.easyclemv0.model.transformation.Similarity;
-//import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
+//import plugins.perrine.easyclemv0.registration.SimilarityTransformationComputer;
 //import plugins.perrine.easyclemv0.util.DatasetGenerator;
 //import vtk.vtkPoints;
 //import vtk.vtkPolyData;
@@ -114,7 +114,7 @@
 //	private FileWriter write;
 //
 //	private DatasetFactory datasetFactory = new DatasetFactory();
-//	private RigidTransformationComputer rigidTransformationComputer = new RigidTransformationComputer();
+//	private SimilarityTransformationComputer rigidTransformationComputer = new SimilarityTransformationComputer();
 //	private TREChecker treChecker = new TREChecker();
 //	private DatasetGenerator datasetGenerator = new DatasetGenerator();
 //	private TREComputerFactory treComputerFactory = new TREComputerFactory();

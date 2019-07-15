@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class RigidTransformationComputerTest {
-    private RigidTransformationComputer subjectUnderTest = new RigidTransformationComputer();
+class SimilarityTransformationComputerTest {
+    private SimilarityTransformationComputer subjectUnderTest = new SimilarityTransformationComputer();
 
     @Test
     void simpleRotation() {
