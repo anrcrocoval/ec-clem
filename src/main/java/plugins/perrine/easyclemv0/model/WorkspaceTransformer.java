@@ -3,7 +3,6 @@ package plugins.perrine.easyclemv0.model;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
-import icy.sequence.SequenceListener;
 import icy.system.thread.ThreadUtil;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -12,10 +11,8 @@ import plugins.perrine.easyclemv0.factory.*;
 import plugins.perrine.easyclemv0.image_transformer.SequenceUpdater;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
-import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
 import plugins.perrine.easyclemv0.storage.xml.XmlFileWriter;
 import plugins.perrine.easyclemv0.storage.xml.XmlTransformationWriter;
-import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -27,10 +24,8 @@ public class WorkspaceTransformer {
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private TransformationSchemaFactory transformationSchemaFactory = new TransformationSchemaFactory();
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
-    private DatasetFactory datasetFactory = new DatasetFactory();
     private RoiUpdater roiUpdater = new RoiUpdater();
     private SequenceFactory sequenceFactory = new SequenceFactory();
-    private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
 
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();
@@ -40,16 +35,8 @@ public class WorkspaceTransformer {
 
     public void apply(Workspace workspace) {
         executorService.submit(() -> {
-//            SequenceListener[] sourceSequenceListeners = removeListeners(workspace.getSourceSequence());
-            List<SequenceListener> targetSequenceListeners = sequenceListenerUtil.removeListeners(workspace.getTargetSequence(), RoiDuplicator.class);
             resetToOriginalImage(workspace);
-
-            try {
-                workspace.setTransformationSchema(transformationSchemaFactory.getFrom(workspace));
-            } catch (RuntimeException e) {
-                sequenceListenerUtil.addListeners(workspace.getTargetSequence(), targetSequenceListeners);
-            }
-
+            workspace.setTransformationSchema(transformationSchemaFactory.getFrom(workspace));
             if(workspace.getTransformationConfiguration().isShowGrid()) {
                 Sequence gridSequence = sequenceFactory.getGridSequence(
                         workspace.getSourceSequence().getSizeX(),
@@ -64,7 +51,6 @@ public class WorkspaceTransformer {
             }
 
             sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformationSchema());
-
             Document document = XMLUtil.createDocument(true);
             xmlWriter = new XmlTransformationWriter(document);
             xmlWriter.write(workspace.getTransformationSchema());
@@ -89,11 +75,7 @@ public class WorkspaceTransformer {
                 }
                 MonitorTargetPoint.UpdatePoint(TREValues);
             }
-
             new AnnounceFrame("TransformationSchema Updated", 5);
-
-//            addListeners(workspace.getSourceSequence(), sourceSequenceListeners);
-            sequenceListenerUtil.addListeners(workspace.getTargetSequence(), targetSequenceListeners);
         });
     }
 
@@ -101,6 +83,7 @@ public class WorkspaceTransformer {
         if(workspace.getTransformationSchema() != null) {
             restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
             roiUpdater.updateRoi(workspace.getTransformationSchema().getFiducialSet().getSourceDataset(), workspace.getSourceSequence());
+            roiUpdater.updateRoi(workspace.getTransformationSchema().getFiducialSet().getTargetDataset(), workspace.getTargetSequence());
             workspace.setTransformationSchema(null);
         }
     }
