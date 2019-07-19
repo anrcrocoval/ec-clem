@@ -28,6 +28,7 @@ public class WorkspaceTransformer {
     private RoiUpdater roiUpdater = new RoiUpdater();
     private SequenceFactory sequenceFactory = new SequenceFactory();
     private ErrorComputer errorComputer = new ErrorComputer();
+    private DatasetFactory datasetFactory = new DatasetFactory();
 
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();
@@ -83,9 +84,12 @@ public class WorkspaceTransformer {
 
     public void resetToOriginalImage(Workspace workspace) {
         if(workspace.getTransformationSchema() != null) {
+            Dataset reversed = datasetFactory.getFrom(
+                    datasetFactory.getFrom(workspace.getSourceSequence()),
+                    workspace.getTransformationSchema().inverse()
+            );
             restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
-            roiUpdater.updateRoi(workspace.getTransformationSchema().getFiducialSet().getSourceDataset(), workspace.getSourceSequence());
-            roiUpdater.updateRoi(workspace.getTransformationSchema().getFiducialSet().getTargetDataset(), workspace.getTargetSequence());
+            roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
             workspace.setTransformationSchema(null);
         }
     }
