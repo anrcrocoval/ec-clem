@@ -10,53 +10,24 @@
  * (at your option) any later version.
  *
  **/
-
-
-package plugins.perrine.easyclemv0;
-
+package plugins.perrine.easyclemv0.error;
 
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.ProgressFrame;
-//import icy.gui.lut.LUTViewer;
 import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
 import icy.image.colormap.FireColorMap;
-
 import icy.image.lut.LUT;
-
-import icy.roi.ROI;
-
 import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;
-import icy.type.point.Point5D;
-//import ij.plugin.filter.LutViewer;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.*;
-
-
-//import plugins.kernel.roi.roi2d.ROI2DEllipse;
-import Jama.Matrix;
-import org.apache.commons.math3.util.CombinatoricsUtils;
-import plugins.kernel.roi.descriptor.measure.ROIMassCenterDescriptorsPlugin;
-//import icy.main.Icy;
-//import icy.math.Scaler;
-import plugins.perrine.easyclemv0.error.TREComputer;
 import plugins.perrine.easyclemv0.factory.SequenceSizeFactory;
-import plugins.perrine.easyclemv0.factory.TREComputerFactory;
-import plugins.perrine.easyclemv0.inertia.InertiaMatrixComputer;
-import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.SequenceSize;
-import plugins.perrine.easyclemv0.roi.RoiProcessor;
 import plugins.stef.tools.overlay.ColorBarOverlay;
-/** author: Perrine.paul-gilloteaux@curie.fr
- * purpose: Compute TRE in each image points from FLE fiducial localisation error
- *
- */
+
 public class TargetRegistrationErrorMap implements Runnable {
 
     private ProgressFrame myprogressbar;
@@ -73,32 +44,20 @@ public class TargetRegistrationErrorMap implements Runnable {
         this.treComputer = treComputer;
     }
 
-    /**
-     * will be run in plugin mode:
-     *  set an progress bar,
-     *  compute the vector f of distance
-     *  and then compute the TRE in each point of the image
-     *  recalibrate the image in pixel size to have it coherent with the target image
-     *  display a lut where error <100 nm emphasized in green
-     */
     @Override
     public void run() {
-        //added to avoid a bug report when no ROI or not enough ROI.
         if (sequence.getROIs().size() < 3) {
             MessageDialog.showDialog("You need at least 4 points to compute an error map ");
         }
-//        Dataset sourceDataset = ReadFiducials(this.sequence);
-        //fiducial is read in nm
+
         myprogressbar = new ProgressFrame("EasyCLEM is computing Error Map");
         myprogressbar.setLength(sequence.getSizeZ());
         myprogressbar.setPosition(0);
-        myprogressbar.setMessage("EasyCLEM was Precomputing Inertia Matrix done");
-
-//        TREComputer treComputer = treComputerFactory.getFrom(sourceDataset, targetDataset);
-
         myprogressbar.setMessage("EasyCLEM is computing Error Map");
+
         final Sequence TREMAP = ComputeTREMAP(sequence, image, treComputer);
         myprogressbar.close();
+
         double sizex = sequence.getPixelSizeX();
         double sizey = sequence.getPixelSizeY();
         double sizez = sequence.getPixelSizeZ();
@@ -153,7 +112,6 @@ public class TargetRegistrationErrorMap implements Runnable {
                         point.getMatrix().set(0, 0, x * sequence.getPixelSizeX());
                         point.getMatrix().set(1, 0, y * sequence.getPixelSizeY());
                         point.getMatrix().set(2, 0, finalz * sequence.getPixelSizeZ());
-//                        dataArray[image.getOffset(x, y)] = (float) treComputer.getExpectedSquareTRE(point);
                         dataArray[image.getOffset(x, y)] = (float) treComputer.getExpectedSquareTRE(point);
                     }
                 }
