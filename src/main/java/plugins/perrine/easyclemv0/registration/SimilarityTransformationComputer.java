@@ -1,15 +1,32 @@
+/**
+ * Copyright 2010-2018 Perrine Paul-Gilloteaux <Perrine.Paul-Gilloteaux@univ-nantes.fr>, CNRS.
+ * Copyright 2019 Guillaume Potier <guillaume.potier@univ-nantes.fr>, INSERM.
+ *
+ * This file is part of EC-CLEM.
+ *
+ * you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ **/
 package plugins.perrine.easyclemv0.registration;
 
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
-import plugins.perrine.easyclemv0.model.Dataset;
-import plugins.perrine.easyclemv0.model.FiducialSet;
-import plugins.perrine.easyclemv0.model.Point;
-import plugins.perrine.easyclemv0.model.transformation.Similarity;
+import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
+import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+import plugins.perrine.easyclemv0.transformation.Similarity;
+
+import javax.inject.Inject;
 
 import static java.lang.Math.max;
 
 public class SimilarityTransformationComputer implements TransformationComputer {
+
+    @Inject
+    public SimilarityTransformationComputer() {}
 
     public Similarity compute(FiducialSet fiducialSet) {
         return compute(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());

@@ -1,7 +1,21 @@
+/**
+ * Copyright 2010-2018 Perrine Paul-Gilloteaux <Perrine.Paul-Gilloteaux@univ-nantes.fr>, CNRS.
+ * Copyright 2019 Guillaume Potier <guillaume.potier@univ-nantes.fr>, INSERM.
+ *
+ * This file is part of EC-CLEM.
+ *
+ * you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ **/
 package plugins.perrine.easyclemv0.roi;
 
 import icy.roi.ROI;
 import plugins.kernel.roi.roi3d.ROI3DPoint;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.regex.Matcher;
@@ -10,6 +24,9 @@ import java.util.regex.Pattern;
 public class RoiProcessor {
 
     private Pattern pattern = Pattern.compile(".*?(\\d+)$");
+
+    @Inject
+    public RoiProcessor() {}
 
     public double[][] getPointsFromRoi(ArrayList<ROI> roiList) {
         if(roiList.size() == 0) {

@@ -1,17 +1,15 @@
 /**
- * Copyright 2010-2017 Perrine Paul-Gilloteaux, CNRS.
- * Perrine.Paul-Gilloteaux@univ-nantes.fr
- * 
+ * Copyright 2010-2018 Perrine Paul-Gilloteaux <Perrine.Paul-Gilloteaux@univ-nantes.fr>, CNRS.
+ * Copyright 2019 Guillaume Potier <guillaume.potier@univ-nantes.fr>, INSERM.
+ *
  * This file is part of EC-CLEM.
- * 
+ *
  * you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  **/
-
-
 
 /**
  * Author: Perrine.Paul-Gilloteaux@curie.fr
@@ -19,14 +17,14 @@
  * this will read the checkbox for fiducial localisation error and for predicted FRE,
  * as well as launching the computation of the error map.
  */
-
 package plugins.perrine.easyclemv0.ui;
 
 import java.awt.Component;
+import javax.inject.Inject;
 import javax.swing.JPanel;
-import plugins.perrine.easyclemv0.model.Workspace;
-import plugins.perrine.easyclemv0.overlay.ErrorInPositionOverlay;
-import plugins.perrine.easyclemv0.overlay.PredictedErrorInPositionOverlay;
+import plugins.perrine.easyclemv0.workspace.Workspace;
+import plugins.perrine.easyclemv0.ui.overlay.ErrorInPositionOverlay;
+import plugins.perrine.easyclemv0.ui.overlay.PredictedErrorInPositionOverlay;
 
 public class GuiCLEMButtons2 extends JPanel {
 
@@ -35,10 +33,15 @@ public class GuiCLEMButtons2 extends JPanel {
 	private MonitorTargetPointButton monitorTargetPointButton;
 	private ShowOverlayCheckbox showerror;
 	private ShowOverlayCheckbox showpredictederror;
+	private ErrorInPositionOverlay errorInPositionOverlay;
+	private PredictedErrorInPositionOverlay predictedErrorInPositionOverlay;
 
-	public GuiCLEMButtons2() {
-		computeErrorMapButton = new ComputeErrorMapButton();
-		monitorTargetPointButton = new MonitorTargetPointButton();
+	@Inject
+	public GuiCLEMButtons2(ComputeErrorMapButton computeErrorMapButton, MonitorTargetPointButton monitorTargetPointButton, ErrorInPositionOverlay errorInPositionOverlay, PredictedErrorInPositionOverlay predictedErrorInPositionOverlay) {
+		this.computeErrorMapButton = computeErrorMapButton;
+		this.monitorTargetPointButton = monitorTargetPointButton;
+		this.errorInPositionOverlay = errorInPositionOverlay;
+		this.predictedErrorInPositionOverlay = predictedErrorInPositionOverlay;
 		showerror = new ShowOverlayCheckbox(
 			null,
 			"Show Difference in Positions",
@@ -60,9 +63,9 @@ public class GuiCLEMButtons2 extends JPanel {
 		computeErrorMapButton.setWorkspace(workspace);
 		monitorTargetPointButton.setWorkspace(workspace);
 		showerror.setWorkspace(workspace);
-		showerror.setOverlay(new ErrorInPositionOverlay(workspace));
+		showerror.setOverlay(errorInPositionOverlay.setWorkspace(workspace));
 		showpredictederror.setWorkspace(workspace);
-		showpredictederror.setOverlay(new PredictedErrorInPositionOverlay(workspace));
+		showpredictederror.setOverlay(predictedErrorInPositionOverlay.setWorkspace(workspace));
 	}
 
 	public void disableButtons() {

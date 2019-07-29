@@ -1,6 +1,6 @@
 /**
- * Copyright 2010-2017 Perrine Paul-Gilloteaux, CNRS.
- * Perrine.Paul-Gilloteaux@univ-nantes.fr
+ * Copyright 2010-2018 Perrine Paul-Gilloteaux <Perrine.Paul-Gilloteaux@univ-nantes.fr>, CNRS.
+ * Copyright 2019 Guillaume Potier <guillaume.potier@univ-nantes.fr>, INSERM.
  *
  * This file is part of EC-CLEM.
  *
@@ -18,19 +18,24 @@
  */
 package plugins.perrine.easyclemv0.ui;
 
+import javax.inject.Inject;
 import javax.swing.JPanel;
-import plugins.perrine.easyclemv0.model.Workspace;
+import plugins.perrine.easyclemv0.workspace.Workspace;
 
 public class GuiCLEMButtons extends JPanel {
 
     private static final long serialVersionUID = 1L;
+    private UpdateTransformationButton updateTransformationButton;
+    private ClearLandmarksButton clearLandmarksButton;
+    private UndoButton undoButton;
+    private ShowPointsButton showPointsButton;
 
-    private UpdateTransformationButton updateTransformationButton = new UpdateTransformationButton();
-    private ClearLandmarksButton clearLandmarksButton = new ClearLandmarksButton();
-    private UndoButton undoButton = new UndoButton();
-    private ShowPointsButton showPointsButton = new ShowPointsButton();
-
-    public GuiCLEMButtons() {
+    @Inject
+    public GuiCLEMButtons(UpdateTransformationButton updateTransformationButton, ClearLandmarksButton clearLandmarksButton, UndoButton undoButton, ShowPointsButton showPointsButton) {
+        this.updateTransformationButton = updateTransformationButton;
+        this.clearLandmarksButton = clearLandmarksButton;
+        this.undoButton = undoButton;
+        this.showPointsButton = showPointsButton;
         add(updateTransformationButton);
         add(clearLandmarksButton);
         add(undoButton);

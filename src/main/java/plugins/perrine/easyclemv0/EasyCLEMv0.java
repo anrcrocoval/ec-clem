@@ -1,16 +1,14 @@
 /**
- * Copyright 2010-2017 Perrine Paul-Gilloteaux, CNRS.
- * Perrine.Paul-Gilloteaux@univ-nantes.fr
- * 
+ * Copyright 2010-2018 Perrine Paul-Gilloteaux <Perrine.Paul-Gilloteaux@univ-nantes.fr>, CNRS.
+ * Copyright 2019 Guillaume Potier <guillaume.potier@univ-nantes.fr>, INSERM.
+ *
  * This file is part of EC-CLEM.
- * 
+ *
  * you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * 
- * Main Class
+ *
  **/
 package plugins.perrine.easyclemv0;
 
@@ -43,22 +41,70 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import icy.type.point.Point5D;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-import plugins.perrine.easyclemv0.factory.SequenceFactory;
-import plugins.perrine.easyclemv0.factory.TransformationConfigurationFactory;
-import plugins.perrine.easyclemv0.model.*;
+import plugins.perrine.easyclemv0.misc.GuiCLEMButtonApply;
+import plugins.perrine.easyclemv0.misc.advancedmodules;
+import plugins.perrine.easyclemv0.sequence.SequenceFactory;
+import plugins.perrine.easyclemv0.transformation.configuration.TransformationConfigurationFactory;
+import plugins.perrine.easyclemv0.transformation.schema.TransformationType;
 import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
 import plugins.perrine.easyclemv0.ui.GuiCLEMButtons;
 import plugins.perrine.easyclemv0.ui.GuiCLEMButtons2;
-import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.sequence_listener.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.workspace.Workspace;
+
+import javax.inject.Inject;
 
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
-	private TransformationConfigurationFactory transformationConfigurationFactory = new TransformationConfigurationFactory();
-	private SequenceFactory sequenceFactory = new SequenceFactory();
-	private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
+	private TransformationConfigurationFactory transformationConfigurationFactory;
+	private SequenceFactory sequenceFactory;
+	private SequenceListenerUtil sequenceListenerUtil;
+	private GuiCLEMButtons guiCLEMButtons;
+	private GuiCLEMButtons2 rigidspecificbutton;
+	private RoiDuplicator sourceSequenceRoiDuplicator;
+	private RoiDuplicator targetSequenceRoiDuplicator;
+
+	public EasyCLEMv0() {
+		DaggerEasyCLEMv0Component.builder().build().inject(this);
+	}
+
+	@Inject
+	public void setTransformationConfigurationFactory(TransformationConfigurationFactory transformationConfigurationFactory) {
+		this.transformationConfigurationFactory = transformationConfigurationFactory;
+	}
+
+	@Inject
+	public void setSequenceFactory(SequenceFactory sequenceFactory) {
+		this.sequenceFactory = sequenceFactory;
+	}
+
+	@Inject
+	public void setSequenceListenerUtil(SequenceListenerUtil sequenceListenerUtil) {
+		this.sequenceListenerUtil = sequenceListenerUtil;
+	}
+
+	@Inject
+	public void setGuiCLEMButtons(GuiCLEMButtons guiCLEMButtons) {
+		this.guiCLEMButtons = guiCLEMButtons;
+	}
+
+	@Inject
+	public void setRigidspecificbutton(GuiCLEMButtons2 rigidspecificbutton) {
+		this.rigidspecificbutton = rigidspecificbutton;
+	}
+
+	@Inject
+	public void setSourceSequenceRoiDuplicator(RoiDuplicator sourceSequenceRoiDuplicator) {
+		this.sourceSequenceRoiDuplicator = sourceSequenceRoiDuplicator;
+	}
+
+	@Inject
+	public void setTargetSequenceRoiDuplicator(RoiDuplicator targetSequenceRoiDuplicator) {
+		this.targetSequenceRoiDuplicator = targetSequenceRoiDuplicator;
+	}
 
 	private Workspace workspace;
-
+	private Thread currentThread;
 	private Overlay myoverlaysource;
 	private Overlay myoverlaytarget;
 
@@ -98,9 +144,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		Color.MAGENTA,
 		Color.ORANGE
 	};
-
-	private GuiCLEMButtons guiCLEMButtons;
-	private GuiCLEMButtons2 rigidspecificbutton;
 
 	private class VisiblepointsOverlay extends Overlay {
 		public VisiblepointsOverlay() {
@@ -170,11 +213,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		choiceinputsection.setToolTipText("2D transform will be only in the plane XY " + "but can be applied to all dimensions.\n WARNING make sure to have the metadata correctly set in 3D");
 		//choiceinputsection.addVisibilityTriggerTo(showgrid, "non rigid (2D or 3D)");
 
-		guiCLEMButtons = new GuiCLEMButtons();
 		guiCLEMButtons.disableButtons();
 		addComponent(guiCLEMButtons);
 
-		rigidspecificbutton = new GuiCLEMButtons2();
 		rigidspecificbutton.disableButtons();
 		addComponent(rigidspecificbutton);
 	}
@@ -204,8 +245,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		if (!choiceinputsection.getValue().equals(INPUT_SELECTION_RIGID)) {
 			rigidspecificbutton.removespecificrigidbutton();
 		}
-		
-		String name = sourceSequence.getFilename() + "_transfo.xml";
+
+		sourceSequence.setName(sourceSequence.getName() + " (transformed)");
+		String name = sourceSequence.getFilename() + "_transfo.storage";
 
 		workspace = new Workspace();
 		workspace.setSourceSequence(sourceSequence);
@@ -218,13 +260,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		rigidspecificbutton.setWorkspace(workspace);
 
 
-		sourceSequence.addListener(
-				new RoiDuplicator(targetSequence, workspace.getWorkspaceState())
-		);
-
-		targetSequence.addListener(
-				new RoiDuplicator(sourceSequence, workspace.getWorkspaceState())
-		);
+		sourceSequence.addListener(sourceSequenceRoiDuplicator.setSequence(targetSequence).setWorkspaceState(workspace.getWorkspaceState()));
+		targetSequence.addListener(targetSequenceRoiDuplicator.setSequence(sourceSequence).setWorkspaceState(workspace.getWorkspaceState()));
 
 		myoverlaysource = new VisiblepointsOverlay();
 		myoverlaytarget = new VisiblepointsOverlay();
