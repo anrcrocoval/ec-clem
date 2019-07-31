@@ -131,6 +131,11 @@ public class Dataset implements Cloneable {
         return new Point(points.getMatrix(i, i, 0, dimension - 1).transpose());
     }
 
+    public Dataset setPoint(int i, Point point) {
+        points.setMatrix(i, i, 0, dimension - 1, point.getMatrix().transpose());
+        return this;
+    }
+
     public Point removePoint(int i) {
         Point toRemove = getPoint(i);
         points = points.getMatrix(IntStream.range(0, n).filter((index) -> index != i).toArray(), 0, dimension - 1);
@@ -144,6 +149,18 @@ public class Dataset implements Cloneable {
         M.setMatrix(n, n, 0, point.getDimension() - 1, point.getMatrix().transpose());
         points = M;
         n = points.getRowDimension();
+        return this;
+    }
+
+    public Dataset sort(Integer[] indices) {
+        if(indices.length != n) {
+            throw new RuntimeException(String.format("Incompatible indices: %d and %d", indices.length, n));
+        }
+        Matrix clone = points.copy();
+        for(int i = 0; i < n; i++) {
+            clone.setMatrix(indices[i], indices[i], 0, dimension - 1, points.getMatrix(i, i, 0, dimension - 1));
+        }
+        points = clone;
         return this;
     }
 }

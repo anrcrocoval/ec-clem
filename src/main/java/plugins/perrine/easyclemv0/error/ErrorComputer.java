@@ -17,17 +17,15 @@ public class ErrorComputer {
     private CovarianceMatrixComputer covarianceMatrixComputer = new CovarianceMatrixComputer();
     private EulerAngleFactory eulerAngleFactory = new EulerAngleFactory();
 
-    public void showError(TransformationSchema transformationSchema) {
+    public Matrix getCovarianceEstimate(TransformationSchema transformationSchema) {
         Transformation from = transformationFactory.getFrom(transformationSchema);
         if(from instanceof SplineTransformation) {
             throw new RuntimeException("Error estimation for SplineTransformation is not supported");
         }
 
         Similarity similarity = (Similarity) from;
-
         Matrix r = similarity.getR();
         Matrix t = similarity.getT();
-
         Matrix X = new Matrix(
             transformationSchema.getFiducialSet().getN(),
             transformationSchema.getFiducialSet().getSourceDataset().getDimension() + transformationSchema.getFiducialSet().getTargetDataset().getDimension()
@@ -46,7 +44,6 @@ public class ErrorComputer {
         );
 
         Matrix cov = covarianceMatrixComputer.compute(X);
-
         Matrix M = getDerivativeMatrix(
                 transformationSchema.getFiducialSet(),
                 r.get(0,0),
@@ -62,8 +59,7 @@ public class ErrorComputer {
                 t.get(1, 0),
                 t.get(2, 0)
         );
-
-        M.times(cov).times(M.transpose()).print(1,10);
+        return M.times(cov).times(M.transpose());
     }
 
     private Matrix getDerivativeMatrix(

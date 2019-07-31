@@ -1,17 +1,17 @@
 package plugins.perrine.easyclemv0;
 
 import Jama.Matrix;
+import org.apache.commons.math3.random.RandomDataGenerator;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.transformation.Transformation;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class TestFiducialSetFactory {
 
-    private Random random = new Random();
+    private RandomDataGenerator random = new RandomDataGenerator();
 
     public FiducialSet getSimpleRotationFiducialSet() {
         List<Point> sourcePoints = new ArrayList<>();
@@ -92,9 +92,29 @@ public class TestFiducialSetFactory {
     public FiducialSet getRandomFromTransformation(Transformation transformation, int n) {
         Dataset source = new Dataset(3);
         for(int i = 0; i < n; i++) {
-            source.addPoint(new Point(new double[]{ random.nextInt(255), random.nextInt(255), random.nextInt(255) }));
+            source.addPoint(new Point(new double[]{ random.nextInt(-127,127), random.nextInt(-127,127), random.nextInt(-127,127) }));
         }
         Dataset target = transformation.apply(source);
         return new FiducialSet(source, target);
+    }
+
+    public FiducialSet getRandomAndNoisyFromTransformation(Transformation transformation, int n) {
+        FiducialSet fiducialSet = getRandomFromTransformation(transformation, n);
+        addGaussianNoise(fiducialSet.getSourceDataset());
+        addGaussianNoise(fiducialSet.getTargetDataset());
+        return fiducialSet;
+    }
+
+    private Dataset addGaussianNoise(Dataset dataset) {
+        for(int i = 0; i < dataset.getN(); i++) {
+            Point point = dataset.getPoint(i);
+            double[] noiseArray = new double[point.getDimension()];
+            for(int j = 0; j < noiseArray.length; j++) {
+                noiseArray[j] = random.nextGaussian(0, 1);
+            }
+            Point noise = new Point(noiseArray);
+            dataset.setPoint(i, point.plus(noise));
+        }
+        return dataset;
     }
 }

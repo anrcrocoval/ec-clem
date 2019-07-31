@@ -51,6 +51,10 @@ public class Point {
         return new Point(coordinates.minus(point.getMatrix()));
     }
 
+    public Point plus(Point point) {
+        return new Point(coordinates.plus(point.getMatrix()));
+    }
+
     public double getSumOfSquare() {
         return coordinates.transpose().times(coordinates).get(0, 0);
     }
