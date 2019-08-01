@@ -7,8 +7,7 @@ import icy.main.Icy;
 import icy.painter.Overlay;
 import icy.sequence.Sequence;
 import icy.type.point.Point5D;
-import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
-import plugins.perrine.easyclemv0.model.Point;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 

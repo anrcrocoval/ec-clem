@@ -2,8 +2,8 @@ package plugins.perrine.easyclemv0.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
-import plugins.perrine.easyclemv0.factory.apache.common.math.RealMatrixFactory;
-import plugins.perrine.easyclemv0.factory.jama.MatrixFactory;
+import plugins.perrine.easyclemv0.matrix.RealMatrixFactory;
+import plugins.perrine.easyclemv0.matrix.MatrixFactory;
 
 import javax.inject.Inject;
 

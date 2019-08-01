@@ -2,7 +2,7 @@ package plugins.perrine.easyclemv0.ui;
 
 import icy.plugin.PluginLauncher;
 import icy.plugin.PluginLoader;
-import plugins.perrine.easyclemv0.Preprocess3Dstackto2D;
+import plugins.perrine.easyclemv0.misc.Preprocess3Dstackto2D;
 
 import javax.inject.Inject;
 import javax.swing.*;

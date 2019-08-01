@@ -2,8 +2,8 @@ package plugins.perrine.easyclemv0.ui;
 
 import icy.roi.ROI;
 import icy.sequence.Sequence;
-import plugins.perrine.easyclemv0.model.Workspace;
-import plugins.perrine.easyclemv0.model.WorkspaceTransformer;
+import plugins.perrine.easyclemv0.workspace.Workspace;
+import plugins.perrine.easyclemv0.workspace.WorkspaceTransformer;
 
 import javax.inject.Inject;
 import javax.swing.*;

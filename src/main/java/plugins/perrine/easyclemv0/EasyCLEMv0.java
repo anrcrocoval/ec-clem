@@ -46,13 +46,16 @@ import icy.sequence.SequenceUtil;
 import icy.type.DataType;
 import icy.type.point.Point5D;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-import plugins.perrine.easyclemv0.factory.SequenceFactory;
-import plugins.perrine.easyclemv0.factory.TransformationConfigurationFactory;
-import plugins.perrine.easyclemv0.model.*;
+import plugins.perrine.easyclemv0.misc.GuiCLEMButtonApply;
+import plugins.perrine.easyclemv0.misc.advancedmodules;
+import plugins.perrine.easyclemv0.sequence.SequenceFactory;
+import plugins.perrine.easyclemv0.transformation.configuration.TransformationConfigurationFactory;
+import plugins.perrine.easyclemv0.transformation.schema.TransformationType;
 import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
 import plugins.perrine.easyclemv0.ui.GuiCLEMButtons;
 import plugins.perrine.easyclemv0.ui.GuiCLEMButtons2;
-import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.sequence_listener.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.workspace.Workspace;
 
 import javax.inject.Inject;
 

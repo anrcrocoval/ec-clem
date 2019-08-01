@@ -1,6 +1,6 @@
 package plugins.perrine.easyclemv0.monitor;
 
-import plugins.perrine.easyclemv0.model.Point;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 
 public class MonitoringConfiguration {
 

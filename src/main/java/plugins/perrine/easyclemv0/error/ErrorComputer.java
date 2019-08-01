@@ -2,13 +2,13 @@ package plugins.perrine.easyclemv0.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;
-import plugins.perrine.easyclemv0.factory.TransformationFactory;
-import plugins.perrine.easyclemv0.model.FiducialSet;
-import plugins.perrine.easyclemv0.model.TransformationSchema;
-import plugins.perrine.easyclemv0.model.transformation.Similarity;
-import plugins.perrine.easyclemv0.model.transformation.SplineTransformation;
-import plugins.perrine.easyclemv0.model.transformation.Transformation;
-import plugins.perrine.easyclemv0.util.MatrixUtil;
+import plugins.perrine.easyclemv0.transformation.TransformationFactory;
+import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
+import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
+import plugins.perrine.easyclemv0.transformation.Similarity;
+import plugins.perrine.easyclemv0.transformation.SplineTransformation;
+import plugins.perrine.easyclemv0.transformation.Transformation;
+import plugins.perrine.easyclemv0.matrix.MatrixUtil;
 
 import javax.inject.Inject;
 

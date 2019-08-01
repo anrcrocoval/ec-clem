@@ -9,8 +9,7 @@ import icy.sequence.SequenceListener;
 import icy.type.point.Point5D;
 import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-import plugins.perrine.easyclemv0.model.WorkspaceState;
-import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.workspace.WorkspaceState;
 
 import javax.inject.Inject;
 import java.util.List;

@@ -1,8 +1,7 @@
 package plugins.perrine.easyclemv0.ui;
 
 import icy.painter.Overlay;
-import plugins.perrine.easyclemv0.model.Workspace;
-import plugins.perrine.easyclemv0.overlay.ErrorInPositionOverlay;
+import plugins.perrine.easyclemv0.workspace.Workspace;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

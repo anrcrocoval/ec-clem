@@ -20,7 +20,7 @@ package plugins.perrine.easyclemv0.ui;
 
 import javax.inject.Inject;
 import javax.swing.JPanel;
-import plugins.perrine.easyclemv0.model.Workspace;
+import plugins.perrine.easyclemv0.workspace.Workspace;
 
 public class GuiCLEMButtons extends JPanel {
 

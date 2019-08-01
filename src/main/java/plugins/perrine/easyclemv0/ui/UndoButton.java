@@ -4,11 +4,13 @@ import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI;
 import icy.sequence.SequenceListener;
-import plugins.perrine.easyclemv0.factory.DatasetFactory;
-import plugins.perrine.easyclemv0.model.*;
+import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
+import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetFactory;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
 import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
-import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.sequence_listener.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.workspace.Workspace;
+import plugins.perrine.easyclemv0.workspace.WorkspaceTransformer;
 
 import javax.inject.Inject;
 import javax.swing.*;

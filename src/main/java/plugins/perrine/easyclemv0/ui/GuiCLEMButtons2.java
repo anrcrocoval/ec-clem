@@ -25,9 +25,9 @@ package plugins.perrine.easyclemv0.ui;
 import java.awt.Component;
 import javax.inject.Inject;
 import javax.swing.JPanel;
-import plugins.perrine.easyclemv0.model.Workspace;
-import plugins.perrine.easyclemv0.overlay.ErrorInPositionOverlay;
-import plugins.perrine.easyclemv0.overlay.PredictedErrorInPositionOverlay;
+import plugins.perrine.easyclemv0.workspace.Workspace;
+import plugins.perrine.easyclemv0.ui.overlay.ErrorInPositionOverlay;
+import plugins.perrine.easyclemv0.ui.overlay.PredictedErrorInPositionOverlay;
 
 public class GuiCLEMButtons2 extends JPanel {
 

@@ -6,7 +6,7 @@ import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
-import plugins.perrine.easyclemv0.model.Workspace;
+import plugins.perrine.easyclemv0.workspace.Workspace;
 
 import javax.inject.Inject;
 import javax.swing.*;

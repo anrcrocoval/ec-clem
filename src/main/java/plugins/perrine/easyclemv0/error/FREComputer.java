@@ -1,7 +1,7 @@
 package plugins.perrine.easyclemv0.error;
 
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import plugins.perrine.easyclemv0.model.Dataset;
+import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 
 import javax.inject.Inject;
 

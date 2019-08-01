@@ -23,9 +23,9 @@ import icy.system.thread.ThreadUtil;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
-import plugins.perrine.easyclemv0.factory.SequenceSizeFactory;
-import plugins.perrine.easyclemv0.model.Point;
-import plugins.perrine.easyclemv0.model.SequenceSize;
+import plugins.perrine.easyclemv0.sequence.SequenceSizeFactory;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+import plugins.perrine.easyclemv0.sequence.SequenceSize;
 import plugins.stef.tools.overlay.ColorBarOverlay;
 
 import javax.inject.Inject;

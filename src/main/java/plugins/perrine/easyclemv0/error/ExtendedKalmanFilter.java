@@ -2,9 +2,9 @@ package plugins.perrine.easyclemv0.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;
-import plugins.perrine.easyclemv0.model.Dataset;
-import plugins.perrine.easyclemv0.model.FiducialSet;
-import plugins.perrine.easyclemv0.model.Point;
+import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
+import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 
 import javax.inject.Inject;
 

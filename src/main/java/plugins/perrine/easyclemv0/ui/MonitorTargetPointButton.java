@@ -3,7 +3,7 @@ package plugins.perrine.easyclemv0.ui;
 import icy.plugin.PluginDescriptor;
 import icy.plugin.PluginLauncher;
 import icy.plugin.PluginLoader;
-import plugins.perrine.easyclemv0.model.Workspace;
+import plugins.perrine.easyclemv0.workspace.Workspace;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetOverlay;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
 

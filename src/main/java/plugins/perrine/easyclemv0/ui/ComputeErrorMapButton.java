@@ -4,8 +4,8 @@ import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import plugins.perrine.easyclemv0.error.TargetRegistrationErrorMap;
 import plugins.perrine.easyclemv0.error.TREComputer;
-import plugins.perrine.easyclemv0.factory.TREComputerFactory;
-import plugins.perrine.easyclemv0.model.Workspace;
+import plugins.perrine.easyclemv0.error.TREComputerFactory;
+import plugins.perrine.easyclemv0.workspace.Workspace;
 
 import javax.inject.Inject;
 import javax.swing.*;

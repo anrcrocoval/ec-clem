@@ -3,8 +3,8 @@
 //import icy.sequence.Sequence;
 //import icy.sequence.SequenceEvent;
 //import icy.sequence.SequenceListener;
-//import plugins.perrine.easyclemv0.model.WorkspaceState;
-//import plugins.perrine.easyclemv0.model.WorkspaceTransformer;
+//import WorkspaceState;
+//import WorkspaceTransformer;
 //import plugins.perrine.easyclemv0.ui.UpdateTransformationButton;
 //
 //import java.util.concurrent.CompletionService;

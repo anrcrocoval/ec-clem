@@ -2,7 +2,7 @@ package plugins.perrine.easyclemv0.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import plugins.perrine.easyclemv0.model.Point;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 
 import javax.inject.Inject;
 
