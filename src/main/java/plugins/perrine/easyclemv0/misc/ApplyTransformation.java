@@ -1,6 +1,6 @@
 /**
- * Copyright 2010-2017 Perrine Paul-Gilloteaux, CNRS.
- * Perrine.Paul-Gilloteaux@univ-nantes.fr
+ * Copyright 2010-2018 Perrine Paul-Gilloteaux <Perrine.Paul-Gilloteaux@univ-nantes.fr>, CNRS.
+ * Copyright 2019 Guillaume Potier <guillaume.potier@univ-nantes.fr>, INSERM.
  *
  * This file is part of EC-CLEM.
  *
@@ -10,14 +10,6 @@
  * (at your option) any later version.
  *
  **/
-
-
-/**
- * AUthor: Perrine.Paul-Gilloteaux@curie.fr
- * Main Class can be used alone or call from another plugin:
- * will apply the transform content in an storage file as in easyclem
- */
-
 package plugins.perrine.easyclemv0.misc;
 
 import java.io.File;
