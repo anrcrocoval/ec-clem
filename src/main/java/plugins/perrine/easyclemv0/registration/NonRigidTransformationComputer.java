@@ -1,4 +1,4 @@
-package plugins.perrine.easyclemv0.test.registration;
+package plugins.perrine.easyclemv0.registration;
 
 import plugins.perrine.easyclemv0.sequence.VtkPointsFactory;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;

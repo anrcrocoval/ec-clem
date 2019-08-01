@@ -55,9 +55,9 @@
 //import plugins.adufour.ezplug.EzVarSequence;
 //import plugins.adufour.ezplug.EzVarText;
 //import plugins.kernel.roi.roi3d.ROI3DPoint;
-//import plugins.perrine.easyclemv0.error.TREComputer;
+//import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputer;
 //import plugins.perrine.easyclemv0.fiducialset.dataset.point.PointFactory;
-//import plugins.perrine.easyclemv0.error.TREComputerFactory;
+//import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
 //import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 //import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 //import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetGenerator;

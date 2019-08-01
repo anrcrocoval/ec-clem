@@ -54,8 +54,8 @@ public class ClearLandmarksButton extends JButton {
             final Document doc = XMLUtil.createDocument(true);
             if (doc != null) {
                 ROI.saveROIsToXML(XMLUtil.getRootElement(doc), rois);
-                System.out.println("ROIS saved before in "+ sequence.getFilename()+"_ROIsavedBeforeClearLandmarks.xml"+"\n Use Load Roi(s) if needed in ROI top menu" );
-                XMLUtil.saveDocument(doc, sequence.getFilename()+"_ROIsavedBeforeClearLandmarks.xml");
+                System.out.println("ROIS saved before in "+ sequence.getFilename()+"_ROIsavedBeforeClearLandmarks.storage"+"\n Use Load Roi(s) if needed in ROI top menu" );
+                XMLUtil.saveDocument(doc, sequence.getFilename()+"_ROIsavedBeforeClearLandmarks.storage");
 
             }
         }

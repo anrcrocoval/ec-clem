@@ -29,7 +29,7 @@ public class GuiCLEMButtonApply extends JPanel {
 
 	public GuiCLEMButtonApply() {
 		JButton btnNewButton = new JButton("I want to apply a previously computed transfo");
-		btnNewButton.setToolTipText("all transfo you were doing have been saved in a file named _transfo.xml");
+		btnNewButton.setToolTipText("all transfo you were doing have been saved in a file named _transfo.storage");
 		btnNewButton.addActionListener(arg0 -> PluginLauncher.start(PluginLoader.getPlugin(ApplyTransformation.class.getName())));
 		add(btnNewButton);
 	}

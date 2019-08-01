@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.error;
+package plugins.perrine.easyclemv0.error.fitzpatrick;
 
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.ProgressFrame;

@@ -1,4 +1,4 @@
-package plugins.perrine.easyclemv0.error;
+package plugins.perrine.easyclemv0.error.fitzpatrick;
 
 import Jama.Matrix;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;

@@ -1,22 +1,42 @@
 package plugins.perrine.easyclemv0.test.registration;
 
 import org.junit.jupiter.api.Test;
+import plugins.perrine.easyclemv0.registration.SimilarityTransformationComputer;
 import plugins.perrine.easyclemv0.test.fiducialset.TestFiducialSetFactory;
 import plugins.perrine.easyclemv0.test.transformation.TestTransformationFactory;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.transformation.Similarity;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
-
+import javax.inject.Inject;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SimilarityTransformationComputerTest {
 
-    private TestFiducialSetFactory testFiducialSetFactory = new TestFiducialSetFactory();
-    private TestTransformationFactory testTransformationFactory = new TestTransformationFactory();
-    private SimilarityTransformationComputer subjectUnderTest = new SimilarityTransformationComputer();
+    private TestFiducialSetFactory testFiducialSetFactory;
+    private TestTransformationFactory testTransformationFactory;
+    private SimilarityTransformationComputer subjectUnderTest;
+
+    public SimilarityTransformationComputerTest() {
+        DaggerSimilarityTransformationComputerTestComponent.create().inject(this);
+    }
+
+    @Inject
+    public void setTestFiducialSetFactory(TestFiducialSetFactory testFiducialSetFactory) {
+        this.testFiducialSetFactory = testFiducialSetFactory;
+    }
+
+    @Inject
+    public void setTestTransformationFactory(TestTransformationFactory testTransformationFactory) {
+        this.testTransformationFactory = testTransformationFactory;
+    }
+
+    @Inject
+    public void setSubjectUnderTest(SimilarityTransformationComputer subjectUnderTest) {
+        this.subjectUnderTest = subjectUnderTest;
+    }
 
     @Test
     void simpleRotation() {

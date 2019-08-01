@@ -1,4 +1,4 @@
-package plugins.perrine.easyclemv0.error;
+package plugins.perrine.easyclemv0.error.fitzpatrick;
 
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;

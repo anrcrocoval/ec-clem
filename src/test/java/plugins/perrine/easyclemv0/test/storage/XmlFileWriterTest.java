@@ -10,20 +10,20 @@ import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.sequence.DimensionSize;
 import plugins.perrine.easyclemv0.sequence.SequenceSize;
-import plugins.perrine.easyclemv0.test.storage.xml.XmlFileReader;
-import plugins.perrine.easyclemv0.test.storage.xml.XmlFileWriter;
-import plugins.perrine.easyclemv0.test.storage.xml.XmlTransformationWriter;
+import plugins.perrine.easyclemv0.storage.XmlFileReader;
+import plugins.perrine.easyclemv0.storage.XmlFileWriter;
+import plugins.perrine.easyclemv0.storage.XmlTransformationWriter;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationType;
-import plugins.perrine.easyclemv0.test.storage.xml.XmlTransformationReader;
+import plugins.perrine.easyclemv0.storage.XmlTransformationReader;
 
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static plugins.perrine.easyclemv0.test.storage.xml.XmlTransformation.transformationElementName;
+import static plugins.perrine.easyclemv0.storage.XmlTransformation.transformationElementName;
 
 class XmlFileWriterTest {
-    private File file = new File("XmlFileWriterTest.xml");
+    private File file = new File("XmlFileWriterTest.storage");
     private XmlFileReader xmlFileReader = new XmlFileReader();
     private XmlFileWriter xmlFileWriter;
     private XmlTransformationReader xmlReader = new XmlTransformationReader();

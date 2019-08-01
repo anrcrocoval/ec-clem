@@ -2,10 +2,17 @@ package plugins.perrine.easyclemv0.test.transformation;
 
 import Jama.Matrix;
 import plugins.perrine.easyclemv0.transformation.Similarity;
+
+import javax.inject.Inject;
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class TestTransformationFactory {
+
+    @Inject
+    public TestTransformationFactory() {
+    }
 
     public Similarity getSimpleRotationTransformation(double angle) {
         Matrix R = new Matrix(

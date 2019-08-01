@@ -247,8 +247,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		if (!choiceinputsection.getValue().equals(INPUT_SELECTION_RIGID)) {
 			rigidspecificbutton.removespecificrigidbutton();
 		}
-		
-		String name = sourceSequence.getFilename() + "_transfo.xml";
+
+		sourceSequence.setName(sourceSequence.getName() + " (transformed)");
+		String name = sourceSequence.getFilename() + "_transfo.storage";
 
 		workspace = new Workspace();
 		workspace.setSourceSequence(sourceSequence);

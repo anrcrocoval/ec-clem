@@ -75,7 +75,7 @@
 //import plugins.adufour.ezplug.EzVarText;
 //import plugins.perrine.easyclemv0.error.TREChecker;
 //import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetFactory;
-//import plugins.perrine.easyclemv0.error.TREComputerFactory;
+//import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
 //import plugins.perrine.easyclemv0.model.*;
 //import plugins.perrine.easyclemv0.transformation.Similarity;
 //import SimilarityTransformationComputer;

@@ -1,4 +1,4 @@
-package plugins.perrine.easyclemv0.test.storage.xml;
+package plugins.perrine.easyclemv0.storage;
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -9,8 +9,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import static plugins.perrine.easyclemv0.test.storage.xml.XmlTransformation.transformationDateAttributeName;
-import static plugins.perrine.easyclemv0.test.storage.xml.XmlTransformation.transformationElementName;
+import static plugins.perrine.easyclemv0.storage.XmlTransformation.transformationDateAttributeName;
+import static plugins.perrine.easyclemv0.storage.XmlTransformation.transformationElementName;
 
 public class XmlTransformationElementListReader {
 

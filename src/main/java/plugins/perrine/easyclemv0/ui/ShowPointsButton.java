@@ -26,4 +26,16 @@ public class ShowPointsButton extends JButton {
     private void action() {
         workspaceTransformer.resetToOriginalImage(workspace);
     }
+
+    private void saveRois(Sequence sequence) {
+        final List<ROI> rois = sequence.getROIs();
+        if (rois.size() > 0) {
+            final Document doc = XMLUtil.createDocument(true);
+            if (doc != null) {
+                ROI.saveROIsToXML(XMLUtil.getRootElement(doc), rois);
+                System.out.println("ROIS saved before in "+ sequence.getFilename()+"_ROIsavedwhenshowonoriginaldata.storage"+"\n Use Load Roi(s) if needed in ROI top menu" );
+                XMLUtil.saveDocument(doc, sequence.getFilename()+"_ROIsavedwhenshowonoriginaldata.storage");
+            }
+        }
+    }
 }

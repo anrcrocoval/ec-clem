@@ -1,10 +1,10 @@
 package plugins.perrine.easyclemv0.transformation;
 
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
-import plugins.perrine.easyclemv0.test.registration.AffineTransformationComputer;
-import plugins.perrine.easyclemv0.test.registration.NonRigidTransformationComputer;
-import plugins.perrine.easyclemv0.test.registration.RigidTransformationComputer;
-import plugins.perrine.easyclemv0.test.registration.SimilarityTransformationComputer;
+import plugins.perrine.easyclemv0.registration.AffineTransformationComputer;
+import plugins.perrine.easyclemv0.registration.NonRigidTransformationComputer;
+import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
+import plugins.perrine.easyclemv0.registration.SimilarityTransformationComputer;
 
 import javax.inject.Inject;
 

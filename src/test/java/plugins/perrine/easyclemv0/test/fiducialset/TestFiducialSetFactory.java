@@ -6,12 +6,18 @@ import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 import plugins.perrine.easyclemv0.transformation.Transformation;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestFiducialSetFactory {
 
     private RandomDataGenerator random = new RandomDataGenerator();
+
+    @Inject
+    public TestFiducialSetFactory() {
+    }
 
     public FiducialSet getSimpleRotationFiducialSet() {
         List<Point> sourcePoints = new ArrayList<>();

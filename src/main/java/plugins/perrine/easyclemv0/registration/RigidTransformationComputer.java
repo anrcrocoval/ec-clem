@@ -1,4 +1,4 @@
-package plugins.perrine.easyclemv0.test.registration;
+package plugins.perrine.easyclemv0.registration;
 
 import Jama.Matrix;
 

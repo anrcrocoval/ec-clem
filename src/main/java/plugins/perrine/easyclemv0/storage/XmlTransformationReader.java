@@ -1,4 +1,4 @@
-package plugins.perrine.easyclemv0.test.storage.xml;
+package plugins.perrine.easyclemv0.storage;
 
 import icy.sequence.DimensionId;
 import icy.util.XMLUtil;
@@ -12,7 +12,7 @@ import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationType;
 
 import java.util.ArrayList;
-import static plugins.perrine.easyclemv0.test.storage.xml.XmlTransformation.*;
+import static plugins.perrine.easyclemv0.storage.XmlTransformation.*;
 
 public class XmlTransformationReader {
 

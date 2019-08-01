@@ -2,9 +2,9 @@ package plugins.perrine.easyclemv0.ui;
 
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
-import plugins.perrine.easyclemv0.error.TargetRegistrationErrorMap;
-import plugins.perrine.easyclemv0.error.TREComputer;
-import plugins.perrine.easyclemv0.error.TREComputerFactory;
+import plugins.perrine.easyclemv0.error.fitzpatrick.TargetRegistrationErrorMap;
+import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputer;
+import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
 import plugins.perrine.easyclemv0.workspace.Workspace;
 
 import javax.inject.Inject;

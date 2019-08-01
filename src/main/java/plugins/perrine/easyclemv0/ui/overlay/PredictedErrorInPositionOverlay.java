@@ -4,9 +4,9 @@ import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.painter.Overlay;
 import icy.sequence.Sequence;
-import plugins.perrine.easyclemv0.error.TREComputer;
+import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputer;
 import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetFactory;
-import plugins.perrine.easyclemv0.error.TREComputerFactory;
+import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.workspace.Workspace;
 

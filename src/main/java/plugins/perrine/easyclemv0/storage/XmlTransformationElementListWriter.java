@@ -1,4 +1,4 @@
-package plugins.perrine.easyclemv0.test.storage.xml;
+package plugins.perrine.easyclemv0.storage;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

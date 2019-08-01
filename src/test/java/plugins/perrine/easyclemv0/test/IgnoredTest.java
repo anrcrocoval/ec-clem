@@ -10,34 +10,50 @@ import plugins.perrine.easyclemv0.test.transformation.TestTransformationFactory;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationType;
 import plugins.perrine.easyclemv0.transformation.Similarity;
-import plugins.perrine.easyclemv0.test.registration.RigidTransformationComputer;
-import plugins.perrine.easyclemv0.test.registration.SimilarityTransformationComputer;
-
+import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
 import javax.inject.Inject;
 
 @Disabled
 class IgnoredTest {
 
-    private TestTransformationFactory testTransformationFactory = new TestTransformationFactory();
-    private TestFiducialSetFactory testFiducialSetFactory = new TestFiducialSetFactory();
-    private SimilarityTransformationComputer similarityTransformationComputer;
+    private TestTransformationFactory testTransformationFactory;
+    private TestFiducialSetFactory testFiducialSetFactory;
     private RigidTransformationComputer rigidTransformationComputer;
     private CovarianceMatrixComputer covarianceMatrixComputer;
     private ErrorComputer errorComputer;
     private ExtendedKalmanFilter extendedKalmanFilter;
 
+    public IgnoredTest() {
+        DaggerIgnoredTestComponent.create().inject(this);
+    }
+
     @Inject
-    public IgnoredTest(
-            SimilarityTransformationComputer similarityTransformationComputer,
-            RigidTransformationComputer rigidTransformationComputer,
-            CovarianceMatrixComputer covarianceMatrixComputer,
-            ErrorComputer errorComputer,
-            ExtendedKalmanFilter extendedKalmanFilter
-    ) {
-        this.similarityTransformationComputer = similarityTransformationComputer;
+    public void setTestTransformationFactory(TestTransformationFactory testTransformationFactory) {
+        this.testTransformationFactory = testTransformationFactory;
+    }
+
+    @Inject
+    public void setTestFiducialSetFactory(TestFiducialSetFactory testFiducialSetFactory) {
+        this.testFiducialSetFactory = testFiducialSetFactory;
+    }
+
+    @Inject
+    public void setRigidTransformationComputer(RigidTransformationComputer rigidTransformationComputer) {
         this.rigidTransformationComputer = rigidTransformationComputer;
+    }
+
+    @Inject
+    public void setCovarianceMatrixComputer(CovarianceMatrixComputer covarianceMatrixComputer) {
         this.covarianceMatrixComputer = covarianceMatrixComputer;
+    }
+
+    @Inject
+    public void setErrorComputer(ErrorComputer errorComputer) {
         this.errorComputer = errorComputer;
+    }
+
+    @Inject
+    public void setExtendedKalmanFilter(ExtendedKalmanFilter extendedKalmanFilter) {
         this.extendedKalmanFilter = extendedKalmanFilter;
     }
 

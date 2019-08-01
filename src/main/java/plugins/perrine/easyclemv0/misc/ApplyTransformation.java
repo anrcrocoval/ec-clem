@@ -15,7 +15,7 @@
 /**
  * AUthor: Perrine.Paul-Gilloteaux@curie.fr
  * Main Class can be used alone or call from another plugin:
- * will apply the transform content in an xml file as in easyclem
+ * will apply the transform content in an storage file as in easyclem
  */
 
 package plugins.perrine.easyclemv0.misc;
@@ -29,8 +29,8 @@ import plugins.adufour.ezplug.EzVarFile;
 import plugins.adufour.ezplug.EzVarSequence;
 import plugins.adufour.vars.lang.VarSequence;
 import plugins.perrine.easyclemv0.sequence.SequenceUpdater;
-import plugins.perrine.easyclemv0.test.storage.xml.XmlFileReader;
-import plugins.perrine.easyclemv0.test.storage.xml.XmlTransformationReader;
+import plugins.perrine.easyclemv0.storage.XmlFileReader;
+import plugins.perrine.easyclemv0.storage.XmlTransformationReader;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
@@ -45,11 +45,11 @@ import plugins.adufour.ezplug.EzLabel;
 
 import javax.inject.Inject;
 
-import static plugins.perrine.easyclemv0.test.storage.xml.XmlTransformation.transformationElementName;
+import static plugins.perrine.easyclemv0.storage.XmlTransformation.transformationElementName;
 
 public class ApplyTransformation extends EzPlug implements Block {
 
-	private EzVarSequence source = new EzVarSequence("Select Source Image (will be transformed from xml file)");
+	private EzVarSequence source = new EzVarSequence("Select Source Image (will be transformed from storage file)");
 	private EzVarFile xmlFile=new EzVarFile("Xml file containing list of transformation", ApplicationPreferences.getPreferences().node("frame/imageLoader").get("path", "."));;
 	private VarSequence out = new VarSequence("output sequence", null);
 	private SequenceUpdater sequenceUpdater;
@@ -64,7 +64,7 @@ public class ApplyTransformation extends EzPlug implements Block {
 
 	@Override
 	protected void initialize() {
-		EzLabel textinfo = new EzLabel("Please select the image on which you want to apply a transformation, and the xml file containing the transformations (likely your file name _transfo.xml)");
+		EzLabel textinfo = new EzLabel("Please select the image on which you want to apply a transformation, and the storage file containing the transformations (likely your file name _transfo.storage)");
 		String varName ="Xml file containing list of transformation";
 		if (source.getValue()!=null)
 			xmlFile=new EzVarFile(varName, source.getValue().getFilename());

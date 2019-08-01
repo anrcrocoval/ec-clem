@@ -2,19 +2,26 @@ package plugins.perrine.easyclemv0.test.error;
 
 import Jama.Matrix;
 import org.junit.jupiter.api.Test;
-import plugins.perrine.easyclemv0.error.InertiaMatrixComputer;
+import plugins.perrine.easyclemv0.error.fitzpatrick.InertiaMatrixComputer;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InertiaMatrixComputerTest {
-    private InertiaMatrixComputer subjectUnderTest = new InertiaMatrixComputer();
+    private InertiaMatrixComputer subjectUnderTest;
 
     public InertiaMatrixComputerTest() {
+        DaggerInertiaMatrixComputerTestComponent.create().inject(this);
+    }
+
+    @Inject
+    public void setSubjectUnderTest(InertiaMatrixComputer subjectUnderTest) {
+        this.subjectUnderTest = subjectUnderTest;
     }
 
     @Test

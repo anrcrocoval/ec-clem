@@ -27,8 +27,8 @@
 //import plugins.adufour.ezplug.EzVarSequence;
 //import plugins.adufour.ezplug.EzVarText;
 //import plugins.kernel.canvas.VtkCanvas;
-//import plugins.perrine.easyclemv0.storage.xml.*;
-//import plugins.perrine.easyclemv0.storage.xml.rigid.RigidTransformationXmlWriter;
+//import plugins.perrine.easyclemv0.storage.storage.*;
+//import plugins.perrine.easyclemv0.storage.storage.rigid.RigidTransformationXmlWriter;
 //import plugins.perrine.easyclemv0.matrix.MatrixUtil;
 //import vtk.vtkCamera;
 //import vtk.vtkDataArray;
@@ -133,7 +133,7 @@
 //					int nbc = sequence.getSizeC();
 //					imageData=new vtkDataSet[nbc];
 //
-//					String name = source.getValue().getFilename() + "_3D_MANUAL_ROTATE_transfo.xml";
+//					String name = source.getValue().getFilename() + "_3D_MANUAL_ROTATE_transfo.storage";
 //					File XMLFile = new File(name);
 //					XmlFileReader xmlFileReader = new XmlFileReader();
 //					Document document = xmlFileReader.loadFile(XMLFile);

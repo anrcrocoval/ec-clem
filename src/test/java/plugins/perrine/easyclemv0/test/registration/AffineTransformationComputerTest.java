@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+import plugins.perrine.easyclemv0.registration.AffineTransformationComputer;
 import plugins.perrine.easyclemv0.transformation.AffineTransformation;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +17,12 @@ class AffineTransformationComputerTest {
     private AffineTransformationComputer subjectUnderTest;
 
     public AffineTransformationComputerTest() {
-        this.subjectUnderTest = DaggerAffineTransformationComputerComponent.create().getAffineTransformationComputer();
+        DaggerAffineTransformationComputerTestComponent.create().inject(this);
+    }
+
+    @Inject
+    public void setSubjectUnderTest(AffineTransformationComputer subjectUnderTest) {
+        this.subjectUnderTest = subjectUnderTest;
     }
 
     @Test
