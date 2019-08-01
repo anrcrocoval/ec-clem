@@ -8,12 +8,22 @@ import plugins.perrine.easyclemv0.model.TransformationSchema;
 import plugins.perrine.easyclemv0.model.transformation.Transformation;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
 
+import javax.inject.Inject;
+
 public class SequenceUpdater {
 
-    private ImageTransformer imageTransformer = new Stack3DVTKTransformer();
-    private TransformationFactory transformationFactory = new TransformationFactory();
-    private DatasetFactory datasetFactory = new DatasetFactory();
-    private RoiUpdater roiUpdater = new RoiUpdater();
+    private Stack3DVTKTransformer imageTransformer;
+    private TransformationFactory transformationFactory;
+    private DatasetFactory datasetFactory;
+    private RoiUpdater roiUpdater;
+
+    @Inject
+    public SequenceUpdater(Stack3DVTKTransformer imageTransformer, TransformationFactory transformationFactory, DatasetFactory datasetFactory, RoiUpdater roiUpdater) {
+        this.imageTransformer = imageTransformer;
+        this.transformationFactory = transformationFactory;
+        this.datasetFactory = datasetFactory;
+        this.roiUpdater = roiUpdater;
+    }
 
     public void update(Sequence sourceSequence, TransformationSchema transformationSchema) {
         Transformation transformation = transformationFactory.getFrom(transformationSchema);

@@ -10,12 +10,22 @@ import plugins.perrine.easyclemv0.model.transformation.SplineTransformation;
 import plugins.perrine.easyclemv0.model.transformation.Transformation;
 import plugins.perrine.easyclemv0.util.MatrixUtil;
 
+import javax.inject.Inject;
+
 public class ErrorComputer {
 
-    private TransformationFactory transformationFactory = new TransformationFactory();
-    private MatrixUtil matrixUtil = new MatrixUtil();
-    private CovarianceMatrixComputer covarianceMatrixComputer = new CovarianceMatrixComputer();
-    private EulerAngleFactory eulerAngleFactory = new EulerAngleFactory();
+    private TransformationFactory transformationFactory;
+    private MatrixUtil matrixUtil;
+    private CovarianceMatrixComputer covarianceMatrixComputer;
+    private EulerAngleFactory eulerAngleFactory;
+
+    @Inject
+    public ErrorComputer(TransformationFactory transformationFactory, MatrixUtil matrixUtil, CovarianceMatrixComputer covarianceMatrixComputer, EulerAngleFactory eulerAngleFactory) {
+        this.transformationFactory = transformationFactory;
+        this.matrixUtil = matrixUtil;
+        this.covarianceMatrixComputer = covarianceMatrixComputer;
+        this.eulerAngleFactory = eulerAngleFactory;
+    }
 
     public Matrix getCovarianceEstimate(TransformationSchema transformationSchema) {
         Transformation from = transformationFactory.getFrom(transformationSchema);

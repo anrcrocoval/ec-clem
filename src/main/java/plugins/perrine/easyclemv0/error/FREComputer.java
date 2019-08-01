@@ -3,9 +3,15 @@ package plugins.perrine.easyclemv0.error;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import plugins.perrine.easyclemv0.model.Dataset;
 
+import javax.inject.Inject;
+
 public class FREComputer {
 
     private Mean mean = new Mean();
+
+    @Inject
+    public FREComputer() {
+    }
 
     public double getExpectedSquareFRE(Dataset transformedSourceDataset, Dataset targetDataset) {
         mean.clear();

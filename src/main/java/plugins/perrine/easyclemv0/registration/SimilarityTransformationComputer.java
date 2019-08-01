@@ -7,9 +7,14 @@ import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.transformation.Similarity;
 
+import javax.inject.Inject;
+
 import static java.lang.Math.max;
 
 public class SimilarityTransformationComputer implements TransformationComputer {
+
+    @Inject
+    public SimilarityTransformationComputer() {}
 
     public Similarity compute(FiducialSet fiducialSet) {
         return compute(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());

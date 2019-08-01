@@ -7,7 +7,12 @@ import plugins.kernel.roi.roi2d.ROI2DPoint;
 import plugins.kernel.roi.roi3d.ROI3DPoint;
 import plugins.perrine.easyclemv0.model.Point;
 
+import javax.inject.Inject;
+
 public class RoiFactory {
+
+    @Inject
+    public RoiFactory() {}
 
     public ROI getFrom(Point point) {
         ROI roi;

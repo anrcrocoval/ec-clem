@@ -13,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class InertiaMatrixComputerTest {
     private InertiaMatrixComputer subjectUnderTest = new InertiaMatrixComputer();
 
+    public InertiaMatrixComputerTest() {
+    }
+
     @Test
     void getInertiaMatrix3D() {
         List<Point> points = new ArrayList<>();

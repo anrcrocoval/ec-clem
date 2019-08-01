@@ -7,12 +7,22 @@ import plugins.perrine.easyclemv0.registration.NonRigidTransformationComputer;
 import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
 import plugins.perrine.easyclemv0.registration.SimilarityTransformationComputer;
 
+import javax.inject.Inject;
+
 public class TransformationFactory {
 
-    private RigidTransformationComputer rigidTransformationComputer = new RigidTransformationComputer();
-    private SimilarityTransformationComputer similarityTransformationComputer = new SimilarityTransformationComputer();
-    private NonRigidTransformationComputer nonRigidTransformationComputer = new NonRigidTransformationComputer();
-    private AffineTransformationComputer affineTransformationComputer = new AffineTransformationComputer();
+    private RigidTransformationComputer rigidTransformationComputer;
+    private SimilarityTransformationComputer similarityTransformationComputer;
+    private NonRigidTransformationComputer nonRigidTransformationComputer;
+    private AffineTransformationComputer affineTransformationComputer;
+
+    @Inject
+    public TransformationFactory(RigidTransformationComputer rigidTransformationComputer, SimilarityTransformationComputer similarityTransformationComputer, NonRigidTransformationComputer nonRigidTransformationComputer, AffineTransformationComputer affineTransformationComputer) {
+        this.rigidTransformationComputer = rigidTransformationComputer;
+        this.similarityTransformationComputer = similarityTransformationComputer;
+        this.nonRigidTransformationComputer = nonRigidTransformationComputer;
+        this.affineTransformationComputer = affineTransformationComputer;
+    }
 
     public Transformation getFrom(TransformationSchema transformationSchema) {
         switch (transformationSchema.getTransformationType()) {

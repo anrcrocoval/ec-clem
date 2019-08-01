@@ -8,13 +8,21 @@ import plugins.perrine.easyclemv0.model.TransformationSchema;
 import plugins.perrine.easyclemv0.model.transformation.Transformation;
 import plugins.perrine.easyclemv0.roi.RoiProcessor;
 import vtk.vtkPolyData;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatasetFactory {
 
-    private RoiProcessor roiProcessor = new RoiProcessor();
-    private TransformationFactory transformationFactory = new TransformationFactory();
+    private RoiProcessor roiProcessor;
+    private TransformationFactory transformationFactory;
+
+    @Inject
+    public DatasetFactory(RoiProcessor roiProcessor, TransformationFactory transformationFactory) {
+        this.roiProcessor = roiProcessor;
+        this.transformationFactory = transformationFactory;
+    }
 
     public Dataset getFrom(Sequence sequence) {
         Dataset dataset;

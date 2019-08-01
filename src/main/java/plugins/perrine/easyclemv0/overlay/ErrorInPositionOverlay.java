@@ -9,16 +9,24 @@ import plugins.perrine.easyclemv0.factory.FiducialSetFactory;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.Workspace;
+
+import javax.inject.Inject;
 import java.awt.*;
 
 public class ErrorInPositionOverlay extends Overlay {
 
     private Workspace workspace;
-    private FiducialSetFactory fiducialSetFactory = new FiducialSetFactory();
+    private FiducialSetFactory fiducialSetFactory;
 
-    public ErrorInPositionOverlay(Workspace workspace) {
+    @Inject
+    public ErrorInPositionOverlay(FiducialSetFactory fiducialSetFactory) {
         super("Difference in position");
+        this.fiducialSetFactory = fiducialSetFactory;
+    }
+
+    public ErrorInPositionOverlay setWorkspace(Workspace workspace) {
         this.workspace = workspace;
+        return this;
     }
 
     @Override

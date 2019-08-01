@@ -6,12 +6,18 @@ import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.transformation.AffineTransformation;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AffineTransformationComputerTest {
-    private AffineTransformationComputer subjectUnderTest = new AffineTransformationComputer();
+    private AffineTransformationComputer subjectUnderTest;
+
+    public AffineTransformationComputerTest() {
+        this.subjectUnderTest = DaggerAffineTransformationComputerComponent.create().getAffineTransformationComputer();
+    }
 
     @Test
     void simpleRotation() {

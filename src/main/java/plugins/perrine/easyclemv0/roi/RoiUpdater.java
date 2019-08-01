@@ -9,15 +9,23 @@ import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
 import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
 
+import javax.inject.Inject;
 import java.util.List;
 
 import static plugins.perrine.easyclemv0.EasyCLEMv0.Colortab;
 
 public class RoiUpdater {
 
-    private DatasetFactory datasetFactory = new DatasetFactory();
-    private RoiFactory roiFactory = new RoiFactory();
-    private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
+    private DatasetFactory datasetFactory;
+    private RoiFactory roiFactory;
+    private SequenceListenerUtil sequenceListenerUtil;
+
+    @Inject
+    public RoiUpdater(DatasetFactory datasetFactory, RoiFactory roiFactory, SequenceListenerUtil sequenceListenerUtil) {
+        this.datasetFactory = datasetFactory;
+        this.roiFactory = roiFactory;
+        this.sequenceListenerUtil = sequenceListenerUtil;
+    }
 
     public void updateRoi(Dataset dataset, Sequence sequence) {
         Dataset pixelDataset = datasetFactory.toPixel(dataset, sequence);

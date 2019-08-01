@@ -6,9 +6,16 @@ import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.Point;
 
+import javax.inject.Inject;
+
 public class ExtendedKalmanFilter {
 
-    private CovarianceMatrixComputer covarianceMatrixComputer = new CovarianceMatrixComputer();
+    private CovarianceMatrixComputer covarianceMatrixComputer;
+
+    @Inject
+    public ExtendedKalmanFilter(CovarianceMatrixComputer covarianceMatrixComputer) {
+        this.covarianceMatrixComputer = covarianceMatrixComputer;
+    }
 
     public KalmanFilterState run(FiducialSet fiducialSet, Matrix estimate, Matrix covariance) {
         Matrix g = estimate;

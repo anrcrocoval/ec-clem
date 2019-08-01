@@ -5,18 +5,27 @@ import plugins.perrine.easyclemv0.factory.vtk.VtkPointsFactory;
 import plugins.perrine.easyclemv0.model.Dataset;
 import vtk.*;
 
+import javax.inject.Inject;
+
 public class SplineTransformation implements Transformation {
 
     private vtkThinPlateSplineTransform splineTransform;
-    private VtkPointsFactory vtkPointsFactory = new VtkPointsFactory();
-    private DatasetFactory datasetFactory = new DatasetFactory();
+    private VtkPointsFactory vtkPointsFactory;
+    private DatasetFactory datasetFactory;
 
-    public SplineTransformation(vtkThinPlateSplineTransform splineTransform) {
-        this.splineTransform = splineTransform;
+    @Inject
+    public SplineTransformation(VtkPointsFactory vtkPointsFactory, DatasetFactory datasetFactory) {
+        this.vtkPointsFactory = vtkPointsFactory;
+        this.datasetFactory = datasetFactory;
     }
 
     public vtkThinPlateSplineTransform getSplineTransform() {
         return splineTransform;
+    }
+
+    public SplineTransformation setSplineTransform(vtkThinPlateSplineTransform splineTransform) {
+        this.splineTransform = splineTransform;
+        return this;
     }
 
     public Dataset apply(Dataset dataset) {

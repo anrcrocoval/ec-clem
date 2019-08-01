@@ -2,6 +2,8 @@ package plugins.perrine.easyclemv0.roi;
 
 import icy.roi.ROI;
 import plugins.kernel.roi.roi3d.ROI3DPoint;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.regex.Matcher;
@@ -10,6 +12,9 @@ import java.util.regex.Pattern;
 public class RoiProcessor {
 
     private Pattern pattern = Pattern.compile(".*?(\\d+)$");
+
+    @Inject
+    public RoiProcessor() {}
 
     public double[][] getPointsFromRoi(ArrayList<ROI> roiList) {
         if(roiList.size() == 0) {

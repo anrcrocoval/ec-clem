@@ -4,16 +4,20 @@ import icy.roi.ROI;
 import icy.sequence.Sequence;
 import plugins.perrine.easyclemv0.model.Workspace;
 import plugins.perrine.easyclemv0.model.WorkspaceTransformer;
+
+import javax.inject.Inject;
 import javax.swing.*;
 import java.util.ArrayList;
 
 public class UpdateTransformationButton extends JButton {
 
-    private WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer();
+    private WorkspaceTransformer workspaceTransformer;
     private Workspace workspace;
 
-    public UpdateTransformationButton() {
+    @Inject
+    public UpdateTransformationButton(WorkspaceTransformer workspaceTransformer) {
         super("Update TransformationSchema");
+        this.workspaceTransformer = workspaceTransformer;
         setToolTipText("Press this button if you have moved the points, prepared set of points, \n or obtained some black part of the image. This will refresh it");
         addActionListener((arg0) -> action());
     }

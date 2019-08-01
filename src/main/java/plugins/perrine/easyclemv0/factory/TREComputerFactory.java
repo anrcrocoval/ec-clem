@@ -11,14 +11,25 @@ import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.TransformationSchema;
 import plugins.perrine.easyclemv0.model.Workspace;
 
+import javax.inject.Inject;
+
 public class TREComputerFactory {
 
     private Mean mean = new Mean();
-    private InertiaMatrixComputer inertiaMatrixComputer = new InertiaMatrixComputer();
-    private FREComputer freComputer = new FREComputer();
-    private FLEComputer fleComputer = new FLEComputer();
-    private TransformationSchemaFactory transformationSchemaFactory = new TransformationSchemaFactory();
-    private DatasetFactory datasetFactory = new DatasetFactory();
+    private InertiaMatrixComputer inertiaMatrixComputer;
+    private FREComputer freComputer;
+    private FLEComputer fleComputer;
+    private TransformationSchemaFactory transformationSchemaFactory;
+    private DatasetFactory datasetFactory;
+
+    @Inject
+    public TREComputerFactory(InertiaMatrixComputer inertiaMatrixComputer, FREComputer freComputer, FLEComputer fleComputer, TransformationSchemaFactory transformationSchemaFactory, DatasetFactory datasetFactory) {
+        this.inertiaMatrixComputer = inertiaMatrixComputer;
+        this.freComputer = freComputer;
+        this.fleComputer = fleComputer;
+        this.transformationSchemaFactory = transformationSchemaFactory;
+        this.datasetFactory = datasetFactory;
+    }
 
     public TREComputer getFrom(TransformationSchema transformationSchema) {
         return getFrom(

@@ -5,16 +5,22 @@ import org.apache.commons.math3.stat.correlation.Covariance;
 import plugins.perrine.easyclemv0.factory.apache.common.math.RealMatrixFactory;
 import plugins.perrine.easyclemv0.factory.jama.MatrixFactory;
 
+import javax.inject.Inject;
+
 public class CovarianceMatrixComputer {
 
-    private RealMatrixFactory realMatrixFactory = new RealMatrixFactory();
-    private MatrixFactory matrixFactory = new MatrixFactory();
-    private Covariance covariance;
+    private RealMatrixFactory realMatrixFactory;
+    private MatrixFactory matrixFactory;
+
+    @Inject
+    public CovarianceMatrixComputer(RealMatrixFactory realMatrixFactory, MatrixFactory matrixFactory) {
+        this.realMatrixFactory = realMatrixFactory;
+        this.matrixFactory = matrixFactory;
+    }
 
     public Matrix compute(Matrix M) {
-        covariance = new Covariance(realMatrixFactory.getFrom(M));
         return matrixFactory.getFrom(
-            covariance.getCovarianceMatrix()
+            new Covariance(realMatrixFactory.getFrom(M)).getCovarianceMatrix()
         );
     }
 }

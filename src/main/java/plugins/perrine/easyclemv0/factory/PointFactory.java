@@ -4,9 +4,16 @@ import icy.roi.ROI;
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.roi.RoiProcessor;
 
+import javax.inject.Inject;
+
 public class PointFactory {
 
-    private RoiProcessor roiProcessor = new RoiProcessor();
+    private RoiProcessor roiProcessor;
+
+    @Inject
+    public PointFactory(RoiProcessor roiProcessor) {
+        this.roiProcessor = roiProcessor;
+    }
 
     public Point getFrom(ROI roi) {
         return new Point(roiProcessor.getPointFromRoi(roi));

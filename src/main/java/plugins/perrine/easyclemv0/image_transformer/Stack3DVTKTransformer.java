@@ -22,11 +22,13 @@ import plugins.perrine.easyclemv0.model.SequenceSize;
 import plugins.perrine.easyclemv0.model.transformation.Transformation;
 import vtk.*;
 
+import javax.inject.Inject;
+
 /**
  * The difference with 2D transform is that the tranform is computed in REAL UNITS, because vtk apply it in real unit,
  * which can be quite convenient for dealing with anisotropy!
  */
-public class Stack3DVTKTransformer implements ImageTransformer {
+public class Stack3DVTKTransformer {
 
 	private vtkImageReslice imageReslice;
 	private Sequence sequence;
@@ -41,8 +43,14 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 	private double InputSpacingx;
 	private double InputSpacingy;
 
-	private VtkAbstractTransformFactory vtkAbstractTransformFactory = new VtkAbstractTransformFactory();
-	private SequenceFactory sequenceFactory = new SequenceFactory();
+	private VtkAbstractTransformFactory vtkAbstractTransformFactory;
+	private SequenceFactory sequenceFactory;
+
+	@Inject
+	public Stack3DVTKTransformer(VtkAbstractTransformFactory vtkAbstractTransformFactory, SequenceFactory sequenceFactory) {
+		this.vtkAbstractTransformFactory = vtkAbstractTransformFactory;
+		this.sequenceFactory = sequenceFactory;
+	}
 
 	public void setSourceSequence(Sequence sequence) {
 		this.sequence = sequence;

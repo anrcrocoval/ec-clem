@@ -5,16 +5,20 @@ import icy.sequence.Sequence;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
 import plugins.perrine.easyclemv0.model.*;
+
+import javax.inject.Inject;
 import javax.swing.*;
 import java.util.List;
 
 public class ShowPointsButton extends JButton {
 
     private Workspace workspace;
-    private WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer();
+    private WorkspaceTransformer workspaceTransformer;
 
-    public ShowPointsButton() {
+    @Inject
+    public ShowPointsButton(WorkspaceTransformer workspaceTransformer) {
         super("Show ROIs on original source image");
+        this.workspaceTransformer = workspaceTransformer;
         setToolTipText("Show the original source Image, with the points selected shown (save the source image to save the ROIs)");
         addActionListener((arg0) -> action());
     }

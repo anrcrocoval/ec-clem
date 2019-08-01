@@ -5,9 +5,16 @@ import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.transformation.AffineTransformation;
 import plugins.perrine.easyclemv0.util.MatrixUtil;
 
+import javax.inject.Inject;
+
 public class AffineTransformationComputer implements TransformationComputer {
 
-    private MatrixUtil matrixUtil = new MatrixUtil();
+    private MatrixUtil matrixUtil;
+
+    @Inject
+    public AffineTransformationComputer(MatrixUtil matrixUtil) {
+        this.matrixUtil = matrixUtil;
+    }
 
     @Override
     public AffineTransformation compute(FiducialSet fiducialSet) {

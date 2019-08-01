@@ -3,7 +3,12 @@ package plugins.perrine.easyclemv0.factory.vtk;
 import plugins.perrine.easyclemv0.model.Dataset;
 import vtk.vtkPoints;
 
+import javax.inject.Inject;
+
 public class VtkPointsFactory {
+
+    @Inject
+    public VtkPointsFactory() {}
 
     public vtkPoints getFrom(Dataset dataset) {
         vtkPoints points = new vtkPoints();

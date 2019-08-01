@@ -9,9 +9,16 @@ import vtk.vtkAbstractTransform;
 import vtk.vtkMatrix4x4;
 import vtk.vtkTransform;
 
+import javax.inject.Inject;
+
 public class VtkAbstractTransformFactory {
 
-    private MatrixUtil matrixUtil = new MatrixUtil();
+    private MatrixUtil matrixUtil;
+
+    @Inject
+    public VtkAbstractTransformFactory(MatrixUtil matrixUtil) {
+        this.matrixUtil = matrixUtil;
+    }
 
     public vtkAbstractTransform getFrom(Transformation transformation) {
         if(transformation instanceof AffineTransformation) {

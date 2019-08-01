@@ -13,6 +13,7 @@ import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
 import plugins.perrine.easyclemv0.storage.xml.XmlFileWriter;
 import plugins.perrine.easyclemv0.storage.xml.XmlTransformationWriter;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -20,17 +21,27 @@ import java.util.concurrent.Executors;
 
 public class WorkspaceTransformer {
 
-    private SequenceUpdater sequenceUpdater = new SequenceUpdater();
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private TransformationSchemaFactory transformationSchemaFactory = new TransformationSchemaFactory();
-    private TREComputerFactory treComputerFactory = new TREComputerFactory();
-    private RoiUpdater roiUpdater = new RoiUpdater();
-    private SequenceFactory sequenceFactory = new SequenceFactory();
-    private DatasetFactory datasetFactory = new DatasetFactory();
+    private SequenceUpdater sequenceUpdater;
+    private ExecutorService executorService;
+    private TransformationSchemaFactory transformationSchemaFactory;
+    private TREComputerFactory treComputerFactory;
+    private RoiUpdater roiUpdater;
+    private SequenceFactory sequenceFactory;
+    private DatasetFactory datasetFactory;
+
+    @Inject
+    public WorkspaceTransformer(SequenceUpdater sequenceUpdater , TransformationSchemaFactory transformationSchemaFactory, TREComputerFactory treComputerFactory, RoiUpdater roiUpdater, SequenceFactory sequenceFactory, DatasetFactory datasetFactory) {
+        this.sequenceUpdater = sequenceUpdater;
+        this.transformationSchemaFactory = transformationSchemaFactory;
+        this.treComputerFactory = treComputerFactory;
+        this.roiUpdater = roiUpdater;
+        this.sequenceFactory = sequenceFactory;
+        this.datasetFactory = datasetFactory;
+        this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    }
 
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();
-
     private XmlFileWriter xmlFileWriter;
     private XmlTransformationWriter xmlWriter;
 

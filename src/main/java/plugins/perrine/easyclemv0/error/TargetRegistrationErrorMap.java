@@ -28,20 +28,28 @@ import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.SequenceSize;
 import plugins.stef.tools.overlay.ColorBarOverlay;
 
+import javax.inject.Inject;
+
 public class TargetRegistrationErrorMap implements Runnable {
 
     private ProgressFrame myprogressbar;
     private Sequence sequence;
     private IcyBufferedImage image;
-    private SequenceSizeFactory sequenceSizeFactory = new SequenceSizeFactory();
+    private SequenceSizeFactory sequenceSizeFactory;
     private TREComputer treComputer;
 
     private CompletionService<IcyBufferedImage> completionService = new ExecutorCompletionService<>(
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     );
 
-    public TargetRegistrationErrorMap(TREComputer treComputer) {
+    @Inject
+    public TargetRegistrationErrorMap(SequenceSizeFactory sequenceSizeFactory) {
+        this.sequenceSizeFactory = sequenceSizeFactory;
+    }
+
+    public TargetRegistrationErrorMap setTreComputer(TREComputer treComputer) {
         this.treComputer = treComputer;
+        return this;
     }
 
     @Override

@@ -7,12 +7,14 @@ import plugins.perrine.easyclemv0.model.Workspace;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetOverlay;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
 
+import javax.inject.Inject;
 import javax.swing.*;
 
 public class MonitorTargetPointButton extends JButton {
 
     private Workspace workspace;
 
+    @Inject
     public MonitorTargetPointButton() {
         super("Monitor a target point ");
         setToolTipText(" This will display the evolution of the target registration error at one target position while points are added");

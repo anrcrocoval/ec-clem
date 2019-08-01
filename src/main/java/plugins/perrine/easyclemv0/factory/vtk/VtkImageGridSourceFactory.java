@@ -2,7 +2,12 @@ package plugins.perrine.easyclemv0.factory.vtk;
 
 import vtk.vtkImageGridSource;
 
+import javax.inject.Inject;
+
 public class VtkImageGridSourceFactory {
+
+    @Inject
+    public VtkImageGridSourceFactory() {}
 
     public vtkImageGridSource getFrom(int xSize, int ySize, int zSize, double spacingX, double spacingY, double spacingZ) {
         vtkImageGridSource sourceGrid = new vtkImageGridSource();

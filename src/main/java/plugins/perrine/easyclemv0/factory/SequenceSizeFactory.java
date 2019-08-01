@@ -5,7 +5,12 @@ import icy.sequence.Sequence;
 import plugins.perrine.easyclemv0.model.DimensionSize;
 import plugins.perrine.easyclemv0.model.SequenceSize;
 
+import javax.inject.Inject;
+
 public class SequenceSizeFactory {
+
+    @Inject
+    public SequenceSizeFactory() {}
 
     public SequenceSize getFrom(Sequence sequence) {
         SequenceSize sequenceSize = new SequenceSize();

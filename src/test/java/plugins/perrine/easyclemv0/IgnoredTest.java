@@ -14,6 +14,7 @@ import plugins.perrine.easyclemv0.model.transformation.Transformation;
 import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
 import plugins.perrine.easyclemv0.registration.SimilarityTransformationComputer;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -23,11 +24,26 @@ class IgnoredTest {
 
     private TestTransformationFactory testTransformationFactory = new TestTransformationFactory();
     private TestFiducialSetFactory testFiducialSetFactory = new TestFiducialSetFactory();
-    private SimilarityTransformationComputer similarityTransformationComputer = new SimilarityTransformationComputer();
-    private RigidTransformationComputer rigidTransformationComputer = new RigidTransformationComputer();
-    private CovarianceMatrixComputer covarianceMatrixComputer = new CovarianceMatrixComputer();
+    private SimilarityTransformationComputer similarityTransformationComputer;
+    private RigidTransformationComputer rigidTransformationComputer;
+    private CovarianceMatrixComputer covarianceMatrixComputer;
+    private ErrorComputer errorComputer;
+    private ExtendedKalmanFilter extendedKalmanFilter;
 
-    private ErrorComputer errorComputer = new ErrorComputer();
+    @Inject
+    public IgnoredTest(
+            SimilarityTransformationComputer similarityTransformationComputer,
+            RigidTransformationComputer rigidTransformationComputer,
+            CovarianceMatrixComputer covarianceMatrixComputer,
+            ErrorComputer errorComputer,
+            ExtendedKalmanFilter extendedKalmanFilter
+    ) {
+        this.similarityTransformationComputer = similarityTransformationComputer;
+        this.rigidTransformationComputer = rigidTransformationComputer;
+        this.covarianceMatrixComputer = covarianceMatrixComputer;
+        this.errorComputer = errorComputer;
+        this.extendedKalmanFilter = extendedKalmanFilter;
+    }
 
     @Test
     void EKF() {
@@ -38,7 +54,6 @@ class IgnoredTest {
         FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n);
 
         Similarity leastSquareEstimate = rigidTransformationComputer.compute(randomFromTransformationFiducialSet);
-        ExtendedKalmanFilter extendedKalmanFilter = new ExtendedKalmanFilter();
         KalmanFilterState kalmanFilterState = new KalmanFilterState(leastSquareEstimate.getMatrixRight(), Matrix.identity(12, 12));
         for(int i = 0; i < 10; i++) {
             kalmanFilterState = extendedKalmanFilter.run(randomFromTransformationFiducialSet, kalmanFilterState.getEstimate(), kalmanFilterState.getCovariance());

@@ -4,11 +4,16 @@ import Jama.Matrix;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Point;
 
+import javax.inject.Inject;
 import java.util.Random;
 
 public class DatasetGenerator {
 
     private Random random = new Random();
+
+    @Inject
+    public DatasetGenerator() {
+    }
 
     public Dataset addNoise(Dataset dataset, double fle) {
         Matrix copy = dataset.getMatrix().copy();

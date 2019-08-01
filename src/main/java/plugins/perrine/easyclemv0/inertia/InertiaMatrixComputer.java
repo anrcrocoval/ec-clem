@@ -5,9 +5,14 @@ import org.apache.commons.math3.util.CombinatoricsUtils;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Point;
 
+import javax.inject.Inject;
 import java.util.Iterator;
 
 public class InertiaMatrixComputer {
+
+    @Inject
+    public InertiaMatrixComputer() {
+    }
 
     public Matrix getInertiaMatrix(Dataset dataset) {
         Matrix M = new Matrix(dataset.getDimension(), dataset.getDimension());

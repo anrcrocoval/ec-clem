@@ -3,9 +3,13 @@ package plugins.perrine.easyclemv0.util;
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 
+import javax.inject.Inject;
 import java.math.BigDecimal;
 
 public class MatrixUtil {
+
+    @Inject
+    public MatrixUtil() {}
 
     public Matrix pseudoInverse(Matrix M) {
         SingularValueDecomposition svd = M.svd();

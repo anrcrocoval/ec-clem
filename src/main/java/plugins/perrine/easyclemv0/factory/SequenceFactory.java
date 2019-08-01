@@ -6,12 +6,19 @@ import icy.sequence.SequenceUtil;
 import icy.type.DataType;
 import plugins.perrine.easyclemv0.factory.vtk.VtkImageGridSourceFactory;
 import vtk.*;
+
+import javax.inject.Inject;
 import java.lang.reflect.Array;
 import static icy.type.DataType.UBYTE;
 
 public class SequenceFactory {
 
-    private VtkImageGridSourceFactory vtkImageGridSourceFactory = new VtkImageGridSourceFactory();
+    private VtkImageGridSourceFactory vtkImageGridSourceFactory;
+
+    @Inject
+    public SequenceFactory(VtkImageGridSourceFactory vtkImageGridSourceFactory) {
+        this.vtkImageGridSourceFactory = vtkImageGridSourceFactory;
+    }
 
     public Sequence getMergeSequence(Sequence source, Sequence target) {
         Sequence result = SequenceUtil.concatC(new Sequence[] { source, target }, false, false, null);

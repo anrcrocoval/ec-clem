@@ -41,6 +41,9 @@ import icy.system.thread.ThreadUtil;
 import plugins.adufour.blocks.lang.Block;
 import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.EzLabel;
+
+import javax.inject.Inject;
+
 import static plugins.perrine.easyclemv0.storage.xml.XmlTransformation.transformationElementName;
 
 public class ApplyTransformation extends EzPlug implements Block {
@@ -48,11 +51,15 @@ public class ApplyTransformation extends EzPlug implements Block {
 	private EzVarSequence source = new EzVarSequence("Select Source Image (will be transformed from xml file)");
 	private EzVarFile xmlFile=new EzVarFile("Xml file containing list of transformation", ApplicationPreferences.getPreferences().node("frame/imageLoader").get("path", "."));;
 	private VarSequence out = new VarSequence("output sequence", null);
-	private SequenceUpdater sequenceUpdater = new SequenceUpdater();
+	private SequenceUpdater sequenceUpdater;
 
 	private XmlFileReader xmlFileReader = new XmlFileReader();
 	private XmlTransformationReader xmlTransformationReader = new XmlTransformationReader();
 
+	@Inject
+	public ApplyTransformation(SequenceUpdater sequenceUpdater) {
+		this.sequenceUpdater = sequenceUpdater;
+	}
 
 	@Override
 	protected void initialize() {

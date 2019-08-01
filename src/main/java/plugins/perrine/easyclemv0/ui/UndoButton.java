@@ -10,19 +10,25 @@ import plugins.perrine.easyclemv0.roi.RoiUpdater;
 import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
 import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
 
+import javax.inject.Inject;
 import javax.swing.*;
 import java.util.List;
 
 public class UndoButton extends JButton {
 
     private Workspace workspace;
-    private DatasetFactory datasetFactory = new DatasetFactory();
-    private RoiUpdater roiUpdater = new RoiUpdater();
-    private WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer();
-    private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
+    private DatasetFactory datasetFactory;
+    private RoiUpdater roiUpdater;
+    private WorkspaceTransformer workspaceTransformer;
+    private SequenceListenerUtil sequenceListenerUtil;
 
-    public UndoButton() {
+    @Inject
+    public UndoButton(DatasetFactory datasetFactory, RoiUpdater roiUpdater, WorkspaceTransformer workspaceTransformer, SequenceListenerUtil sequenceListenerUtil) {
         super("Undo last point");
+        this.datasetFactory = datasetFactory;
+        this.roiUpdater = roiUpdater;
+        this.workspaceTransformer = workspaceTransformer;
+        this.sequenceListenerUtil = sequenceListenerUtil;
         setToolTipText("Press this button to cancel the last point edition you have done, it will reverse to the previous state of your image");
         addActionListener((arg0) -> action());
     }

@@ -9,17 +9,26 @@ import plugins.perrine.easyclemv0.factory.DatasetFactory;
 import plugins.perrine.easyclemv0.factory.TREComputerFactory;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Workspace;
+
+import javax.inject.Inject;
 import java.awt.*;
 
 public class PredictedErrorInPositionOverlay extends Overlay {
 
     private Workspace workspace;
-    private DatasetFactory datasetFactory = new DatasetFactory();
-    private TREComputerFactory treComputerFactory = new TREComputerFactory();
+    private DatasetFactory datasetFactory;
+    private TREComputerFactory treComputerFactory;
 
-    public PredictedErrorInPositionOverlay(Workspace workspace) {
+    @Inject
+    public PredictedErrorInPositionOverlay(DatasetFactory datasetFactory, TREComputerFactory treComputerFactory) {
         super("Predicted Error from point configuration");
+        this.datasetFactory = datasetFactory;
+        this.treComputerFactory = treComputerFactory;
+    }
+
+    public PredictedErrorInPositionOverlay setWorkspace(Workspace workspace) {
         this.workspace = workspace;
+        return this;
     }
 
     @Override

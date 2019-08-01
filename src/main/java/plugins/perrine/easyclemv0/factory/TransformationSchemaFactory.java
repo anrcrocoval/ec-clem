@@ -4,10 +4,18 @@ import plugins.perrine.easyclemv0.model.FiducialSet;
 import plugins.perrine.easyclemv0.model.TransformationSchema;
 import plugins.perrine.easyclemv0.model.Workspace;
 
+import javax.inject.Inject;
+
 public class TransformationSchemaFactory {
 
-    private FiducialSetFactory fiducialSetFactory = new FiducialSetFactory();
-    private SequenceSizeFactory sequenceSizeFactory = new SequenceSizeFactory();
+    private FiducialSetFactory fiducialSetFactory;
+    private SequenceSizeFactory sequenceSizeFactory;
+
+    @Inject
+    public TransformationSchemaFactory(FiducialSetFactory fiducialSetFactory, SequenceSizeFactory sequenceSizeFactory) {
+        this.fiducialSetFactory = fiducialSetFactory;
+        this.sequenceSizeFactory = sequenceSizeFactory;
+    }
 
     public TransformationSchema getFrom(Workspace workspace) {
         FiducialSet fiducialSet = fiducialSetFactory.getFrom(workspace);
