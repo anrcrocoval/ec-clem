@@ -23,10 +23,11 @@
 package plugins.perrine.easyclemv0.ui;
 
 import java.awt.Component;
+import javax.inject.Inject;
 import javax.swing.JPanel;
-import plugins.perrine.easyclemv0.model.Workspace;
-import plugins.perrine.easyclemv0.overlay.ErrorInPositionOverlay;
-import plugins.perrine.easyclemv0.overlay.PredictedErrorInPositionOverlay;
+import plugins.perrine.easyclemv0.workspace.Workspace;
+import plugins.perrine.easyclemv0.ui.overlay.ErrorInPositionOverlay;
+import plugins.perrine.easyclemv0.ui.overlay.PredictedErrorInPositionOverlay;
 
 public class GuiCLEMButtons2 extends JPanel {
 
@@ -35,10 +36,15 @@ public class GuiCLEMButtons2 extends JPanel {
 	private MonitorTargetPointButton monitorTargetPointButton;
 	private ShowOverlayCheckbox showerror;
 	private ShowOverlayCheckbox showpredictederror;
+	private ErrorInPositionOverlay errorInPositionOverlay;
+	private PredictedErrorInPositionOverlay predictedErrorInPositionOverlay;
 
-	public GuiCLEMButtons2() {
-		computeErrorMapButton = new ComputeErrorMapButton();
-		monitorTargetPointButton = new MonitorTargetPointButton();
+	@Inject
+	public GuiCLEMButtons2(ComputeErrorMapButton computeErrorMapButton, MonitorTargetPointButton monitorTargetPointButton, ErrorInPositionOverlay errorInPositionOverlay, PredictedErrorInPositionOverlay predictedErrorInPositionOverlay) {
+		this.computeErrorMapButton = computeErrorMapButton;
+		this.monitorTargetPointButton = monitorTargetPointButton;
+		this.errorInPositionOverlay = errorInPositionOverlay;
+		this.predictedErrorInPositionOverlay = predictedErrorInPositionOverlay;
 		showerror = new ShowOverlayCheckbox(
 			null,
 			"Show Difference in Positions",
@@ -60,9 +66,9 @@ public class GuiCLEMButtons2 extends JPanel {
 		computeErrorMapButton.setWorkspace(workspace);
 		monitorTargetPointButton.setWorkspace(workspace);
 		showerror.setWorkspace(workspace);
-		showerror.setOverlay(new ErrorInPositionOverlay(workspace));
+		showerror.setOverlay(errorInPositionOverlay.setWorkspace(workspace));
 		showpredictederror.setWorkspace(workspace);
-		showpredictederror.setOverlay(new PredictedErrorInPositionOverlay(workspace));
+		showpredictederror.setOverlay(predictedErrorInPositionOverlay.setWorkspace(workspace));
 	}
 
 	public void disableButtons() {

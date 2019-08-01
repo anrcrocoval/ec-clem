@@ -9,8 +9,9 @@ import icy.sequence.SequenceListener;
 import icy.type.point.Point5D;
 import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-import plugins.perrine.easyclemv0.model.WorkspaceState;
-import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.workspace.WorkspaceState;
+
+import javax.inject.Inject;
 import java.util.List;
 
 import static plugins.perrine.easyclemv0.EasyCLEMv0.Colortab;
@@ -21,9 +22,19 @@ public class RoiDuplicator implements SequenceListener {
     private WorkspaceState workspaceState;
     private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
 
-    public RoiDuplicator(Sequence sequence, WorkspaceState workspaceState) {
+    @Inject
+    public RoiDuplicator(SequenceListenerUtil sequenceListenerUtil) {
+        this.sequenceListenerUtil = sequenceListenerUtil;
+    }
+
+    public RoiDuplicator setSequence(Sequence sequence) {
         this.sequence = sequence;
+        return this;
+    }
+
+    public RoiDuplicator setWorkspaceState(WorkspaceState workspaceState) {
         this.workspaceState = workspaceState;
+        return this;
     }
 
     @Override

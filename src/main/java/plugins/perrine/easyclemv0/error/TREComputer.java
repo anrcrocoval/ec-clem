@@ -2,7 +2,9 @@ package plugins.perrine.easyclemv0.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import plugins.perrine.easyclemv0.model.Point;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+
+import javax.inject.Inject;
 
 public class TREComputer {
     private double expectedSquareFLE;
@@ -12,6 +14,7 @@ public class TREComputer {
     private Matrix barycentre;
     private Mean mean = new Mean();
 
+    @Inject
     public TREComputer(double n, double[] f, Matrix eigenVectors, Matrix barycentre, double expectedSquareFLE) {
         this.n = n;
         this.f = f;

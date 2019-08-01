@@ -4,29 +4,33 @@ import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI;
 import icy.sequence.SequenceListener;
-import plugins.perrine.easyclemv0.factory.DatasetFactory;
-import plugins.perrine.easyclemv0.model.*;
+import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
+import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetFactory;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
 import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
-import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
-
+import plugins.perrine.easyclemv0.sequence_listener.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.workspace.Workspace;
+import plugins.perrine.easyclemv0.workspace.WorkspaceTransformer;
+import javax.inject.Inject;
 import javax.swing.*;
 import java.util.List;
 
 public class UndoButton extends JButton {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
-    private DatasetFactory datasetFactory = new DatasetFactory();
-    private RoiUpdater roiUpdater = new RoiUpdater();
-    private WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer();
-    private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
+    private DatasetFactory datasetFactory;
+    private RoiUpdater roiUpdater;
+    private WorkspaceTransformer workspaceTransformer;
+    private SequenceListenerUtil sequenceListenerUtil;
 
-    public UndoButton() {
+    @Inject
+    public UndoButton(DatasetFactory datasetFactory, RoiUpdater roiUpdater, WorkspaceTransformer workspaceTransformer, SequenceListenerUtil sequenceListenerUtil) {
         super("Undo last point");
+        this.datasetFactory = datasetFactory;
+        this.roiUpdater = roiUpdater;
+        this.workspaceTransformer = workspaceTransformer;
+        this.sequenceListenerUtil = sequenceListenerUtil;
         setToolTipText("Press this button to cancel the last point edition you have done, it will reverse to the previous state of your image");
         addActionListener((arg0) -> action());
     }

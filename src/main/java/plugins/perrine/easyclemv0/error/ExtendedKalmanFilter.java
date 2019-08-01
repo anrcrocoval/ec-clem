@@ -2,13 +2,19 @@ package plugins.perrine.easyclemv0.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;
-import plugins.perrine.easyclemv0.model.Dataset;
-import plugins.perrine.easyclemv0.model.FiducialSet;
-import plugins.perrine.easyclemv0.model.Point;
+import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
+import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+import javax.inject.Inject;
 
 public class ExtendedKalmanFilter {
 
-    private CovarianceMatrixComputer covarianceMatrixComputer = new CovarianceMatrixComputer();
+    private CovarianceMatrixComputer covarianceMatrixComputer;
+
+    @Inject
+    public ExtendedKalmanFilter(CovarianceMatrixComputer covarianceMatrixComputer) {
+        this.covarianceMatrixComputer = covarianceMatrixComputer;
+    }
 
     public KalmanFilterState run(FiducialSet fiducialSet, Matrix estimate, Matrix covariance) {
         Matrix g = estimate;

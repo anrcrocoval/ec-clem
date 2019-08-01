@@ -5,7 +5,13 @@ import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 
+import javax.inject.Inject;
+
 public class EulerAngleFactory {
+
+    @Inject
+    public EulerAngleFactory() {
+    }
 
     public double[] getFrom(Matrix M) {
         Rotation rotation = new Rotation(M.getArray(), 0.01);

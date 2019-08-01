@@ -4,9 +4,10 @@ import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import plugins.perrine.easyclemv0.error.TargetRegistrationErrorMap;
 import plugins.perrine.easyclemv0.error.TREComputer;
-import plugins.perrine.easyclemv0.factory.TREComputerFactory;
-import plugins.perrine.easyclemv0.model.Workspace;
+import plugins.perrine.easyclemv0.error.TREComputerFactory;
+import plugins.perrine.easyclemv0.workspace.Workspace;
 
+import javax.inject.Inject;
 import javax.swing.*;
 
 public class ComputeErrorMapButton extends JButton {
@@ -17,10 +18,14 @@ public class ComputeErrorMapButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
     private TREComputer treComputer;
-    private TREComputerFactory treComputerFactory = new TREComputerFactory();
+    private TREComputerFactory treComputerFactory;
+    private TargetRegistrationErrorMap targetRegistrationErrorMap;
 
-    public ComputeErrorMapButton() {
+    @Inject
+    public ComputeErrorMapButton(TREComputerFactory treComputerFactory, TargetRegistrationErrorMap targetRegistrationErrorMap) {
         super("Compute the whole predicted error map ");
+        this.treComputerFactory = treComputerFactory;
+        this.targetRegistrationErrorMap = targetRegistrationErrorMap;
         setToolTipText(" This will compute a new image were each pixel value stands for the statistical registration error (called Target Registration Error");
         addActionListener((arg0) -> action());
     }
@@ -31,7 +36,7 @@ public class ComputeErrorMapButton extends JButton {
 
     private void action() {
         treComputer = treComputerFactory.getFrom(workspace);
-        TargetRegistrationErrorMap myTREmap = new TargetRegistrationErrorMap(treComputer);
+        targetRegistrationErrorMap.setTreComputer(treComputer);
         if (workspace.getSourceSequence() != null) {
             if (workspace.getSourceSequence().getROIs().size() < 3) {
                 new AnnounceFrame("Without at least 3 ROI points, the error map does not have any meaning. Please add points.",5);
@@ -46,7 +51,7 @@ public class ComputeErrorMapButton extends JButton {
 //							MessageDialog.showDialog("Please Initialize EC-Clem first by pressing the Play button");
 //							return;
 //						}
-                myTREmap.apply(workspace.getTargetSequence(), workspace.getTargetSequence().getFirstImage());
+                targetRegistrationErrorMap.apply(workspace.getTargetSequence(), workspace.getTargetSequence().getFirstImage());
             }
         } else {
             MessageDialog.showDialog("Source and target were closed. Please open one of them and try again");

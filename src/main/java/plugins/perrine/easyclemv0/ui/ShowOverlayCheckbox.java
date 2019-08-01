@@ -1,17 +1,12 @@
 package plugins.perrine.easyclemv0.ui;
 
 import icy.painter.Overlay;
-import plugins.perrine.easyclemv0.model.Workspace;
-
-
+import plugins.perrine.easyclemv0.workspace.Workspace;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class ShowOverlayCheckbox extends JCheckBox {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
     private Overlay overlay;
