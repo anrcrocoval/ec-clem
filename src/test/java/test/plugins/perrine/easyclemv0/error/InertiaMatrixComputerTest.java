@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.test.error;
+package test.plugins.perrine.easyclemv0.error;
 
 import Jama.Matrix;
 import org.junit.jupiter.api.Test;

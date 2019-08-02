@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.test.fiducialset;
+package test.plugins.perrine.easyclemv0.fiducialset;
 
 import Jama.Matrix;
 import org.apache.commons.math3.random.RandomDataGenerator;

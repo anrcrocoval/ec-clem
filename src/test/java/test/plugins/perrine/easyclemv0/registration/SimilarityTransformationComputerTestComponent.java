@@ -10,11 +10,11 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.test.registration;
+package test.plugins.perrine.easyclemv0.registration;
 
 import dagger.Component;
 
 @Component
-public interface AffineTransformationComputerTestComponent {
-    void inject(AffineTransformationComputerTest affineTransformationComputerTest);
+public interface SimilarityTransformationComputerTestComponent {
+    void inject(SimilarityTransformationComputerTest similarityTransformationComputerTest);
 }

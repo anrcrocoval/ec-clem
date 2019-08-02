@@ -10,15 +10,15 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.test;
+package test.plugins.perrine.easyclemv0;
 
 import Jama.Matrix;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import plugins.perrine.easyclemv0.error.*;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
-import plugins.perrine.easyclemv0.test.fiducialset.TestFiducialSetFactory;
-import plugins.perrine.easyclemv0.test.transformation.TestTransformationFactory;
+import test.plugins.perrine.easyclemv0.fiducialset.TestFiducialSetFactory;
+import test.plugins.perrine.easyclemv0.transformation.TestTransformationFactory;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationType;
 import plugins.perrine.easyclemv0.transformation.Similarity;

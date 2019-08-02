@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.test.fiducialset.dataset.point;
+package test.plugins.perrine.easyclemv0.fiducialset.dataset.point;
 
 import Jama.Matrix;
 import org.junit.jupiter.api.Test;

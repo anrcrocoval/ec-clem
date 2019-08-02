@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.test;
+package test.plugins.perrine.easyclemv0;
 
 import dagger.Component;
 

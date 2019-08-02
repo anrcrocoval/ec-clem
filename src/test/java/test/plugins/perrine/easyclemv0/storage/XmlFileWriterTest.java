@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.test.storage;
+package test.plugins.perrine.easyclemv0.storage;
 
 import icy.sequence.DimensionId;
 import icy.util.XMLUtil;

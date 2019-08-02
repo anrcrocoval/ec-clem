@@ -10,16 +10,17 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.test.registration;
+package test.plugins.perrine.easyclemv0.registration;
 
 import org.junit.jupiter.api.Test;
 import plugins.perrine.easyclemv0.registration.SimilarityTransformationComputer;
-import plugins.perrine.easyclemv0.test.fiducialset.TestFiducialSetFactory;
-import plugins.perrine.easyclemv0.test.transformation.TestTransformationFactory;
+import test.plugins.perrine.easyclemv0.fiducialset.TestFiducialSetFactory;
+import test.plugins.perrine.easyclemv0.transformation.TestTransformationFactory;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.transformation.Similarity;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+
 import javax.inject.Inject;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
