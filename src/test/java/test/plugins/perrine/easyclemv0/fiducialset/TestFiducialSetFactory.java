@@ -13,7 +13,10 @@
 package test.plugins.perrine.easyclemv0.fiducialset;
 
 import Jama.Matrix;
+import org.apache.commons.math3.random.JDKRandomGenerator;
+import org.apache.commons.math3.random.RandomAdaptor;
 import org.apache.commons.math3.random.RandomDataGenerator;
+import org.apache.commons.math3.random.SynchronizedRandomGenerator;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
@@ -25,7 +28,7 @@ import java.util.List;
 
 public class TestFiducialSetFactory {
 
-    private RandomDataGenerator random = new RandomDataGenerator();
+    private SynchronizedRandomGenerator random = new SynchronizedRandomGenerator(new JDKRandomGenerator());
 
     @Inject
     public TestFiducialSetFactory() {
@@ -110,7 +113,21 @@ public class TestFiducialSetFactory {
     public FiducialSet getRandomFromTransformation(Transformation transformation, int n) {
         Dataset source = new Dataset(3);
         for(int i = 0; i < n; i++) {
-            source.addPoint(new Point(new double[]{ random.nextInt(-127,127), random.nextInt(-127,127), random.nextInt(-127,127) }));
+            source.addPoint(new Point(new double[]{ random.nextInt(255), random.nextInt(255), random.nextInt(255) }));
+        }
+        Dataset target = transformation.apply(source);
+        return new FiducialSet(source, target);
+    }
+
+    public FiducialSet getGaussianAroundCenterOfGravityFromTransformation(Transformation transformation, int n) {
+        Point centerOfGravity = new Point(new double[]{ random.nextInt(255), random.nextInt(255), random.nextInt(255) });
+        Dataset source = new Dataset(3);
+        for(int i = 0; i < n; i++) {
+            source.addPoint(
+                centerOfGravity.plus(
+                    new Point(new double[]{ random.nextGaussian() * 10, random.nextGaussian() * 10, random.nextGaussian() * 10 })
+                )
+            );
         }
         Dataset target = transformation.apply(source);
         return new FiducialSet(source, target);
@@ -123,12 +140,12 @@ public class TestFiducialSetFactory {
         return fiducialSet;
     }
 
-    private Dataset addGaussianNoise(Dataset dataset) {
+    public Dataset addGaussianNoise(Dataset dataset) {
         for(int i = 0; i < dataset.getN(); i++) {
             Point point = dataset.getPoint(i);
             double[] noiseArray = new double[point.getDimension()];
             for(int j = 0; j < noiseArray.length; j++) {
-                noiseArray[j] = random.nextGaussian(0, 1);
+                noiseArray[j] = random.nextGaussian() * 10;
             }
             Point noise = new Point(noiseArray);
             dataset.setPoint(i, point.plus(noise));

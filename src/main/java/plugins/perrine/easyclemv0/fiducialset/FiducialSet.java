@@ -13,18 +13,11 @@
 package plugins.perrine.easyclemv0.fiducialset;
 
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
-import plugins.perrine.easyclemv0.error.MahalanobisDistanceComputer;
-
-import plugins.perrine.easyclemv0.error.MahalanobisDistanceComputer;
-
-import java.util.Arrays;
 
 public class FiducialSet {
     private Dataset sourceDataset;
     private Dataset targetDataset;
     private int n;
-
-    private MahalanobisDistanceComputer mahalanobisDistanceComputer = new MahalanobisDistanceComputer();
 
     public FiducialSet(Dataset sourceDataset, Dataset targetDataset) {
         this.sourceDataset = sourceDataset;
