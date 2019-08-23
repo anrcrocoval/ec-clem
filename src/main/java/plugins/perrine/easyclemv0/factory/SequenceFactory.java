@@ -14,7 +14,10 @@ public class SequenceFactory {
     private VtkImageGridSourceFactory vtkImageGridSourceFactory = new VtkImageGridSourceFactory();
 
     public Sequence getMergeSequence(Sequence source, Sequence target) {
-        Sequence result = SequenceUtil.concatC(new Sequence[] { source, target }, false, false, null);
+    	// check Sequence type before merging (must be the same datatype)
+    	boolean rescale=false;
+    	Sequence sourceconverted= SequenceUtil.convertToType(source, target.getDataType_(), rescale);
+        Sequence result = SequenceUtil.concatC(new Sequence[] { sourceconverted, target }, false, false, null);
         result.setName("Merged");
         return result;
     }
