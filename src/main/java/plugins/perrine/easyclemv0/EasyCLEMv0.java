@@ -69,17 +69,21 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	static String[] listofRegistrationchoice = new String[] { "From Live to EM", "From Section to EM", "From Live to Section" };
 	private EzLabel versioninfo = new EzLabel("Version " + getDescriptor().getVersion());
 
-	private static String INPUT_SELECTION_RIGID = TransformationType.RIGID.name();
+	private static String INPUT_SELECTION_RIGID = TransformationType.RIGID.name() ;
 	private static String INPUT_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
 	private static String INPUT_SELECTION_AFFINE = TransformationType.AFFINE.name();
 	private static String INPUT_SELECTION_SPLINE = TransformationType.SPLINE.name();
+	private static String MESSAGE_SELECTION_RIGID = "Do not allow any scaling other than the one respecting metadata" ;
+	private static String MESSAGE_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
+	private static String MESSAGE_SELECTION_AFFINE = TransformationType.AFFINE.name();
+	private static String MESSAGE_SELECTION_SPLINE = TransformationType.SPLINE.name();
 	private EzVarText choiceinputsection = new EzVarText(
 		"I want to compute the transformation in:",
 			new String[] {
-				INPUT_SELECTION_RIGID,
-				INPUT_SELECTION_SIMILARITY,
-				INPUT_SELECTION_AFFINE,
-				INPUT_SELECTION_SPLINE
+				MESSAGE_SELECTION_RIGID,
+				MESSAGE_SELECTION_SIMILARITY,
+				MESSAGE_SELECTION_AFFINE,
+				MESSAGE_SELECTION_SPLINE
 			}, 0, false
 	);
 	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", true);
@@ -220,7 +224,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
 		workspace.setXMLFile(new File(name));
-		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(TransformationType.valueOf(choiceinputsection.getValue()), showgrid.getValue()));
+		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(TransformationType.valueOf(getchoice()), showgrid.getValue()));
 
 		guiCLEMButtons.setworkspace(workspace);
 		rigidspecificbutton.setWorkspace(workspace);
@@ -257,6 +261,17 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		sequenceListenerUtil.removeListeners(targetSequence, RoiDuplicator.class);
 		sourceSequence.removeOverlay(myoverlaysource);
 		targetSequence.removeOverlay(myoverlaytarget);
+	}
+
+	private String getchoice() {
+		if (choiceinputsection.getValue()==MESSAGE_SELECTION_RIGID ) 
+			return INPUT_SELECTION_RIGID;
+		if (choiceinputsection.getValue()==MESSAGE_SELECTION_SIMILARITY ) 
+			return INPUT_SELECTION_SIMILARITY;
+		if (choiceinputsection.getValue()==MESSAGE_SELECTION_AFFINE ) 
+			return INPUT_SELECTION_AFFINE;
+		return INPUT_SELECTION_SPLINE;
+		
 	}
 
 	private void convertTo8Bit(Sequence sequence) {
