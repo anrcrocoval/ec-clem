@@ -6,3 +6,5 @@ dependency-reduced-pom.xml
 .classpath
 .project
 .settings/
+setting.xml
+workspace 
