@@ -38,12 +38,12 @@ import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.gui.frame.progress.ToolTipFrame;
 import icy.gui.util.FontUtil;
-import icy.image.IcyBufferedImage;
+
 import icy.painter.Overlay;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
-import icy.type.DataType;
+
 import icy.type.point.Point5D;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import plugins.perrine.easyclemv0.factory.SequenceFactory;
@@ -105,6 +105,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	private GuiCLEMButtons guiCLEMButtons;
 	private GuiCLEMButtons2 rigidspecificbutton;
+	private String sourceSequenceoriname;
 
 	private class VisiblepointsOverlay extends Overlay {
 		public VisiblepointsOverlay() {
@@ -159,15 +160,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	@Override
 	protected void initialize() {
-		new ToolTipFrame("<html>" + "<br> Press Play when ready. " + "<br> <li> Add point (2D or 3D ROI) on target image only.</li> "
-				+ "<br> <li> Drag the point in Source, and RIGHT CLICK. Then add point again on target. "
-				+ "<br> <li> If you add a point on source image instead (called point2D), delete it, "
-				+ "<br> and select the ROI Point to add a point from Target</li> "
-				+ "<br> <li> You can also prepare pair of points before , "
-				+ "<br> by making sure they will have the same name in both images.</li>"
-				+ "<br> <li> Do not forget that the transformation will be automatically saved "
-				+ "<br> and that you can apply to any image with the same original or a rescaled dimension.</li>"
-				+ "<br> <li> When working in 3D mode, make sure metadata (pixel size) are correctly calibrated, see Sequence Properties.</li> "
+		new ToolTipFrame("<html>" + "<br> Press Play when ready. " + "<br> <li> Add point (2D or 3D ROI) on any image and drag it to its correct position in the other image.</li> "
+				+ "<br> <li> Use zoom and Lock views to help you!</li> "
 				+ "</html>","startmessage");
 		addEzComponent(versioninfo);
 //		prealign.setToolTipText("Volume can be turned in order to generate a new and still calibrated stack");
@@ -215,8 +209,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		if (!choiceinputsection.getValue().equals(INPUT_SELECTION_RIGID)) {
 			rigidspecificbutton.removespecificrigidbutton();
 		}
-
-		sourceSequence.setName(sourceSequence.getName() + " (transformed)");
+		
 		String name = sourceSequence.getFilename() + "_transfo.xml";
 
 		workspace = new Workspace();
@@ -229,10 +222,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		guiCLEMButtons.setworkspace(workspace);
 		rigidspecificbutton.setWorkspace(workspace);
 
-//		RoiChanged roiChangedListener = new RoiChanged(workspace.getWorkspaceState(), workspaceTransformer);
-//		sourceSequence.addListener(
-//			roiChangedListener
-//		);
 
 		sourceSequence.addListener(
 				new RoiDuplicator(targetSequence, workspace.getWorkspaceState())
@@ -246,6 +235,13 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		myoverlaytarget = new VisiblepointsOverlay();
 		sourceSequence.addOverlay(myoverlaysource);
 		targetSequence.addOverlay(myoverlaytarget);
+		MessageOverlay messageSource = new MessageOverlay("Source");
+
+		MessageOverlay messageTarget = new MessageOverlay("Target");
+
+		sourceSequence.addOverlay(messageSource);
+
+		targetSequence.addOverlay(messageTarget);
 
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
 		new AnnounceFrame("Select point on image" + targetSequence.getName() + ", then drag it on source image and RIGHT CLICK", 5);
@@ -254,8 +250,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		rigidspecificbutton.enableButtons();
 		Icy.getMainInterface().setSelectedTool(ROI3DPointPlugin.class.getName());
 		currentThread = Thread.currentThread();
-		currentThread.suspend();
-
+		currentThread.suspend(); // TODO deprecated : check" What should I use instead of Thread.suspend and Thread.resume?" in Oracle java doc
+	
 //		sourceSequence.removeListener(roiChangedListener);
 		sequenceListenerUtil.removeListeners(sourceSequence, RoiDuplicator.class);
 		sequenceListenerUtil.removeListeners(targetSequence, RoiDuplicator.class);
@@ -274,26 +270,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		
 	}
 
-	private void convertTo8Bit(Sequence sequence) {
-		Sequence tmp;
-		if (sequence.getDataType_().getBitSize() != 8) {
-			tmp = SequenceUtil.convertToType(sequence, DataType.UBYTE, true);
-			sequence.beginUpdate();
-			sequence.removeAllImages();
-			try {
-				for (int t = 0; t < tmp.getSizeT(); t++) {
-					for (int z = 0; z < tmp.getSizeZ(); z++) {
-						IcyBufferedImage image = tmp.getImage(t, z);
-						sequence.setImage(t, z, image);
-					}
-				}
-			} finally {
-				sequence.endUpdate();
-			}
-		}
-		sequence.setAutoUpdateChannelBounds(true);
-	}
-
+	
 	@Override
 	public void clean() {
 	}
@@ -312,6 +289,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		choiceinputsection.setEnabled(true);
 		showgrid.setEnabled(true);
 		rigidspecificbutton.reshowspecificrigidbutton();
-		currentThread.resume();
+		currentThread.resume(); //TODO deprecated check java doc What should I use instead of Thread.suspend and Thread.resume?
 	}
 }
