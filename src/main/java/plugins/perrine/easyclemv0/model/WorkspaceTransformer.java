@@ -78,7 +78,8 @@ public class WorkspaceTransformer {
                 }
                 MonitorTargetPoint.UpdatePoint(TREValues);
             }
-            new AnnounceFrame("TransformationSchema Updated", 5);
+            new AnnounceFrame("Transformation Updated", 5);
+            workspace.getSourceSequence().setName(workspace.getOriginalNameofSource()+ "(transformed)");
         });
     }
 
@@ -91,6 +92,7 @@ public class WorkspaceTransformer {
             restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
             roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
             workspace.setTransformationSchema(null);
+            workspace.getSourceSequence().setName(workspace.getOriginalNameofSource());
         }
     }
 
