@@ -56,7 +56,6 @@ import plugins.perrine.easyclemv0.util.SequenceListenerUtil;
 
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
-	private Thread currentThread;
 	private TransformationConfigurationFactory transformationConfigurationFactory = new TransformationConfigurationFactory();
 	private SequenceFactory sequenceFactory = new SequenceFactory();
 	private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
@@ -236,22 +235,24 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		sourceSequence.addOverlay(myoverlaysource);
 		targetSequence.addOverlay(myoverlaytarget);
 		MessageOverlay messageSource = new MessageOverlay("Source");
-
 		MessageOverlay messageTarget = new MessageOverlay("Target");
-
 		sourceSequence.addOverlay(messageSource);
-
 		targetSequence.addOverlay(messageTarget);
-
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
 		new AnnounceFrame("Select point on image" + targetSequence.getName() + ", then drag it on source image and RIGHT CLICK", 5);
 
 		guiCLEMButtons.enableButtons();
 		rigidspecificbutton.enableButtons();
 		Icy.getMainInterface().setSelectedTool(ROI3DPointPlugin.class.getName());
-		currentThread = Thread.currentThread();
-		currentThread.suspend(); // TODO deprecated : check" What should I use instead of Thread.suspend and Thread.resume?" in Oracle java doc
-	
+
+		synchronized(this) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
 //		sourceSequence.removeListener(roiChangedListener);
 		sequenceListenerUtil.removeListeners(sourceSequence, RoiDuplicator.class);
 		sequenceListenerUtil.removeListeners(targetSequence, RoiDuplicator.class);
@@ -267,7 +268,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		if (choiceinputsection.getValue()==MESSAGE_SELECTION_AFFINE ) 
 			return INPUT_SELECTION_AFFINE;
 		return INPUT_SELECTION_SPLINE;
-		
 	}
 
 	
@@ -277,11 +277,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	@Override
 	public void stopExecution() {
-
 		ThreadUtil.invokeLater(() -> new Viewer(
 				sequenceFactory.getMergeSequence(workspace.getSourceSequence(), workspace.getTargetSequence())
 		));
-
 		guiCLEMButtons.disableButtons();
 		rigidspecificbutton.disableButtons();
 		source.setEnabled(true);
@@ -289,6 +287,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		choiceinputsection.setEnabled(true);
 		showgrid.setEnabled(true);
 		rigidspecificbutton.reshowspecificrigidbutton();
-		currentThread.resume(); //TODO deprecated check java doc What should I use instead of Thread.suspend and Thread.resume?
+		synchronized(this) {
+			notify();
+		}
 	}
 }
