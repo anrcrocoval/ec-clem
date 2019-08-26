@@ -4,7 +4,7 @@ import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.painter.Overlay;
 import icy.sequence.Sequence;
-import plugins.perrine.easyclemv0.factory.DatasetFactory;
+
 import plugins.perrine.easyclemv0.factory.FiducialSetFactory;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.FiducialSet;

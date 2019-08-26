@@ -83,7 +83,7 @@ public class RoiDuplicator implements SequenceListener {
 
     }
 
-    private Class getSelectedTool(ROI roi) {
+    private Class<?> getSelectedTool(ROI roi) {
         switch (roi.getDimension()) {
             case 2 : return ROI2DPointPlugin.class;
             case 3 : return ROI3DPointPlugin.class;

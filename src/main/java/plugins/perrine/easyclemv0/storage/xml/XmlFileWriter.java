@@ -2,8 +2,6 @@ package plugins.perrine.easyclemv0.storage.xml;
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.io.File;
 

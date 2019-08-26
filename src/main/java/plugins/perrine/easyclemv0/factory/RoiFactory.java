@@ -1,7 +1,7 @@
 package plugins.perrine.easyclemv0.factory;
 
 import icy.roi.ROI;
-import icy.sequence.Sequence;
+
 import icy.type.point.Point5D;
 import plugins.kernel.roi.roi2d.ROI2DPoint;
 import plugins.kernel.roi.roi3d.ROI3DPoint;

@@ -12,7 +12,14 @@ import java.util.List;
 
 public class ClearLandmarksButton extends JButton {
 
-    private Workspace workspace;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1095959148116159518L;
+
+
+
+	private Workspace workspace;
 
     public ClearLandmarksButton() {
         super("Clear all landmarks points");

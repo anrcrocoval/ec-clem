@@ -15,7 +15,11 @@ import java.util.List;
 
 public class UndoButton extends JButton {
 
-    private Workspace workspace;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Workspace workspace;
     private DatasetFactory datasetFactory = new DatasetFactory();
     private RoiUpdater roiUpdater = new RoiUpdater();
     private WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer();

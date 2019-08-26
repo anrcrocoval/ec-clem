@@ -3,7 +3,7 @@ package plugins.perrine.easyclemv0.util;
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 
-import java.math.BigDecimal;
+
 
 public class MatrixUtil {
 

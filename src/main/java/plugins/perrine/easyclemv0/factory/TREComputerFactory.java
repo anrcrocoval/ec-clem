@@ -7,7 +7,7 @@ import plugins.perrine.easyclemv0.error.FREComputer;
 import plugins.perrine.easyclemv0.error.TREComputer;
 import plugins.perrine.easyclemv0.inertia.InertiaMatrixComputer;
 import plugins.perrine.easyclemv0.model.Dataset;
-import plugins.perrine.easyclemv0.model.FiducialSet;
+
 import plugins.perrine.easyclemv0.model.TransformationSchema;
 import plugins.perrine.easyclemv0.model.Workspace;
 

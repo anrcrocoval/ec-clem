@@ -32,7 +32,7 @@ import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
 import plugins.adufour.ezplug.EzVarSequence;
 import plugins.adufour.vars.lang.VarROIArray;
-import plugins.adufour.vars.lang.VarSequence;
+
 
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;

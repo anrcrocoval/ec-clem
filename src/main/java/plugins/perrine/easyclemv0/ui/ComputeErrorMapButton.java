@@ -4,7 +4,7 @@ import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import plugins.perrine.easyclemv0.TargetRegistrationErrorMap;
 import plugins.perrine.easyclemv0.error.TREComputer;
-import plugins.perrine.easyclemv0.factory.DatasetFactory;
+
 import plugins.perrine.easyclemv0.factory.TREComputerFactory;
 import plugins.perrine.easyclemv0.model.Workspace;
 
@@ -12,7 +12,11 @@ import javax.swing.*;
 
 public class ComputeErrorMapButton extends JButton {
 
-    private Workspace workspace;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Workspace workspace;
     private TREComputer treComputer;
     private TREComputerFactory treComputerFactory = new TREComputerFactory();
 

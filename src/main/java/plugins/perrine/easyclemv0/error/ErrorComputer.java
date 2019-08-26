@@ -4,7 +4,7 @@ import Jama.Matrix;
 import plugins.perrine.easyclemv0.factory.TransformationFactory;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.TransformationSchema;
-import plugins.perrine.easyclemv0.model.transformation.AffineTransformation;
+
 import plugins.perrine.easyclemv0.model.transformation.Similarity;
 import plugins.perrine.easyclemv0.model.transformation.SplineTransformation;
 import plugins.perrine.easyclemv0.model.transformation.Transformation;

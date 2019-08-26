@@ -1,7 +1,7 @@
 package plugins.perrine.easyclemv0.factory;
 
 import Jama.Matrix;
-import icy.roi.ROI;
+
 import icy.sequence.Sequence;
 import plugins.perrine.easyclemv0.model.Dataset;
 import plugins.perrine.easyclemv0.model.Point;
@@ -79,10 +79,5 @@ public class DatasetFactory {
         return new Dataset(M);
     }
 
-    private void convertAllROI(Sequence sequence) {
-        ArrayList<ROI> roiList = sequence.getROIs();
-        roiProcessor.convert(roiList);
-        sequence.removeAllROI();
-        sequence.addROIs(roiList, false);
-    }
+   
 }

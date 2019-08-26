@@ -11,7 +11,11 @@ import javax.swing.*;
 
 public class MonitorTargetPointButton extends JButton {
 
-    private Workspace workspace;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Workspace workspace;
 
     public MonitorTargetPointButton() {
         super("Monitor a target point ");

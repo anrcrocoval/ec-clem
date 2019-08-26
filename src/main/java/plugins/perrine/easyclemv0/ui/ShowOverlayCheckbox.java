@@ -2,14 +2,18 @@ package plugins.perrine.easyclemv0.ui;
 
 import icy.painter.Overlay;
 import plugins.perrine.easyclemv0.model.Workspace;
-import plugins.perrine.easyclemv0.overlay.ErrorInPositionOverlay;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class ShowOverlayCheckbox extends JCheckBox {
 
-    private Workspace workspace;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Workspace workspace;
     private Overlay overlay;
 
     public ShowOverlayCheckbox(Overlay overlay, String text, String tooltip) {

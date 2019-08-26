@@ -32,7 +32,7 @@ import java.util.Random;
 import javax.swing.JPanel;
 
 
-import Jama.Matrix;
+
 import icy.gui.frame.IcyFrame;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.gui.frame.progress.ProgressFrame;
@@ -43,7 +43,7 @@ import icy.roi.ROI;
 
 import icy.sequence.Sequence;
 
-import icy.type.point.Point5D;
+
 
 import plugins.adufour.ezplug.EzLabel;
 import plugins.adufour.ezplug.EzPlug;
@@ -190,15 +190,7 @@ public class StudyLandmarksConfagainstN extends EzPlug implements EzStoppable {
 
 
 
-	private void CreateSourcePoint(Point5D centerpoint, int radius, int n) {
-		this.sourcepoints = new double[n][3];
-		for (int i = 0; i < n; i++) {
-			sourcepoints[i][0]=(centerpoint.getX()*source.getValue().getPixelSizeX()*1000+(generator.nextGaussian() * (radius/3)));
-			sourcepoints[i][1]=(centerpoint.getY()*source.getValue().getPixelSizeY()*1000+(generator.nextGaussian() * (radius/3)));
-			sourcepoints[i][2]=0.0;
-		}
-	}
-
+	
 	private void DisplayPointRois(double[][] sourcepoints2) {
 		double sizex=source.getValue().getPixelSizeX()*1000;// in nm
 		double sizez=source.getValue().getPixelSizeZ()*1000;

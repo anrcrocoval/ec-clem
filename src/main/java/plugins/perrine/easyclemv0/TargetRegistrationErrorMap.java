@@ -24,34 +24,34 @@ import icy.image.colormap.FireColorMap;
 
 import icy.image.lut.LUT;
 
-import icy.roi.ROI;
+
 
 import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;
-import icy.type.point.Point5D;
-//import ij.plugin.filter.LutViewer;
 
-import java.util.ArrayList;
+
+
+
 import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.Map;
 import java.util.concurrent.*;
 
 
-//import plugins.kernel.roi.roi2d.ROI2DEllipse;
-import Jama.Matrix;
-import org.apache.commons.math3.util.CombinatoricsUtils;
-import plugins.kernel.roi.descriptor.measure.ROIMassCenterDescriptorsPlugin;
+
+
+
+
 //import icy.main.Icy;
 //import icy.math.Scaler;
 import plugins.perrine.easyclemv0.error.TREComputer;
 import plugins.perrine.easyclemv0.factory.SequenceSizeFactory;
-import plugins.perrine.easyclemv0.factory.TREComputerFactory;
-import plugins.perrine.easyclemv0.inertia.InertiaMatrixComputer;
-import plugins.perrine.easyclemv0.model.Dataset;
+
+
+
 import plugins.perrine.easyclemv0.model.Point;
 import plugins.perrine.easyclemv0.model.SequenceSize;
-import plugins.perrine.easyclemv0.roi.RoiProcessor;
+
 import plugins.stef.tools.overlay.ColorBarOverlay;
 /** author: Perrine.paul-gilloteaux@curie.fr
  * purpose: Compute TRE in each image points from FLE fiducial localisation error

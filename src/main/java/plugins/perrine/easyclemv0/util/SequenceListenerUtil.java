@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class SequenceListenerUtil {
 
-    public List<SequenceListener> removeListeners(Sequence sequence, Class listenerClass) {
+    public List<SequenceListener> removeListeners(Sequence sequence, Class<?> listenerClass) {
         List<SequenceListener> listeners = Arrays.stream(sequence.getListeners()).filter(
                 (listener) -> listenerClass.isAssignableFrom(listener.getClass())
         ).collect(Collectors.toList());
