@@ -30,7 +30,7 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 
 	private vtkImageReslice imageReslice;
 	private Sequence sequence;
-	private vtkDataSet[] imageData;
+	private vtkPointData[] imageData;
 	private int extentx;
 	private int extenty;
 	private int extentz;
@@ -85,11 +85,14 @@ public class Stack3DVTKTransformer implements ImageTransformer {
 		imageReslice.SetResliceTransform(mytransfo);
 		imageReslice.SetInterpolationModeToLinear();
 
-		imageData = new vtkDataSet[sequence.getSizeC()];
+		imageData = new vtkPointData[sequence.getSizeC()];
 		for (int c = 0; c < sequence.getSizeC(); c++) {
 			imageReslice.SetInputData(converttoVtkImageData(c));
+			imageReslice.Modified();
 			imageReslice.Update();
-			imageData[c] = imageReslice.GetOutput();
+			vtkImageData copy = new vtkImageData();
+			copy.DeepCopy(imageReslice.GetOutput());
+			imageData[c] = copy.GetPointData();
 		}
 
 		sequence = sequenceFactory.getFrom(sequence, imageData, extentx, extenty, extentz, sequence.getSizeT(), spacingx, spacingy, spacingz);
