@@ -10,12 +10,10 @@
  * (at your option) any later version.
  *
  **/
-package test.plugins.perrine.easyclemv0.fiducialset;
+package fixtures.fiducialset;
 
 import Jama.Matrix;
 import org.apache.commons.math3.random.JDKRandomGenerator;
-import org.apache.commons.math3.random.RandomAdaptor;
-import org.apache.commons.math3.random.RandomDataGenerator;
 import org.apache.commons.math3.random.SynchronizedRandomGenerator;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;

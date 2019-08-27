@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package test.plugins.perrine.easyclemv0.transformation.schema;
+package fixtures.transformation.schema;
 
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.sequence.SequenceSize;

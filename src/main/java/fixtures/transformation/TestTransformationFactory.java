@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package test.plugins.perrine.easyclemv0.transformation;
+package fixtures.transformation;
 
 import Jama.Matrix;
 import plugins.perrine.easyclemv0.transformation.Similarity;

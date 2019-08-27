@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.univ-nantes</groupId>
-    <artifactId>ec-clem</artifactId>
+    <artifactId>ec_clem</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

@@ -13,9 +13,10 @@
 package test.plugins.perrine.easyclemv0;
 
 import Jama.Matrix;
+import fixtures.fiducialset.TestFiducialSetFactory;
+import fixtures.transformation.TestTransformationFactory;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.Variance;
-import org.apache.commons.math3.util.Pair;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import plugins.perrine.easyclemv0.error.*;
@@ -25,8 +26,6 @@ import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 import plugins.perrine.easyclemv0.registration.AffineTransformationComputer;
 import plugins.perrine.easyclemv0.registration.TLSAffineTransformationComputer;
 import plugins.perrine.easyclemv0.transformation.AffineTransformation;
-import test.plugins.perrine.easyclemv0.fiducialset.TestFiducialSetFactory;
-import test.plugins.perrine.easyclemv0.transformation.TestTransformationFactory;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationType;
 import plugins.perrine.easyclemv0.transformation.Similarity;
