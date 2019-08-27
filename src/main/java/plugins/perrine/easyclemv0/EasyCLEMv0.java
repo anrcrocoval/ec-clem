@@ -20,7 +20,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.util.ArrayList;
-
 import icy.gui.viewer.Viewer;
 import icy.main.Icy;
 import icy.system.thread.ThreadUtil;
@@ -38,12 +37,10 @@ import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.gui.frame.progress.ToolTipFrame;
 import icy.gui.util.FontUtil;
-
 import icy.painter.Overlay;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
-
 import icy.type.point.Point5D;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import plugins.perrine.easyclemv0.factory.SequenceFactory;
@@ -68,11 +65,11 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	static String[] listofRegistrationchoice = new String[] { "From Live to EM", "From Section to EM", "From Live to Section" };
 	private EzLabel versioninfo = new EzLabel("Version " + getDescriptor().getVersion());
 
-	private static String INPUT_SELECTION_RIGID = TransformationType.RIGID.name() ;
+	private static String INPUT_SELECTION_RIGID = TransformationType.RIGID.name();
 	private static String INPUT_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
 	private static String INPUT_SELECTION_AFFINE = TransformationType.AFFINE.name();
 	private static String INPUT_SELECTION_SPLINE = TransformationType.SPLINE.name();
-	private static String MESSAGE_SELECTION_RIGID = "Do not allow any scaling other than the one respecting metadata" ;
+	private static String MESSAGE_SELECTION_RIGID = "Do not allow any scaling other than the one respecting metadata";
 	private static String MESSAGE_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
 	private static String MESSAGE_SELECTION_AFFINE = TransformationType.AFFINE.name();
 	private static String MESSAGE_SELECTION_SPLINE = TransformationType.SPLINE.name();
@@ -104,7 +101,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	private GuiCLEMButtons guiCLEMButtons;
 	private GuiCLEMButtons2 rigidspecificbutton;
-	private String sourceSequenceoriname;
 
 	private class VisiblepointsOverlay extends Overlay {
 		public VisiblepointsOverlay() {
@@ -261,15 +257,14 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	}
 
 	private String getchoice() {
-		if (choiceinputsection.getValue()==MESSAGE_SELECTION_RIGID ) 
+		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_RIGID))
 			return INPUT_SELECTION_RIGID;
-		if (choiceinputsection.getValue()==MESSAGE_SELECTION_SIMILARITY ) 
+		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_SIMILARITY))
 			return INPUT_SELECTION_SIMILARITY;
-		if (choiceinputsection.getValue()==MESSAGE_SELECTION_AFFINE ) 
+		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_AFFINE))
 			return INPUT_SELECTION_AFFINE;
 		return INPUT_SELECTION_SPLINE;
 	}
-
 	
 	@Override
 	public void clean() {
