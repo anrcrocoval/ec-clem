@@ -18,15 +18,11 @@ import plugins.perrine.easyclemv0.error.fitzpatrick.TargetRegistrationErrorMap;
 import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputer;
 import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
 import plugins.perrine.easyclemv0.workspace.Workspace;
-
 import javax.inject.Inject;
 import javax.swing.*;
 
 public class ComputeErrorMapButton extends JButton {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
     private TREComputer treComputer;

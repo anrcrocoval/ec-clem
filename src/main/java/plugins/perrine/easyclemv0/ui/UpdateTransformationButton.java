@@ -19,7 +19,7 @@ import javax.swing.*;
 
 public class UpdateTransformationButton extends JButton {
 
-	private static final long serialVersionUID = 1L; //to avoid warning
+	private static final long serialVersionUID = 1L;
     private WorkspaceTransformer workspaceTransformer;
     private Workspace workspace;
 

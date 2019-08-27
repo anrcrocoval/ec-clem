@@ -60,9 +60,11 @@ public class Workspace {
     public void setSourceBackup(Sequence sourceBackup) {
         this.sourceBackup = sourceBackup;
     }
+
     public String getOriginalNameofSource () {
         return this.sourceBackup.getName();
     }
+
     public Sequence getTargetSequence() {
         return targetSequence;
     }

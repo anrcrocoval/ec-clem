@@ -25,7 +25,6 @@ import plugins.perrine.easyclemv0.workspace.Workspace;
 public class GuiCLEMButtons extends JPanel {
 
     private static final long serialVersionUID = 1L;
-
     private UpdateTransformationButton updateTransformationButton;
     private ClearLandmarksButton clearLandmarksButton;
     private UndoButton undoButton;
