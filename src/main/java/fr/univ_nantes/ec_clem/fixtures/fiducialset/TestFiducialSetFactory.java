@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package fixtures.fiducialset;
+package fr.univ_nantes.ec_clem.fixtures.fiducialset;
 
 import Jama.Matrix;
 import org.apache.commons.math3.random.JDKRandomGenerator;

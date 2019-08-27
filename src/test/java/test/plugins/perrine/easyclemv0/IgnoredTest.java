@@ -13,8 +13,8 @@
 package test.plugins.perrine.easyclemv0;
 
 import Jama.Matrix;
-import fixtures.fiducialset.TestFiducialSetFactory;
-import fixtures.transformation.TestTransformationFactory;
+import fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
+import fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.Variance;
 import org.junit.jupiter.api.Disabled;

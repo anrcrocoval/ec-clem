@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package fixtures.transformation.schema;
+package fr.univ_nantes.ec_clem.fixtures.transformation.schema;
 
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.sequence.SequenceSize;
