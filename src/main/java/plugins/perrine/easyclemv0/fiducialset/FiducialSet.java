@@ -14,7 +14,7 @@ package plugins.perrine.easyclemv0.fiducialset;
 
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 
-public class FiducialSet {
+public class FiducialSet implements Cloneable {
     private Dataset sourceDataset;
     private Dataset targetDataset;
     private int n;
@@ -26,6 +26,25 @@ public class FiducialSet {
             throw new RuntimeException("sourceDataset and targetDataset do not have the same number of points");
         }
         n = sourceDataset.getN();
+    }
+
+    @Override
+    public FiducialSet clone() {
+        FiducialSet clone = null;
+        try {
+            clone = (FiducialSet) super.clone();
+            clone.sourceDataset = sourceDataset.clone();
+            clone.targetDataset = targetDataset.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return clone;
+    }
+
+    public void remove(int i) {
+        sourceDataset.removePoint(i);
+        targetDataset.removePoint(i);
+        n--;
     }
 
     public Dataset getSourceDataset() {

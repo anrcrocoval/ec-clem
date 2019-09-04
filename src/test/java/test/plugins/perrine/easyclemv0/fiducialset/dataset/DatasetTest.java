@@ -65,4 +65,11 @@ class DatasetTest {
         double meanNorm = subjectUnderTest.getMeanNorm();
         assertEquals(8.815, meanNorm, 0.0001);
     }
+
+    @Test
+    void testClone() {
+        Dataset clone = subjectUnderTest.clone();
+        assertTrue(clone != subjectUnderTest);
+        assertTrue(clone.getClass() == subjectUnderTest.getClass());
+    }
 }

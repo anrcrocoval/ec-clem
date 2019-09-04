@@ -10,12 +10,10 @@
  * (at your option) any later version.
  *
  **/
-package test.plugins.perrine.easyclemv0.fiducialset;
+package fr.univ_nantes.ec_clem.fixtures.fiducialset;
 
 import Jama.Matrix;
 import org.apache.commons.math3.random.JDKRandomGenerator;
-import org.apache.commons.math3.random.RandomAdaptor;
-import org.apache.commons.math3.random.RandomDataGenerator;
 import org.apache.commons.math3.random.SynchronizedRandomGenerator;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
@@ -133,19 +131,19 @@ public class TestFiducialSetFactory {
         return new FiducialSet(source, target);
     }
 
-    public FiducialSet getRandomAndNoisyFromTransformation(Transformation transformation, int n) {
+    public FiducialSet getRandomAndNoisyFromTransformation(Transformation transformation, int n, float var) {
         FiducialSet fiducialSet = getRandomFromTransformation(transformation, n);
-        addGaussianNoise(fiducialSet.getSourceDataset());
-        addGaussianNoise(fiducialSet.getTargetDataset());
+        addGaussianNoise(fiducialSet.getSourceDataset(), var);
+        addGaussianNoise(fiducialSet.getTargetDataset(), var);
         return fiducialSet;
     }
 
-    public Dataset addGaussianNoise(Dataset dataset) {
+    public Dataset addGaussianNoise(Dataset dataset, float var) {
         for(int i = 0; i < dataset.getN(); i++) {
             Point point = dataset.getPoint(i);
             double[] noiseArray = new double[point.getDimension()];
             for(int j = 0; j < noiseArray.length; j++) {
-                noiseArray[j] = random.nextGaussian() * 10;
+                noiseArray[j] = random.nextGaussian() * var;
             }
             Point noise = new Point(noiseArray);
             dataset.setPoint(i, point.plus(noise));

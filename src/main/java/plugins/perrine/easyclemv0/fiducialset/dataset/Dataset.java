@@ -17,6 +17,7 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static java.lang.Math.sqrt;
@@ -58,7 +59,15 @@ public class Dataset implements Cloneable {
 
     @Override
     public Dataset clone() {
-        return new Dataset(points.copy());
+        Dataset clone = null;
+        try {
+            clone = (Dataset) super.clone();
+            clone.points = points.copy();
+            clone.mean = mean.copy();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return clone;
     }
 
     public Point getBarycentre() {
