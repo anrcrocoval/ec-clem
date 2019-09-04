@@ -131,19 +131,19 @@ public class TestFiducialSetFactory {
         return new FiducialSet(source, target);
     }
 
-    public FiducialSet getRandomAndNoisyFromTransformation(Transformation transformation, int n) {
+    public FiducialSet getRandomAndNoisyFromTransformation(Transformation transformation, int n, float var) {
         FiducialSet fiducialSet = getRandomFromTransformation(transformation, n);
-        addGaussianNoise(fiducialSet.getSourceDataset());
-        addGaussianNoise(fiducialSet.getTargetDataset());
+        addGaussianNoise(fiducialSet.getSourceDataset(), var);
+        addGaussianNoise(fiducialSet.getTargetDataset(), var);
         return fiducialSet;
     }
 
-    public Dataset addGaussianNoise(Dataset dataset) {
+    public Dataset addGaussianNoise(Dataset dataset, float var) {
         for(int i = 0; i < dataset.getN(); i++) {
             Point point = dataset.getPoint(i);
             double[] noiseArray = new double[point.getDimension()];
             for(int j = 0; j < noiseArray.length; j++) {
-                noiseArray[j] = random.nextGaussian() * 10;
+                noiseArray[j] = random.nextGaussian() * var;
             }
             Point noise = new Point(noiseArray);
             dataset.setPoint(i, point.plus(noise));

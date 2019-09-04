@@ -115,7 +115,7 @@ class IgnoredTest {
                                 randomFromTransformationFiducialSet.getTargetDataset().clone()
                         );
                         testFiducialSetFactory.addGaussianNoise(
-                                currentFiducialSet.getTargetDataset()
+                                currentFiducialSet.getTargetDataset(), 10
                         );
                         Point targetRemovedPoint = currentFiducialSet.getTargetDataset().removePoint(0);
                         Point sourceRemovedPoint = currentFiducialSet.getSourceDataset().removePoint(0);
@@ -174,7 +174,7 @@ class IgnoredTest {
         int n = 15;
         Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n);
+        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, 10);
         AffineTransformation compute = affineTransformationComputer.compute(randomFromTransformationFiducialSet);
         Dataset error = new Dataset(randomFromTransformationFiducialSet.getTargetDataset().getMatrix().minus(
                 compute.apply(randomFromTransformationFiducialSet.getSourceDataset()).getMatrix()
@@ -189,7 +189,7 @@ class IgnoredTest {
         int n = 15;
         Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n);
+        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, 10);
 
         Dataset error = new Dataset(3);
 
@@ -223,7 +223,7 @@ class IgnoredTest {
         int n = 15;
         Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n);
+        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, 10);
         tlsAffineTransformationComputer.compute(randomFromTransformationFiducialSet);
     }
 
@@ -233,7 +233,7 @@ class IgnoredTest {
         int n = 15;
         Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n);
+        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, 10);
 
         Similarity leastSquareEstimate = rigidTransformationComputer.compute(randomFromTransformationFiducialSet);
         KalmanFilterState kalmanFilterState = new KalmanFilterState(leastSquareEstimate.getMatrixRight(), Matrix.identity(12, 12));
@@ -254,7 +254,7 @@ class IgnoredTest {
         simpleRotationTransformation.getMatrixRight().print(1,5);
         Matrix M = new Matrix(n, 12);
         for(int i = 0; i < n; i++) {
-            FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, nFiducial);
+            FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, nFiducial, 10);
             Similarity computedTransformation = rigidTransformationComputer.compute(randomFromTransformationFiducialSet);
 
             for(int u = 0; u < computedTransformation.getR().getRowDimension(); u++) {
@@ -279,7 +279,7 @@ class IgnoredTest {
         covariance.print(1,5);
 
         Matrix covarianceEstimate = errorComputer.getCovarianceEstimate(new TransformationSchema(
-                testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, nFiducial),
+                testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, nFiducial, 10),
                 TransformationType.RIGID,
                 null,
                 null
