@@ -22,6 +22,9 @@ import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetFactory;
 import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputer;
+import plugins.perrine.easyclemv0.progress.MasterProgressReport;
+import plugins.perrine.easyclemv0.progress.ProgressReport;
+import plugins.perrine.easyclemv0.progress.ProgressTrackable;
 import plugins.perrine.easyclemv0.sequence.SequenceUpdater;
 import plugins.perrine.easyclemv0.sequence.SequenceFactory;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchemaFactory;
@@ -35,7 +38,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class WorkspaceTransformer {
+public class WorkspaceTransformer implements ProgressTrackable {
 
     private SequenceUpdater sequenceUpdater;
     private ExecutorService executorService;
@@ -44,6 +47,13 @@ public class WorkspaceTransformer {
     private RoiUpdater roiUpdater;
     private SequenceFactory sequenceFactory;
     private DatasetFactory datasetFactory;
+
+    private List<Integer> listofNvalues = new ArrayList<>();
+    private List<Double> listoftrevalues = new ArrayList<>();
+    private XmlFileWriter xmlFileWriter;
+    private XmlTransformationWriter xmlWriter;
+
+    private ProgressReport progressReport;
 
     @Inject
     public WorkspaceTransformer(SequenceUpdater sequenceUpdater , TransformationSchemaFactory transformationSchemaFactory, TREComputerFactory treComputerFactory, RoiUpdater roiUpdater, SequenceFactory sequenceFactory, DatasetFactory datasetFactory) {
@@ -56,13 +66,14 @@ public class WorkspaceTransformer {
         this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
-    private List<Integer> listofNvalues = new ArrayList<>();
-    private List<Double> listoftrevalues = new ArrayList<>();
-    private XmlFileWriter xmlFileWriter;
-    private XmlTransformationWriter xmlWriter;
+    @Override
+    public ProgressReport getProgress() {
+        return null;
+    }
 
     public void apply(Workspace workspace) {
         executorService.submit(() -> {
+            progressReport = new MasterProgressReport();
             resetToOriginalImage(workspace);
             workspace.setTransformationSchema(transformationSchemaFactory.getFrom(workspace));
             if(workspace.getTransformationConfiguration().isShowGrid()) {

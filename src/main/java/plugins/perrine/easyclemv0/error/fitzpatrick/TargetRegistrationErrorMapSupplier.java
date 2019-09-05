@@ -12,58 +12,55 @@
  **/
 package plugins.perrine.easyclemv0.error.fitzpatrick;
 
-import icy.gui.frame.progress.ProgressFrame;
 import icy.image.IcyBufferedImage;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.*;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+import plugins.perrine.easyclemv0.progress.ProgressReport;
+import plugins.perrine.easyclemv0.progress.SlaveProgressReport;
+import plugins.perrine.easyclemv0.progress.ProgressTrackable;
 import plugins.perrine.easyclemv0.sequence.SequenceFactory;
 import plugins.perrine.easyclemv0.sequence.SequenceSize;
 import plugins.stef.tools.overlay.ColorBarOverlay;
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.*;
+import java.util.function.Supplier;
 
-public class TargetRegistrationErrorMap  {
+public class TargetRegistrationErrorMapSupplier implements Supplier<Sequence>, ProgressTrackable {
 
-    private ProgressFrame myprogressbar;
     private SequenceFactory sequenceFactory;
+    private SequenceSize sequenceSize;
+    private TREComputer treComputer;
+    private SlaveProgressReport slaveProgressReport;
 
     private CompletionService<IcyBufferedImage> completionService = new ExecutorCompletionService<>(
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     );
 
+    public TargetRegistrationErrorMapSupplier(SequenceSize sequenceSize, TREComputer treComputer) {
+        DaggerTargetRegistrationErrorMapSupplierComponent.builder().build().inject(this);
+        this.sequenceSize = sequenceSize;
+        this.treComputer = treComputer;
+        slaveProgressReport = new SlaveProgressReport(sequenceSize.get(DimensionId.Z).getSize());
+    }
+
     @Inject
-    public TargetRegistrationErrorMap(SequenceFactory sequenceFactory) {
+    public void setSequenceFactory(SequenceFactory sequenceFactory) {
         this.sequenceFactory = sequenceFactory;
     }
 
-    public CompletableFuture<Sequence> run(SequenceSize sequenceSize, TREComputer treComputer) {
-//        myprogressbar = new ProgressFrame("EasyCLEM is computing Error Map");
-//        myprogressbar.setLength(sequenceSize.get(DimensionId.Z).getSize());
-//        myprogressbar.setPosition(0);
-//        myprogressbar.setMessage("EasyCLEM is computing Error Map");
-
-        CompletableFuture<Sequence> completableFuture = CompletableFuture.supplyAsync(
-            () -> {
-                Sequence TREMAP = ComputeTREMAP(sequenceSize, treComputer);
-                TREMAP.setAutoUpdateChannelBounds(false);
-                TREMAP.endUpdate();
-                TREMAP.setName("Prediction of registration only error in nanometers (if calibration settings were correct)");
-                ColorBarOverlay mycolorbar = new ColorBarOverlay(null);
-                mycolorbar.setDisplayMinMax(true);
-                TREMAP.addOverlay(mycolorbar);
-                return TREMAP;
-            }
-        );
-
-        return completableFuture;
+    @Override
+    public ProgressReport getProgress() {
+        return slaveProgressReport.clone();
     }
 
-    private Sequence ComputeTREMAP(SequenceSize sequenceSize, TREComputer treComputer) {
+    @Override
+    public Sequence get() {
         Map<Future<IcyBufferedImage>, Integer> resultMap = new HashMap<>();
         Sequence newSequence = sequenceFactory.getFrom(sequenceSize);
+        newSequence.beginUpdate();
         for (int z = 0; z < sequenceSize.get(DimensionId.Z).getSize(); z++) {
             final double finalz = z;
             Point point = new Point(sequenceSize.getN());
@@ -74,7 +71,7 @@ public class TargetRegistrationErrorMap  {
                         point.getMatrix().set(0, 0, x * sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer());
                         point.getMatrix().set(1, 0, y * sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer());
                         point.getMatrix().set(2, 0, finalz * sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer());
-                        dataArray[(y * sequenceSize.get(DimensionId.Y).getSize()) + x] = (float) treComputer.getExpectedSquareTRE(point);
+                        dataArray[(y * sequenceSize.get(DimensionId.X).getSize()) + x] = (float) treComputer.getExpectedSquareTRE(point);
                     }
                 }
 
@@ -87,13 +84,18 @@ public class TargetRegistrationErrorMap  {
                 Future<IcyBufferedImage> take = completionService.take();
                 int offset = resultMap.remove(take);
                 newSequence.setImage(0, offset, take.get());
-//                myprogressbar.incPosition();
+                slaveProgressReport.incrementCompleted();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-//            myprogressbar.close();
         }
 
+        newSequence.setAutoUpdateChannelBounds(false);
+        newSequence.setName("Prediction of registration only error in nanometers (if calibration settings were correct)");
+        ColorBarOverlay mycolorbar = new ColorBarOverlay(null);
+        mycolorbar.setDisplayMinMax(true);
+        newSequence.addOverlay(mycolorbar);
+        newSequence.endUpdate();
         return newSequence;
     }
 }

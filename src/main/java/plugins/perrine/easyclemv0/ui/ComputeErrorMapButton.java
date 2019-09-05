@@ -17,24 +17,33 @@ import icy.gui.frame.progress.AnnounceFrame;
 import icy.gui.viewer.Viewer;
 import icy.image.colormap.FireColorMap;
 import icy.system.thread.ThreadUtil;
-import plugins.perrine.easyclemv0.error.fitzpatrick.TargetRegistrationErrorMap;
+import plugins.perrine.easyclemv0.error.fitzpatrick.TargetRegistrationErrorMapFactory;
 import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
+import plugins.perrine.easyclemv0.error.fitzpatrick.TargetRegistrationErrorMapSupplier;
+import plugins.perrine.easyclemv0.progress.MasterProgressReport;
 import plugins.perrine.easyclemv0.workspace.Workspace;
 import javax.inject.Inject;
 import javax.swing.*;
+import java.util.concurrent.CompletableFuture;
 
 public class ComputeErrorMapButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
     private TREComputerFactory treComputerFactory;
-    private TargetRegistrationErrorMap targetRegistrationErrorMap;
+    private TargetRegistrationErrorMapFactory targetRegistrationErrorMapFactory;
+    private ProgressBarManager progressBarManager;
 
     @Inject
-    public ComputeErrorMapButton(TREComputerFactory treComputerFactory, TargetRegistrationErrorMap targetRegistrationErrorMap) {
+    public ComputeErrorMapButton(
+            TREComputerFactory treComputerFactory,
+            TargetRegistrationErrorMapFactory targetRegistrationErrorMapFactory,
+            ProgressBarManager progressBarManager
+    ) {
         super("Compute the whole predicted error map ");
         this.treComputerFactory = treComputerFactory;
-        this.targetRegistrationErrorMap = targetRegistrationErrorMap;
+        this.targetRegistrationErrorMapFactory = targetRegistrationErrorMapFactory;
+        this.progressBarManager = progressBarManager;
         setToolTipText(" This will compute a new image were each pixel value stands for the statistical registration error (called Target Registration Error");
         addActionListener((arg0) -> action());
     }
@@ -48,15 +57,19 @@ public class ComputeErrorMapButton extends JButton {
             if (workspace.getSourceSequence().getROIs().size() < 3) {
                 new AnnounceFrame("Without at least 3 ROI points, the error map does not have any meaning. Please add points.",5);
             } else {
-                targetRegistrationErrorMap.run(
-                    workspace.getTransformationSchema().getTargetSize(),
-                    treComputerFactory.getFrom(workspace)
-                ).thenAccept(sequence -> ThreadUtil.invokeLater(() -> {
-                    Viewer viewer = new Viewer(sequence);
-                    viewer.getLut()
-                        .getLutChannel(0)
-                        .setColorMap(new FireColorMap(), false);
-                }));
+                TargetRegistrationErrorMapSupplier targetRegistrationErrorMapSupplier = targetRegistrationErrorMapFactory.getFrom(
+                        workspace.getTransformationSchema().getTargetSize(),
+                        treComputerFactory.getFrom(workspace)
+                );
+                progressBarManager.subscribe(new MasterProgressReport().add(targetRegistrationErrorMapSupplier));
+                CompletableFuture
+                    .supplyAsync(targetRegistrationErrorMapSupplier)
+                    .thenAccept(sequence -> ThreadUtil.invokeLater(() -> {
+                        Viewer viewer = new Viewer(sequence);
+                        viewer.getLut()
+                            .getLutChannel(0)
+                            .setColorMap(new FireColorMap(), false);
+                    }));
             }
         } else {
             MessageDialog.showDialog("Source and target were closed. Please open one of them and try again");
