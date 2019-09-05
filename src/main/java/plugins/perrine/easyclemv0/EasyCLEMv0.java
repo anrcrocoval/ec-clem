@@ -104,7 +104,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	}
 
 	private Workspace workspace;
-	private Thread currentThread;
 	private Overlay myoverlaysource;
 	private Overlay myoverlaytarget;
 
@@ -242,7 +241,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		choiceinputsection.setEnabled(false);
 		showgrid.setEnabled(false);
 
-		if (!choiceinputsection.getValue().equals(INPUT_SELECTION_RIGID)) {
+		if (!getchoice().equals(INPUT_SELECTION_RIGID)) {
 			rigidspecificbutton.removespecificrigidbutton();
 		}
 

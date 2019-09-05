@@ -88,6 +88,21 @@ public class SequenceFactory {
         return sequence;
     }
 
+    public Sequence getFrom(SequenceSize sequenceSize) {
+        Sequence newSequence = new Sequence();
+        for(DimensionSize dimensionSize : sequenceSize.getDimensions()) {
+            switch(dimensionSize.getDimensionId()) {
+                case X: newSequence.setPixelSizeX(dimensionSize.getPixelSizeInMicrometer());
+                    break;
+                case Y: newSequence.setPixelSizeY(dimensionSize.getPixelSizeInMicrometer());
+                    break;
+                case Z: newSequence.setPixelSizeZ(dimensionSize.getPixelSizeInMicrometer());
+                    break;
+            }
+        }
+        return newSequence;
+    }
+
     private Object getPrimitiveArray(DataType datatype, vtkDataArray dataArray) {
         switch(datatype) {
             case UBYTE:

@@ -12,119 +12,73 @@
  **/
 package plugins.perrine.easyclemv0.error.fitzpatrick;
 
-import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.ProgressFrame;
-import icy.gui.viewer.Viewer;
 import icy.image.IcyBufferedImage;
-import icy.image.colormap.FireColorMap;
-import icy.image.lut.LUT;
+import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-import icy.system.thread.ThreadUtil;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
-import plugins.perrine.easyclemv0.sequence.SequenceSizeFactory;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+import plugins.perrine.easyclemv0.sequence.SequenceFactory;
 import plugins.perrine.easyclemv0.sequence.SequenceSize;
 import plugins.stef.tools.overlay.ColorBarOverlay;
-
 import javax.inject.Inject;
 
-public class TargetRegistrationErrorMap implements Runnable {
+public class TargetRegistrationErrorMap  {
 
     private ProgressFrame myprogressbar;
-    private Sequence sequence;
-    private IcyBufferedImage image;
-    private SequenceSizeFactory sequenceSizeFactory;
-    private TREComputer treComputer;
+    private SequenceFactory sequenceFactory;
 
     private CompletionService<IcyBufferedImage> completionService = new ExecutorCompletionService<>(
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     );
 
     @Inject
-    public TargetRegistrationErrorMap(SequenceSizeFactory sequenceSizeFactory) {
-        this.sequenceSizeFactory = sequenceSizeFactory;
+    public TargetRegistrationErrorMap(SequenceFactory sequenceFactory) {
+        this.sequenceFactory = sequenceFactory;
     }
 
-    public TargetRegistrationErrorMap setTreComputer(TREComputer treComputer) {
-        this.treComputer = treComputer;
-        return this;
-    }
+    public CompletableFuture<Sequence> run(SequenceSize sequenceSize, TREComputer treComputer) {
+//        myprogressbar = new ProgressFrame("EasyCLEM is computing Error Map");
+//        myprogressbar.setLength(sequenceSize.get(DimensionId.Z).getSize());
+//        myprogressbar.setPosition(0);
+//        myprogressbar.setMessage("EasyCLEM is computing Error Map");
 
-    @Override
-    public void run() {
-        if (sequence.getROIs().size() < 3) {
-            MessageDialog.showDialog("You need at least 4 points to compute an error map ");
-        }
-
-        myprogressbar = new ProgressFrame("EasyCLEM is computing Error Map");
-        myprogressbar.setLength(sequence.getSizeZ());
-        myprogressbar.setPosition(0);
-        myprogressbar.setMessage("EasyCLEM is computing Error Map");
-
-        final Sequence TREMAP = ComputeTREMAP(sequence, image, treComputer);
-        myprogressbar.close();
-
-        double sizex = sequence.getPixelSizeX();
-        double sizey = sequence.getPixelSizeY();
-        double sizez = sequence.getPixelSizeZ();
-        if (TREMAP == null) {
-            MessageDialog.showDialog("No active image");
-            return;
-        }
-        TREMAP.setPixelSizeX(sizex);
-        TREMAP.setPixelSizeY(sizey);
-        TREMAP.setPixelSizeZ(sizez);
-        TREMAP.setAutoUpdateChannelBounds(false);
-        TREMAP.endUpdate();
-        TREMAP.setName("Prediction of registration only error in nanometers (if calibration settings were correct)");
-        ColorBarOverlay mycolorbar = new ColorBarOverlay(null);
-        mycolorbar.setDisplayMinMax(true);
-        TREMAP.addOverlay(mycolorbar);
-        ThreadUtil.invokeLater(new Runnable() {
-            public void run() {
-                Viewer myviewer = new Viewer(TREMAP);
-                LUT mylut = myviewer.getLut();
-                mylut.getLutChannel(0).setColorMap(new FireColorMap(), false);
-                System.out.println("done");
+        CompletableFuture<Sequence> completableFuture = CompletableFuture.supplyAsync(
+            () -> {
+                Sequence TREMAP = ComputeTREMAP(sequenceSize, treComputer);
+                TREMAP.setAutoUpdateChannelBounds(false);
+                TREMAP.endUpdate();
+                TREMAP.setName("Prediction of registration only error in nanometers (if calibration settings were correct)");
+                ColorBarOverlay mycolorbar = new ColorBarOverlay(null);
+                mycolorbar.setDisplayMinMax(true);
+                TREMAP.addOverlay(mycolorbar);
+                return TREMAP;
             }
-        });
+        );
+
+        return completableFuture;
     }
 
-    public void apply(Sequence sequence, IcyBufferedImage image) {
-        this.sequence = sequence;
-        this.image = image;
-        new Thread(this).start();
-    }
-
-    private Sequence ComputeTREMAP(Sequence sequence, IcyBufferedImage image, TREComputer treComputer) {
-        Sequence newsequence = new Sequence();
-        newsequence.setPixelSizeX(sequence.getPixelSizeX());
-        newsequence.setPixelSizeY(sequence.getPixelSizeY());
-        newsequence.setPixelSizeZ(sequence.getPixelSizeZ());
-        if (image == null) {
-            return null;
-        }
-
+    private Sequence ComputeTREMAP(SequenceSize sequenceSize, TREComputer treComputer) {
         Map<Future<IcyBufferedImage>, Integer> resultMap = new HashMap<>();
-        SequenceSize sequenceSize = sequenceSizeFactory.getFrom(sequence);
-
-        for (int z = 0; z < sequence.getSizeZ(); z++) {
+        Sequence newSequence = sequenceFactory.getFrom(sequenceSize);
+        for (int z = 0; z < sequenceSize.get(DimensionId.Z).getSize(); z++) {
             final double finalz = z;
             Point point = new Point(sequenceSize.getN());
             resultMap.put(completionService.submit(() -> {
-                float[] dataArray = new float[image.getSizeX() * image.getSizeY()];
-                for (int x = 0; x < image.getSizeX(); x++) {
-                    for (int y = 0; y < image.getSizeY(); y++) {
-                        point.getMatrix().set(0, 0, x * sequence.getPixelSizeX());
-                        point.getMatrix().set(1, 0, y * sequence.getPixelSizeY());
-                        point.getMatrix().set(2, 0, finalz * sequence.getPixelSizeZ());
-                        dataArray[image.getOffset(x, y)] = (float) treComputer.getExpectedSquareTRE(point);
+                float[] dataArray = new float[sequenceSize.get(DimensionId.X).getSize() * sequenceSize.get(DimensionId.Y).getSize()];
+                for (int x = 0; x < sequenceSize.get(DimensionId.X).getSize(); x++) {
+                    for (int y = 0; y < sequenceSize.get(DimensionId.Y).getSize(); y++) {
+                        point.getMatrix().set(0, 0, x * sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer());
+                        point.getMatrix().set(1, 0, y * sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer());
+                        point.getMatrix().set(2, 0, finalz * sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer());
+                        dataArray[(y * sequenceSize.get(DimensionId.Y).getSize()) + x] = (float) treComputer.getExpectedSquareTRE(point);
                     }
                 }
 
-                return new IcyBufferedImage(sequence.getSizeX(), sequence.getSizeY(), dataArray);
+                return new IcyBufferedImage(sequenceSize.get(DimensionId.X).getSize(), sequenceSize.get(DimensionId.Y).getSize(), dataArray);
             }), z);
         }
 
@@ -132,17 +86,14 @@ public class TargetRegistrationErrorMap implements Runnable {
             try {
                 Future<IcyBufferedImage> take = completionService.take();
                 int offset = resultMap.remove(take);
-                newsequence.setImage(0, offset, take.get());
-                myprogressbar.incPosition();
+                newSequence.setImage(0, offset, take.get());
+//                myprogressbar.incPosition();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
+//            myprogressbar.close();
         }
 
-        return newsequence;
-    }
-
-    public void setSequence(Sequence sequence) {
-        this.sequence = sequence;
+        return newSequence;
     }
 }
