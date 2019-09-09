@@ -37,7 +37,12 @@ public class GuiCLEMButtons2 extends JPanel {
 	private PredictedErrorInPositionOverlay predictedErrorInPositionOverlay;
 
 	@Inject
-	public GuiCLEMButtons2(ComputeErrorMapButton computeErrorMapButton, MonitorTargetPointButton monitorTargetPointButton, ErrorInPositionOverlay errorInPositionOverlay, PredictedErrorInPositionOverlay predictedErrorInPositionOverlay) {
+	public GuiCLEMButtons2(
+			ComputeErrorMapButton computeErrorMapButton,
+			MonitorTargetPointButton monitorTargetPointButton,
+			ErrorInPositionOverlay errorInPositionOverlay,
+			PredictedErrorInPositionOverlay predictedErrorInPositionOverlay
+	) {
 		this.computeErrorMapButton = computeErrorMapButton;
 		this.monitorTargetPointButton = monitorTargetPointButton;
 		this.errorInPositionOverlay = errorInPositionOverlay;
@@ -84,7 +89,6 @@ public class GuiCLEMButtons2 extends JPanel {
 
 	public void removespecificrigidbutton(){
 		Component[] listcomp = this.getComponents();
-		// we keep only the first component
 		for (int c = 1; c < listcomp.length; c++){
 			Component mycomp = listcomp[c];
 			mycomp.setVisible(false);
@@ -93,7 +97,6 @@ public class GuiCLEMButtons2 extends JPanel {
 
 	public void reshowspecificrigidbutton(){
 		Component[] listcomp = this.getComponents();
-		// we keep only the first component
 		for (int c = 1; c < listcomp.length; c++){
 			Component mycomp = listcomp[c];
 			mycomp.setVisible(true);

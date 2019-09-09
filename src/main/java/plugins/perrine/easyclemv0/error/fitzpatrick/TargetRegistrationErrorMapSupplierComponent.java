@@ -10,13 +10,11 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0;
+package plugins.perrine.easyclemv0.error.fitzpatrick;
 
 import dagger.Component;
-import javax.inject.Singleton;
 
-@Singleton
 @Component
-public interface EasyCLEMv0Component {
-    void inject(EasyCLEMv0 easyCLEMv0);
+public interface TargetRegistrationErrorMapSupplierComponent {
+    void inject(TargetRegistrationErrorMapSupplier easyCLEMv0);
 }

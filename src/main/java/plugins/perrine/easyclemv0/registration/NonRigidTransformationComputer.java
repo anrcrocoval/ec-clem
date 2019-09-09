@@ -19,7 +19,6 @@ import plugins.perrine.easyclemv0.transformation.DaggerSplineTransformationCompo
 import plugins.perrine.easyclemv0.transformation.SplineTransformation;
 import plugins.perrine.easyclemv0.transformation.SplineTransformationComponent;
 import vtk.vtkThinPlateSplineTransform;
-
 import javax.inject.Inject;
 
 public class NonRigidTransformationComputer implements TransformationComputer {

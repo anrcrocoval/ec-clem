@@ -15,20 +15,23 @@ package plugins.perrine.easyclemv0.sequence;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import icy.type.DataType;
+import plugins.perrine.easyclemv0.progress.ProgressTrackableMasterTask;
 import plugins.perrine.easyclemv0.transformation.Transformation;
 import vtk.*;
-
 import javax.inject.Inject;
+import java.util.function.Supplier;
 
 /**
  * The difference with 2D transform is that the tranform is computed in REAL UNITS, because vtk apply it in real unit,
  * which can be quite convenient for dealing with anisotropy!
  */
-public class Stack3DVTKTransformer {
+public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implements Supplier<Sequence> {
 
 	private vtkImageReslice imageReslice;
-	private Sequence sequence;
 	private vtkPointData[] imageData;
+
+	private Sequence sequence;
+	private Transformation transformation;
 	private int extentx;
 	private int extenty;
 	private int extentz;
@@ -40,46 +43,36 @@ public class Stack3DVTKTransformer {
 	private double InputSpacingy;
 
 	private VtkAbstractTransformFactory vtkAbstractTransformFactory;
-	private SequenceFactory sequenceFactory;
+	private VtkDataSequenceSupplier vtkDataSequenceSupplier;
 
-	@Inject
-	public Stack3DVTKTransformer(VtkAbstractTransformFactory vtkAbstractTransformFactory, SequenceFactory sequenceFactory) {
-		this.vtkAbstractTransformFactory = vtkAbstractTransformFactory;
-		this.sequenceFactory = sequenceFactory;
+	public Stack3DVTKTransformer(Sequence sequence, SequenceSize sequenceSize, Transformation transformation) {
+		DaggerStack3DVTKTransformerComponent.builder().build().inject(this);
+		setSourceSequence(sequence);
+		setTargetSize(sequenceSize);
+		this.transformation = transformation;
+		imageData = new vtkPointData[sequence.getSizeC()];
+		vtkDataSequenceSupplier = new VtkDataSequenceSupplier(sequence, imageData, extentx, extenty, extentz, sequence.getSizeT(), spacingx, spacingy, spacingz);
+		super.add(vtkDataSequenceSupplier);
 	}
 
-	public void setSourceSequence(Sequence sequence) {
+	private void setSourceSequence(Sequence sequence) {
 		this.sequence = sequence;
-		setSourceSize(sequence.getPixelSizeX(), sequence.getPixelSizeY(), sequence.getPixelSizeZ());
+		InputSpacingx = sequence.getPixelSizeX();
+		InputSpacingy = sequence.getPixelSizeY();
+		InputSpacingz = sequence.getPixelSizeZ();
 	}
 
-	private void setSourceSize(double pixelSizeX, double pixelSizeY, double pixelSizeZ) {
-		InputSpacingx = pixelSizeX;
-		InputSpacingy = pixelSizeY;
-		InputSpacingz = pixelSizeZ;
+	private void setTargetSize(SequenceSize sequenceSize) {
+		this.extentx = sequenceSize.get(DimensionId.X).getSize();
+		this.extenty = sequenceSize.get(DimensionId.Y).getSize();
+		this.extentz = sequenceSize.get(DimensionId.Z).getSize();
+		this.spacingx = sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer();
+		this.spacingy = sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer();
+		this.spacingz = sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer();
 	}
 
-	public void setTargetSize(SequenceSize sequenceSize) {
-		setTargetSize(
-			sequenceSize.get(DimensionId.X).getSize(),
-			sequenceSize.get(DimensionId.Y).getSize(),
-			sequenceSize.get(DimensionId.Z).getSize(),
-			sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer(),
-			sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer(),
-			sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer()
-		);
-	}
-
-	public void setTargetSize(int sizeX, int sizeY, int sizeZ, double pixelSizeX, double pixelSizeY, double pixelSizeZ) {
-		this.extentx = sizeX;
-		this.extenty = sizeY;
-		this.extentz = sizeZ;
-		this.spacingx = pixelSizeX;
-		this.spacingy = pixelSizeY;
-		this.spacingz = pixelSizeZ;
-	}
-
-	public void run(Transformation transformation) {
+	@Override
+	public Sequence get() {
 		vtkAbstractTransform mytransfo = vtkAbstractTransformFactory.getFrom(transformation);
 		imageReslice = new vtkImageReslice();
 		imageReslice.SetOutputDimensionality(3);
@@ -89,7 +82,6 @@ public class Stack3DVTKTransformer {
 		imageReslice.SetResliceTransform(mytransfo);
 		imageReslice.SetInterpolationModeToLinear();
 
-		imageData = new vtkPointData[sequence.getSizeC()];
 		for (int c = 0; c < sequence.getSizeC(); c++) {
 			imageReslice.SetInputData(converttoVtkImageData(c));
 			imageReslice.Modified();
@@ -99,7 +91,7 @@ public class Stack3DVTKTransformer {
 			imageData[c] = copy.GetPointData();
 		}
 
-		sequence = sequenceFactory.getFrom(sequence, imageData, extentx, extenty, extentz, sequence.getSizeT(), spacingx, spacingy, spacingz);
+		return vtkDataSequenceSupplier.get();
 	}
 
 	private vtkImageData converttoVtkImageData(int posC) {
@@ -166,5 +158,10 @@ public class Stack3DVTKTransformer {
 		}
 
 		return newImageData;
+	}
+
+	@Inject
+	public void setVtkAbstractTransformFactory(VtkAbstractTransformFactory vtkAbstractTransformFactory) {
+		this.vtkAbstractTransformFactory = vtkAbstractTransformFactory;
 	}
 }
