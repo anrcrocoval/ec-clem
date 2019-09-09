@@ -12,6 +12,7 @@
  **/
 package plugins.perrine.easyclemv0.ui;
 
+import icy.gui.dialog.MessageDialog;
 import plugins.perrine.easyclemv0.workspace.Workspace;
 import plugins.perrine.easyclemv0.workspace.WorkspaceTransformer;
 import javax.inject.Inject;
@@ -35,7 +36,11 @@ public class UpdateTransformationButton extends JButton {
     private void action() {
         WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer(workspace);
         progressBarManager.subscribe(workspaceTransformer);
-        CompletableFuture.runAsync(workspaceTransformer);
+        CompletableFuture.runAsync(workspaceTransformer).exceptionally(e -> {
+            e.printStackTrace();
+            MessageDialog.showDialog(e.getCause().getMessage(), MessageDialog.ERROR_MESSAGE);
+            return null;
+        });
     }
 
     public void setWorkspace(Workspace workspace) {

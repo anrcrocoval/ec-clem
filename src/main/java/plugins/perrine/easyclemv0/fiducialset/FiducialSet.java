@@ -22,10 +22,13 @@ public class FiducialSet implements Cloneable {
     public FiducialSet(Dataset sourceDataset, Dataset targetDataset) {
         this.sourceDataset = sourceDataset;
         this.targetDataset = targetDataset;
-        if(sourceDataset.getN() != targetDataset.getN()) {
-            throw new RuntimeException("sourceDataset and targetDataset do not have the same number of points");
-        }
         n = sourceDataset.getN();
+        if(n < 3) {
+            throw new RuntimeException("Minimum number of fiducial points is 3");
+        }
+        if(sourceDataset.getN() != targetDataset.getN()) {
+            throw new RuntimeException("Source dataset and target dataset do not have the same number of points");
+        }
     }
 
     @Override

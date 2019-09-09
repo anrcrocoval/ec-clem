@@ -12,16 +12,25 @@
  **/
 package plugins.perrine.easyclemv0.error.fitzpatrick;
 
-import plugins.perrine.easyclemv0.sequence.SequenceSize;
+import plugins.perrine.easyclemv0.workspace.Workspace;
 import javax.inject.Inject;
 
 public class TargetRegistrationErrorMapFactory {
 
+    private TREComputerFactory treComputerFactory;
+
     @Inject
-    public TargetRegistrationErrorMapFactory() {
+    public TargetRegistrationErrorMapFactory(TREComputerFactory treComputerFactory) {
+        this.treComputerFactory = treComputerFactory;
     }
 
-    public TargetRegistrationErrorMapSupplier getFrom(SequenceSize sequenceSize, TREComputer treComputer) {
-        return new TargetRegistrationErrorMapSupplier(sequenceSize, treComputer);
+    public TargetRegistrationErrorMapSupplier getFrom(Workspace workspace) {
+        if(workspace.getTransformationSchema() == null) {
+            throw new RuntimeException("Transformation is not initialized");
+        }
+        return new TargetRegistrationErrorMapSupplier(
+            workspace.getTransformationSchema().getTargetSize(),
+            treComputerFactory.getFrom(workspace)
+        );
     }
 }

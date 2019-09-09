@@ -30,7 +30,7 @@ public class RoiProcessor {
 
     public double[][] getPointsFromRoi(ArrayList<ROI> roiList) {
         if(roiList.size() == 0) {
-            return null;
+            throw new RuntimeException("Dataset is empty");
         }
 
         int dimension = 3;

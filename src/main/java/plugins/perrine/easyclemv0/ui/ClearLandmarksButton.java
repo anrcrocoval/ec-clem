@@ -45,7 +45,6 @@ public class ClearLandmarksButton extends JButton {
         }
         clearLandmarks(workspace.getSourceSequence());
         clearLandmarks(workspace.getTargetSequence());
-        new AnnounceFrame("All ROIs have been deleted from images " + workspace.getSourceSequence().getName() + " and " + workspace.getTargetSequence().getName(),5);
     }
 
     private void clearLandmarks(Sequence sequence) {
@@ -59,9 +58,7 @@ public class ClearLandmarksButton extends JButton {
             final Document doc = XMLUtil.createDocument(true);
             if (doc != null) {
                 ROI.saveROIsToXML(XMLUtil.getRootElement(doc), rois);
-                System.out.println("ROIS saved before in "+ sequence.getFilename()+"_ROIsavedBeforeClearLandmarks.storage"+"\n Use Load Roi(s) if needed in ROI top menu" );
                 XMLUtil.saveDocument(doc, sequence.getFilename()+"_ROIsavedBeforeClearLandmarks.storage");
-
             }
         }
     }

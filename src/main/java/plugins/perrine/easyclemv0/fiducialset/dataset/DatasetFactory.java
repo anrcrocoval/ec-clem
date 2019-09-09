@@ -40,7 +40,7 @@ public class DatasetFactory {
         Dataset dataset;
         try {
             dataset = new Dataset(roiProcessor.getPointsFromRoi(sequence.getROIs()));
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             dataset = new Dataset(0);
         }
         return toMicroMeter(dataset, sequence);

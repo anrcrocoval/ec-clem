@@ -32,7 +32,7 @@ public class RoiDuplicator implements SequenceListener {
 
     private Sequence sequence;
     private WorkspaceState workspaceState;
-    private SequenceListenerUtil sequenceListenerUtil = new SequenceListenerUtil();
+    private SequenceListenerUtil sequenceListenerUtil;
 
     @Inject
     public RoiDuplicator(SequenceListenerUtil sequenceListenerUtil) {
@@ -87,7 +87,6 @@ public class RoiDuplicator implements SequenceListener {
             roisource.setPosition5D(position);
 
         }
-        System.out.println("Adding Roi Landmark " + event.getSequence().getROICount(ROI.class) + " on source");
         roisource.setColor(roi.getColor());
         roisource.setName(roi.getName());
         roisource.setStroke(roi.getStroke());

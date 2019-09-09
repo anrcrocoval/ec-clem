@@ -36,12 +36,12 @@ public class SimilarityTransformationComputer implements TransformationComputer 
         if (source.getN() < 2) {
             int dimension = max(source.getDimension(), target.getDimension());
             return new Similarity(
-                    Matrix.identity(
-                            dimension,
-                            dimension
-                    ),
-                    new Matrix(dimension, 1, 0),
-                    Matrix.identity(dimension, dimension)
+                Matrix.identity(
+                    dimension,
+                    dimension
+                ),
+                new Matrix(dimension, 1, 0),
+                Matrix.identity(dimension, dimension)
             );
         }
 

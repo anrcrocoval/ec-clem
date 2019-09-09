@@ -45,12 +45,12 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         workspace.setTransformationSchema(transformationSchemaFactory.getFrom(workspace));
         if(workspace.getTransformationConfiguration().isShowGrid()) {
             Sequence gridSequence = sequenceFactory.getGridSequence(
-                    workspace.getSourceSequence().getSizeX(),
-                    workspace.getSourceSequence().getSizeY(),
-                    workspace.getSourceSequence().getSizeZ(),
-                    workspace.getSourceSequence().getPixelSizeX(),
-                    workspace.getSourceSequence().getPixelSizeY(),
-                    workspace.getSourceSequence().getPixelSizeZ()
+                workspace.getSourceSequence().getSizeX(),
+                workspace.getSourceSequence().getSizeY(),
+                workspace.getSourceSequence().getSizeZ(),
+                workspace.getSourceSequence().getPixelSizeX(),
+                workspace.getSourceSequence().getPixelSizeY(),
+                workspace.getSourceSequence().getPixelSizeZ()
             );
             SequenceUpdater transformationGridSequenceUpdater = new SequenceUpdater(gridSequence, workspace.getTransformationSchema());
             super.add(transformationGridSequenceUpdater);
@@ -71,8 +71,8 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
 
             listofNvalues.add(listofNvalues.size(), workspace.getTransformationSchema().getFiducialSet().getN());
             listoftrevalues.add(
-                    listoftrevalues.size(),
-                    treComputer.getExpectedSquareTRE(workspace.getMonitoringConfiguration().getMonitoringPoint())
+                listoftrevalues.size(),
+                treComputer.getExpectedSquareTRE(workspace.getMonitoringConfiguration().getMonitoringPoint())
             );
 
             double[][] TREValues = new double[listofNvalues.size()][2];
@@ -84,7 +84,6 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
             }
             MonitorTargetPoint.UpdatePoint(TREValues);
         }
-        new AnnounceFrame("Transformation Updated", 5);
         workspace.getSourceSequence().setName(workspace.getOriginalNameofSource()+ "(transformed)");
     }
 
