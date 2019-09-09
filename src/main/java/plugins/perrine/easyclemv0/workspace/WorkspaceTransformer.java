@@ -1,15 +1,3 @@
-/**
- * Copyright 2010-2018 Perrine Paul-Gilloteaux <Perrine.Paul-Gilloteaux@univ-nantes.fr>, CNRS.
- * Copyright 2019 Guillaume Potier <guillaume.potier@univ-nantes.fr>, INSERM.
- *
- * This file is part of EC-CLEM.
- *
- * you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- **/
 package plugins.perrine.easyclemv0.workspace;
 
 import icy.gui.frame.progress.AnnounceFrame;
@@ -18,134 +6,100 @@ import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
-import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
-import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
-import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetFactory;
 import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputer;
-import plugins.perrine.easyclemv0.progress.MasterProgressReport;
-import plugins.perrine.easyclemv0.progress.ProgressReport;
-import plugins.perrine.easyclemv0.progress.ProgressTrackable;
-import plugins.perrine.easyclemv0.sequence.SequenceUpdater;
-import plugins.perrine.easyclemv0.sequence.SequenceFactory;
-import plugins.perrine.easyclemv0.transformation.schema.TransformationSchemaFactory;
+import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
 import plugins.perrine.easyclemv0.monitor.MonitorTargetPoint;
-import plugins.perrine.easyclemv0.roi.RoiUpdater;
+import plugins.perrine.easyclemv0.progress.ProgressTrackableMasterTask;
+import plugins.perrine.easyclemv0.sequence.SequenceFactory;
+import plugins.perrine.easyclemv0.sequence.SequenceUpdater;
 import plugins.perrine.easyclemv0.storage.XmlFileWriter;
 import plugins.perrine.easyclemv0.storage.XmlTransformationWriter;
+import plugins.perrine.easyclemv0.transformation.schema.TransformationSchemaFactory;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class WorkspaceTransformer implements ProgressTrackable {
+public class WorkspaceTransformer extends ProgressTrackableMasterTask implements Runnable {
 
-    private SequenceUpdater sequenceUpdater;
-    private ExecutorService executorService;
     private TransformationSchemaFactory transformationSchemaFactory;
     private TREComputerFactory treComputerFactory;
-    private RoiUpdater roiUpdater;
     private SequenceFactory sequenceFactory;
-    private DatasetFactory datasetFactory;
 
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();
     private XmlFileWriter xmlFileWriter;
     private XmlTransformationWriter xmlWriter;
 
-    private ProgressReport progressReport;
+    private Workspace workspace;
 
-    @Inject
-    public WorkspaceTransformer(SequenceUpdater sequenceUpdater , TransformationSchemaFactory transformationSchemaFactory, TREComputerFactory treComputerFactory, RoiUpdater roiUpdater, SequenceFactory sequenceFactory, DatasetFactory datasetFactory) {
-        this.sequenceUpdater = sequenceUpdater;
-        this.transformationSchemaFactory = transformationSchemaFactory;
-        this.treComputerFactory = treComputerFactory;
-        this.roiUpdater = roiUpdater;
-        this.sequenceFactory = sequenceFactory;
-        this.datasetFactory = datasetFactory;
-        this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    public WorkspaceTransformer(Workspace workspace) {
+        DaggerWorkspaceTransformerComponent.builder().build().inject(this);
+        this.workspace = workspace;
     }
 
     @Override
-    public ProgressReport getProgress() {
-        return null;
-    }
+    public void run() {
+        ResetOriginalImage resetOriginalImage = new ResetOriginalImage(workspace);
+        super.add(resetOriginalImage);
+        resetOriginalImage.run();
+        workspace.setTransformationSchema(transformationSchemaFactory.getFrom(workspace));
+        if(workspace.getTransformationConfiguration().isShowGrid()) {
+            Sequence gridSequence = sequenceFactory.getGridSequence(
+                    workspace.getSourceSequence().getSizeX(),
+                    workspace.getSourceSequence().getSizeY(),
+                    workspace.getSourceSequence().getSizeZ(),
+                    workspace.getSourceSequence().getPixelSizeX(),
+                    workspace.getSourceSequence().getPixelSizeY(),
+                    workspace.getSourceSequence().getPixelSizeZ()
+            );
+            SequenceUpdater transformationGridSequenceUpdater = new SequenceUpdater(gridSequence, workspace.getTransformationSchema());
+            super.add(transformationGridSequenceUpdater);
+            transformationGridSequenceUpdater.run();
+            ThreadUtil.invokeLater(() -> new Viewer(gridSequence));
+        }
+        SequenceUpdater sequenceUpdater = new SequenceUpdater(workspace.getSourceSequence(), workspace.getTransformationSchema());
+        super.add(sequenceUpdater);
+        sequenceUpdater.run();
 
-    public void apply(Workspace workspace) {
-        executorService.submit(() -> {
-            progressReport = new MasterProgressReport();
-            resetToOriginalImage(workspace);
-            workspace.setTransformationSchema(transformationSchemaFactory.getFrom(workspace));
-            if(workspace.getTransformationConfiguration().isShowGrid()) {
-                Sequence gridSequence = sequenceFactory.getGridSequence(
-                        workspace.getSourceSequence().getSizeX(),
-                        workspace.getSourceSequence().getSizeY(),
-                        workspace.getSourceSequence().getSizeZ(),
-                        workspace.getSourceSequence().getPixelSizeX(),
-                        workspace.getSourceSequence().getPixelSizeY(),
-                        workspace.getSourceSequence().getPixelSizeZ()
-                );
-                sequenceUpdater.update(gridSequence, workspace.getTransformationSchema());
-                ThreadUtil.invokeLater(() -> new Viewer(gridSequence));
-            }
-            sequenceUpdater.update(workspace.getSourceSequence(), workspace.getTransformationSchema());
-            Document document = XMLUtil.createDocument(true);
-            xmlWriter = new XmlTransformationWriter(document);
-            xmlWriter.write(workspace.getTransformationSchema());
-            xmlFileWriter = new XmlFileWriter(document, workspace.getXMLFile());
-            xmlFileWriter.write();
+        Document document = XMLUtil.createDocument(true);
+        xmlWriter = new XmlTransformationWriter(document);
+        xmlWriter.write(workspace.getTransformationSchema());
+        xmlFileWriter = new XmlFileWriter(document, workspace.getXMLFile());
+        xmlFileWriter.write();
+        if (workspace.getMonitoringConfiguration().isMonitor()) {
+            TREComputer treComputer = treComputerFactory.getFrom(workspace);
 
-            if (workspace.getMonitoringConfiguration().isMonitor()) {
-                TREComputer treComputer = treComputerFactory.getFrom(workspace);
-
-                listofNvalues.add(listofNvalues.size(), workspace.getTransformationSchema().getFiducialSet().getN());
-                listoftrevalues.add(
+            listofNvalues.add(listofNvalues.size(), workspace.getTransformationSchema().getFiducialSet().getN());
+            listoftrevalues.add(
                     listoftrevalues.size(),
                     treComputer.getExpectedSquareTRE(workspace.getMonitoringConfiguration().getMonitoringPoint())
-                );
-
-                double[][] TREValues = new double[listofNvalues.size()][2];
-
-                for (int i = 0; i < listofNvalues.size(); i++) {
-                    TREValues[i][0] = listofNvalues.get(i);
-                    TREValues[i][1] = listoftrevalues.get(i);
-                    System.out.println("N=" + TREValues[i][0] + ", TRE=" + TREValues[i][1]);
-                }
-                MonitorTargetPoint.UpdatePoint(TREValues);
-            }
-            new AnnounceFrame("Transformation Updated", 5);
-            workspace.getSourceSequence().setName(workspace.getOriginalNameofSource()+ "(transformed)");
-        });
-    }
-
-    public void resetToOriginalImage(Workspace workspace) {
-        if(workspace.getTransformationSchema() != null) {
-            Dataset reversed = datasetFactory.getFrom(
-                    datasetFactory.getFrom(workspace.getSourceSequence()),
-                    workspace.getTransformationSchema().inverse()
             );
-            restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
-            roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
-            workspace.setTransformationSchema(null);
-            workspace.getSourceSequence().setName(workspace.getOriginalNameofSource());
+
+            double[][] TREValues = new double[listofNvalues.size()][2];
+
+            for (int i = 0; i < listofNvalues.size(); i++) {
+                TREValues[i][0] = listofNvalues.get(i);
+                TREValues[i][1] = listoftrevalues.get(i);
+                System.out.println("N=" + TREValues[i][0] + ", TRE=" + TREValues[i][1]);
+            }
+            MonitorTargetPoint.UpdatePoint(TREValues);
         }
+        new AnnounceFrame("Transformation Updated", 5);
+        workspace.getSourceSequence().setName(workspace.getOriginalNameofSource()+ "(transformed)");
     }
 
-    private void restoreBackup(Sequence sequence, Sequence backup) {
-        sequence.setAutoUpdateChannelBounds(false);
-        sequence.beginUpdate();
-        sequence.removeAllImages();
-        try {
-            for (int t = 0; t < backup.getSizeT(); t++) {
-                for (int z = 0; z < backup.getSizeZ(); z++) {
-                    sequence.setImage(t, z, backup.getImage(t, z));
-                }
-            }
-            sequence.setPixelSizeX(backup.getPixelSizeX());
-            sequence.setPixelSizeY(backup.getPixelSizeY());
-            sequence.setPixelSizeZ(backup.getPixelSizeZ());
-        } finally {
-            sequence.endUpdate();
-        }
+    @Inject
+    public void setTransformationSchemaFactory(TransformationSchemaFactory transformationSchemaFactory) {
+        this.transformationSchemaFactory = transformationSchemaFactory;
+    }
+
+    @Inject
+    public void setTreComputerFactory(TREComputerFactory treComputerFactory) {
+        this.treComputerFactory = treComputerFactory;
+    }
+
+    @Inject
+    public void setSequenceFactory(SequenceFactory sequenceFactory) {
+        this.sequenceFactory = sequenceFactory;
     }
 }

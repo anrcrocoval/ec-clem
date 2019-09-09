@@ -3,20 +3,25 @@ package plugins.perrine.easyclemv0.progress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MasterProgressReport extends ProgressReport implements ProgressTrackable {
+public abstract class ProgressTrackableMasterTask extends ProgressReport implements ProgressTrackable {
     private List<ProgressTrackable> tasks;
 
-    public MasterProgressReport() {
+    public ProgressTrackableMasterTask() {
         this.tasks = new ArrayList<>();
     }
 
-    public List<ProgressTrackable> getChildReports() {
-        return tasks;
+    public ProgressTrackableMasterTask add(ProgressTrackable task) {
+        tasks.add(task);
+        super.setChanged();
+        super.notifyObservers(task);
+        return this;
     }
 
-    public MasterProgressReport add(ProgressTrackable task) {
-        tasks.add(task);
-        return this;
+    public void visit(ProgressManager progressManager) {
+        super.addObserver(progressManager);
+        for(ProgressTrackable progressTrackable : tasks) {
+            progressManager.subscribe(progressTrackable);
+        }
     }
 
     @Override

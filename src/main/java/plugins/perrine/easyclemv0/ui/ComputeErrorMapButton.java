@@ -20,7 +20,6 @@ import icy.system.thread.ThreadUtil;
 import plugins.perrine.easyclemv0.error.fitzpatrick.TargetRegistrationErrorMapFactory;
 import plugins.perrine.easyclemv0.error.fitzpatrick.TREComputerFactory;
 import plugins.perrine.easyclemv0.error.fitzpatrick.TargetRegistrationErrorMapSupplier;
-import plugins.perrine.easyclemv0.progress.MasterProgressReport;
 import plugins.perrine.easyclemv0.workspace.Workspace;
 import javax.inject.Inject;
 import javax.swing.*;
@@ -61,7 +60,7 @@ public class ComputeErrorMapButton extends JButton {
                         workspace.getTransformationSchema().getTargetSize(),
                         treComputerFactory.getFrom(workspace)
                 );
-                progressBarManager.subscribe(new MasterProgressReport().add(targetRegistrationErrorMapSupplier));
+                progressBarManager.subscribe(targetRegistrationErrorMapSupplier);
                 CompletableFuture
                     .supplyAsync(targetRegistrationErrorMapSupplier)
                     .thenAccept(sequence -> ThreadUtil.invokeLater(() -> {

@@ -14,35 +14,51 @@ package plugins.perrine.easyclemv0.sequence;
 
 import icy.sequence.Sequence;
 import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.easyclemv0.progress.ProgressTrackableMasterTask;
 import plugins.perrine.easyclemv0.transformation.TransformationFactory;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
 import plugins.perrine.easyclemv0.transformation.Transformation;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
-
 import javax.inject.Inject;
 
-public class SequenceUpdater {
+public class SequenceUpdater extends ProgressTrackableMasterTask implements Runnable {
 
-    private Stack3DVTKTransformer imageTransformer;
     private TransformationFactory transformationFactory;
     private DatasetFactory datasetFactory;
     private RoiUpdater roiUpdater;
 
-    @Inject
-    public SequenceUpdater(Stack3DVTKTransformer imageTransformer, TransformationFactory transformationFactory, DatasetFactory datasetFactory, RoiUpdater roiUpdater) {
-        this.imageTransformer = imageTransformer;
-        this.transformationFactory = transformationFactory;
-        this.datasetFactory = datasetFactory;
-        this.roiUpdater = roiUpdater;
+    private Sequence sourceSequence;
+    private TransformationSchema transformationSchema;
+
+    public SequenceUpdater(Sequence sourceSequence, TransformationSchema transformationSchema) {
+        DaggerSequenceUpdaterComponent.builder().build().inject(this);
+        this.sourceSequence = sourceSequence;
+        this.transformationSchema = transformationSchema;
     }
 
-    public void update(Sequence sourceSequence, TransformationSchema transformationSchema) {
+    @Override
+    public void run() {
         Transformation transformation = transformationFactory.getFrom(transformationSchema);
         Dataset sourceTransformedDataset = datasetFactory.getFrom(datasetFactory.getFrom(sourceSequence), transformationSchema);
-        imageTransformer.setSourceSequence(sourceSequence);
-        imageTransformer.setTargetSize(transformationSchema.getTargetSize());
-        imageTransformer.run(transformation);
+        Stack3DVTKTransformer imageTransformer = new Stack3DVTKTransformer(sourceSequence, transformationSchema.getTargetSize(), transformation);
+        super.add(imageTransformer);
+        sourceSequence = imageTransformer.get();
         roiUpdater.updateRoi(sourceTransformedDataset, sourceSequence);
+    }
+
+    @Inject
+    public void setTransformationFactory(TransformationFactory transformationFactory) {
+        this.transformationFactory = transformationFactory;
+    }
+
+    @Inject
+    public void setDatasetFactory(DatasetFactory datasetFactory) {
+        this.datasetFactory = datasetFactory;
+    }
+
+    @Inject
+    public void setRoiUpdater(RoiUpdater roiUpdater) {
+        this.roiUpdater = roiUpdater;
     }
 }

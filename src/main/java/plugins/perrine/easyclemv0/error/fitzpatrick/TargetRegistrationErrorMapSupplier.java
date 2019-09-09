@@ -16,9 +16,7 @@ import icy.image.IcyBufferedImage;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
-import plugins.perrine.easyclemv0.progress.ProgressReport;
-import plugins.perrine.easyclemv0.progress.SlaveProgressReport;
-import plugins.perrine.easyclemv0.progress.ProgressTrackable;
+import plugins.perrine.easyclemv0.progress.*;
 import plugins.perrine.easyclemv0.sequence.SequenceFactory;
 import plugins.perrine.easyclemv0.sequence.SequenceSize;
 import plugins.stef.tools.overlay.ColorBarOverlay;
@@ -28,32 +26,21 @@ import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.Supplier;
 
-public class TargetRegistrationErrorMapSupplier implements Supplier<Sequence>, ProgressTrackable {
+public class TargetRegistrationErrorMapSupplier extends ProgressTrackableChildTask implements Supplier<Sequence> {
 
     private SequenceFactory sequenceFactory;
     private SequenceSize sequenceSize;
     private TREComputer treComputer;
-    private SlaveProgressReport slaveProgressReport;
 
     private CompletionService<IcyBufferedImage> completionService = new ExecutorCompletionService<>(
         Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
     );
 
     public TargetRegistrationErrorMapSupplier(SequenceSize sequenceSize, TREComputer treComputer) {
+        super(sequenceSize.get(DimensionId.Z).getSize());
         DaggerTargetRegistrationErrorMapSupplierComponent.builder().build().inject(this);
         this.sequenceSize = sequenceSize;
         this.treComputer = treComputer;
-        slaveProgressReport = new SlaveProgressReport(sequenceSize.get(DimensionId.Z).getSize());
-    }
-
-    @Inject
-    public void setSequenceFactory(SequenceFactory sequenceFactory) {
-        this.sequenceFactory = sequenceFactory;
-    }
-
-    @Override
-    public ProgressReport getProgress() {
-        return slaveProgressReport.clone();
     }
 
     @Override
@@ -84,7 +71,7 @@ public class TargetRegistrationErrorMapSupplier implements Supplier<Sequence>, P
                 Future<IcyBufferedImage> take = completionService.take();
                 int offset = resultMap.remove(take);
                 newSequence.setImage(0, offset, take.get());
-                slaveProgressReport.incrementCompleted();
+                super.incrementCompleted();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -97,5 +84,10 @@ public class TargetRegistrationErrorMapSupplier implements Supplier<Sequence>, P
         newSequence.addOverlay(mycolorbar);
         newSequence.endUpdate();
         return newSequence;
+    }
+
+    @Inject
+    public void setSequenceFactory(SequenceFactory sequenceFactory) {
+        this.sequenceFactory = sequenceFactory;
     }
 }

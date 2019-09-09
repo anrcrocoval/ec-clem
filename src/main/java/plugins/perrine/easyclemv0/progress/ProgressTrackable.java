@@ -14,4 +14,5 @@ package plugins.perrine.easyclemv0.progress;
 
 public interface ProgressTrackable {
     ProgressReport getProgress();
+    void visit(ProgressManager progressManager);
 }

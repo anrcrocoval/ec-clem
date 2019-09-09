@@ -50,9 +50,7 @@ public class ApplyTransformation extends EzPlug implements Block {
 	private XmlTransformationReader xmlTransformationReader = new XmlTransformationReader();
 
 	@Inject
-	public ApplyTransformation(SequenceUpdater sequenceUpdater) {
-		this.sequenceUpdater = sequenceUpdater;
-	}
+	public ApplyTransformation() {}
 
 	@Override
 	protected void initialize() {
@@ -81,8 +79,8 @@ public class ApplyTransformation extends EzPlug implements Block {
 			Document document = xmlFileReader.loadFile(xmlFile.getValue());
 			Element transformationElement = XMLUtil.getElement(document.getDocumentElement(), transformationElementName);
 			TransformationSchema transformationSchema = xmlTransformationReader.read(transformationElement);
-			sequenceUpdater.update(sourceseq, transformationSchema);
-
+			sequenceUpdater = new SequenceUpdater(sourceseq, transformationSchema);
+			sequenceUpdater.run();
 			if (!isHeadLess()) {
 				IcyCanvas sourcecanvas = source.getValue().getFirstViewer().getCanvas();
 				if (sourcecanvas instanceof IcyCanvas2D) {

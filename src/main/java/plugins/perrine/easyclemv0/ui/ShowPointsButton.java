@@ -12,21 +12,22 @@
  **/
 package plugins.perrine.easyclemv0.ui;
 
+import plugins.perrine.easyclemv0.workspace.ResetOriginalImage;
 import plugins.perrine.easyclemv0.workspace.Workspace;
-import plugins.perrine.easyclemv0.workspace.WorkspaceTransformer;
 import javax.inject.Inject;
 import javax.swing.*;
+import java.util.concurrent.CompletableFuture;
 
 public class ShowPointsButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
     private Workspace workspace;
-    private WorkspaceTransformer workspaceTransformer;
+    private ProgressBarManager progressBarManager;
 
     @Inject
-    public ShowPointsButton(WorkspaceTransformer workspaceTransformer) {
+    public ShowPointsButton(ProgressBarManager progressBarManager) {
         super("Show ROIs on original source image");
-        this.workspaceTransformer = workspaceTransformer;
+        this.progressBarManager = progressBarManager;
         setToolTipText("Show the original source Image, with the points selected shown (save the source image to save the ROIs)");
         addActionListener((arg0) -> action());
     }
@@ -36,6 +37,8 @@ public class ShowPointsButton extends JButton {
     }
 
     private void action() {
-        workspaceTransformer.resetToOriginalImage(workspace);
+        ResetOriginalImage resetOriginalImage = new ResetOriginalImage(workspace);
+        progressBarManager.subscribe(resetOriginalImage);
+        CompletableFuture.runAsync(resetOriginalImage);
     }
 }

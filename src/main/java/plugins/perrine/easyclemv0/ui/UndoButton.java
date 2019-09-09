@@ -15,17 +15,15 @@ package plugins.perrine.easyclemv0.ui;
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI;
-import icy.sequence.SequenceListener;
-import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetFactory;
 import plugins.perrine.easyclemv0.roi.RoiUpdater;
-import plugins.perrine.easyclemv0.sequence_listener.RoiDuplicator;
 import plugins.perrine.easyclemv0.sequence_listener.SequenceListenerUtil;
+import plugins.perrine.easyclemv0.workspace.Undo;
 import plugins.perrine.easyclemv0.workspace.Workspace;
-import plugins.perrine.easyclemv0.workspace.WorkspaceTransformer;
 import javax.inject.Inject;
 import javax.swing.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class UndoButton extends JButton {
 
@@ -33,15 +31,15 @@ public class UndoButton extends JButton {
 	private Workspace workspace;
     private DatasetFactory datasetFactory;
     private RoiUpdater roiUpdater;
-    private WorkspaceTransformer workspaceTransformer;
     private SequenceListenerUtil sequenceListenerUtil;
+    private ProgressBarManager progressBarManager;
 
     @Inject
-    public UndoButton(DatasetFactory datasetFactory, RoiUpdater roiUpdater, WorkspaceTransformer workspaceTransformer, SequenceListenerUtil sequenceListenerUtil) {
+    public UndoButton(DatasetFactory datasetFactory, RoiUpdater roiUpdater, ProgressBarManager progressBarManager, SequenceListenerUtil sequenceListenerUtil) {
         super("Undo last point");
         this.datasetFactory = datasetFactory;
         this.roiUpdater = roiUpdater;
-        this.workspaceTransformer = workspaceTransformer;
+        this.progressBarManager = progressBarManager;
         this.sequenceListenerUtil = sequenceListenerUtil;
         setToolTipText("Press this button to cancel the last point edition you have done, it will reverse to the previous state of your image");
         addActionListener((arg0) -> action());
@@ -63,15 +61,8 @@ public class UndoButton extends JButton {
             return;
         }
 
-        List<SequenceListener> targetSequenceListeners = sequenceListenerUtil.removeListeners(workspace.getTargetSequence(), RoiDuplicator.class);
-        workspaceTransformer.resetToOriginalImage(workspace);
-        Dataset sourceDataset = datasetFactory.getFrom(workspace.getSourceSequence());
-        sourceDataset.removePoint(sourceDataset.getN() - 1);
-        Dataset targetDataset = datasetFactory.getFrom(workspace.getTargetSequence());
-        targetDataset.removePoint(targetDataset.getN() - 1);
-        roiUpdater.updateRoi(sourceDataset, workspace.getSourceSequence());
-        roiUpdater.updateRoi(targetDataset, workspace.getTargetSequence());
-        sequenceListenerUtil.addListeners(workspace.getTargetSequence(), targetSequenceListeners);
-        workspaceTransformer.apply(workspace);
+        Undo undo = new Undo(workspace);
+        progressBarManager.subscribe(undo);
+        CompletableFuture.runAsync(undo);
     }
 }

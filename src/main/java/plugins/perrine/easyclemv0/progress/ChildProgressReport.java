@@ -12,16 +12,11 @@
  **/
 package plugins.perrine.easyclemv0.progress;
 
-public class SlaveProgressReport extends ProgressReport implements Cloneable {
+public class ChildProgressReport extends ProgressReport implements Cloneable {
     private int total;
     private int completed = 0;
 
-    public SlaveProgressReport(int total) {
-        this.total = total;
-    }
-
-    public SlaveProgressReport(int completed, int total) {
-        this.completed = completed;
+    public ChildProgressReport(int total) {
         this.total = total;
     }
 
@@ -38,10 +33,10 @@ public class SlaveProgressReport extends ProgressReport implements Cloneable {
     }
 
     @Override
-    public SlaveProgressReport clone() {
-        SlaveProgressReport clone = null;
+    public ChildProgressReport clone() {
+        ChildProgressReport clone = null;
         try {
-            clone = (SlaveProgressReport) super.clone();
+            clone = (ChildProgressReport) super.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }

@@ -14,7 +14,7 @@ package plugins.perrine.easyclemv0.error.fitzpatrick;
 
 import dagger.Component;
 
-@Component()
+@Component
 public interface TargetRegistrationErrorMapSupplierComponent {
     void inject(TargetRegistrationErrorMapSupplier easyCLEMv0);
 }

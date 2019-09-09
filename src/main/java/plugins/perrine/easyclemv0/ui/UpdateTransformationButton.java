@@ -16,23 +16,26 @@ import plugins.perrine.easyclemv0.workspace.Workspace;
 import plugins.perrine.easyclemv0.workspace.WorkspaceTransformer;
 import javax.inject.Inject;
 import javax.swing.*;
+import java.util.concurrent.CompletableFuture;
 
 public class UpdateTransformationButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
-    private WorkspaceTransformer workspaceTransformer;
+    private ProgressBarManager progressBarManager;
     private Workspace workspace;
 
     @Inject
-    public UpdateTransformationButton(WorkspaceTransformer workspaceTransformer) {
+    public UpdateTransformationButton(ProgressBarManager progressBarManager) {
         super("Update TransformationSchema");
-        this.workspaceTransformer = workspaceTransformer;
+        this.progressBarManager = progressBarManager;
         setToolTipText("Press this button if you have moved the points, prepared set of points, \n or obtained some black part of the image. This will refresh it");
         addActionListener((arg0) -> action());
     }
 
     private void action() {
-        workspaceTransformer.apply(workspace);
+        WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer(workspace);
+        progressBarManager.subscribe(workspaceTransformer);
+        CompletableFuture.runAsync(workspaceTransformer);
     }
 
     public void setWorkspace(Workspace workspace) {

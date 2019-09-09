@@ -13,18 +13,19 @@
 package plugins.perrine.easyclemv0.ui;
 
 import icy.gui.frame.progress.ProgressFrame;
-import plugins.perrine.easyclemv0.progress.MasterProgressReport;
+import plugins.perrine.easyclemv0.progress.ProgressManager;
 import plugins.perrine.easyclemv0.progress.ProgressReport;
 import plugins.perrine.easyclemv0.progress.ProgressTrackable;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class ProgressBarManager {
+public class ProgressBarManager extends ProgressManager {
 
     private Map<ProgressTrackable, ProgressFrame> bars;
     private Map<ProgressTrackable, ScheduledFuture> schedules;
@@ -37,14 +38,12 @@ public class ProgressBarManager {
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     }
 
-    public void subscribe(MasterProgressReport masterReport) {
-        add(masterReport);
-        for(ProgressTrackable childReport : masterReport.getChildReports()) {
-            add(childReport);
-        }
+    @Override
+    public void update(Observable observable, Object o) {
+        super.subscribe((ProgressTrackable) o);
     }
 
-    private void add(ProgressTrackable progressTrackable) {
+    public void add(ProgressTrackable progressTrackable) {
         ProgressFrame progressFrame = new ProgressFrame(progressTrackable.getClass().getSimpleName());
         progressFrame.setLength(progressTrackable.getProgress().getTotal());
         progressFrame.setPosition(0);
