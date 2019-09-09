@@ -245,8 +245,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			rigidspecificbutton.removespecificrigidbutton();
 		}
 
-		sourceSequence.setName(sourceSequence.getName() + " (transformed)");
-		String name = sourceSequence.getFilename() + "_transfo.storage";
+		sourceSequence.setName(sourceSequence.getName() + "_transformed");
+		String name = sourceSequence.getName() + "_transfo.xml";
 
 		workspace = new Workspace();
 		workspace.setSourceSequence(sourceSequence);
@@ -257,7 +257,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		guiCLEMButtons.setworkspace(workspace);
 		rigidspecificbutton.setWorkspace(workspace);
-
 
 		sourceSequence.addListener(sourceSequenceRoiDuplicator.setSequence(targetSequence).setWorkspaceState(workspace.getWorkspaceState()));
 		targetSequence.addListener(targetSequenceRoiDuplicator.setSequence(sourceSequence).setWorkspaceState(workspace.getWorkspaceState()));

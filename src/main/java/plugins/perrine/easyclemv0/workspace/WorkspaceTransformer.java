@@ -84,7 +84,6 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
             }
             MonitorTargetPoint.UpdatePoint(TREValues);
         }
-        workspace.getSourceSequence().setName(workspace.getOriginalNameofSource()+ "(transformed)");
     }
 
     @Inject
