@@ -3,3 +3,6 @@ libs/icy
 setting.xml
 target/
 workspace/
+.classpath
+.project
+.settings/
