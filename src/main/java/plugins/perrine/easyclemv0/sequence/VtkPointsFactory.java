@@ -13,6 +13,7 @@
 package plugins.perrine.easyclemv0.sequence;
 
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 import vtk.vtkPoints;
 
 import javax.inject.Inject;
@@ -28,6 +29,13 @@ public class VtkPointsFactory {
         for (int i = 0; i < dataset.getN(); i++) {
             points.SetPoint(i, dataset.getPoint(i).getMatrix().transpose().getArray()[0]);
         }
+        return points;
+    }
+
+    public vtkPoints getFrom(Point point) {
+        vtkPoints points = new vtkPoints();
+        points.SetNumberOfPoints(1);
+        points.SetPoint(0, point.getMatrix().transpose().getArray()[0]);
         return points;
     }
 }

@@ -16,7 +16,7 @@ import Jama.Matrix;
 
 public class Similarity extends AffineTransformation {
 
-    private Matrix R;
+    protected Matrix R;
     private Matrix S;
 
     public Similarity(Matrix R, Matrix T, Matrix S) {

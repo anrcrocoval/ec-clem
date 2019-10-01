@@ -13,6 +13,8 @@
 package plugins.perrine.easyclemv0.transformation;
 
 import plugins.perrine.easyclemv0.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.PointFactory;
 import plugins.perrine.easyclemv0.sequence.VtkPointsFactory;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import vtk.*;
@@ -24,11 +26,13 @@ public class SplineTransformation implements Transformation {
     private vtkThinPlateSplineTransform splineTransform;
     private VtkPointsFactory vtkPointsFactory;
     private DatasetFactory datasetFactory;
+    private PointFactory pointFactory;
 
     @Inject
-    public SplineTransformation(VtkPointsFactory vtkPointsFactory, DatasetFactory datasetFactory) {
+    public SplineTransformation(VtkPointsFactory vtkPointsFactory, DatasetFactory datasetFactory, PointFactory pointFactory) {
         this.vtkPointsFactory = vtkPointsFactory;
         this.datasetFactory = datasetFactory;
+        this.pointFactory = pointFactory;
     }
 
     public vtkThinPlateSplineTransform getSplineTransform() {
@@ -38,6 +42,11 @@ public class SplineTransformation implements Transformation {
     public SplineTransformation setSplineTransform(vtkThinPlateSplineTransform splineTransform) {
         this.splineTransform = splineTransform;
         return this;
+    }
+
+    public Point apply(Point point) {
+        vtkPolyData vtkPointsResult = apply(vtkPointsFactory.getFrom(point), splineTransform);
+        return pointFactory.getFrom(vtkPointsResult);
     }
 
     public Dataset apply(Dataset dataset) {

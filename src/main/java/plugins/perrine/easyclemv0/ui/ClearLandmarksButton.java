@@ -13,7 +13,6 @@
 package plugins.perrine.easyclemv0.ui;
 
 import icy.gui.dialog.MessageDialog;
-import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.util.XMLUtil;

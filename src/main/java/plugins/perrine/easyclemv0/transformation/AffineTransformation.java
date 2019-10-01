@@ -17,7 +17,7 @@ import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 
 public class AffineTransformation implements Transformation {
-    protected Matrix A;
+    private Matrix A;
     protected Matrix T;
 
     public AffineTransformation(Matrix A, Matrix T) {

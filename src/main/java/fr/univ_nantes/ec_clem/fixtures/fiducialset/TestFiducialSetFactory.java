@@ -13,15 +13,16 @@
 package fr.univ_nantes.ec_clem.fixtures.fiducialset;
 
 import Jama.Matrix;
+import org.apache.commons.math3.distribution.MultivariateNormalDistribution;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.SynchronizedRandomGenerator;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 import plugins.perrine.easyclemv0.transformation.Transformation;
-
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TestFiducialSetFactory {
@@ -108,46 +109,65 @@ public class TestFiducialSetFactory {
         return new FiducialSet(source, target);
     }
 
-    public FiducialSet getRandomFromTransformation(Transformation transformation, int n) {
-        Dataset source = new Dataset(3);
+    public FiducialSet getRandomFromTransformation(Transformation transformation, int n, int[] range) {
+        Dataset source = new Dataset(range.length);
         for(int i = 0; i < n; i++) {
-            source.addPoint(new Point(new double[]{ random.nextInt(255), random.nextInt(255), random.nextInt(255) }));
+            source.addPoint(getRandomPoint(range));
         }
         Dataset target = transformation.apply(source);
         return new FiducialSet(source, target);
     }
 
-    public FiducialSet getGaussianAroundCenterOfGravityFromTransformation(Transformation transformation, int n) {
-        Point centerOfGravity = new Point(new double[]{ random.nextInt(255), random.nextInt(255), random.nextInt(255) });
-        Dataset source = new Dataset(3);
-        for(int i = 0; i < n; i++) {
-            source.addPoint(
-                centerOfGravity.plus(
-                    new Point(new double[]{ random.nextGaussian() * 10, random.nextGaussian() * 10, random.nextGaussian() * 10 })
-                )
-            );
-        }
-        Dataset target = transformation.apply(source);
-        return new FiducialSet(source, target);
+    private double[] getGaussian(double[][] covariance) {
+        double[] means = new double[covariance.length];
+        Arrays.fill(means, 0);
+        MultivariateNormalDistribution multivariateNormalDistribution = new MultivariateNormalDistribution(random, means, covariance);
+        return multivariateNormalDistribution.sample();
     }
 
-    public FiducialSet getRandomAndNoisyFromTransformation(Transformation transformation, int n, float var) {
-        FiducialSet fiducialSet = getRandomFromTransformation(transformation, n);
-        addGaussianNoise(fiducialSet.getSourceDataset(), var);
-        addGaussianNoise(fiducialSet.getTargetDataset(), var);
+    private double[] getUniform(int[] range) {
+        double[] result = new double[range.length];
+        for(int i = 0; i < range.length; i++) {
+            result[i] = random.nextInt(range[i]);
+        }
+        return result;
+    }
+
+    public Point getRandomPoint(int[] range) {
+        return new Point(getUniform(range));
+    }
+
+//    public FiducialSet getGaussianAroundCenterOfGravityFromTransformation(Transformation transformation, int n, int[] range, double[][] covariance) {
+//        Point centerOfGravity = getRandomPoint(range);
+//        Dataset source = new Dataset(3);
+//        for(int i = 0; i < n; i++) {
+//            source.addPoint(
+//                centerOfGravity.plus(
+//                    new Point(getGaussian(covariance))
+//                )
+//            );
+//        }
+//        Dataset target = transformation.apply(source);
+//        return new FiducialSet(source, target);
+//    }
+
+    public FiducialSet getRandomAndNoisyFromTransformation(Transformation transformation, int n, int[] range, double[][] covariance) {
+        FiducialSet fiducialSet = getRandomFromTransformation(transformation, n, range);
+        addGaussianNoise(fiducialSet.getSourceDataset(), covariance);
+        addGaussianNoise(fiducialSet.getTargetDataset(), covariance);
         return fiducialSet;
     }
 
-    public Dataset addGaussianNoise(Dataset dataset, float var) {
+    public Dataset addGaussianNoise(Dataset dataset, double[][] covariance) {
         for(int i = 0; i < dataset.getN(); i++) {
             Point point = dataset.getPoint(i);
-            double[] noiseArray = new double[point.getDimension()];
-            for(int j = 0; j < noiseArray.length; j++) {
-                noiseArray[j] = random.nextGaussian() * var;
-            }
-            Point noise = new Point(noiseArray);
-            dataset.setPoint(i, point.plus(noise));
+            dataset.setPoint(i, addGaussianNoise(point, covariance));
         }
         return dataset;
+    }
+
+    public Point addGaussianNoise(Point point, double[][] covariance) {
+        Point noise = new Point(getGaussian(covariance));
+        return point.plus(noise);
     }
 }

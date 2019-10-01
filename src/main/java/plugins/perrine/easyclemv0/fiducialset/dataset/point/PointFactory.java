@@ -13,9 +13,13 @@
 package plugins.perrine.easyclemv0.fiducialset.dataset.point;
 
 import icy.roi.ROI;
+import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.roi.RoiProcessor;
+import vtk.vtkPolyData;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PointFactory {
 
@@ -32,5 +36,9 @@ public class PointFactory {
 
     public Point getFrom(double ... coordinates) {
         return new Point(coordinates);
+    }
+
+    public Point getFrom(vtkPolyData points) {
+        return new Point(points.GetPoint(0));
     }
 }

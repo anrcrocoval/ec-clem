@@ -13,7 +13,9 @@
 package plugins.perrine.easyclemv0.transformation;
 
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
+import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 
 public interface Transformation {
     Dataset apply(Dataset dataset);
+    Point apply(Point point);
 }

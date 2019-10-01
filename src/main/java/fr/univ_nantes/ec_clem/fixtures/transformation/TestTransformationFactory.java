@@ -13,25 +13,97 @@
 package fr.univ_nantes.ec_clem.fixtures.transformation;
 
 import Jama.Matrix;
+import org.apache.commons.math3.random.JDKRandomGenerator;
+import org.apache.commons.math3.random.SynchronizedRandomGenerator;
+import plugins.perrine.easyclemv0.transformation.AffineTransformation;
 import plugins.perrine.easyclemv0.transformation.Similarity;
-
 import javax.inject.Inject;
-
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class TestTransformationFactory {
 
+    private SynchronizedRandomGenerator random = new SynchronizedRandomGenerator(new JDKRandomGenerator());
+
     @Inject
-    public TestTransformationFactory() {
+    public TestTransformationFactory() {}
+
+    public Similarity getRandomSimpleRotationTransformation(int dimension) {
+        return getSimpleRotationTransformation(dimension);
     }
 
-    public Similarity getSimpleRotationTransformation(double angle) {
+    private double getRandomAngle() {
+        return random.nextDouble() * 2 * Math.PI;
+    }
+
+    public Similarity getSimpleRotationTransformation(int dimension) {
+        switch (dimension) {
+            case 2: return getSimpleRotationTransformation2D(getRandomAngle());
+            case 3: return getSimpleRotationTransformation3D(getRandomAngle(), getRandomAngle(), getRandomAngle());
+        }
+        return null;
+    }
+
+    public Similarity getRandomSimpleSimilarityTransformation2D() {
+        return getSimpleSimilarityTransformation2D(getRandomAngle(), new double[]{random.nextDouble(), random.nextDouble()}, random.nextDouble());
+    }
+
+    public AffineTransformation getRandomSimpleAffineTransformation2D() {
+        Matrix A = new Matrix(2, 2);
+        A.set(0, 0, random.nextDouble());
+        A.set(0, 1, random.nextDouble());
+        A.set(1, 0, random.nextDouble());
+        A.set(1, 1, random.nextDouble());
+        Matrix T = new Matrix(2, 1);
+        T.set(0, 0, random.nextDouble());
+        T.set(1, 0, random.nextDouble());
+        return new AffineTransformation(A, T);
+    }
+
+    public Similarity getSimpleSimilarityTransformation2D(double angle, double[] t, double scale) {
         Matrix R = new Matrix(
             new double[][]{
-                { cos(angle), -1 * sin(angle), 0 },
-                { sin(angle), cos(angle), 0 },
-                { 0, 0, 1 }
+                { cos(angle), -1 * sin(angle) },
+                { sin(angle), cos(angle) }
+            }
+        );
+
+        Matrix S = Matrix.identity(2, 2).times(scale);
+        Matrix T = new Matrix(
+            new double[][] {
+                { t[0] },
+                { t[1] }
+            }
+        );
+
+        return new Similarity(R, T, S);
+    }
+
+    private Similarity getSimpleRotationTransformation2D(double angle) {
+        Matrix R = new Matrix(
+            new double[][]{
+                { cos(angle), -1 * sin(angle) },
+                { sin(angle), cos(angle) }
+            }
+        );
+
+        Matrix S = Matrix.identity(2, 2);
+        Matrix T = new Matrix(
+            new double[][] {
+                { 0 },
+                { 0 }
+            }
+        );
+
+        return new Similarity(R, T, S);
+    }
+
+    private Similarity getSimpleRotationTransformation3D(double ox, double oy, double oz) {
+        Matrix R = new Matrix(
+            new double[][]{
+                { cos(oz) * cos(oy), (cos(oz) * sin(oy) * sin(ox)) - (sin(oz) * cos(ox)), (cos(oz) * sin(oy) * cos(ox)) + (sin(oz) * sin(ox)) },
+                { sin(oz) * cos(oy), (sin(oz) * sin(oy) * sin(ox)) + (cos(oz) * cos(ox)), (sin(oz) * sin(oy) * cos(ox)) - (cos(oz) * sin(ox)) },
+                { -sin(oy), cos(oy) * sin(ox), cos(oy) * cos(ox) }
             }
         );
 

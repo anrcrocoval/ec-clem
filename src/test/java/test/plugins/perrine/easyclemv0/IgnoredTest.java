@@ -45,6 +45,13 @@ class IgnoredTest {
     private TLSAffineTransformationComputer tlsAffineTransformationComputer;
     private AffineTransformationComputer affineTransformationComputer;
 
+    private int[] range = new int[] {256, 256, 256};
+    private double[][] isotropicCovariance = new double[][] {
+        {100, 0, 0},
+        {0, 100, 0},
+        {0, 0, 100}
+    };
+
     public IgnoredTest() {
         DaggerIgnoredTestComponent.create().inject(this);
     }
@@ -90,91 +97,12 @@ class IgnoredTest {
     }
 
     @Test
-    void LS_varying_noise() {
-        double angle = 38;
-        int n = 100;
-        int iter = 50;
-        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getGaussianAroundCenterOfGravityFromTransformation(
-                simpleRotationTransformation, n * n + 1
-        );
-        Matrix error = new Matrix(iter * n, 4);
-        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        CompletionService<Runnable> completionService = new ExecutorCompletionService<>(executorService);
-        for(int i = 0; i < iter; i++) {
-            final int finalI = i;
-            for(int j = 0; j < n; j++) {
-                final int finalJ = j;
-                completionService.submit(() -> {
-                    int nbIter = (finalI + 1) * (finalI + 1);
-                    int nbPoints = (finalJ + 1) * (finalJ + 1);
-                    Matrix currentError = new Matrix(nbIter, 3);
-                    for(int current = 0; current < nbIter; current++) {
-                        FiducialSet currentFiducialSet = new FiducialSet(
-                                randomFromTransformationFiducialSet.getSourceDataset().clone(),
-                                randomFromTransformationFiducialSet.getTargetDataset().clone()
-                        );
-                        testFiducialSetFactory.addGaussianNoise(
-                                currentFiducialSet.getTargetDataset(), 10
-                        );
-                        Point targetRemovedPoint = currentFiducialSet.getTargetDataset().removePoint(0);
-                        Point sourceRemovedPoint = currentFiducialSet.getSourceDataset().removePoint(0);
-
-                        for(int k = n * n; k > nbPoints; k--) {
-                            currentFiducialSet.getTargetDataset().removePoint(0);
-                            currentFiducialSet.getSourceDataset().removePoint(0);
-                        }
-
-                        FiducialSet finalCurrentFiducialSet = new FiducialSet(
-                                currentFiducialSet.getSourceDataset(),
-                                currentFiducialSet.getTargetDataset()
-                        );
-                        AffineTransformation compute = affineTransformationComputer.compute(finalCurrentFiducialSet);
-                        Matrix minus = randomFromTransformationFiducialSet.getTargetDataset().getPoint(0).getMatrix().minus(
-                                new Point(compute.apply(sourceRemovedPoint).getMatrix()).getMatrix()
-                        );
-                        currentError.setMatrix(current, current, 0, 2, minus.transpose());
-                    }
-
-                    Dataset d = new Dataset(currentError);
-                    Mean mean = new Mean();
-                    mean.clear();
-                    Variance variance = new Variance();
-                    variance.clear();
-
-                    for(int p = 0; p < d.getN(); p++) {
-                        double sumOfSquare = d.getPoint(p).getSumOfSquare();
-                        mean.increment(sumOfSquare);
-                        variance.increment(sumOfSquare);
-                    }
-
-                    error.set(finalI * n + finalJ, 0, nbIter);
-                    error.set(finalI * n + finalJ, 1, nbPoints);
-                    error.set(finalI * n + finalJ, 2, mean.getResult());
-                    error.set(finalI * n + finalJ, 3, variance.getResult());
-                }, null);
-            }
-        }
-
-        for(int i = 0; i < iter; i++) {
-            for(int j = 0; j < n; j++) {
-                try {
-                    completionService.take().get();
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        error.print(1,5);
-    }
-
-    @Test
     void LS() {
         double angle = 38;
         int n = 15;
-        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
+        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(range.length);
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, 10);
+        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, range, isotropicCovariance);
         AffineTransformation compute = affineTransformationComputer.compute(randomFromTransformationFiducialSet);
         Dataset error = new Dataset(randomFromTransformationFiducialSet.getTargetDataset().getMatrix().minus(
                 compute.apply(randomFromTransformationFiducialSet.getSourceDataset()).getMatrix()
@@ -187,9 +115,9 @@ class IgnoredTest {
     void LS_leave_one_out() {
         double angle = 38;
         int n = 15;
-        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
+        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(range.length);
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, 10);
+        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, range, isotropicCovariance);
 
         Dataset error = new Dataset(3);
 
@@ -221,9 +149,9 @@ class IgnoredTest {
     void TLS() {
         double angle = 38;
         int n = 15;
-        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
+        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(range.length);
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, 10);
+        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, range, isotropicCovariance);
         tlsAffineTransformationComputer.compute(randomFromTransformationFiducialSet);
     }
 
@@ -231,9 +159,9 @@ class IgnoredTest {
     void EKF() {
         double angle = 38;
         int n = 15;
-        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
+        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(range.length);
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, 10);
+        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, range, isotropicCovariance);
 
         Similarity leastSquareEstimate = rigidTransformationComputer.compute(randomFromTransformationFiducialSet);
         KalmanFilterState kalmanFilterState = new KalmanFilterState(leastSquareEstimate.getMatrixRight(), Matrix.identity(12, 12));
@@ -250,11 +178,11 @@ class IgnoredTest {
         double angle = 38;
         int n = 15;
         int nFiducial = 50;
-        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(angle);
+        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(range.length);
         simpleRotationTransformation.getMatrixRight().print(1,5);
         Matrix M = new Matrix(n, 12);
         for(int i = 0; i < n; i++) {
-            FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, nFiducial, 10);
+            FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, nFiducial, range, isotropicCovariance);
             Similarity computedTransformation = rigidTransformationComputer.compute(randomFromTransformationFiducialSet);
 
             for(int u = 0; u < computedTransformation.getR().getRowDimension(); u++) {
@@ -279,7 +207,7 @@ class IgnoredTest {
         covariance.print(1,5);
 
         Matrix covarianceEstimate = errorComputer.getCovarianceEstimate(new TransformationSchema(
-                testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, nFiducial, 10),
+                testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, nFiducial, range, isotropicCovariance),
                 TransformationType.RIGID,
                 null,
                 null
