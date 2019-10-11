@@ -33,7 +33,53 @@ public class TestFiducialSetFactory {
     public TestFiducialSetFactory() {
     }
 
-    public FiducialSet getSimpleRotationFiducialSet() {
+    public FiducialSet getSimpleRotationFiducialSet2D() {
+        List<Point> sourcePoints = new ArrayList<>();
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 7 }, { 5 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 8 }, { 5 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 9 }, { 3 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 12 }, { 25 }})));
+        Dataset source = new Dataset(sourcePoints);
+
+        List<Point> targetPoints = new ArrayList<>();
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 0.3623365 }, { 2.206516 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ -1.5478108 }, { 1.613779 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{  0.5927372 }, { -1.910147 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 5.2036726 }, { 6.849948 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 6.1587463 }, { 7.146317 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{  7.7065571 }, { 5.532538 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 4.0516693 }, { 27.433264 }})));
+        Dataset target = new Dataset(targetPoints);
+        return new FiducialSet(source, target);
+    }
+
+    public FiducialSet getSimpleTranslationFiducialSet2D() {
+        List<Point> sourcePoints = new ArrayList<>();
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 7 }, { 5 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 8 }, { 5 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 9 }, { 3 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 12 }, { 25 }})));
+        Dataset source = new Dataset(sourcePoints);
+
+        List<Point> targetPoints = new ArrayList<>();
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 2 }, { 3 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 0 }, { 3 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 1 }, { -1 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 8 }, { 6 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 9 }, { 6 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 10 }, { 4 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 13 }, { 26 }})));
+        Dataset target = new Dataset(targetPoints);
+        return new FiducialSet(source, target);
+    }
+
+    public FiducialSet getSimpleRotationFiducialSet3D() {
         List<Point> sourcePoints = new ArrayList<>();
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 1 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
@@ -50,7 +96,7 @@ public class TestFiducialSetFactory {
         return new FiducialSet(source, target);
     }
 
-    public FiducialSet getSimpleTranslationFiducialSet() {
+    public FiducialSet getSimpleTranslationFiducialSet3D() {
         List<Point> sourcePoints = new ArrayList<>();
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 1 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
@@ -67,7 +113,7 @@ public class TestFiducialSetFactory {
         return new FiducialSet(source, target);
     }
 
-    public FiducialSet getComplexRotationFiducialSet() {
+    public FiducialSet getComplexRotationFiducialSet3D() {
         List<Point> sourcePoints = new ArrayList<>();
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 1 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
@@ -84,7 +130,7 @@ public class TestFiducialSetFactory {
         return new FiducialSet(source, target);
     }
 
-    public FiducialSet getTranslationRotationScalingFiducialSet() {
+    public FiducialSet getTranslationRotationScalingFiducialSet3D() {
         List<Point> sourcePoints = new ArrayList<>();
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 168.04540 }, { 158.13620 }, { 1 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 343.47724 }, { 298.73880 }, { 1 }})));
@@ -136,20 +182,6 @@ public class TestFiducialSetFactory {
     public Point getRandomPoint(int[] range) {
         return new Point(getUniform(range));
     }
-
-//    public FiducialSet getGaussianAroundCenterOfGravityFromTransformation(Transformation transformation, int n, int[] range, double[][] covariance) {
-//        Point centerOfGravity = getRandomPoint(range);
-//        Dataset source = new Dataset(3);
-//        for(int i = 0; i < n; i++) {
-//            source.addPoint(
-//                centerOfGravity.plus(
-//                    new Point(getGaussian(covariance))
-//                )
-//            );
-//        }
-//        Dataset target = transformation.apply(source);
-//        return new FiducialSet(source, target);
-//    }
 
     public FiducialSet getRandomAndNoisyFromTransformation(Transformation transformation, int n, int[] range, double[][] covariance) {
         FiducialSet fiducialSet = getRandomFromTransformation(transformation, n, range);
