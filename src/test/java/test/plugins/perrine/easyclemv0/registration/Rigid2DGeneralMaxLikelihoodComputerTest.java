@@ -14,11 +14,13 @@ package test.plugins.perrine.easyclemv0.registration;
 
 import fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
 import fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 import plugins.perrine.easyclemv0.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputer;
+import plugins.perrine.easyclemv0.registration.likelihood.dimension2.general.Rigid2DGeneralMaxLikelihoodComputer;
 import plugins.perrine.easyclemv0.transformation.Similarity;
 
 import javax.inject.Inject;
@@ -27,14 +29,15 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Rigid2DMaxLikelihoodComputerTest {
+@Disabled
+class Rigid2DGeneralMaxLikelihoodComputerTest {
 
     private TestFiducialSetFactory testFiducialSetFactory;
     private TestTransformationFactory testTransformationFactory;
-    private Rigid2DMaxLikelihoodComputer subjectUnderTest;
+    private Rigid2DGeneralMaxLikelihoodComputer subjectUnderTest;
 
-    public Rigid2DMaxLikelihoodComputerTest() {
-        DaggerRigid2DMaxLikelihoodComputerTestComponent.create().inject(this);
+    public Rigid2DGeneralMaxLikelihoodComputerTest() {
+        DaggerRigid2DGeneralMaxLikelihoodComputerTestComponent.create().inject(this);
     }
 
     @Inject
@@ -48,7 +51,7 @@ class Rigid2DMaxLikelihoodComputerTest {
     }
 
     @Inject
-    public void setSubjectUnderTest(Rigid2DMaxLikelihoodComputer subjectUnderTest) {
+    public void setSubjectUnderTest(Rigid2DGeneralMaxLikelihoodComputer subjectUnderTest) {
         this.subjectUnderTest = subjectUnderTest;
     }
 

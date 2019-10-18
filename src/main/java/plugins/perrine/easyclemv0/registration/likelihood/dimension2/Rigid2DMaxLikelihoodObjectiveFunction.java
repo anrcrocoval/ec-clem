@@ -2,35 +2,32 @@ package plugins.perrine.easyclemv0.registration.likelihood.dimension2;
 
 import Jama.Matrix;
 import org.apache.commons.math3.analysis.MultivariateFunction;
-import org.apache.commons.math3.exception.DimensionMismatchException;
 import plugins.perrine.easyclemv0.error.CovarianceMatrixComputer;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.matrix.MatrixUtil;
+
 import javax.inject.Inject;
+import java.util.Arrays;
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class Rigid2DMaxLikelihoodObjectiveFunction implements MultivariateFunction {
-
-    private CovarianceMatrixComputer covarianceMatrixComputer;
-    private MatrixUtil matrixUtil;
+public abstract class Rigid2DMaxLikelihoodObjectiveFunction implements MultivariateFunction {
 
     private FiducialSet fiducialSet;
     private Matrix sigmaInv;
+    private CovarianceMatrixComputer covarianceMatrixComputer;
+    private MatrixUtil matrixUtil;
 
     public Rigid2DMaxLikelihoodObjectiveFunction(FiducialSet fiducialSet) {
         DaggerRigid2DLikelihoodObjectiveFunctionComponent.create().inject(this);
         this.fiducialSet = fiducialSet;
-        sigmaInv = matrixUtil.pseudoInverse(
-            covarianceMatrixComputer.compute(fiducialSet.getTargetDataset().getMatrix())
-        );
+        sigmaInv = matrixUtil.pseudoInverse(covarianceMatrixComputer.compute(fiducialSet.getTargetDataset().getMatrix()));
     }
 
     @Override
     public double value(double[] point) {
-        if(point.length != 3) {
-            throw new DimensionMismatchException(point.length, 3);
-        }
+        checkParameters(point);
         Matrix R = getR(point[2]);
         Matrix T = getT(point[0], point[1]);
         double sum = 0;
@@ -38,10 +35,17 @@ public class Rigid2DMaxLikelihoodObjectiveFunction implements MultivariateFuncti
             Matrix y = fiducialSet.getTargetDataset().getPoint(i).getMatrix();
             Matrix z = fiducialSet.getSourceDataset().getPoint(i).getMatrix();
             Matrix tmp = y.minus(R.times(z)).minus(T);
-            sum += tmp.transpose().times(sigmaInv).times(tmp).get(0,0);
+            sum += tmp.transpose().times(getSigmaInv(point)).times(tmp).get(0,0);
         }
-        return sum;
+        return sum * -1/2;
     }
+
+   abstract protected Matrix getSigmaInv(double[] point);
+    abstract protected void checkParameters(double[] point);
+
+//    private Matrix getSigmaInv() {
+//        return sigmaInv;
+//    }
 
     private Matrix getR(double theta) {
         return new Matrix(new double[][] {
