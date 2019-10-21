@@ -19,7 +19,7 @@ public class ObjectiveFunctionOptimizer {
         multiStartMultivariateOptimizer = new MultiStartMultivariateOptimizer(
                 new NonLinearConjugateGradientOptimizer(
                     FLETCHER_REEVES,
-                        new SimpleValueChecker(0.000000001, 0.000000001)
+                        new SimpleValueChecker(0.00000000001, 0.00000000001)
                 ),
                 1000,
             generator

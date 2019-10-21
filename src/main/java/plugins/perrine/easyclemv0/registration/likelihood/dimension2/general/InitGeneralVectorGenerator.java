@@ -31,7 +31,7 @@ public class InitGeneralVectorGenerator implements RandomVectorGenerator {
     @Override
     public double[] nextVector() {
         double[] doubles = random.nextVector();
-        return new double[] {doubles[0], doubles[1], doubles[2], sigmaInv.get(0, 0), sigmaInv.get(0, 1), sigmaInv.get(1,1)};
+        return new double[] {doubles[0], doubles[1], doubles[2]};
     }
 
     @Inject

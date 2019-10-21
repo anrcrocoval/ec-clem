@@ -7,6 +7,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapter;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 import org.apache.commons.math3.random.RandomVectorGenerator;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.registration.TransformationComputer;
@@ -42,16 +43,18 @@ public abstract class Rigid2DMaxLikelihoodComputer implements TransformationComp
             getParametersLowerBounds(),
             getParametersUpperBounds()
         );
-        ObjectiveFunctionOptimizer objectiveFunctionOptimizer = new ObjectiveFunctionOptimizer(getRandomVectorGenerator(fiducialSet));
+//        ObjectiveFunctionOptimizer objectiveFunctionOptimizer = new ObjectiveFunctionOptimizer(getRandomVectorGenerator(fiducialSet));
+        BOBYQAOptimizer  objectiveFunctionOptimizer = new BOBYQAOptimizer(5);
         PointValuePair optimize = objectiveFunctionOptimizer.optimize(
-            GoalType.MINIMIZE,
+            GoalType.MAXIMIZE,
 //            new ObjectiveFunction(adapter),
             new ObjectiveFunction(getObjectiveFunction(fiducialSet)),
-            new ObjectiveFunctionGradient(getObjectiveFunctionGradient(fiducialSet, adapter)),
+//            new ObjectiveFunctionGradient(getObjectiveFunctionGradient(fiducialSet, adapter)),
             new InitialGuess(getInitialGuess(fiducialSet)),
             MaxEval.unlimited(),
             MaxIter.unlimited()
         );
+//        return new PointValuePair(getBoundedValues(optimize.getPoint()), optimize.getValue());
         return optimize;
 //        return new PointValuePair(adapter.unboundedToBounded(optimize.getPoint()), optimize.getValue());
     }
@@ -63,4 +66,5 @@ public abstract class Rigid2DMaxLikelihoodComputer implements TransformationComp
     protected abstract double[] getParametersLowerBounds();
     protected abstract double[] getParametersUpperBounds();
     protected abstract RandomVectorGenerator getRandomVectorGenerator(FiducialSet fiducialSet);
+    protected abstract double[] getBoundedValues(double[] point);
 }

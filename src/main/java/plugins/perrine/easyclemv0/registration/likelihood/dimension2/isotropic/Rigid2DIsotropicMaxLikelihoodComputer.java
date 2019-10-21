@@ -2,6 +2,7 @@ package plugins.perrine.easyclemv0.registration.likelihood.dimension2.isotropic;
 
 import Jama.Matrix;
 import org.apache.commons.math3.analysis.MultivariateVectorFunction;
+import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;
 import org.apache.commons.math3.optim.nonlinear.scalar.MultivariateFunctionMappingAdapter;
 import org.apache.commons.math3.random.RandomVectorGenerator;
 import plugins.perrine.easyclemv0.error.CovarianceMatrixComputer;
@@ -38,6 +39,19 @@ public class Rigid2DIsotropicMaxLikelihoodComputer extends Rigid2DMaxLikelihoodC
     @Override
     protected RandomVectorGenerator getRandomVectorGenerator(FiducialSet fiducialSet) {
         return new InitIsotropicVectorGenerator(fiducialSet);
+    }
+
+    @Override
+    protected double[] getBoundedValues(double[] point) {
+        DerivativeStructure tx = new DerivativeStructure(6, 1, 0, point[0]);
+        DerivativeStructure ty = new DerivativeStructure(6, 1, 1, point[1]);
+        DerivativeStructure theta = new DerivativeStructure(6, 1, 2, point[2]);
+        DerivativeStructure lambda11 = new DerivativeStructure(6, 1, 3, point[3]);
+
+        DerivativeStructure sigmoid_theta = theta.negate().exp().add(1).reciprocal().multiply(2 * Math.PI);
+        DerivativeStructure exp_lambda11 = lambda11.abs().add(0.00000001);
+
+        return  new double[]{tx.getValue(), ty.getValue(), sigmoid_theta.getValue(), exp_lambda11.getValue()};
     }
 
     @Override
