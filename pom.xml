@@ -63,6 +63,11 @@
             <artifactId>vtk</artifactId>
             <version>0.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>fr.univ-nantes</groupId>
+            <artifactId>ipopt</artifactId>
+            <version>0.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>gov.nist.math</groupId>
@@ -147,7 +152,7 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>icy</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/icy.jar</file>
+                            <file>${project.basedir}/lib/icy/icy.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -162,7 +167,7 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>ezplug</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/plugins/adufour/ezplug/EzPlug.jar</file>
+                            <file>${project.basedir}/lib/icy/plugins/adufour/ezplug/EzPlug.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -177,7 +182,7 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>vtk</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/lib/vtk.jar</file>
+                            <file>${project.basedir}/lib/icy/lib/vtk.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -192,7 +197,7 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>colorbar</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/plugins/stef/tools/overlay/ColorBar.jar</file>
+                            <file>${project.basedir}/lib/icy/plugins/stef/tools/overlay/ColorBar.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -207,7 +212,7 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>blocks</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/plugins/adufour/blocks/Blocks.jar</file>
+                            <file>${project.basedir}/lib/icy/plugins/adufour/blocks/Blocks.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -222,7 +227,7 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>tvdenoising</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/plugins/nchenouard/tvdenoising/TVDenoising.jar</file>
+                            <file>${project.basedir}/lib/icy/plugins/nchenouard/tvdenoising/TVDenoising.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -237,7 +242,7 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>filtertoolbox</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/plugins/adufour/filtering/FilterToolbox.jar</file>
+                            <file>${project.basedir}/lib/icy/plugins/adufour/filtering/FilterToolbox.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -252,7 +257,7 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>bioformats</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/lib/bioformats.jar</file>
+                            <file>${project.basedir}/lib/icy/lib/bioformats.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -267,7 +272,7 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>jogl</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/lib/jogl-all.jar</file>
+                            <file>${project.basedir}/lib/icy/lib/jogl-all.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -282,7 +287,22 @@
                             <groupId>fr.univ-nantes</groupId>
                             <artifactId>jai</artifactId>
                             <version>0.0.0</version>
-                            <file>${project.basedir}/libs/icy/lib/jai_core.jar</file>
+                            <file>${project.basedir}/lib/icy/lib/jai_core.jar</file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>install-ipopt</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>fr.univ-nantes</groupId>
+                            <artifactId>ipopt</artifactId>
+                            <version>0.0.0</version>
+                            <file>${project.basedir}/lib/ipopt.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>

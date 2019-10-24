@@ -1,5 +1,5 @@
 .idea/
-libs/icy
+lib/icy
 setting.xml
 target/
 workspace/
