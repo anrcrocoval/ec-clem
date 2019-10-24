@@ -58,6 +58,7 @@ public class IpoptTest {
     void test2() {
         FiducialSet simpleRotationFiducialSet = testFiducialSetFactory.getSimpleRotationFiducialSet2D();
         Rigid2DGeneralMaxLikelihoodIpopt subjectUnderTest = new Rigid2DGeneralMaxLikelihoodIpopt(simpleRotationFiducialSet);
+        subjectUnderTest.setIntegerOption("max_iter", 10000);
         subjectUnderTest.OptimizeNLP();
         double[] x = subjectUnderTest.getVariableValues();
         System.out.println(Arrays.toString(x));

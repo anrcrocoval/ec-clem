@@ -26,6 +26,10 @@ public class Rigid2DIsotropicMaxLikelihoodComputer extends Rigid2DMaxLikelihoodC
     @Override
     protected double[] optimize(FiducialSet fiducialSet) {
         Rigid2DIsotropicMaxLikelihoodIpopt rigid2DGeneralMaxLikelihoodIpopt = new Rigid2DIsotropicMaxLikelihoodIpopt(fiducialSet);
+        rigid2DGeneralMaxLikelihoodIpopt.setIntegerOption("max_iter", 20000);
+        rigid2DGeneralMaxLikelihoodIpopt.setNumericOption("print_frequency_time", 1);
+        rigid2DGeneralMaxLikelihoodIpopt.setIntegerOption("print_frequency_iter", 1);
+        rigid2DGeneralMaxLikelihoodIpopt.setStringOption("linear_solver", "mumps");
         rigid2DGeneralMaxLikelihoodIpopt.OptimizeNLP();
         System.out.println(Arrays.toString(rigid2DGeneralMaxLikelihoodIpopt.getVariableValues()));
         System.out.println(Arrays.toString(rigid2DGeneralMaxLikelihoodIpopt.getConstraintValues()));
