@@ -107,8 +107,8 @@ public class Rigid2DIsotropicMaxLikelihoodIpopt extends Ipopt {
 
     @Override
     protected boolean eval_g(int n, double[] x, boolean new_x, int m, double[] g) {
-        g[0] = Math.pow(x[3], 2) + Math.pow(x[5], 2) - Math.pow(x[4], 2) - Math.pow(x[6], 2);
-        g[1] = (x[3] * x[4]) + (x[6] * x[5]);
+        g[0] = getConstraint0(x).getValue();
+        g[1] = getConstraint1(x).getValue();
         return true;
     }
 
@@ -133,20 +133,22 @@ public class Rigid2DIsotropicMaxLikelihoodIpopt extends Ipopt {
             iRow[12] = 1;  jCol[12] = 5;
             iRow[13] = 1;  jCol[13] = 6;
         } else {
-            values[0] = 0;
-            values[1] = 0;
-            values[2] = 0;
-            values[3] = 2 * x[3];
-            values[4] = -2 * x[4];
-            values[5] = 2 * x[5];
-            values[6] = -2 * x[6];
-            values[7] = 0;
-            values[8] = 0;
-            values[9] = 0;
-            values[10] = x[4];
-            values[11] = x[3];
-            values[12] = -x[6];
-            values[13] = -x[5];
+            DerivativeStructure constraint0 = getConstraint0(x);
+            DerivativeStructure constraint1 = getConstraint1(x);
+            values[0] = constraint0.getPartialDerivative(1, 0, 0, 0, 0, 0, 0);
+            values[1] = constraint0.getPartialDerivative(0, 1, 0, 0, 0, 0, 0);
+            values[2] = constraint0.getPartialDerivative(0, 0, 1, 0, 0, 0, 0);
+            values[3] = constraint0.getPartialDerivative(0, 0, 0, 1, 0, 0, 0);
+            values[4] = constraint0.getPartialDerivative(0, 0, 0, 0, 1, 0, 0);
+            values[5] = constraint0.getPartialDerivative(0, 0, 0, 0, 0, 1, 0);
+            values[6] = constraint0.getPartialDerivative(0, 0, 0, 0, 0, 0, 1);
+            values[7] = constraint1.getPartialDerivative(1, 0, 0, 0, 0, 0, 0);
+            values[8] = constraint1.getPartialDerivative(0, 1, 0, 0, 0, 0, 0);
+            values[9] = constraint1.getPartialDerivative(0, 0, 1, 0, 0, 0, 0);
+            values[10] = constraint1.getPartialDerivative(0, 0, 0, 1, 0, 0, 0);
+            values[11] = constraint1.getPartialDerivative(0, 0, 0, 0, 1, 0, 0);
+            values[12] = constraint1.getPartialDerivative(0, 0, 0, 0, 0, 1, 0);
+            values[13] = constraint1.getPartialDerivative(0, 0, 0, 0, 0, 0, 1);
         }
         return true;
     }
@@ -174,42 +176,92 @@ public class Rigid2DIsotropicMaxLikelihoodIpopt extends Ipopt {
         } else {
             try {
                 DerivativeStructure derivativeStructure = cache.get(cacheWrapper.set(x));
-                values[0] = derivativeStructure.getPartialDerivative(2, 0, 0, 0, 0, 0, 0) * obj_factor;
-                values[1] = derivativeStructure.getPartialDerivative(1, 1, 0, 0, 0, 0, 0) * obj_factor;
-                values[2] = derivativeStructure.getPartialDerivative(0, 2, 0, 0, 0, 0, 0) * obj_factor;
-                values[3] = derivativeStructure.getPartialDerivative(1, 0, 1, 0, 0, 0, 0) * obj_factor;
-                values[4] = derivativeStructure.getPartialDerivative(0, 1, 1, 0, 0, 0, 0) * obj_factor;
-                values[5] = derivativeStructure.getPartialDerivative(0, 0, 2, 0, 0, 0, 0) * obj_factor;
-                values[6] = derivativeStructure.getPartialDerivative(1, 0, 0, 1, 0, 0, 0) * obj_factor;
-                values[7] = derivativeStructure.getPartialDerivative(0, 1, 0, 1, 0, 0, 0) * obj_factor;
-                values[8] = derivativeStructure.getPartialDerivative(0, 0, 1, 1, 0, 0, 0) * obj_factor;
-                values[9] = derivativeStructure.getPartialDerivative(0, 0, 0, 2, 0, 0, 0) * obj_factor;
-                values[10] = derivativeStructure.getPartialDerivative(1, 0, 0, 0, 1, 0, 0) * obj_factor;
-                values[11] = derivativeStructure.getPartialDerivative(0, 1, 0, 0, 1, 0, 0) * obj_factor;
-                values[12] = derivativeStructure.getPartialDerivative(0, 0, 1, 0, 1, 0, 0) * obj_factor;
-                values[13] = derivativeStructure.getPartialDerivative(0, 0, 0, 1, 1, 0, 0) * obj_factor;
-                values[14] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 2, 0, 0) * obj_factor;
-                values[15] = derivativeStructure.getPartialDerivative(1, 0, 0, 0, 0, 1, 0) * obj_factor;
-                values[16] = derivativeStructure.getPartialDerivative(0, 1, 0, 0, 0, 1, 0) * obj_factor;
-                values[17] = derivativeStructure.getPartialDerivative(0, 0, 1, 0, 0, 1, 0) * obj_factor;
-                values[18] = derivativeStructure.getPartialDerivative(0, 0, 0, 1, 0, 1, 0) * obj_factor;
-                values[19] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 1, 1, 0) * obj_factor;
-                values[20] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 0, 2, 0) * obj_factor;
-                values[21] = derivativeStructure.getPartialDerivative(1, 0, 0, 0, 0, 0, 1) * obj_factor;
-                values[22] = derivativeStructure.getPartialDerivative(0, 1, 0, 0, 0, 0, 1) * obj_factor;
-                values[23] = derivativeStructure.getPartialDerivative(0, 0, 1, 0, 0, 0, 1) * obj_factor;
-                values[24] = derivativeStructure.getPartialDerivative(0, 0, 0, 1, 0, 0, 1) * obj_factor;
-                values[25] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 1, 0, 1) * obj_factor;
-                values[26] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 0, 1, 1) * obj_factor;
-                values[27] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 0, 0, 2) * obj_factor;
-
-                values[9] += 2 * lambda[0];
-                values[14] += -2 * lambda[0];
-                values[20] += 2 * lambda[0];
-                values[27] += -2 * lambda[0];
-
-                values[13] += lambda[1];
-                values[26] +=  -lambda[1];
+                DerivativeStructure constraint0 = getConstraint0(x);
+                DerivativeStructure constraint1 = getConstraint1(x);
+                values[0] = derivativeStructure.getPartialDerivative(2, 0, 0, 0, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(2, 0, 0, 0, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(2, 0, 0, 0, 0, 0, 0) * lambda[1];
+                values[1] = derivativeStructure.getPartialDerivative(1, 1, 0, 0, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(1, 1, 0, 0, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(1, 1, 0, 0, 0, 0, 0) * lambda[1];
+                values[2] = derivativeStructure.getPartialDerivative(0, 2, 0, 0, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 2, 0, 0, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 2, 0, 0, 0, 0, 0) * lambda[1];
+                values[3] = derivativeStructure.getPartialDerivative(1, 0, 1, 0, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(1, 0, 1, 0, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(1, 0, 1, 0, 0, 0, 0) * lambda[1];
+                values[4] = derivativeStructure.getPartialDerivative(0, 1, 1, 0, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 1, 1, 0, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 1, 1, 0, 0, 0, 0) * lambda[1];
+                values[5] = derivativeStructure.getPartialDerivative(0, 0, 2, 0, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 2, 0, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 2, 0, 0, 0, 0) * lambda[1];
+                values[6] = derivativeStructure.getPartialDerivative(1, 0, 0, 1, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(1, 0, 0, 1, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(1, 0, 0, 1, 0, 0, 0) * lambda[1];
+                values[7] = derivativeStructure.getPartialDerivative(0, 1, 0, 1, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 1, 0, 1, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 1, 0, 1, 0, 0, 0) * lambda[1];
+                values[8] = derivativeStructure.getPartialDerivative(0, 0, 1, 1, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 1, 1, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 1, 1, 0, 0, 0) * lambda[1];
+                values[9] = derivativeStructure.getPartialDerivative(0, 0, 0, 2, 0, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 2, 0, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 2, 0, 0, 0) * lambda[1];
+                values[10] = derivativeStructure.getPartialDerivative(1, 0, 0, 0, 1, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(1, 0, 0, 0, 1, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(1, 0, 0, 0, 1, 0, 0) * lambda[1];
+                values[11] = derivativeStructure.getPartialDerivative(0, 1, 0, 0, 1, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 1, 0, 0, 1, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 1, 0, 0, 1, 0, 0) * lambda[1];
+                values[12] = derivativeStructure.getPartialDerivative(0, 0, 1, 0, 1, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 1, 0, 1, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 1, 0, 1, 0, 0) * lambda[1];
+                values[13] = derivativeStructure.getPartialDerivative(0, 0, 0, 1, 1, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 1, 1, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 1, 1, 0, 0) * lambda[1];
+                values[14] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 2, 0, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 0, 2, 0, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 0, 2, 0, 0) * lambda[1];
+                values[15] = derivativeStructure.getPartialDerivative(1, 0, 0, 0, 0, 1, 0) * obj_factor
+                    + constraint0.getPartialDerivative(1, 0, 0, 0, 0, 1, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(1, 0, 0, 0, 0, 1, 0) * lambda[1];
+                values[16] = derivativeStructure.getPartialDerivative(0, 1, 0, 0, 0, 1, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 1, 0, 0, 0, 1, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 1, 0, 0, 0, 1, 0) * lambda[1];
+                values[17] = derivativeStructure.getPartialDerivative(0, 0, 1, 0, 0, 1, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 1, 0, 0, 1, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 1, 0, 0, 1, 0) * lambda[1];
+                values[18] = derivativeStructure.getPartialDerivative(0, 0, 0, 1, 0, 1, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 1, 0, 1, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 1, 0, 1, 0) * lambda[1];
+                values[19] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 1, 1, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 0, 1, 1, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 0, 1, 1, 0) * lambda[1];
+                values[20] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 0, 2, 0) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 0, 0, 2, 0) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 0, 0, 2, 0) * lambda[1];
+                values[21] = derivativeStructure.getPartialDerivative(1, 0, 0, 0, 0, 0, 1) * obj_factor
+                    + constraint0.getPartialDerivative(1, 0, 0, 0, 0, 0, 1) * lambda[0]
+                    + constraint1.getPartialDerivative(1, 0, 0, 0, 0, 0, 1) * lambda[1];
+                values[22] = derivativeStructure.getPartialDerivative(0, 1, 0, 0, 0, 0, 1) * obj_factor
+                    + constraint0.getPartialDerivative(0, 1, 0, 0, 0, 0, 1) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 1, 0, 0, 0, 0, 1) * lambda[1];
+                values[23] = derivativeStructure.getPartialDerivative(0, 0, 1, 0, 0, 0, 1) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 1, 0, 0, 0, 1) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 1, 0, 0, 0, 1) * lambda[1];
+                values[24] = derivativeStructure.getPartialDerivative(0, 0, 0, 1, 0, 0, 1) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 1, 0, 0, 1) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 1, 0, 0, 1) * lambda[1];
+                values[25] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 1, 0, 1) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 0, 1, 0, 1) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 0, 1, 0, 1) * lambda[1];
+                values[26] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 0, 1, 1) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 0, 0, 1, 1) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 0, 0, 1, 1) * lambda[1];
+                values[27] = derivativeStructure.getPartialDerivative(0, 0, 0, 0, 0, 0, 2) * obj_factor
+                    + constraint0.getPartialDerivative(0, 0, 0, 0, 0, 0, 2) * lambda[0]
+                    + constraint1.getPartialDerivative(0, 0, 0, 0, 0, 0, 2) * lambda[1];
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
@@ -222,15 +274,16 @@ public class Rigid2DIsotropicMaxLikelihoodIpopt extends Ipopt {
         DerivativeStructure tx = new DerivativeStructure(7, 2, 0, point[0]);
         DerivativeStructure ty = new DerivativeStructure(7, 2, 1, point[1]);
         DerivativeStructure theta = new DerivativeStructure(7, 2, 2, point[2]);
-
         DerivativeStructure v_11 = new DerivativeStructure(7, 2, 3, point[3]);
         DerivativeStructure v_12 = new DerivativeStructure(7, 2, 4, point[4]);
         DerivativeStructure v_21 = new DerivativeStructure(7, 2, 5, point[5]);
         DerivativeStructure v_22 = new DerivativeStructure(7, 2, 6, point[6]);
 
         DerivativeStructure lambda_11 = (v_11.pow(2)).add(v_21.pow(2));
+        DerivativeStructure lambda_12 = (v_11.multiply(v_12)).add(v_22.multiply(v_21));
+        DerivativeStructure lambda_22 = (v_22.pow(2)).add(v_12.pow(2));
 
-        DerivativeStructure det_lambda = (lambda_11.pow(2));
+        DerivativeStructure det_lambda = (lambda_11.multiply(lambda_22)).subtract(lambda_12.pow(2));
         DerivativeStructure sum = null;
 
         for(int i = 0; i < fiducialSet.getN(); i++) {
@@ -244,8 +297,8 @@ public class Rigid2DIsotropicMaxLikelihoodIpopt extends Ipopt {
                 .add(y.get(1))
                 .subtract(theta.sin().multiply(z.get(0)))
                 .subtract(theta.cos().multiply(z.get(1)));
-            DerivativeStructure sum_i = tmp1.multiply(tmp1.multiply(lambda_11))
-                .add(tmp2.multiply(tmp2.multiply(lambda_11)));
+            DerivativeStructure sum_i = tmp1.multiply(tmp1.multiply(lambda_11).add(tmp2.multiply(lambda_12)))
+                .add(tmp2.multiply(tmp1.multiply(lambda_12).add(tmp2.multiply(lambda_22))));
 
             if(sum == null) {
                 sum = sum_i;
@@ -255,5 +308,27 @@ public class Rigid2DIsotropicMaxLikelihoodIpopt extends Ipopt {
         }
 
         return (((((((det_lambda.reciprocal()).sqrt()).multiply(2 * Math.PI)).reciprocal()).log()).multiply(fiducialSet.getN())).subtract(sum.divide(2))).multiply(-1);
+    }
+
+    private DerivativeStructure getConstraint0(double[] point) {
+        DerivativeStructure tx = new DerivativeStructure(7, 2, 0, point[0]);
+        DerivativeStructure ty = new DerivativeStructure(7, 2, 1, point[1]);
+        DerivativeStructure theta = new DerivativeStructure(7, 2, 2, point[2]);
+        DerivativeStructure v_11 = new DerivativeStructure(7, 2, 3, point[3]);
+        DerivativeStructure v_12 = new DerivativeStructure(7, 2, 4, point[4]);
+        DerivativeStructure v_21 = new DerivativeStructure(7, 2, 5, point[5]);
+        DerivativeStructure v_22 = new DerivativeStructure(7, 2, 6, point[6]);
+        return v_11.pow(2).add(v_21.pow(2)).subtract(v_12.pow(2)).subtract(v_22.pow(2));
+    }
+
+    private DerivativeStructure getConstraint1(double[] point) {
+        DerivativeStructure tx = new DerivativeStructure(7, 2, 0, point[0]);
+        DerivativeStructure ty = new DerivativeStructure(7, 2, 1, point[1]);
+        DerivativeStructure theta = new DerivativeStructure(7, 2, 2, point[2]);
+        DerivativeStructure v_11 = new DerivativeStructure(7, 2, 3, point[3]);
+        DerivativeStructure v_12 = new DerivativeStructure(7, 2, 4, point[4]);
+        DerivativeStructure v_21 = new DerivativeStructure(7, 2, 5, point[5]);
+        DerivativeStructure v_22 = new DerivativeStructure(7, 2, 6, point[6]);
+        return (v_11.multiply(v_12)).add(v_22.multiply(v_21));
     }
 }
