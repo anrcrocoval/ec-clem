@@ -27,10 +27,34 @@ import java.util.List;
 
 public class TestFiducialSetFactory {
 
-    private SynchronizedRandomGenerator random = new SynchronizedRandomGenerator(new JDKRandomGenerator());
+    private SynchronizedRandomGenerator random;
 
     @Inject
     public TestFiducialSetFactory() {
+        random = new SynchronizedRandomGenerator(new JDKRandomGenerator());
+    }
+
+    public FiducialSet getIdentityFiducialSet2DWithNoise100_0_0_100() {
+        List<Point> sourcePoints = new ArrayList<>();
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 7 }, { 5 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 8 }, { 5 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 9 }, { 3 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 12 }, { 25 }})));
+        Dataset source = new Dataset(sourcePoints);
+
+        List<Point> targetPoints = new ArrayList<>();
+        targetPoints.add(new Point(new Matrix(new double[][] {{ -5.66543 }, { 12.11796 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 3.26596 }, { -15.17124 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 1.39882 }, { 0.82489 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 3.33783 }, { -1.93170 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 15.97593 }, { 8.84992 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 1.17434 }, { 3.52065 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 13.53713 }, { 34.08704 }})));
+        Dataset target = new Dataset(targetPoints);
+        return new FiducialSet(source, target);
     }
 
     public FiducialSet getSimpleRotationFiducialSet2D() {

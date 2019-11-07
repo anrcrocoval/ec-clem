@@ -56,6 +56,32 @@ class Rigid2DGeneralMaxLikelihoodComputerTest {
     }
 
     @Test
+    void identity() {
+        FiducialSet identityFiducialSet = testFiducialSetFactory.getIdentityFiducialSet2DWithNoise100_0_0_100();
+        Similarity result = subjectUnderTest.compute(identityFiducialSet);
+        assertEquals(2, result.getR().getRowDimension());
+        assertEquals(2, result.getR().getColumnDimension());
+        checkDetIsOne(result);
+        checkExpectedResidualIsZero(identityFiducialSet.getSourceDataset(), identityFiducialSet.getTargetDataset(), result);
+        assertEquals(1, result.getR().get(0, 0), 0.0000001);
+        assertEquals(0, result.getR().get(1, 0), 0.0000001);
+        assertEquals(0, result.getR().get(0, 1), 0.0000001);
+        assertEquals(1, result.getR().get(1, 1), 0.0000001);
+
+        assertEquals(2, result.getS().getRowDimension());
+        assertEquals(2, result.getS().getColumnDimension());
+        assertEquals(1, result.getS().get(0, 0), 0.0000001);
+        assertEquals(0, result.getS().get(1, 0), 0.0000001);
+        assertEquals(0, result.getS().get(0, 1), 0.0000001);
+        assertEquals(1, result.getS().get(1, 1), 0.0000001);
+
+        assertEquals(2, result.getT().getRowDimension());
+        assertEquals(1, result.getT().getColumnDimension());
+        assertEquals(0, result.getT().get(0, 0), 0.0000001);
+        assertEquals(0, result.getT().get(1, 0), 0.0000001);
+    }
+
+    @Test
     void simpleRotation() {
         FiducialSet simpleRotationFiducialSet = testFiducialSetFactory.getSimpleRotationFiducialSet2D();
         Similarity result = subjectUnderTest.compute(simpleRotationFiducialSet);
