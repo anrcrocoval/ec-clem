@@ -4,8 +4,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
-import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
-
 import java.util.concurrent.*;
 
 import static java.lang.Math.*;
@@ -37,7 +35,8 @@ public class BaseOptimProblem {
     }
 
     private LoadingCache<TmpCacheWrapper1, Double> tmp5Cache = CacheBuilder.newBuilder()
-        .maximumSize(10000)
+        .maximumSize(1000000)
+        .concurrencyLevel(Runtime.getRuntime().availableProcessors())
         .build(new CacheLoader<TmpCacheWrapper1, Double>() {
                    public Double load(TmpCacheWrapper1 key) {
                        return computetmp1BigDecimal(key.getY(), key.getZ(), key.getTheta(), key.getTx());
@@ -46,7 +45,8 @@ public class BaseOptimProblem {
         );
 
     private LoadingCache<TmpCacheWrapper1, Double> tmp6Cache = CacheBuilder.newBuilder()
-        .maximumSize(10000)
+        .maximumSize(1000000)
+        .concurrencyLevel(Runtime.getRuntime().availableProcessors())
         .build(new CacheLoader<TmpCacheWrapper1, Double>() {
                    public Double load(TmpCacheWrapper1 key) {
                        return computetmp2BigDecimal(key.getY(), key.getZ(), key.getTheta(), key.getTx());
@@ -55,7 +55,8 @@ public class BaseOptimProblem {
         );
 
     private LoadingCache<TmpCacheWrapper2, Double> tmp7Cache = CacheBuilder.newBuilder()
-        .maximumSize(10000)
+        .maximumSize(1000000)
+        .concurrencyLevel(Runtime.getRuntime().availableProcessors())
         .build(new CacheLoader<TmpCacheWrapper2, Double>() {
                    public Double load(TmpCacheWrapper2 key) {
                        return computetmp3BigDecimal(key.getZ(), key.getTheta());
@@ -64,7 +65,8 @@ public class BaseOptimProblem {
         );
 
     private LoadingCache<TmpCacheWrapper2, Double> tmp8Cache = CacheBuilder.newBuilder()
-        .maximumSize(10000)
+        .maximumSize(1000000)
+        .concurrencyLevel(Runtime.getRuntime().availableProcessors())
         .build(new CacheLoader<TmpCacheWrapper2, Double>() {
                    public Double load(TmpCacheWrapper2 key) {
                        return computetmp4BigDecimal(key.getZ(), key.getTheta());
@@ -100,9 +102,11 @@ public class BaseOptimProblem {
         double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
             sum += tmp1*(tmp1*lambda11+tmp2*lambda12)
@@ -121,12 +125,12 @@ public class BaseOptimProblem {
         double v22 = point[6];
         double lambda11 = pow(v11, 2) + (pow(v21, 2));
         double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
             sum += tmp1*lambda11+tmp2*lambda12;
@@ -142,14 +146,14 @@ public class BaseOptimProblem {
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
         double lambda12 = v11 * v12 + v21 * v22;
         double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
             sum += tmp1*lambda12+tmp2*lambda22;
@@ -168,11 +172,12 @@ public class BaseOptimProblem {
         double lambda11 = pow(v11, 2) + (pow(v21, 2));
         double lambda12 = v11 * v12 + v21 * v22;
         double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
             double tmp3 = gettmp3BigDecimal(z, theta);
@@ -191,18 +196,15 @@ public class BaseOptimProblem {
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += 2d*v11*pow(tmp1, 2)
                 + 2d*v12*tmp1*tmp2;
         }
@@ -217,18 +219,15 @@ public class BaseOptimProblem {
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += 2d*v11*tmp1*tmp2
                 +2d*v12*pow(tmp2, 2);
         }
@@ -243,18 +242,15 @@ public class BaseOptimProblem {
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += 2d*v21*pow(tmp1, 2)
                 +2d*v22*tmp1*tmp2;
         }
@@ -269,66 +265,63 @@ public class BaseOptimProblem {
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += 2d*v21*tmp1*tmp2
                 +2d*v22*pow(tmp2, 2);
         }
         return (fiducialSet.getN()*v11/detV - sum / 2d) * -1d;
     }
 
-    private double gettmp1BigDecimal(Point y, Point z, double theta, double tx) {
+    private double gettmp1BigDecimal(double[] y, double[] z, double theta, double tx) {
         TmpCacheWrapper1 wrap = new TmpCacheWrapper1().setY(y).setZ(z).setTheta(theta).setTx(tx);
         return tmp5Cache.getUnchecked(wrap);
     }
 
-    private double computetmp1BigDecimal(Point y, Point z, double theta, double tx) {
-        return y.get(0)
-            - z.get(0) * cos(theta)
-            + z.get(1) * sin(theta)
+    private double computetmp1BigDecimal(double[] y, double[] z, double theta, double tx) {
+        return y[0]
+            - z[0] * cos(theta)
+            + z[1] * sin(theta)
             - tx;
     }
 
-    private double gettmp2BigDecimal(Point y, Point z, double theta, double tx) {
+    private double gettmp2BigDecimal(double[] y, double[] z, double theta, double tx) {
         TmpCacheWrapper1 wrap = new TmpCacheWrapper1().setY(y).setZ(z).setTheta(theta).setTx(tx);
         return tmp6Cache.getUnchecked(wrap);
     }
 
-    private double computetmp2BigDecimal(Point y, Point z, double theta, double ty) {
-        return y.get(1)
-            - z.get(0) * sin(theta)
-            - z.get(1) * cos(theta)
+    private double computetmp2BigDecimal(double[] y, double[] z, double theta, double ty) {
+        return y[1]
+            - z[0] * sin(theta)
+            - z[1] * cos(theta)
             - ty;
     }
 
-    private double gettmp3BigDecimal(Point z, double theta) {
+    private double gettmp3BigDecimal(double[] z, double theta) {
         TmpCacheWrapper2 wrap = new TmpCacheWrapper2().setZ(z).setTheta(theta);
         return tmp7Cache.getUnchecked(wrap);
     }
 
-    private double computetmp3BigDecimal(Point z, double theta) {
-        return z.get(0) * sin(theta)
-            + z.get(1) * cos(theta);
+    private double computetmp3BigDecimal(double[] z, double theta) {
+        return z[0] * sin(theta)
+            + z[1] * cos(theta);
     }
 
-    private double gettmp4BigDecimal(Point z, double theta) {
+    private double gettmp4BigDecimal(double[] z, double theta) {
         TmpCacheWrapper2 wrap = new TmpCacheWrapper2().setZ(z).setTheta(theta);
         return tmp8Cache.getUnchecked(wrap);
     }
 
-    private double computetmp4BigDecimal(Point z, double theta) {
-        return -z.get(0) * cos(theta)
-            + z.get(1) * sin(theta);
+    private double computetmp4BigDecimal(double[] z, double theta) {
+        return -z[0] * cos(theta)
+            + z[1] * sin(theta);
     }
 
     public double[] getObjectiveGradient(double[] point) throws ExecutionException, InterruptedException {
@@ -353,62 +346,35 @@ public class BaseOptimProblem {
 
     // tx²
     private double getSecondDerivative0Value(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
-        double v12 = point[4];
         double v21 = point[5];
-        double v22 = point[6];
         double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
-        double sum = 0d;
 
         return fiducialSet.getN()*lambda11;
     }
 
     // tx*ty
     private double getSecondDerivative1Value(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
         double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
-        double sum = 0d;
 
         return fiducialSet.getN()*lambda12;
     }
 
     // ty²
     private double getSecondDerivative2Value(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
-        double v11 = point[3];
         double v12 = point[4];
-        double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
         double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
-        double sum = 0d;
 
         return fiducialSet.getN()*lambda22;
     }
 
     // tx*theta
     private double getSecondDerivative3Value(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
@@ -416,14 +382,12 @@ public class BaseOptimProblem {
         double v22 = point[6];
         double lambda11 = pow(v11, 2) + (pow(v21, 2));
         double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp3 = gettmp3BigDecimal(z, theta);
             double tmp4 = gettmp4BigDecimal(z, theta);
             sum += tmp3*lambda11+tmp4*lambda12;
@@ -434,23 +398,19 @@ public class BaseOptimProblem {
 
     // ty*theta
     private double getSecondDerivative4Value(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
         double lambda12 = v11 * v12 + v21 * v22;
         double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp3 = gettmp3BigDecimal(z, theta);
             double tmp4 = gettmp4BigDecimal(z, theta);
             sum += tmp3*lambda12+tmp4*lambda22;
@@ -471,11 +431,12 @@ public class BaseOptimProblem {
         double lambda11 = pow(v11, 2) + (pow(v21, 2));
         double lambda12 = v11 * v12 + v21 * v22;
         double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
             double tmp3 = gettmp3BigDecimal(z, theta);
@@ -496,20 +457,14 @@ public class BaseOptimProblem {
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
-        double v21 = point[5];
-        double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += 2d*v11*tmp1
                 +v12*tmp2;
         }
@@ -520,24 +475,15 @@ public class BaseOptimProblem {
     // ty*v11
     private double getSecondDerivative7Value(double[] point) {
         double tx = point[0];
-        double ty = point[1];
         double theta = point[2];
-        double v11 = point[3];
         double v12 = point[4];
-        double v21 = point[5];
-        double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += v12*tmp1;
         }
 
@@ -551,16 +497,12 @@ public class BaseOptimProblem {
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
-        double v21 = point[5];
-        double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
             double tmp3 = gettmp3BigDecimal(z, theta);
@@ -576,24 +518,19 @@ public class BaseOptimProblem {
     // v11²
     private double getSecondDerivative9Value(double[] point) {
         double tx = point[0];
-        double ty = point[1];
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += 2d*pow(tmp1, 2);
         }
         return (fiducialSet.getN()*pow(v22, 2)* -1d / pow(detV, 2) - sum / 2d) * -1d;
@@ -601,25 +538,16 @@ public class BaseOptimProblem {
 
     // v12*tx
     private double getSecondDerivative10Value(double[] point) {
-        double tx = point[0];
         double ty = point[1];
         double theta = point[2];
         double v11 = point[3];
-        double v12 = point[4];
-        double v21 = point[5];
-        double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += v11*tmp2;
         }
         return sum * -1d;
@@ -632,20 +560,14 @@ public class BaseOptimProblem {
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
-        double v21 = point[5];
-        double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += v11*tmp1
                 +2d*v12*tmp2;
         }
@@ -659,16 +581,12 @@ public class BaseOptimProblem {
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
-        double v21 = point[5];
-        double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
             double tmp3 = gettmp3BigDecimal(z, theta);
@@ -689,18 +607,15 @@ public class BaseOptimProblem {
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += 2d*tmp1*tmp2;
         }
         return (fiducialSet.getN()*v21*v22 / pow(detV, 2) - sum / 2d) * -1d;
@@ -708,25 +623,20 @@ public class BaseOptimProblem {
 
     // v12²
     private double getSecondDerivative14Value(double[] point) {
-        double tx = point[0];
         double ty = point[1];
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += 2d*pow(tmp2, 2);
         }
         return (fiducialSet.getN()*pow(v21, 2) * -1d / pow(detV, 2) - sum / 2d) * -1d;
@@ -737,22 +647,16 @@ public class BaseOptimProblem {
         double tx = point[0];
         double ty = point[1];
         double theta = point[2];
-        double v11 = point[3];
-        double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += 2d*v21*tmp1
                 +v22*tmp2;
         }
@@ -762,24 +666,15 @@ public class BaseOptimProblem {
     // v21*ty
     private double getSecondDerivative16Value(double[] point) {
         double tx = point[0];
-        double ty = point[1];
         double theta = point[2];
-        double v11 = point[3];
-        double v12 = point[4];
-        double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += v22*tmp1;
         }
         return sum * -1d;
@@ -790,18 +685,14 @@ public class BaseOptimProblem {
         double tx = point[0];
         double ty = point[1];
         double theta = point[2];
-        double v11 = point[3];
-        double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
             double tmp3 = gettmp3BigDecimal(z, theta);
@@ -815,36 +706,22 @@ public class BaseOptimProblem {
 
     // v21*v11
     private double getSecondDerivative18Value(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
-        double sum = 0d;
 
         return (fiducialSet.getN()*v12*v22 / pow(detV, 2)) * -1d;
     }
 
     // v21*v12
     private double getSecondDerivative19Value(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
-        double sum = 0d;
 
         return fiducialSet.getN()*v11*v22* -1d / pow(detV, 2) * -1d;
     }
@@ -852,24 +729,19 @@ public class BaseOptimProblem {
     // v21²
     private double getSecondDerivative20Value(double[] point) {
         double tx = point[0];
-        double ty = point[1];
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum +=2d*pow(tmp1, 2);
         }
         return (fiducialSet.getN()*pow(v12, 2) * -1d / pow(detV, 2) - sum / 2d) * -1d;
@@ -877,25 +749,16 @@ public class BaseOptimProblem {
 
     // v22*tx
     private double getSecondDerivative21Value(double[] point) {
-        double tx = point[0];
         double ty = point[1];
         double theta = point[2];
-        double v11 = point[3];
-        double v12 = point[4];
         double v21 = point[5];
-        double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += v21*tmp2;
         }
         return sum * -1d;
@@ -906,22 +769,16 @@ public class BaseOptimProblem {
         double tx = point[0];
         double ty = point[1];
         double theta = point[2];
-        double v11 = point[3];
-        double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum += v21*tmp1
                 +2d*v22*tmp2;
         }
@@ -933,18 +790,14 @@ public class BaseOptimProblem {
         double tx = point[0];
         double ty = point[1];
         double theta = point[2];
-        double v11 = point[3];
-        double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
-        double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
             double tmp3 = gettmp3BigDecimal(z, theta);
@@ -958,35 +811,22 @@ public class BaseOptimProblem {
 
     // v22*v11
     private double getSecondDerivative24Value(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
-        double sum = 0d;
+
         return (fiducialSet.getN()*v12*v21*-1d / pow(detV, 2)) * -1d;
     }
 
     // v22*v12
     private double getSecondDerivative25Value(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
-        double sum = 0d;
         return (fiducialSet.getN()*v11*v21 / pow(detV, 2)) * -1d;
     }
 
@@ -999,18 +839,15 @@ public class BaseOptimProblem {
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum +=2d*tmp1*tmp2;
         }
         return (fiducialSet.getN()*v11*v12 / pow(detV, 2) - sum / 2d) * -1d;
@@ -1018,25 +855,20 @@ public class BaseOptimProblem {
 
     // v22²
     private double getSecondDerivative27Value(double[] point) {
-        double tx = point[0];
         double ty = point[1];
         double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
         double v22 = point[6];
-        double lambda11 = pow(v11, 2) + (pow(v21, 2));
-        double lambda12 = v11 * v12 + v21 * v22;
-        double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
         double sum = 0d;
-        for (int i = 0; i < fiducialSet.getN(); i++) {
-            Point y = fiducialSet.getTargetDataset().getPoint(i);
-            Point z = fiducialSet.getSourceDataset().getPoint(i);
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
+        double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
+        double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
+        for(int i = 0; i < fiducialSet.getN(); i++) {
+            double[] y = target[i];
+            double[] z = source[i];
             double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
             sum +=2d*pow(tmp2, 2);
         }
         return (fiducialSet.getN()*pow(v11, 2) * -1d / pow(detV, 2) - sum / 2d) * -1d;

@@ -2,11 +2,13 @@ package plugins.perrine.easyclemv0.registration.likelihood.dimension2.general;
 
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 
+import java.util.Arrays;
+
 public class TmpCacheWrapper2 {
-    private Point z;
+    private double[] z;
     private double theta;
 
-    public Point getZ() {
+    public double[] getZ() {
         return z;
     }
 
@@ -14,7 +16,7 @@ public class TmpCacheWrapper2 {
         return theta;
     }
 
-    public TmpCacheWrapper2 setZ(Point z) {
+    public TmpCacheWrapper2 setZ(double[] z) {
         this.z = z;
         return this;
     }
@@ -32,14 +34,14 @@ public class TmpCacheWrapper2 {
         TmpCacheWrapper2 that = (TmpCacheWrapper2) o;
 
         if (Double.compare(that.theta, theta) != 0) return false;
-        return z.equals(that.z);
+        return Arrays.equals(z, that.z);
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        result = z.hashCode();
+        result = Arrays.hashCode(z);
         temp = Double.doubleToLongBits(theta);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;

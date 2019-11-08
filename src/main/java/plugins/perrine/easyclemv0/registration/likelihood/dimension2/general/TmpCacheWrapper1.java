@@ -1,18 +1,18 @@
 package plugins.perrine.easyclemv0.registration.likelihood.dimension2.general;
 
-import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+import java.util.Arrays;
 
 public class TmpCacheWrapper1 {
-    private Point y;
-    private Point z;
+    private double[] y;
+    private double[] z;
     private double theta;
     private double tx;
 
-    public Point getY() {
+    public double[] getY() {
         return y;
     }
 
-    public Point getZ() {
+    public double[] getZ() {
         return z;
     }
 
@@ -24,12 +24,12 @@ public class TmpCacheWrapper1 {
         return tx;
     }
 
-    public TmpCacheWrapper1 setY(Point y) {
+    public TmpCacheWrapper1 setY(double[] y) {
         this.y = y;
         return this;
     }
 
-    public TmpCacheWrapper1 setZ(Point z) {
+    public TmpCacheWrapper1 setZ(double[] z) {
         this.z = z;
         return this;
     }
@@ -53,16 +53,16 @@ public class TmpCacheWrapper1 {
 
         if (Double.compare(that.theta, theta) != 0) return false;
         if (Double.compare(that.tx, tx) != 0) return false;
-        if (!y.equals(that.y)) return false;
-        return z.equals(that.z);
+        if (!Arrays.equals(y, that.y)) return false;
+        return Arrays.equals(z, that.z);
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        result = y.hashCode();
-        result = 31 * result + z.hashCode();
+        result = Arrays.hashCode(y);
+        result = 31 * result + Arrays.hashCode(z);
         temp = Double.doubleToLongBits(theta);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(tx);
