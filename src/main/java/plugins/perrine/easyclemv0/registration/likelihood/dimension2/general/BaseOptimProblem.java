@@ -5,7 +5,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import java.util.concurrent.*;
-
 import static java.lang.Math.*;
 
 public class BaseOptimProblem {
