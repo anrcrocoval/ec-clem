@@ -40,6 +40,8 @@ import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 import icy.gui.viewer.Viewer;
 import icy.main.Icy;
 import icy.system.thread.ThreadUtil;
+import plugins.adufour.blocks.lang.Block;
+import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.EzGroup;
 import plugins.adufour.ezplug.EzLabel;
 import plugins.adufour.ezplug.EzPlug;
@@ -47,6 +49,8 @@ import plugins.adufour.ezplug.EzStoppable;
 import plugins.adufour.ezplug.EzVarBoolean;
 import plugins.adufour.ezplug.EzVarSequence;
 import plugins.adufour.ezplug.EzVarText;
+import plugins.adufour.vars.lang.VarSequence;
+import plugins.kernel.roi.descriptor.measure.ROIMassCenterDescriptorsPlugin;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.gui.dialog.MessageDialog;
@@ -63,7 +67,7 @@ import vtk.*;
 
 import javax.inject.Inject;
 
-public class EasyCLEMv0 extends EzPlug implements EzStoppable {
+public class EasyCLEMv0 extends EzPlug implements EzStoppable, Block {
 
 	private MessageOverlay messageSource = new MessageOverlay("Source");
 	private MessageOverlay messageTarget = new MessageOverlay("Target");
@@ -118,7 +122,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private EzVarSequence target = new EzVarSequence("Select image that will not be modified (likely EM)");
 	private EzVarSequence source = new EzVarSequence("Select image that will be transformed and resized (likely FM)");
 	private EzGroup inputGroup = new EzGroup("Images to process", source, target, choiceinputsection, noiseModel, showgrid);
-
+	private VarSequence tseqsource=new VarSequence("Source transformed on Target sequence", null);
 	public static Color[] Colortab = new Color[] {
 		Color.RED,
 		Color.YELLOW,
@@ -203,19 +207,27 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			return;
 		}
 
-		source.setEnabled(false);
-		target.setEnabled(false);
-		choiceinputsection.setEnabled(false);
-		noiseModel.setEnabled(false);
-		showgrid.setEnabled(false);
+		if (!this.isHeadLess()) {
+			source.setEnabled(false);
+			target.setEnabled(false);
+			choiceinputsection.setEnabled(false);
+			noiseModel.setEnabled(false);
+			showgrid.setEnabled(false);
+		}
+		if (!getchoice().equals(INPUT_SELECTION_RIGID)) {
+			rigidspecificbutton.removespecificrigidbutton();
+		}
 
+		sourceSequence.setName(sourceSequence.getName() + "_transformed");
 		String name = sourceSequence.getName() + "_transfo.xml";
-
+		if (this.isHeadLess())
+			showgrid.setValue(false);
 		workspace = new Workspace();
 		workspace.setSourceSequence(sourceSequence);
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
 		workspace.setXMLFile(new File(name));
+<<<<<<< HEAD:src/main/java/plugins/fr/univ_nantes/ec_clem/EasyCLEMv0.java
 		workspace.setTransformationConfiguration(
 			transformationConfigurationFactory.getFrom(
 				TransformationType.valueOf(choiceinputsection.getValue()),
@@ -233,12 +245,19 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		sourceSequence.addOverlay(messageSource);
 		targetSequence.addOverlay(messageTarget);
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
-		new AnnounceFrame("Select point on image" + targetSequence.getName() + ", then drag it on source image and RIGHT CLICK", 5);
 
-		guiCLEMButtons.setEnabled(true);
-		rigidspecificbutton.enableButtons();
-		Icy.getMainInterface().setSelectedTool(ROI3DPointPlugin.class.getName());
-
+		if (!this.isHeadLess()) {
+			new AnnounceFrame("Select point on image" + targetSequence.getName() + ", then drag it on source image and RIGHT CLICK", 5);
+			guiCLEMButtons.setEnabled(true);
+			rigidspecificbutton.enableButtons();
+			Icy.getMainInterface().setSelectedTool(ROI3DPointPlugin.class.getName());
+		} else {
+			 WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer(workspace);
+			 workspaceTransformer.run();
+			 tseqsource.setValue(workspace.getSourceSequence());
+			 return;
+		}
+		
 		synchronized(this) {
 			try {
 				wait();
@@ -270,5 +289,18 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		synchronized(this) {
 			notify();
 		}
+	}
+
+	@Override
+	public void declareInput(VarList inputMap) {
+		inputMap.add("Source Image", source.getVariable());
+		inputMap.add("Target Image", target.getVariable());
+		inputMap.add("Transformation Mode", choiceinputsection.getVariable());
+	}
+
+	@Override
+	public void declareOutput(VarList outputMap) {
+		outputMap.add("Source Transformed on Target", tseqsource );
+		
 	}
 }
