@@ -13,17 +13,17 @@
 package test.plugins.perrine.easyclemv0.registration;
 
 import Jama.Matrix;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
 import plugins.perrine.easyclemv0.registration.AffineTransformationComputer;
 import plugins.perrine.easyclemv0.transformation.AffineTransformation;
-
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.testng.Assert.assertEquals;
 
 class AffineTransformationComputerTest {
     private AffineTransformationComputer subjectUnderTest;

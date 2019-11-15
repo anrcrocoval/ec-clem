@@ -13,20 +13,19 @@
 package test.plugins.perrine.easyclemv0.fiducialset.dataset;
 
 import Jama.Matrix;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.testng.Assert.*;
 
 class DatasetTest {
     private Dataset subjectUnderTest;
 
-    @BeforeEach
+    @BeforeTest
     void init() {
         List<Point> points = new ArrayList<>();
         points.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
@@ -69,7 +68,7 @@ class DatasetTest {
     @Test
     void testClone() {
         Dataset clone = subjectUnderTest.clone();
-        assertTrue(clone != subjectUnderTest);
-        assertTrue(clone.getClass() == subjectUnderTest.getClass());
+        assertNotSame(clone, subjectUnderTest);
+        assertSame(clone.getClass(), subjectUnderTest.getClass());
     }
 }

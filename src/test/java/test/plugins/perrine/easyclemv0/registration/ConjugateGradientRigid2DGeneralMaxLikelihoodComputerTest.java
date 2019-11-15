@@ -14,7 +14,7 @@ package test.plugins.perrine.easyclemv0.registration;
 
 import fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
 import fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
@@ -23,7 +23,7 @@ import plugins.perrine.easyclemv0.transformation.Similarity;
 import javax.inject.Inject;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
 
