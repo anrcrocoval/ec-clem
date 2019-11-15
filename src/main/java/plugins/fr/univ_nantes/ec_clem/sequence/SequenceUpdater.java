@@ -28,7 +28,7 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
     private RegistrationParameterFactory transformationFactory;
     private DatasetFactory datasetFactory;
     private RoiUpdater roiUpdater;
-
+    private Transformation transformation;
     private Sequence sourceSequence;
     private TransformationSchema transformationSchema;
 
@@ -49,6 +49,7 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
             transformationSchema.getTargetSize(),
             transformationFactory.getFrom(transformationSchema).getTransformation()
         );
+
         super.add(imageTransformer);
         sourceSequence = imageTransformer.get();
 
@@ -70,5 +71,10 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
     @Inject
     public void setRoiUpdater(RoiUpdater roiUpdater) {
         this.roiUpdater = roiUpdater;
+    }
+    
+    public Transformation getTransformation() {
+		return transformation;
+    	
     }
 }
