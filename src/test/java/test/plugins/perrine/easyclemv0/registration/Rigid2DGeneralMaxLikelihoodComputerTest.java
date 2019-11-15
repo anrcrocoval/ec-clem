@@ -19,8 +19,7 @@ import org.junit.jupiter.api.Test;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
-import plugins.perrine.easyclemv0.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputer;
-import plugins.perrine.easyclemv0.registration.likelihood.dimension2.general.Rigid2DGeneralMaxLikelihoodComputer;
+import plugins.perrine.easyclemv0.registration.likelihood.dimension2.general.interior_point.InteriorPointRigid2DGeneralMaxLikelihoodComputer;
 import plugins.perrine.easyclemv0.transformation.Similarity;
 
 import javax.inject.Inject;
@@ -34,7 +33,7 @@ class Rigid2DGeneralMaxLikelihoodComputerTest {
 
     private TestFiducialSetFactory testFiducialSetFactory;
     private TestTransformationFactory testTransformationFactory;
-    private Rigid2DGeneralMaxLikelihoodComputer subjectUnderTest;
+    private InteriorPointRigid2DGeneralMaxLikelihoodComputer subjectUnderTest;
 
     public Rigid2DGeneralMaxLikelihoodComputerTest() {
         DaggerRigid2DGeneralMaxLikelihoodComputerTestComponent.create().inject(this);
@@ -51,7 +50,7 @@ class Rigid2DGeneralMaxLikelihoodComputerTest {
     }
 
     @Inject
-    public void setSubjectUnderTest(Rigid2DGeneralMaxLikelihoodComputer subjectUnderTest) {
+    public void setSubjectUnderTest(InteriorPointRigid2DGeneralMaxLikelihoodComputer subjectUnderTest) {
         this.subjectUnderTest = subjectUnderTest;
     }
 

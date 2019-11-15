@@ -1,23 +1,27 @@
-package plugins.perrine.easyclemv0.registration.likelihood.dimension2.general;
+package plugins.perrine.easyclemv0.registration.likelihood.dimension2.general.interior_point;
 
 import org.coinor.Ipopt;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.registration.likelihood.dimension2.IpoptSolver;
 import plugins.perrine.easyclemv0.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputer;
-import javax.inject.Inject;
+import plugins.perrine.easyclemv0.registration.likelihood.dimension2.general.BaseOptimProblem;
 
-public class Rigid2DGeneralMaxLikelihoodComputer extends Rigid2DMaxLikelihoodComputer {
+import javax.inject.Inject;
+import java.util.Arrays;
+
+public class InteriorPointRigid2DGeneralMaxLikelihoodComputer extends Rigid2DMaxLikelihoodComputer {
 
     @Inject
-    public Rigid2DGeneralMaxLikelihoodComputer() {
+    public InteriorPointRigid2DGeneralMaxLikelihoodComputer() {
         super();
-        DaggerRigid2DGeneralLikelihoodComputerComponent.create().inject(this);
+        DaggerInteriorPointRigid2DGeneralLikelihoodComputerComponent.create().inject(this);
     }
 
     @Override
     protected double[] optimize(FiducialSet fiducialSet) {
         Ipopt ipopt = new IpoptSolver(new BaseOptimProblem(fiducialSet));
         ipopt.OptimizeNLP();
+        System.out.println(Arrays.toString(ipopt.getVariableValues()));
         return ipopt.getVariableValues();
     }
 }
