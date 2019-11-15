@@ -31,7 +31,7 @@ public class SequenceFactory {
     public Sequence getMergeSequence(Sequence source, Sequence target) {
         Sequence result = SequenceUtil.concatC(
             new Sequence[] {
-                SequenceUtil.convertToType(source, target.getDataType_(), false),
+                SequenceUtil.convertToType(source, target.getDataType_(), true),
                 target
             },
             false,

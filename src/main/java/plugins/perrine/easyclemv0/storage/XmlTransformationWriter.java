@@ -15,11 +15,19 @@ package plugins.perrine.easyclemv0.storage;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import Jama.Matrix;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
+import plugins.perrine.easyclemv0.matrix.MatrixUtil;
 import plugins.perrine.easyclemv0.sequence.DimensionSize;
 import plugins.perrine.easyclemv0.sequence.SequenceSize;
+import plugins.perrine.easyclemv0.sequence.VtkAbstractTransformFactory;
+import plugins.perrine.easyclemv0.transformation.Transformation;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
+import vtk.vtkAbstractTransform;
+import vtk.vtkMatrix4x4;
+import vtk.vtkTransform;
 
 import java.time.ZonedDateTime;
 
@@ -78,5 +86,25 @@ public class XmlTransformationWriter {
             coordinate.setAttribute(coordinateDimensionAttributeName, String.valueOf(i));
             coordinate.setTextContent(String.valueOf(point.getMatrix().get(i, 0)));
         }
+    }
+    public void writeTransfo(TransformationSchema transformationSchema, Transformation transfo) {
+        Element transformationElement = XMLUtil.addElement(document.getDocumentElement(), transformationElementName);
+        transformationElement.setAttribute(transformationTypeAttributeName, transformationSchema.getTransformationType().name());
+        transformationElement.setAttribute(transformationDateAttributeName, ZonedDateTime.now().toString());
+        write(transformationSchema.getSourceSize(), "source", transformationElement);
+        write(transformationSchema.getTargetSize(), "target", transformationElement);
+        VtkAbstractTransformFactory vtkabstracttransformfactory=new VtkAbstractTransformFactory(new MatrixUtil());
+        vtkTransform abstractvtk = (vtkTransform) vtkabstracttransformfactory.getFrom(transfo);
+        write(abstractvtk.GetMatrix(),transformationElement);
+    }
+    private void write(vtkMatrix4x4 transfo, Element MatrixElement) {
+    	
+    	Element transfoElement = XMLUtil.addElement(MatrixElement, "MatrixTransformation");
+    	for (int i=0;i<4;i++)
+    	{
+    		for(int j=0;j<4;j++) {
+    				transfoElement.setAttribute("m"+String.valueOf(i)+String.valueOf(j), String.valueOf(transfo.GetElement(i, j)));
+    		}
+    	}
     }
 }

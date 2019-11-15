@@ -28,6 +28,7 @@ public class Workspace {
     private File XMLFile;
     private WorkspaceState workspaceState;
     private TransformationConfiguration transformationConfiguration;
+	private File XMLFileTransfo;
 
     public Workspace() {
         workspaceState = new WorkspaceState(false, false);
@@ -42,7 +43,15 @@ public class Workspace {
         this.workspaceState = workspaceState;
         this.monitoringConfiguration = monitoringConfiguration;
     }
-
+    public Workspace(Sequence sourceSequence, Sequence targetSequence, Sequence sourceBackup, File XMLFile, File XMLFileTransfo, WorkspaceState workspaceState, MonitoringConfiguration monitoringConfiguration) {
+        this.sourceSequence = sourceSequence;
+        this.targetSequence = targetSequence;
+        this.sourceBackup = sourceBackup;
+        this.XMLFile = XMLFile;
+        this.XMLFileTransfo = XMLFileTransfo;
+        this.workspaceState = workspaceState;
+        this.monitoringConfiguration = monitoringConfiguration;
+    }
     private MonitoringConfiguration monitoringConfiguration;
 
     public Sequence getSourceSequence() {
@@ -76,9 +85,14 @@ public class Workspace {
     public File getXMLFile() {
         return XMLFile;
     }
-
+    public File getXMLFileTransfo() {
+        return XMLFileTransfo;
+    }
     public void setXMLFile(File XMLFile) {
         this.XMLFile = XMLFile;
+    }
+    public void setXMLFileTransfo(File XMLFile) {
+        this.XMLFileTransfo = XMLFile;
     }
 
     public WorkspaceState getWorkspaceState() {

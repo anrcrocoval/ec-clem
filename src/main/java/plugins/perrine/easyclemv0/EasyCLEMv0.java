@@ -150,7 +150,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable, Block {
 		Color.MAGENTA,
 		Color.ORANGE
 	};
-
+	
 	private class VisiblepointsOverlay extends Overlay {
 		public VisiblepointsOverlay() {
 			super("Visible points");
@@ -252,9 +252,13 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable, Block {
 		if (!getchoice().equals(INPUT_SELECTION_RIGID)) {
 			rigidspecificbutton.removespecificrigidbutton();
 		}
-
+		String name = sourceSequence.getFilename()+ "_to_"+targetSequence.getName()+"_points.xml";
+		String nametransfo = sourceSequence.getFilename() +"_to_"+targetSequence.getName()+ "_transfo.xml";
 		sourceSequence.setName(sourceSequence.getName() + "_transformed");
-		String name = sourceSequence.getName() + "_transfo.xml";
+		System.out.println("Resulting Transformation will be saved as:");
+		System.out.println(nametransfo);
+		System.out.println("and points used for the registration as:");
+		System.out.println(name);
 		if (this.isHeadLess())
 			showgrid.setValue(false);
 		workspace = new Workspace();
@@ -262,6 +266,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable, Block {
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
 		workspace.setXMLFile(new File(name));
+		workspace.setXMLFileTransfo(new File(nametransfo));
 		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(TransformationType.valueOf(getchoice()), showgrid.getValue()));
 		
 			

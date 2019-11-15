@@ -14,6 +14,7 @@ import plugins.perrine.easyclemv0.sequence.SequenceFactory;
 import plugins.perrine.easyclemv0.sequence.SequenceUpdater;
 import plugins.perrine.easyclemv0.storage.XmlFileWriter;
 import plugins.perrine.easyclemv0.storage.XmlTransformationWriter;
+import plugins.perrine.easyclemv0.transformation.Transformation;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchemaFactory;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -29,7 +30,8 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
     private List<Double> listoftrevalues = new ArrayList<>();
     private XmlFileWriter xmlFileWriter;
     private XmlTransformationWriter xmlWriter;
-
+    private XmlFileWriter xmlFileWriterTransfo;
+    private XmlTransformationWriter xmlWriterTransfo;
     private Workspace workspace;
 
     public WorkspaceTransformer(Workspace workspace) {
@@ -60,12 +62,18 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         SequenceUpdater sequenceUpdater = new SequenceUpdater(workspace.getSourceSequence(), workspace.getTransformationSchema());
         super.add(sequenceUpdater);
         sequenceUpdater.run();
-
+        Transformation transfo=sequenceUpdater.getTransformation();
         Document document = XMLUtil.createDocument(true);
         xmlWriter = new XmlTransformationWriter(document);
         xmlWriter.write(workspace.getTransformationSchema());
         xmlFileWriter = new XmlFileWriter(document, workspace.getXMLFile());
         xmlFileWriter.write();
+        Document documenttransfo = XMLUtil.createDocument(true);
+        xmlWriterTransfo = new XmlTransformationWriter(documenttransfo);
+        xmlWriterTransfo.writeTransfo(workspace.getTransformationSchema(), transfo);
+        xmlFileWriterTransfo = new XmlFileWriter(documenttransfo, workspace.getXMLFileTransfo());
+        xmlFileWriterTransfo.write();
+        
         if (workspace.getMonitoringConfiguration().isMonitor()) {
             TREComputer treComputer = treComputerFactory.getFrom(workspace);
 

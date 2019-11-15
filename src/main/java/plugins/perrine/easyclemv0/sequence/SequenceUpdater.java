@@ -27,7 +27,7 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
     private TransformationFactory transformationFactory;
     private DatasetFactory datasetFactory;
     private RoiUpdater roiUpdater;
-
+    private Transformation transformation;
     private Sequence sourceSequence;
     private TransformationSchema transformationSchema;
 
@@ -40,7 +40,7 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
     @Override
     public void run() {
         Dataset sourceTransformedDataset = datasetFactory.getFrom(datasetFactory.getFrom(sourceSequence), transformationSchema);
-        Transformation transformation = transformationFactory.getFrom(transformationSchema);
+        transformation = transformationFactory.getFrom(transformationSchema);
         Stack3DVTKTransformer imageTransformer = new Stack3DVTKTransformer(sourceSequence, transformationSchema.getTargetSize(), transformation);
         super.add(imageTransformer);
         sourceSequence = imageTransformer.get();
@@ -60,5 +60,10 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
     @Inject
     public void setRoiUpdater(RoiUpdater roiUpdater) {
         this.roiUpdater = roiUpdater;
+    }
+    
+    public Transformation getTransformation() {
+		return transformation;
+    	
     }
 }
