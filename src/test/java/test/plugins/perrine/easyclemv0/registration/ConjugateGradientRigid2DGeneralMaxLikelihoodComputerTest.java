@@ -14,29 +14,25 @@ package test.plugins.perrine.easyclemv0.registration;
 
 import fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
 import fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.dataset.point.Point;
-import plugins.perrine.easyclemv0.registration.likelihood.dimension2.general.interior_point.InteriorPointRigid2DGeneralMaxLikelihoodComputer;
+import plugins.perrine.easyclemv0.registration.likelihood.dimension2.general.conjugate_gradient.ConjugateGradientRigid2DGeneralMaxLikelihoodComputer;
 import plugins.perrine.easyclemv0.transformation.Similarity;
-
 import javax.inject.Inject;
-
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled
-class Rigid2DGeneralMaxLikelihoodComputerTest {
+class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
 
     private TestFiducialSetFactory testFiducialSetFactory;
     private TestTransformationFactory testTransformationFactory;
-    private InteriorPointRigid2DGeneralMaxLikelihoodComputer subjectUnderTest;
+    private ConjugateGradientRigid2DGeneralMaxLikelihoodComputer subjectUnderTest;
 
-    public Rigid2DGeneralMaxLikelihoodComputerTest() {
-        DaggerRigid2DGeneralMaxLikelihoodComputerTestComponent.create().inject(this);
+    public ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest() {
+        DaggerConjugateGradientRigid2DGeneralMaxLikelihoodComputerTestComponent.create().inject(this);
     }
 
     @Inject
@@ -50,7 +46,7 @@ class Rigid2DGeneralMaxLikelihoodComputerTest {
     }
 
     @Inject
-    public void setSubjectUnderTest(InteriorPointRigid2DGeneralMaxLikelihoodComputer subjectUnderTest) {
+    public void setSubjectUnderTest(ConjugateGradientRigid2DGeneralMaxLikelihoodComputer subjectUnderTest) {
         this.subjectUnderTest = subjectUnderTest;
     }
 
@@ -62,22 +58,22 @@ class Rigid2DGeneralMaxLikelihoodComputerTest {
         assertEquals(2, result.getR().getColumnDimension());
         checkDetIsOne(result);
         checkExpectedResidualIsZero(identityFiducialSet.getSourceDataset(), identityFiducialSet.getTargetDataset(), result);
-        assertEquals(1, result.getR().get(0, 0), 0.0000001);
-        assertEquals(0, result.getR().get(1, 0), 0.0000001);
-        assertEquals(0, result.getR().get(0, 1), 0.0000001);
-        assertEquals(1, result.getR().get(1, 1), 0.0000001);
+        assertEquals(1, result.getR().get(0, 0), 0.1);
+        assertEquals(0, result.getR().get(1, 0), 0.1);
+        assertEquals(0, result.getR().get(0, 1), 0.1);
+        assertEquals(1, result.getR().get(1, 1), 0.1);
 
         assertEquals(2, result.getS().getRowDimension());
         assertEquals(2, result.getS().getColumnDimension());
-        assertEquals(1, result.getS().get(0, 0), 0.0000001);
-        assertEquals(0, result.getS().get(1, 0), 0.0000001);
-        assertEquals(0, result.getS().get(0, 1), 0.0000001);
-        assertEquals(1, result.getS().get(1, 1), 0.0000001);
+        assertEquals(1, result.getS().get(0, 0), 0.1);
+        assertEquals(0, result.getS().get(1, 0), 0.1);
+        assertEquals(0, result.getS().get(0, 1), 0.1);
+        assertEquals(1, result.getS().get(1, 1), 0.1);
 
         assertEquals(2, result.getT().getRowDimension());
         assertEquals(1, result.getT().getColumnDimension());
-        assertEquals(0, result.getT().get(0, 0), 0.0000001);
-        assertEquals(0, result.getT().get(1, 0), 0.0000001);
+        assertEquals(0, result.getT().get(0, 0), 1);
+        assertEquals(0, result.getT().get(1, 0), 1);
     }
 
     @Test
@@ -88,22 +84,22 @@ class Rigid2DGeneralMaxLikelihoodComputerTest {
         assertEquals(2, result.getR().getColumnDimension());
         checkDetIsOne(result);
         checkExpectedResidualIsZero(simpleRotationFiducialSet.getSourceDataset(), simpleRotationFiducialSet.getTargetDataset(), result);
-        assertEquals(cos(38), result.getR().get(0, 0), 0.0000001);
-        assertEquals(sin(38), result.getR().get(1, 0), 0.0000001);
-        assertEquals(-sin(38), result.getR().get(0, 1), 0.0000001);
-        assertEquals(cos(38), result.getR().get(1, 1), 0.0000001);
+        assertEquals(cos(38), result.getR().get(0, 0), 0.00001);
+        assertEquals(sin(38), result.getR().get(1, 0), 0.00001);
+        assertEquals(-sin(38), result.getR().get(0, 1), 0.00001);
+        assertEquals(cos(38), result.getR().get(1, 1), 0.00001);
 
         assertEquals(2, result.getS().getRowDimension());
         assertEquals(2, result.getS().getColumnDimension());
-        assertEquals(1, result.getS().get(0, 0), 0.0000001);
-        assertEquals(0, result.getS().get(1, 0), 0.0000001);
-        assertEquals(0, result.getS().get(0, 1), 0.0000001);
-        assertEquals(1, result.getS().get(1, 1), 0.0000001);
+        assertEquals(1, result.getS().get(0, 0), 0.00001);
+        assertEquals(0, result.getS().get(1, 0), 0.00001);
+        assertEquals(0, result.getS().get(0, 1), 0.00001);
+        assertEquals(1, result.getS().get(1, 1), 0.00001);
 
         assertEquals(2, result.getT().getRowDimension());
         assertEquals(1, result.getT().getColumnDimension());
-        assertEquals(0, result.getT().get(0, 0), 0.0000001);
-        assertEquals(0, result.getT().get(1, 0), 0.0000001);
+        assertEquals(0, result.getT().get(0, 0), 0.00001);
+        assertEquals(0, result.getT().get(1, 0), 0.00001);
     }
 
     @Test
@@ -143,7 +139,7 @@ class Rigid2DGeneralMaxLikelihoodComputerTest {
                 )
         ).getBarycentre();
         for(int i = 0; i < expected.getDimension(); i++) {
-            assertEquals(0, expected.get(i), 0.0000001);
+            assertEquals(0, expected.get(i), 0.01);
         }
     }
 }

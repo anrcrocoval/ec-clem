@@ -39,9 +39,6 @@ public class ConstrainedOptimProblem extends BaseOptimProblem {
     }
 
     private double getConstraint0(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
@@ -50,9 +47,6 @@ public class ConstrainedOptimProblem extends BaseOptimProblem {
     }
 
     private double getConstraint1(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
@@ -68,9 +62,6 @@ public class ConstrainedOptimProblem extends BaseOptimProblem {
     }
 
     private double[] getConstraint0Gradient(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];
@@ -81,9 +72,6 @@ public class ConstrainedOptimProblem extends BaseOptimProblem {
     }
 
     private double[] getConstraint1Gradient(double[] point) {
-        double tx = point[0];
-        double ty = point[1];
-        double theta = point[2];
         double v11 = point[3];
         double v12 = point[4];
         double v21 = point[5];

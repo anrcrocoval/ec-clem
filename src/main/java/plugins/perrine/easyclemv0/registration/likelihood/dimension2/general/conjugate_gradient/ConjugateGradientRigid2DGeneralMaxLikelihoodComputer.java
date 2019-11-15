@@ -67,7 +67,7 @@ public class ConjugateGradientRigid2DGeneralMaxLikelihoodComputer extends Rigid2
             new InitialGuess(optimProblem.getStartingPoint()),
             MaxEval.unlimited()
         );
-        System.out.println(Arrays.toString(optimize.getPoint()));
+//        System.out.println(Arrays.toString(optimize.getPoint()));
         return optimize.getPoint();
     }
 }

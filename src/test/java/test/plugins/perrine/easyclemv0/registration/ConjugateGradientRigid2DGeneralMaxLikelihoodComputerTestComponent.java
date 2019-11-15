@@ -15,6 +15,6 @@ package test.plugins.perrine.easyclemv0.registration;
 import dagger.Component;
 
 @Component
-public interface Rigid2DGeneralMaxLikelihoodComputerTestComponent {
-    void inject(Rigid2DGeneralMaxLikelihoodComputerTest rigid2DGeneralMaxLikelihoodComputerTest);
+public interface ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTestComponent {
+    void inject(ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest rigid2DGeneralMaxLikelihoodComputerTest);
 }

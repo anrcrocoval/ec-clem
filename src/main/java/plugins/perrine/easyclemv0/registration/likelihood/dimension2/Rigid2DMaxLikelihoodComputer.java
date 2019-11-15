@@ -38,9 +38,9 @@ public abstract class Rigid2DMaxLikelihoodComputer implements TransformationComp
         double lambdaInv22 = (Math.pow(optimize[6], 2) + Math.pow(optimize[4], 2));
         double lambdaInv12 = (optimize[3] * optimize[4]) + (optimize[6] * optimize[5]);
         double det = (lambdaInv11 * lambdaInv22) - (lambdaInv12 * lambdaInv12);
-        System.out.println(lambdaInv22 / det);
-        System.out.println(-lambdaInv12 / det);
-        System.out.println(lambdaInv11 / det);
+//        System.out.println(lambdaInv22 / det);
+//        System.out.println(-lambdaInv12 / det);
+//        System.out.println(lambdaInv11 / det);
         return s;
     }
 

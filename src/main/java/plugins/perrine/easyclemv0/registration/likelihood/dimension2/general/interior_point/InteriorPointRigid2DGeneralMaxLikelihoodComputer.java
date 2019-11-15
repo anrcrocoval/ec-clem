@@ -21,7 +21,7 @@ public class InteriorPointRigid2DGeneralMaxLikelihoodComputer extends Rigid2DMax
     protected double[] optimize(FiducialSet fiducialSet) {
         Ipopt ipopt = new IpoptSolver(new BaseOptimProblem(fiducialSet));
         ipopt.OptimizeNLP();
-        System.out.println(Arrays.toString(ipopt.getVariableValues()));
+//        System.out.println(Arrays.toString(ipopt.getVariableValues()));
         return ipopt.getVariableValues();
     }
 }
