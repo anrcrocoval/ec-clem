@@ -63,11 +63,6 @@
             <artifactId>vtk</artifactId>
             <version>0.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>fr.univ-nantes</groupId>
-            <artifactId>ipopt</artifactId>
-            <version>0.0.0</version>
-        </dependency>
 
         <dependency>
             <groupId>gov.nist.math</groupId>
