@@ -110,22 +110,22 @@ class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
         assertEquals(2, result.getR().getColumnDimension());
         checkDetIsOne(result);
         checkExpectedResidualIsZero(simpleTranslationFiducialSet.getSourceDataset(), simpleTranslationFiducialSet.getTargetDataset(), result);
-        assertEquals(1, result.getR().get(0, 0), 0.0000001);
-        assertEquals(0, result.getR().get(1, 0), 0.0000001);
-        assertEquals(0, result.getR().get(0, 1), 0.0000001);
-        assertEquals(1, result.getR().get(1, 1), 0.0000001);
+        assertEquals(1, result.getR().get(0, 0), 0.000001);
+        assertEquals(0, result.getR().get(1, 0), 0.000001);
+        assertEquals(0, result.getR().get(0, 1), 0.000001);
+        assertEquals(1, result.getR().get(1, 1), 0.000001);
 
         assertEquals(2, result.getS().getRowDimension());
         assertEquals(2, result.getS().getColumnDimension());
-        assertEquals(1, result.getS().get(0, 0), 0.0000001);
-        assertEquals(0, result.getS().get(1, 0), 0.0000001);
-        assertEquals(0, result.getS().get(0, 1), 0.0000001);
-        assertEquals(1, result.getS().get(1, 1), 0.0000001);
+        assertEquals(1, result.getS().get(0, 0), 0.000001);
+        assertEquals(0, result.getS().get(1, 0), 0.000001);
+        assertEquals(0, result.getS().get(0, 1), 0.000001);
+        assertEquals(1, result.getS().get(1, 1), 0.000001);
 
         assertEquals(2, result.getT().getRowDimension());
         assertEquals(1, result.getT().getColumnDimension());
-        assertEquals(1, result.getT().get(0, 0), 0.0000001);
-        assertEquals(1, result.getT().get(1, 0), 0.0000001);
+        assertEquals(1, result.getT().get(0, 0), 0.000001);
+        assertEquals(1, result.getT().get(1, 0), 0.000001);
     }
 
     private void checkDetIsOne(Similarity result) {

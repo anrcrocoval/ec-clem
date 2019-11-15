@@ -295,21 +295,6 @@
                             <goal>install-file</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>install-ipopt</id>
-                        <phase>clean</phase>
-                        <configuration>
-                            <groupId>fr.univ-nantes</groupId>
-                            <artifactId>ipopt</artifactId>
-                            <version>0.0.0</version>
-                            <file>${project.basedir}/lib/ipopt.jar</file>
-                            <packaging>jar</packaging>
-                            <generatePom>true</generatePom>
-                        </configuration>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
