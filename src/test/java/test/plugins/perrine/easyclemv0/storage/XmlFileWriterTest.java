@@ -14,9 +14,9 @@ package test.plugins.perrine.easyclemv0.storage;
 
 import icy.sequence.DimensionId;
 import icy.util.XMLUtil;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
@@ -28,10 +28,9 @@ import plugins.perrine.easyclemv0.storage.XmlTransformationWriter;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationSchema;
 import plugins.perrine.easyclemv0.transformation.schema.TransformationType;
 import plugins.perrine.easyclemv0.storage.XmlTransformationReader;
-
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.testng.Assert.assertEquals;
 import static plugins.perrine.easyclemv0.storage.XmlTransformation.transformationElementName;
 
 class XmlFileWriterTest {
@@ -43,8 +42,8 @@ class XmlFileWriterTest {
     private SequenceSize sourceSequenceSize = new SequenceSize();
     private SequenceSize targetSequenceSize = new SequenceSize();
 
-    @BeforeEach
-    @AfterEach
+    @BeforeTest
+    @AfterTest
     private void clearFile() {
         file.delete();
     }

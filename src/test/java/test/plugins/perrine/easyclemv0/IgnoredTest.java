@@ -15,10 +15,7 @@ package test.plugins.perrine.easyclemv0;
 import Jama.Matrix;
 import fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
 import fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
-import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import org.apache.commons.math3.stat.descriptive.moment.Variance;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import plugins.perrine.easyclemv0.error.*;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.fiducialset.dataset.Dataset;
@@ -31,9 +28,7 @@ import plugins.perrine.easyclemv0.transformation.schema.TransformationType;
 import plugins.perrine.easyclemv0.transformation.Similarity;
 import plugins.perrine.easyclemv0.registration.RigidTransformationComputer;
 import javax.inject.Inject;
-import java.util.concurrent.*;
 
-@Disabled
 class IgnoredTest {
 
     private TestTransformationFactory testTransformationFactory;
@@ -96,7 +91,7 @@ class IgnoredTest {
         this.affineTransformationComputer = affineTransformationComputer;
     }
 
-    @Test
+    @Test(enabled = false)
     void LS() {
         double angle = 38;
         int n = 15;
@@ -111,7 +106,7 @@ class IgnoredTest {
         error.getBarycentre().getMatrix().print(1,5);
     }
 
-    @Test
+    @Test(enabled = false)
     void LS_leave_one_out() {
         double angle = 38;
         int n = 15;
@@ -145,7 +140,7 @@ class IgnoredTest {
         error.getBarycentre().getMatrix().print(1,5);
     }
 
-    @Test
+    @Test(enabled = false)
     void TLS() {
         double angle = 38;
         int n = 15;
@@ -155,7 +150,7 @@ class IgnoredTest {
         tlsAffineTransformationComputer.compute(randomFromTransformationFiducialSet);
     }
 
-    @Test
+    @Test(enabled = false)
     void EKF() {
         double angle = 38;
         int n = 15;
@@ -173,7 +168,7 @@ class IgnoredTest {
         kalmanFilterState.getCovariance().print(1,5);
     }
 
-    @Test
+    @Test(enabled = false)
     void covariance() {
         double angle = 38;
         int n = 15;

@@ -13,13 +13,14 @@
 package test.plugins.perrine.easyclemv0.registration;
 
 import fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import plugins.perrine.easyclemv0.fiducialset.FiducialSet;
 import plugins.perrine.easyclemv0.registration.likelihood.dimension2.general.BaseOptimProblem;
 import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.testng.Assert.assertEquals;
 
 public class BaseOptimProblemTest {
 
