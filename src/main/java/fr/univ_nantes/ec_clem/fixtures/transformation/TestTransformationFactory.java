@@ -79,7 +79,7 @@ public class TestTransformationFactory {
         return new Similarity(R, T, S);
     }
 
-    private Similarity getSimpleRotationTransformation2D(double angle) {
+    public Similarity getSimpleRotationTransformation2D(double angle) {
         Matrix R = new Matrix(
             new double[][]{
                 { cos(angle), -1 * sin(angle) },
@@ -98,7 +98,7 @@ public class TestTransformationFactory {
         return new Similarity(R, T, S);
     }
 
-    private Similarity getSimpleRotationTransformation3D(double ox, double oy, double oz) {
+    public Similarity getSimpleRotationTransformation3D(double ox, double oy, double oz) {
         Matrix R = new Matrix(
             new double[][]{
                 { cos(oz) * cos(oy), (cos(oz) * sin(oy) * sin(ox)) - (sin(oz) * cos(ox)), (cos(oz) * sin(oy) * cos(ox)) + (sin(oz) * sin(ox)) },

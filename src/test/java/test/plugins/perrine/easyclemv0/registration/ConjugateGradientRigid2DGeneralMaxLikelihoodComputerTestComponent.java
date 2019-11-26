@@ -10,11 +10,11 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.workspace;
+package test.plugins.perrine.easyclemv0.registration;
 
 import dagger.Component;
 
 @Component
-public interface ResetOriginalImageComponent {
-    void inject(ResetOriginalImage ResetOriginalImage);
+public interface ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTestComponent {
+    void inject(ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest rigid2DGeneralMaxLikelihoodComputerTest);
 }

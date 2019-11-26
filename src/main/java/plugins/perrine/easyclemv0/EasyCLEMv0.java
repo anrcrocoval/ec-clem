@@ -17,7 +17,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+
 import icy.gui.viewer.Viewer;
 import icy.main.Icy;
 import icy.system.thread.ThreadUtil;
@@ -108,13 +113,12 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private Overlay myoverlaytarget;
 
 	static String[] listofRegistrationchoice = new String[] { "From Live to EM", "From Section to EM", "From Live to Section" };
-	private EzLabel versioninfo = new EzLabel("Version " + getDescriptor().getVersion());
 
 	private static String INPUT_SELECTION_RIGID = TransformationType.RIGID.name();
 	private static String INPUT_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
 	private static String INPUT_SELECTION_AFFINE = TransformationType.AFFINE.name();
 	private static String INPUT_SELECTION_SPLINE = TransformationType.SPLINE.name();
-	private static String MESSAGE_SELECTION_RIGID = "Do not allow any scaling other than the one respecting metadata";
+	private static String MESSAGE_SELECTION_RIGID = TransformationType.RIGID.name();
 	private static String MESSAGE_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
 	private static String MESSAGE_SELECTION_AFFINE = TransformationType.AFFINE.name();
 	private static String MESSAGE_SELECTION_SPLINE = TransformationType.SPLINE.name();
@@ -195,26 +199,37 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		}
 	}
 
+	private String getVersionString() {
+		String className = this.getClass().getSimpleName() + ".class";
+		String classPath = this.getClass().getResource(className).toString();
+		String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
+		Manifest manifest = null;
+		try {
+			manifest = new Manifest(new URL(manifestPath).openStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Attributes attributes = manifest.getMainAttributes();
+		return String.format("Version : %s",
+			attributes.getValue("Implementation-Version")
+		);
+	}
+
 	@Override
 	protected void initialize() {
 		new ToolTipFrame("<html>" + "<br> Press Play when ready. " + "<br> <li> Add point (2D or 3D ROI) on any image and drag it to its correct position in the other image.</li> "
 				+ "<br> <li> Use zoom and Lock views to help you!</li> "
 				+ "</html>","startmessage");
-		addEzComponent(versioninfo);
-//		prealign.setToolTipText("Volume can be turned in order to generate a new and still calibrated stack");
-//		choiceinputsection.addVisibilityTriggerTo(prealign, "3D (X,Y,Z,[T])", "3D but let me update myself");
-//		addEzComponent(prealign);
-//		addComponent(new GuiCLEMButtonPreprocess());
+		addEzComponent(
+			new EzLabel(getVersionString())
+		);
 		addComponent(new GuiCLEMButtonApply());
 		addComponent(new advancedmodules(this));
 		addEzComponent(inputGroup);
 
 		choiceinputsection.setToolTipText("2D transform will be only in the plane XY " + "but can be applied to all dimensions.\n WARNING make sure to have the metadata correctly set in 3D");
-		//choiceinputsection.addVisibilityTriggerTo(showgrid, "non rigid (2D or 3D)");
-
 		guiCLEMButtons.disableButtons();
 		addComponent(guiCLEMButtons);
-
 		rigidspecificbutton.disableButtons();
 		addComponent(rigidspecificbutton);
 	}

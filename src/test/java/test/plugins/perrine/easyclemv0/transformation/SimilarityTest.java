@@ -13,10 +13,10 @@
 package test.plugins.perrine.easyclemv0.transformation;
 
 import Jama.Matrix;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import plugins.perrine.easyclemv0.transformation.Similarity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.testng.Assert.assertEquals;
 
 public class SimilarityTest {
 

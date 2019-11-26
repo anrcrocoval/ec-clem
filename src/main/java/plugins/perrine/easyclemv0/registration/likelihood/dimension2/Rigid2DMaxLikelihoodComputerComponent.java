@@ -10,11 +10,13 @@
  * (at your option) any later version.
  *
  **/
-package plugins.perrine.easyclemv0.workspace;
+package plugins.perrine.easyclemv0.registration.likelihood.dimension2;
 
 import dagger.Component;
+import javax.inject.Singleton;
 
+@Singleton
 @Component
-public interface ResetOriginalImageComponent {
-    void inject(ResetOriginalImage ResetOriginalImage);
+public interface Rigid2DMaxLikelihoodComputerComponent {
+    void inject(Rigid2DMaxLikelihoodComputer rigid2DMaxLikelihoodComputer);
 }

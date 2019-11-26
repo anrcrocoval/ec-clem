@@ -94,34 +94,10 @@ public class Dataset implements Cloneable {
         return mean.getResult();
     }
 
-    public boolean isCoplanar() {
-        boolean result = true;
-        for(int j = 0; j < dimension; j++) {
-            boolean isCoplanarForColumn = true;
-            double firstValue = points.get(0, j);
-            for(int i = 1; i < n; i++) {
-                if(points.get(i, j) != firstValue) {
-                    isCoplanarForColumn = false;
-                    break;
-                }
-            }
-            result &= isCoplanarForColumn;
-        }
-        return result;
-    }
-
     public void substractRowWise(Point point) {
         for(int j = 0; j < dimension; j++) {
             for(int i = 0; i < n; i++) {
                 points.set(i, j, points.get(i, j) - point.getMatrix().get(j, 0));
-            }
-        }
-    }
-
-    public void addRowWise(Point point) {
-        for(int j = 0; j < dimension; j++) {
-            for(int i = 0; i < n; i++) {
-                points.set(i, j, points.get(i, j) + point.getMatrix().get(j, 0));
             }
         }
     }
@@ -151,7 +127,7 @@ public class Dataset implements Cloneable {
     }
 
     public Point getPoint(int i) {
-        return new Point(points.getMatrix(i, i, 0, dimension - 1).transpose());
+        return new Point(points.getMatrix(i, i, 0, dimension - 1).getRowPackedCopy());
     }
 
     public Dataset setPoint(int i, Point point) {
