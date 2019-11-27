@@ -20,7 +20,13 @@ import plugins.kernel.roi.roi3d.ROI3DPoint;
 
 import javax.inject.Inject;
 
+import java.awt.*;
+
+import static plugins.fr.univ_nantes.ec_clem.EasyCLEMv0.Colortab;
+
 public class RoiFactory {
+
+    private static String fiducialAttribute = "fiducial";
 
     @Inject
     public RoiFactory() {}
@@ -47,6 +53,15 @@ public class RoiFactory {
             }
         }
         roi.setPosition5D(position);
+        return roi;
+    }
+
+    public ROI getFiducialRoiFrom(ROI roi, Color color, int id) {
+        roi.setColor(color);
+        roi.setName(String.format("%s_%d", fiducialAttribute, id));
+        roi.setShowName(true);
+        roi.setStroke(6);
+        roi.setProperty(fiducialAttribute, null);
         return roi;
     }
 }
