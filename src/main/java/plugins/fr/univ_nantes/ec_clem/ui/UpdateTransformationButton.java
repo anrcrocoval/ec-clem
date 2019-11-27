@@ -22,7 +22,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class UpdateTransformationButton extends JButton {
 
-	private static final long serialVersionUID = 1L;
     private ProgressBarManager progressBarManager;
     private Workspace workspace;
 

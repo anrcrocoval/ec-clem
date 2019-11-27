@@ -26,7 +26,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class ComputeErrorMapButton extends JButton {
 
-	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
     private TargetRegistrationErrorMapFactory targetRegistrationErrorMapFactory;
     private ProgressBarManager progressBarManager;

@@ -25,8 +25,6 @@ import javax.swing.JPanel;
 
 public class GuiCLEMButtonApply extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-
 	public GuiCLEMButtonApply() {
 		JButton btnNewButton = new JButton("I want to apply a previously computed transfo");
 		btnNewButton.setToolTipText("all transfo you were doing have been saved in a file named _transfo.storage");

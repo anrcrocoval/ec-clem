@@ -21,7 +21,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class ShowPointsButton extends JButton {
 
-	private static final long serialVersionUID = 1L;
     private Workspace workspace;
     private ProgressBarManager progressBarManager;
 

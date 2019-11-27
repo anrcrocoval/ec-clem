@@ -20,7 +20,6 @@ import java.awt.event.ActionEvent;
 
 public class ShowOverlayCheckbox extends JCheckBox {
 
-	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
     private Overlay overlay;
 

@@ -29,7 +29,6 @@ import javax.swing.JPanel;
 
 public class advancedmodules extends JPanel {
 
-	private static final long serialVersionUID = 1L;
 	EasyCLEMv0 matiteclasse;
 
 	/**

@@ -29,7 +29,6 @@ import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 
 public class GuiCLEMButtons2 extends JPanel {
 
-	private static final long serialVersionUID = 1L;
 	private ComputeErrorMapButton computeErrorMapButton;
 	private MonitorTargetPointButton monitorTargetPointButton;
 	private ShowOverlayCheckbox showerror;

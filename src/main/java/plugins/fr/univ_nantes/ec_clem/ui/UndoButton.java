@@ -21,7 +21,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class UndoButton extends JButton {
 
-	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
     private ProgressBarManager progressBarManager;
 
