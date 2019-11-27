@@ -68,6 +68,7 @@ public class RoiDuplicator implements SequenceListener {
 
         roi.setColor(Colortab[(event.getSequence().getROICount(ROI.class) - 1) % Colortab.length]);
         roi.setName("Point " + event.getSequence().getROIs().size());
+        roi.setShowName(true);
         roi.setStroke(6);
 
         ROI roisource = roi.getCopy();
@@ -75,13 +76,13 @@ public class RoiDuplicator implements SequenceListener {
             new AnnounceFrame("You've closed the source image");
             return;
         }
-        int zs = sequence.getFirstViewer().getPositionZ(); // was
+        int zs = sequence.getFirstViewer().getPositionZ();
         Point5D pos2 = roisource.getPosition5D();
         pos2.setZ(zs);
         roisource.setPosition5D(pos2);
         if ((sequence.getWidth() != event.getSequence().getWidth()) || (sequence.getHeight() != event.getSequence().getHeight())) {
             Point5D position = (Point5D) pos.clone();
-            position.setLocation(sequence.getWidth() / 2, sequence.getHeight() / 2,
+            position.setLocation(sequence.getWidth() / 2d, sequence.getHeight() / 2d,
                 sequence.getFirstViewer().getPositionZ(),
                 sequence.getFirstViewer().getPositionT(), pos.getC());
             roisource.setPosition5D(position);
@@ -89,6 +90,7 @@ public class RoiDuplicator implements SequenceListener {
         }
         roisource.setColor(roi.getColor());
         roisource.setName(roi.getName());
+        roisource.setShowName(roi.getShowName());
         roisource.setStroke(roi.getStroke());
         roisource.setFocused(false);
         List<SequenceListener> sequenceListeners = sequenceListenerUtil.removeListeners(sequence, RoiDuplicator.class);
@@ -101,9 +103,7 @@ public class RoiDuplicator implements SequenceListener {
     }
 
     @Override
-    public void sequenceClosed(Sequence sequence) {
-
-    }
+    public void sequenceClosed(Sequence sequence) {}
 
     private Class<?> getSelectedTool(ROI roi) {
         switch (roi.getDimension()) {

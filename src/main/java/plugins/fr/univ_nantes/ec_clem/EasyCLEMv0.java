@@ -19,10 +19,8 @@ import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceFactory;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiDuplicator;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.SequenceListenerUtil;
@@ -41,7 +39,6 @@ import plugins.adufour.ezplug.EzStoppable;
 import plugins.adufour.ezplug.EzVarBoolean;
 import plugins.adufour.ezplug.EzVarSequence;
 import plugins.adufour.ezplug.EzVarText;
-import plugins.kernel.roi.descriptor.measure.ROIMassCenterDescriptorsPlugin;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.gui.dialog.MessageDialog;
@@ -49,10 +46,8 @@ import icy.gui.frame.progress.AnnounceFrame;
 import icy.gui.frame.progress.ToolTipFrame;
 import icy.gui.util.FontUtil;
 import icy.painter.Overlay;
-import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
-import icy.type.point.Point5D;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import plugins.fr.univ_nantes.ec_clem.misc.GuiCLEMButtonApply;
 import plugins.fr.univ_nantes.ec_clem.misc.advancedmodules;
@@ -112,10 +107,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	}
 
 	private Workspace workspace;
-	private Overlay myoverlaysource;
-	private Overlay myoverlaytarget;
-
-	static String[] listofRegistrationchoice = new String[] { "From Live to EM", "From Section to EM", "From Live to Section" };
 
 	private static String INPUT_SELECTION_RIGID = TransformationType.RIGID.name();
 	private static String INPUT_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
@@ -150,35 +141,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		Color.MAGENTA,
 		Color.ORANGE
 	};
-
-	private class VisiblepointsOverlay extends Overlay {
-		public VisiblepointsOverlay() {
-			super("Visible points");
-		}
-
-		@Override
-		public void paint(Graphics2D g, Sequence sequence, IcyCanvas canvas) {
-			if ((canvas instanceof IcyCanvas2D) && (g != null)) {
-				ArrayList<ROI> listfiducials = sequence.getROIs();
-				for (ROI roi : listfiducials) {
-					Point5D p3D = ROIMassCenterDescriptorsPlugin.computeMassCenter(roi);
-					if (Double.isNaN(p3D.getX())) {
-						p3D = roi.getPosition5D();
-					}
-
-					g.setColor(Color.BLACK);
-					g.setStroke(new BasicStroke(5));
-					Font f = g.getFont();
-					f = FontUtil.setName(f, "Arial");
-					f = FontUtil.setSize(f, (int) canvas.canvasToImageLogDeltaX(20));
-					g.setFont(f);
-					g.drawString(roi.getName(), (float) p3D.getX(), (float) p3D.getY());
-					g.setColor(Color.YELLOW);
-					g.drawString(roi.getName(), (float) p3D.getX() + 1, (float) p3D.getY() + 1);
-				}
-			}
-		}
-	}
 
 	private class MessageOverlay extends Overlay {
 		String message;
@@ -257,11 +219,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		choiceinputsection.setEnabled(false);
 		showgrid.setEnabled(false);
 
-//		if (!getchoice().equals(INPUT_SELECTION_RIGID)) {
-//			rigidspecificbutton.removespecificrigidbutton();
-//		}
-
-		sourceSequence.setName(sourceSequence.getName() + "_transformed");
 		String name = sourceSequence.getName() + "_transfo.xml";
 
 		workspace = new Workspace();
@@ -276,11 +233,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		sourceSequence.addListener(sourceSequenceRoiDuplicator.setSequence(targetSequence).setWorkspaceState(workspace.getWorkspaceState()));
 		targetSequence.addListener(targetSequenceRoiDuplicator.setSequence(sourceSequence).setWorkspaceState(workspace.getWorkspaceState()));
-
-		myoverlaysource = new VisiblepointsOverlay();
-		myoverlaytarget = new VisiblepointsOverlay();
-		sourceSequence.addOverlay(myoverlaysource);
-		targetSequence.addOverlay(myoverlaytarget);
 		sourceSequence.addOverlay(messageSource);
 		targetSequence.addOverlay(messageTarget);
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
@@ -298,28 +250,27 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			}
 		}
 
-//		sourceSequence.removeListener(roiChangedListener);
 		sequenceListenerUtil.removeListeners(sourceSequence, RoiDuplicator.class);
 		sequenceListenerUtil.removeListeners(targetSequence, RoiDuplicator.class);
-		sourceSequence.removeOverlay(myoverlaysource);
-		targetSequence.removeOverlay(myoverlaytarget);
 		sourceSequence.removeOverlay(messageSource);
 		targetSequence.removeOverlay(messageTarget);
 	}
 
 	private String getchoice() {
-		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_RIGID))
+		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_RIGID)) {
 			return INPUT_SELECTION_RIGID;
-		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_SIMILARITY))
+		}
+		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_SIMILARITY)) {
 			return INPUT_SELECTION_SIMILARITY;
-		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_AFFINE))
+		}
+		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_AFFINE)) {
 			return INPUT_SELECTION_AFFINE;
+		}
 		return INPUT_SELECTION_SPLINE;
 	}
 	
 	@Override
-	public void clean() {
-	}
+	public void clean() {}
 
 	@Override
 	public void stopExecution() {
@@ -332,7 +283,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		target.setEnabled(true);
 		choiceinputsection.setEnabled(true);
 		showgrid.setEnabled(true);
-//		rigidspecificbutton.reshowspecificrigidbutton();
 		synchronized(this) {
 			notify();
 		}
