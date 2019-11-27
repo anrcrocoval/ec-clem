@@ -61,6 +61,9 @@ import javax.inject.Inject;
 
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
+	private MessageOverlay messageSource = new MessageOverlay("Source");
+	private MessageOverlay messageTarget = new MessageOverlay("Target");
+
 	private TransformationConfigurationFactory transformationConfigurationFactory;
 	private SequenceFactory sequenceFactory;
 	private SequenceListenerUtil sequenceListenerUtil;
@@ -178,11 +181,11 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	}
 
 	private class MessageOverlay extends Overlay {
-		String mytext;
+		String message;
 
 		public MessageOverlay(String text) {
 			super("Message");
-			mytext = text;
+			message = text;
 		}
 
 		@Override
@@ -194,7 +197,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 				f = FontUtil.setName(f, "Arial");
 				f = FontUtil.setSize(f, (int) canvas.canvasToImageLogDeltaX(20));
 				g.setFont(f);
-				g.drawString(mytext, 10, (int) canvas.canvasToImageLogDeltaX(50));
+				g.drawString(message, 10, (int) canvas.canvasToImageLogDeltaX(50));
 			}
 		}
 	}
@@ -220,9 +223,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		new ToolTipFrame("<html>" + "<br> Press Play when ready. " + "<br> <li> Add point (2D or 3D ROI) on any image and drag it to its correct position in the other image.</li> "
 				+ "<br> <li> Use zoom and Lock views to help you!</li> "
 				+ "</html>","startmessage");
-		addEzComponent(
-			new EzLabel(getVersionString())
-		);
+		addEzComponent(new EzLabel(getVersionString()));
 		addComponent(new GuiCLEMButtonApply());
 		addComponent(new advancedmodules(this));
 		addEzComponent(inputGroup);
@@ -256,9 +257,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		choiceinputsection.setEnabled(false);
 		showgrid.setEnabled(false);
 
-		if (!getchoice().equals(INPUT_SELECTION_RIGID)) {
-			rigidspecificbutton.removespecificrigidbutton();
-		}
+//		if (!getchoice().equals(INPUT_SELECTION_RIGID)) {
+//			rigidspecificbutton.removespecificrigidbutton();
+//		}
 
 		sourceSequence.setName(sourceSequence.getName() + "_transformed");
 		String name = sourceSequence.getName() + "_transfo.xml";
@@ -280,8 +281,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		myoverlaytarget = new VisiblepointsOverlay();
 		sourceSequence.addOverlay(myoverlaysource);
 		targetSequence.addOverlay(myoverlaytarget);
-		MessageOverlay messageSource = new MessageOverlay("Source");
-		MessageOverlay messageTarget = new MessageOverlay("Target");
 		sourceSequence.addOverlay(messageSource);
 		targetSequence.addOverlay(messageTarget);
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
@@ -304,6 +303,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		sequenceListenerUtil.removeListeners(targetSequence, RoiDuplicator.class);
 		sourceSequence.removeOverlay(myoverlaysource);
 		targetSequence.removeOverlay(myoverlaytarget);
+		sourceSequence.removeOverlay(messageSource);
+		targetSequence.removeOverlay(messageTarget);
 	}
 
 	private String getchoice() {
@@ -331,7 +332,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		target.setEnabled(true);
 		choiceinputsection.setEnabled(true);
 		showgrid.setEnabled(true);
-		rigidspecificbutton.reshowspecificrigidbutton();
+//		rigidspecificbutton.reshowspecificrigidbutton();
 		synchronized(this) {
 			notify();
 		}
