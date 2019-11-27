@@ -15,8 +15,6 @@ package fr.univ_nantes.ec_clem.test;
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.error.CovarianceMatrixComputer;
 import plugins.fr.univ_nantes.ec_clem.error.ErrorComputer;
-import plugins.fr.univ_nantes.ec_clem.error.ExtendedKalmanFilter;
-import plugins.fr.univ_nantes.ec_clem.error.KalmanFilterState;
 import plugins.fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
 import plugins.fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
 import org.testng.annotations.Test;
@@ -39,7 +37,6 @@ class IgnoredTest {
     private RigidTransformationComputer rigidTransformationComputer;
     private CovarianceMatrixComputer covarianceMatrixComputer;
     private ErrorComputer errorComputer;
-    private ExtendedKalmanFilter extendedKalmanFilter;
     private TLSAffineTransformationComputer tlsAffineTransformationComputer;
     private AffineTransformationComputer affineTransformationComputer;
 
@@ -77,11 +74,6 @@ class IgnoredTest {
     @Inject
     public void setErrorComputer(ErrorComputer errorComputer) {
         this.errorComputer = errorComputer;
-    }
-
-    @Inject
-    public void setExtendedKalmanFilter(ExtendedKalmanFilter extendedKalmanFilter) {
-        this.extendedKalmanFilter = extendedKalmanFilter;
     }
 
     @Inject
@@ -151,24 +143,6 @@ class IgnoredTest {
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
         FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, range, isotropicCovariance);
         tlsAffineTransformationComputer.compute(randomFromTransformationFiducialSet);
-    }
-
-    @Test(enabled = false)
-    void EKF() {
-        double angle = 38;
-        int n = 15;
-        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(range.length);
-        simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, range, isotropicCovariance);
-
-        Similarity leastSquareEstimate = rigidTransformationComputer.compute(randomFromTransformationFiducialSet);
-        KalmanFilterState kalmanFilterState = new KalmanFilterState(leastSquareEstimate.getMatrixRight(), Matrix.identity(12, 12));
-        for(int i = 0; i < 10000; i++) {
-            kalmanFilterState = extendedKalmanFilter.run(randomFromTransformationFiducialSet, kalmanFilterState.getEstimate(), kalmanFilterState.getCovariance());
-        }
-
-        kalmanFilterState.getEstimate().print(1,5);
-        kalmanFilterState.getCovariance().print(1,5);
     }
 
     @Test(enabled = false)
