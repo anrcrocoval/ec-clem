@@ -12,9 +12,9 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.transformation;
 
+import plugins.fr.univ_nantes.ec_clem.registration.NonLinearTransformationComputer;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.registration.AffineTransformationComputer;
-import plugins.fr.univ_nantes.ec_clem.registration.NonRigidTransformationComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.RigidTransformationComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.SimilarityTransformationComputer;
 
@@ -24,14 +24,14 @@ public class TransformationFactory {
 
     private RigidTransformationComputer rigidTransformationComputer;
     private SimilarityTransformationComputer similarityTransformationComputer;
-    private NonRigidTransformationComputer nonRigidTransformationComputer;
+    private NonLinearTransformationComputer nonLinearTransformationComputer;
     private AffineTransformationComputer affineTransformationComputer;
 
     @Inject
-    public TransformationFactory(RigidTransformationComputer rigidTransformationComputer, SimilarityTransformationComputer similarityTransformationComputer, NonRigidTransformationComputer nonRigidTransformationComputer, AffineTransformationComputer affineTransformationComputer) {
+    public TransformationFactory(RigidTransformationComputer rigidTransformationComputer, SimilarityTransformationComputer similarityTransformationComputer, NonLinearTransformationComputer nonLinearTransformationComputer, AffineTransformationComputer affineTransformationComputer) {
         this.rigidTransformationComputer = rigidTransformationComputer;
         this.similarityTransformationComputer = similarityTransformationComputer;
-        this.nonRigidTransformationComputer = nonRigidTransformationComputer;
+        this.nonLinearTransformationComputer = nonLinearTransformationComputer;
         this.affineTransformationComputer = affineTransformationComputer;
     }
 
@@ -40,7 +40,7 @@ public class TransformationFactory {
             case RIGID: return rigidTransformationComputer.compute(transformationSchema.getFiducialSet());
             case SIMILARITY: return similarityTransformationComputer.compute(transformationSchema.getFiducialSet());
             case AFFINE: return affineTransformationComputer.compute(transformationSchema.getFiducialSet());
-            case SPLINE: return  nonRigidTransformationComputer.compute(transformationSchema.getFiducialSet());
+            case SPLINE: return  nonLinearTransformationComputer.compute(transformationSchema.getFiducialSet());
             default : throw new RuntimeException("Case not implemented");
         }
     }
