@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 import plugins.fr.univ_nantes.ec_clem.registration.SimilarityTransformationComputer;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import javax.inject.Inject;
@@ -246,7 +247,7 @@ class SimilarityTransformationComputerTest {
         Point expected = new Dataset(
                 targetDataset.getMatrix().minus(
                         sourceDataset.getHomogeneousMatrixRight().times(result.getMatrixRight().transpose())
-                )
+                ), PointType.FIDUCIAL
         ).getBarycentre();
         for(int i = 0; i < expected.getDimension(); i++) {
             assertEquals(0, expected.get(i), 0.0000001);

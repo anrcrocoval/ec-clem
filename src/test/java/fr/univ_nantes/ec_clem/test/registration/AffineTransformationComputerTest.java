@@ -18,6 +18,7 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.registration.AffineTransformationComputer;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -44,14 +45,14 @@ class AffineTransformationComputerTest {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { 2 }, { 2 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { -2 }, { 4 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{  4 }, { 0 }, { 6 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { 2 }, { 6 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
 
         AffineTransformation result = subjectUnderTest.compute(new FiducialSet(source, target));
         assertEquals(4, result.getHomogeneousMatrix().getRowDimension());
@@ -81,14 +82,14 @@ class AffineTransformationComputerTest {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ 2 }, { 3 }, { 2 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 0 }, { 3 }, { 3 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 1 }, { -1 }, { 4 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 2 }, { 3 }, { 4 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
 
         AffineTransformation result = subjectUnderTest.compute(new FiducialSet(source, target));
         assertEquals(4, result.getHomogeneousMatrix().getRowDimension());
@@ -118,14 +119,14 @@ class AffineTransformationComputerTest {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ -2.1213204 }, { 1 }, { -0.7071068 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -2.8284272 }, { -1 }, { 0 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -0.7071068 }, { 0 }, { 3.5355340 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -3.5355340 }, { 1 }, { 0.7071068 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
 
         AffineTransformation result = subjectUnderTest.compute(new FiducialSet(source, target));
         assertEquals(4, result.getHomogeneousMatrix().getRowDimension());

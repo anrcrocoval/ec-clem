@@ -17,6 +17,7 @@ import Jama.SingularValueDecomposition;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
 
 import javax.inject.Inject;
@@ -60,7 +61,7 @@ public class SimilarityTransformationComputer implements TransformationComputer 
     }
 
     protected Matrix getS(Matrix sourceDataset, Matrix targetDataset, Matrix R) {
-        Dataset ratioDataset = new Dataset(targetDataset.arrayRightDivide(R.times(sourceDataset.transpose()).transpose()));
+        Dataset ratioDataset = new Dataset(targetDataset.arrayRightDivide(R.times(sourceDataset.transpose()).transpose()), PointType.FIDUCIAL);
         Point ratioPoint = ratioDataset.getBarycentre();
         Matrix scale = Matrix.identity(R.getRowDimension(), R.getColumnDimension());
         for(int i = 0; i < R.getRowDimension(); i++) {

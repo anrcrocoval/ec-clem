@@ -19,6 +19,7 @@ import org.apache.commons.math3.random.SynchronizedRandomGenerator;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class TestFiducialSetFactory {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 8 }, { 5 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 9 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 12 }, { 25 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ -5.66543 }, { 12.11796 }})));
@@ -53,7 +54,7 @@ public class TestFiducialSetFactory {
         targetPoints.add(new Point(new Matrix(new double[][] {{ 15.97593 }, { 8.84992 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 1.17434 }, { 3.52065 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 13.53713 }, { 34.08704 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
         return new FiducialSet(source, target);
     }
 
@@ -66,7 +67,7 @@ public class TestFiducialSetFactory {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 8 }, { 5 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 9 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 12 }, { 25 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ 0.3623365 }, { 2.206516 }})));
@@ -76,7 +77,7 @@ public class TestFiducialSetFactory {
         targetPoints.add(new Point(new Matrix(new double[][] {{ 6.1587463 }, { 7.146317 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{  7.7065571 }, { 5.532538 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 4.0516693 }, { 27.433264 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
         return new FiducialSet(source, target);
     }
 
@@ -89,7 +90,7 @@ public class TestFiducialSetFactory {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 8 }, { 5 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 9 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 12 }, { 25 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ 2 }, { 3 }})));
@@ -99,7 +100,7 @@ public class TestFiducialSetFactory {
         targetPoints.add(new Point(new Matrix(new double[][] {{ 9 }, { 6 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 10 }, { 4 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 13 }, { 26 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
         return new FiducialSet(source, target);
     }
 
@@ -109,14 +110,14 @@ public class TestFiducialSetFactory {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { 2 }, { 2 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { -2 }, { 4 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{  4 }, { 0 }, { 6 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { 2 }, { 6 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
         return new FiducialSet(source, target);
     }
 
@@ -126,14 +127,14 @@ public class TestFiducialSetFactory {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ 2 }, { 3 }, { 2 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 0 }, { 3 }, { 3 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 1 }, { -1 }, { 4 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 2 }, { 3 }, { 4 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
         return new FiducialSet(source, target);
     }
 
@@ -143,14 +144,14 @@ public class TestFiducialSetFactory {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ -2.1213204 }, { 1 }, { -0.7071068 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -2.8284272 }, { -1 }, { 0 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -0.7071068 }, { 0 }, { 3.5355340 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ -3.5355340 }, { 1 }, { 0.7071068 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
         return new FiducialSet(source, target);
     }
 
@@ -164,7 +165,7 @@ public class TestFiducialSetFactory {
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 189.46474 }, { 271.82878 }, { 1 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 229.31887 }, { 321.75632 }, { 1 }})));
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 298.71181 }, { 368.81018 }, { 1 }})));
-        Dataset source = new Dataset(sourcePoints);
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
 
         List<Point> targetPoints = new ArrayList<>();
         targetPoints.add(new Point(new Matrix(new double[][] {{ 160 }, { 306 }, { 1 }})));
@@ -175,12 +176,12 @@ public class TestFiducialSetFactory {
         targetPoints.add(new Point(new Matrix(new double[][] {{ 326 }, { 474 }, { 1 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 442 }, { 498 }, { 1 }})));
         targetPoints.add(new Point(new Matrix(new double[][] {{ 608 }, { 502 }, { 1 }})));
-        Dataset target = new Dataset(targetPoints);
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
         return new FiducialSet(source, target);
     }
 
     public FiducialSet getRandomFromTransformation(Transformation transformation, int n, int[] range) {
-        Dataset source = new Dataset(range.length);
+        Dataset source = new Dataset(range.length, PointType.FIDUCIAL);
         for(int i = 0; i < n; i++) {
             source.addPoint(getRandomPoint(range));
         }

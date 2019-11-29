@@ -14,37 +14,41 @@ package plugins.fr.univ_nantes.ec_clem.roi;
 
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.DatasetFactory;
-import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiDuplicator;
+import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiListenerManager;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.SequenceListenerUtil;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceListener;
 import javax.inject.Inject;
 import java.util.List;
-import static plugins.fr.univ_nantes.ec_clem.EasyCLEMv0.Colortab;
 
 public class RoiUpdater {
 
     private DatasetFactory datasetFactory;
     private RoiFactory roiFactory;
     private SequenceListenerUtil sequenceListenerUtil;
+    private RoiListenerManager roiListenerManager;
 
     @Inject
-    public RoiUpdater(DatasetFactory datasetFactory, RoiFactory roiFactory, SequenceListenerUtil sequenceListenerUtil) {
+    public RoiUpdater(DatasetFactory datasetFactory, RoiFactory roiFactory, SequenceListenerUtil sequenceListenerUtil, RoiListenerManager roiListenerManager) {
         this.datasetFactory = datasetFactory;
         this.roiFactory = roiFactory;
         this.sequenceListenerUtil = sequenceListenerUtil;
+        this.roiListenerManager = roiListenerManager;
     }
 
     public void updateRoi(Dataset dataset, Sequence sequence) {
         Dataset pixelDataset = datasetFactory.toPixel(dataset, sequence);
-        sequence.removeAllROI();
-        List<SequenceListener> sequenceListeners = sequenceListenerUtil.removeListeners(sequence, RoiDuplicator.class);
+        sequence.removeROIs(
+            roiFactory.getFrom(sequence, dataset.getPointType()),
+            false
+        );
+        List<SequenceListener> sequenceListeners = roiListenerManager.removeAll(sequence);
         for(int i = 0; i < pixelDataset.getN(); i++) {
-            ROI roi = roiFactory.getFiducialRoiFrom(
+            ROI roi = roiFactory.getRoiFrom(
                 roiFactory.getFrom(pixelDataset.getPoint(i)),
-                Colortab[i % Colortab.length],
-                i + 1
+                i + 1,
+                dataset.getPointType()
             );
             sequence.addROI(roi);
         }

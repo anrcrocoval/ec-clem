@@ -18,6 +18,7 @@ import plugins.kernel.roi.roi3d.ROI3DPoint;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +29,7 @@ public class RoiProcessor {
     @Inject
     public RoiProcessor() {}
 
-    public double[][] getPointsFromRoi(ArrayList<ROI> roiList) {
+    public double[][] getPointsFromRoi(List<ROI> roiList) {
         if(roiList.size() == 0) {
             throw new RuntimeException("Dataset is empty");
         }
@@ -60,7 +61,7 @@ public class RoiProcessor {
         return result;
     }
 
-    private void sort(ArrayList<ROI> roiList) {
+    private void sort(List<ROI> roiList) {
         roiList.sort(Comparator.comparing((roi) -> {
             Matcher matcher = pattern.matcher(roi.getName());
             matcher.matches();

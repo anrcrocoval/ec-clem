@@ -63,6 +63,7 @@ public class XmlTransformationWriter {
     private void write(Dataset dataset, Element datasetElement) {
         datasetElement.setAttribute(XmlTransformation.datasetNAttributeName, String.valueOf(dataset.getN()));
         datasetElement.setAttribute(XmlTransformation.datasetDimensionAttributeName, String.valueOf(dataset.getDimension()));
+        datasetElement.setAttribute(XmlTransformation.datasetPointTypeAttributeName, dataset.getPointType().name());
         for(int i = 0; i < dataset.getN(); i++) {
             Element point = XMLUtil.addElement(datasetElement, XmlTransformation.pointElementName);
             point.setAttribute(XmlTransformation.pointIdAttributeName, String.valueOf(i));

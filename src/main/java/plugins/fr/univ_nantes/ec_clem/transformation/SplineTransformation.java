@@ -51,7 +51,7 @@ public class SplineTransformation implements Transformation {
 
     public Dataset apply(Dataset dataset) {
         vtkPolyData vtkPointsResult = apply(vtkPointsFactory.getFrom(dataset), splineTransform);
-        return datasetFactory.getFrom(vtkPointsResult);
+        return datasetFactory.getFrom(vtkPointsResult, dataset.getPointType());
     }
 
     private vtkPolyData apply(vtkPoints sourcePoints, vtkThinPlateSplineTransform transform) {

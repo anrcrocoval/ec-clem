@@ -12,7 +12,8 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.workspace;
 
-import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiDuplicator;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
+import plugins.fr.univ_nantes.ec_clem.sequence_listener.FiducialRoiListener;
 import icy.sequence.SequenceListener;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.DatasetFactory;
@@ -44,11 +45,11 @@ public class Undo extends ProgressTrackableMasterTask implements Runnable {
 
     @Override
     public void run() {
-        List<SequenceListener> targetSequenceListeners = sequenceListenerUtil.removeListeners(workspace.getTargetSequence(), RoiDuplicator.class);
+        List<SequenceListener> targetSequenceListeners = sequenceListenerUtil.removeListeners(workspace.getTargetSequence(), FiducialRoiListener.class);
         resetOriginalImage.run();
-        Dataset sourceDataset = datasetFactory.getFrom(workspace.getSourceSequence());
+        Dataset sourceDataset = datasetFactory.getFrom(workspace.getSourceSequence(), PointType.FIDUCIAL);
         sourceDataset.removePoint(sourceDataset.getN() - 1);
-        Dataset targetDataset = datasetFactory.getFrom(workspace.getTargetSequence());
+        Dataset targetDataset = datasetFactory.getFrom(workspace.getTargetSequence(), PointType.FIDUCIAL);
         targetDataset.removePoint(targetDataset.getN() - 1);
         roiUpdater.updateRoi(sourceDataset, workspace.getSourceSequence());
         roiUpdater.updateRoi(targetDataset, workspace.getTargetSequence());

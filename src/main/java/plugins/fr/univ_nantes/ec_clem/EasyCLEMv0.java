@@ -22,7 +22,8 @@ import java.net.URL;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceFactory;
-import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiDuplicator;
+import plugins.fr.univ_nantes.ec_clem.sequence_listener.FiducialRoiListener;
+import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiListenerManager;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.SequenceListenerUtil;
 import plugins.fr.univ_nantes.ec_clem.transformation.configuration.TransformationConfigurationFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
@@ -61,11 +62,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	private TransformationConfigurationFactory transformationConfigurationFactory;
 	private SequenceFactory sequenceFactory;
-	private SequenceListenerUtil sequenceListenerUtil;
+	private RoiListenerManager roiListenerManager;
 	private GuiCLEMButtons guiCLEMButtons;
 	private GuiCLEMButtons2 rigidspecificbutton;
-	private RoiDuplicator sourceSequenceRoiDuplicator;
-	private RoiDuplicator targetSequenceRoiDuplicator;
 
 	public EasyCLEMv0() {
 		DaggerEasyCLEMv0Component.builder().build().inject(this);
@@ -82,8 +81,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	}
 
 	@Inject
-	public void setSequenceListenerUtil(SequenceListenerUtil sequenceListenerUtil) {
-		this.sequenceListenerUtil = sequenceListenerUtil;
+	public void setRoiListenerManager(RoiListenerManager roiListenerManager) {
+		this.roiListenerManager = roiListenerManager;
 	}
 
 	@Inject
@@ -94,16 +93,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	@Inject
 	public void setRigidspecificbutton(GuiCLEMButtons2 rigidspecificbutton) {
 		this.rigidspecificbutton = rigidspecificbutton;
-	}
-
-	@Inject
-	public void setSourceSequenceRoiDuplicator(RoiDuplicator sourceSequenceRoiDuplicator) {
-		this.sourceSequenceRoiDuplicator = sourceSequenceRoiDuplicator;
-	}
-
-	@Inject
-	public void setTargetSequenceRoiDuplicator(RoiDuplicator targetSequenceRoiDuplicator) {
-		this.targetSequenceRoiDuplicator = targetSequenceRoiDuplicator;
 	}
 
 	private Workspace workspace;
@@ -191,7 +180,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		addEzComponent(inputGroup);
 
 		choiceinputsection.setToolTipText("2D transform will be only in the plane XY " + "but can be applied to all dimensions.\n WARNING make sure to have the metadata correctly set in 3D");
-		guiCLEMButtons.disableButtons();
+		guiCLEMButtons.setEnabled(false);
 		addComponent(guiCLEMButtons);
 		rigidspecificbutton.disableButtons();
 		addComponent(rigidspecificbutton);
@@ -231,14 +220,14 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		guiCLEMButtons.setworkspace(workspace);
 		rigidspecificbutton.setWorkspace(workspace);
 
-		sourceSequence.addListener(sourceSequenceRoiDuplicator.setSequence(targetSequence).setWorkspaceState(workspace.getWorkspaceState()));
-		targetSequence.addListener(targetSequenceRoiDuplicator.setSequence(sourceSequence).setWorkspaceState(workspace.getWorkspaceState()));
+//		sourceSequence.addListener(sourceSequenceFiducialRoiListener.setSequence(targetSequence).setWorkspaceState(workspace.getWorkspaceState()));
+//		targetSequence.addListener(targetSequenceFiducialRoiListener.setSequence(sourceSequence).setWorkspaceState(workspace.getWorkspaceState()));
 		sourceSequence.addOverlay(messageSource);
 		targetSequence.addOverlay(messageTarget);
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
 		new AnnounceFrame("Select point on image" + targetSequence.getName() + ", then drag it on source image and RIGHT CLICK", 5);
 
-		guiCLEMButtons.enableButtons();
+		guiCLEMButtons.setEnabled(true);
 		rigidspecificbutton.enableButtons();
 		Icy.getMainInterface().setSelectedTool(ROI3DPointPlugin.class.getName());
 
@@ -250,8 +239,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			}
 		}
 
-		sequenceListenerUtil.removeListeners(sourceSequence, RoiDuplicator.class);
-		sequenceListenerUtil.removeListeners(targetSequence, RoiDuplicator.class);
+//		roiListenerManager.clear();
 		sourceSequence.removeOverlay(messageSource);
 		targetSequence.removeOverlay(messageTarget);
 	}
@@ -277,7 +265,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		ThreadUtil.invokeLater(() -> new Viewer(
 				sequenceFactory.getMergeSequence(workspace.getSourceSequence(), workspace.getTargetSequence())
 		));
-		guiCLEMButtons.disableButtons();
+		guiCLEMButtons.setEnabled(false);
 		rigidspecificbutton.disableButtons();
 		source.setEnabled(true);
 		target.setEnabled(true);

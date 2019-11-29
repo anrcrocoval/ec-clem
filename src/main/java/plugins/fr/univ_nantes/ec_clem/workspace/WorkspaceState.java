@@ -12,14 +12,18 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.workspace;
 
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
+
 public class WorkspaceState {
 
+    private PointType pointType;
     private boolean flagReadyToMove;
     private boolean done;
 
-    public WorkspaceState(boolean flagReadyToMove, boolean done) {
+    public WorkspaceState(boolean flagReadyToMove, boolean done, PointType pointType) {
         this.flagReadyToMove = flagReadyToMove;
         this.done = done;
+        this.pointType = pointType;
     }
 
     public boolean isFlagReadyToMove() {
@@ -36,5 +40,13 @@ public class WorkspaceState {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public PointType getPointType() {
+        return pointType;
+    }
+
+    public void setPointType(PointType pointType) {
+        this.pointType = pointType;
     }
 }

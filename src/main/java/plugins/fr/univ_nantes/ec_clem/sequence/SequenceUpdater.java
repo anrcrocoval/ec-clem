@@ -12,6 +12,7 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.sequence;
 
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.TransformationFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
@@ -40,12 +41,14 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
 
     @Override
     public void run() {
-        Dataset sourceTransformedDataset = datasetFactory.getFrom(datasetFactory.getFrom(sourceSequence), transformationSchema);
+        Dataset sourceTransformedDataset = datasetFactory.getFrom(datasetFactory.getFrom(sourceSequence, PointType.FIDUCIAL), transformationSchema);
+        Dataset sourceNonFiducialTransformedDataset = datasetFactory.getFrom(datasetFactory.getFrom(sourceSequence, PointType.NOT_FIDUCIAL), transformationSchema);
         Transformation transformation = transformationFactory.getFrom(transformationSchema);
         Stack3DVTKTransformer imageTransformer = new Stack3DVTKTransformer(sourceSequence, transformationSchema.getTargetSize(), transformation);
         super.add(imageTransformer);
         sourceSequence = imageTransformer.get();
         roiUpdater.updateRoi(sourceTransformedDataset, sourceSequence);
+        roiUpdater.updateRoi(sourceNonFiducialTransformedDataset, sourceSequence);
     }
 
     @Inject

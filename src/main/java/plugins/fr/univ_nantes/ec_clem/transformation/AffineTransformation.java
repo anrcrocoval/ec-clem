@@ -33,7 +33,7 @@ public class AffineTransformation implements Transformation {
     public Dataset apply(Dataset dataset) {
         Matrix M = (getHomogeneousMatrix().times(dataset.getHomogeneousMatrixRight().transpose())).transpose();
         M = M.getMatrix(0, M.getRowDimension() - 1, 0, M.getColumnDimension() - 2);
-        return new Dataset(M);
+        return new Dataset(M, dataset.getPointType());
     }
 
     public Matrix getMatrixRight() {

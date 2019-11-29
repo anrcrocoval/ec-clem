@@ -15,31 +15,35 @@ package plugins.fr.univ_nantes.ec_clem.fiducialset.dataset;
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import java.util.List;
 import java.util.stream.IntStream;
-
 import static java.lang.Math.sqrt;
 
 public class Dataset implements Cloneable {
+
+    private PointType pointType;
     private Matrix points;
     private int dimension;
     private int n;
     private Mean mean = new Mean();
 
-    public Dataset(int dimension) {
+    public Dataset(int dimension, PointType pointType) {
+        this.pointType = pointType;
         this.dimension = dimension;
         n = 0;
         points = new Matrix(n, dimension);
     }
 
-    public Dataset(Matrix M) {
+    public Dataset(Matrix M, PointType pointType) {
+        this.pointType = pointType;
         this.dimension = M.getColumnDimension();
         this.n = M.getRowDimension();
         points = M;
     }
 
-    public Dataset(List<Point> points) {
+    public Dataset(List<Point> points, PointType pointType) {
+        this.pointType = pointType;
         n = points.size();
         dimension = points.get(0).getDimension();
         this.points = new Matrix(n, dimension);
@@ -50,7 +54,8 @@ public class Dataset implements Cloneable {
         }
     }
 
-    public Dataset(double[][] points) {
+    public Dataset(double[][] points, PointType pointType) {
+        this.pointType = pointType;
         n = points.length;
         dimension = points[0].length;
         this.points = new Matrix(points);
@@ -160,5 +165,9 @@ public class Dataset implements Cloneable {
         }
         points = clone;
         return this;
+    }
+
+    public PointType getPointType() {
+        return pointType;
     }
 }

@@ -13,6 +13,7 @@
 package plugins.fr.univ_nantes.ec_clem.fiducialset;
 
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 
 public class FiducialSet implements Cloneable {
     private Dataset sourceDataset;
@@ -25,6 +26,9 @@ public class FiducialSet implements Cloneable {
         n = sourceDataset.getN();
         if(n < 3) {
             throw new RuntimeException("Minimum number of fiducial points is 3");
+        }
+        if(targetDataset.getPointType() != PointType.FIDUCIAL || sourceDataset.getPointType() != PointType.FIDUCIAL) {
+            throw new RuntimeException("Source dataset and target dataset should have FIDUCIAL type");
         }
         if(sourceDataset.getN() != targetDataset.getN()) {
             throw new RuntimeException("Source dataset and target dataset do not have the same number of points");

@@ -20,6 +20,7 @@ import org.testng.annotations.Test;
 import org.w3c.dom.Document;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.sequence.DimensionSize;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceSize;
 import plugins.fr.univ_nantes.ec_clem.storage.XmlFileReader;
@@ -50,8 +51,8 @@ class XmlFileWriterTest {
 
     @Test
     void writeAndRead() {
-        Dataset sourceDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }});
-        Dataset targetDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }});
+        Dataset sourceDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }}, PointType.FIDUCIAL);
+        Dataset targetDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }}, PointType.FIDUCIAL);
         sourceSequenceSize.add(new DimensionSize(DimensionId.X, 10, 1));
         targetSequenceSize.add(new DimensionSize(DimensionId.X, 10, 1));
         TransformationSchema transformationSchema = new TransformationSchema(

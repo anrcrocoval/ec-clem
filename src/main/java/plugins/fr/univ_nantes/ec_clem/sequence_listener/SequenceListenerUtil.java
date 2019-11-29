@@ -22,8 +22,7 @@ import java.util.stream.Collectors;
 public class SequenceListenerUtil {
 
     @Inject
-    public SequenceListenerUtil() {
-    }
+    public SequenceListenerUtil() {}
 
     public List<SequenceListener> removeListeners(Sequence sequence, Class listenerClass) {
         List<SequenceListener> listeners = Arrays.stream(sequence.getListeners()).filter(

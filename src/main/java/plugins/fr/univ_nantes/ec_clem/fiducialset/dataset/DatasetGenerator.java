@@ -14,6 +14,7 @@ package plugins.fr.univ_nantes.ec_clem.fiducialset.dataset;
 
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 
 import javax.inject.Inject;
 import java.util.Random;
@@ -33,11 +34,11 @@ public class DatasetGenerator {
                 copy.set(i, j, copy.get(i, j) + random.nextGaussian() * fle);
             }
         }
-        return new Dataset(copy);
+        return new Dataset(copy, dataset.getPointType());
     }
 
     public Dataset generate(Point center, int radius, int n) {
-        Dataset result = new Dataset(center.getDimension());
+        Dataset result = new Dataset(center.getDimension(), PointType.FIDUCIAL);
         for (int i = 0; i < n; i++) {
             Point point = new Point(result.getDimension());
             for(int d = 0; d < point.getDimension(); d++) {

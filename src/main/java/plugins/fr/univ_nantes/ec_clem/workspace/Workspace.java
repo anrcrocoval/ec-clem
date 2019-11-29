@@ -30,7 +30,7 @@ public class Workspace {
     private TransformationConfiguration transformationConfiguration;
 
     public Workspace() {
-        workspaceState = new WorkspaceState(false, false);
+        workspaceState = new WorkspaceState(false, false, null);
         monitoringConfiguration = new MonitoringConfiguration(false, false);
     }
 

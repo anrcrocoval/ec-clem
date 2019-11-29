@@ -23,6 +23,7 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.registration.AffineTransformationComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.TLSAffineTransformationComputer;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
@@ -96,7 +97,7 @@ class IgnoredTest {
         AffineTransformation compute = affineTransformationComputer.compute(randomFromTransformationFiducialSet);
         Dataset error = new Dataset(randomFromTransformationFiducialSet.getTargetDataset().getMatrix().minus(
                 compute.apply(randomFromTransformationFiducialSet.getSourceDataset()).getMatrix()
-        ));
+        ), PointType.FIDUCIAL);
         error.getMatrix().print(1,5);
         error.getBarycentre().getMatrix().print(1,5);
     }
@@ -109,7 +110,7 @@ class IgnoredTest {
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
         FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, range, isotropicCovariance);
 
-        Dataset error = new Dataset(3);
+        Dataset error = new Dataset(3, PointType.FIDUCIAL);
 
         for(int i = 0; i < randomFromTransformationFiducialSet.getN(); i++) {
             Point targetRemovedPoint = randomFromTransformationFiducialSet.getTargetDataset().removePoint(0);
@@ -174,7 +175,7 @@ class IgnoredTest {
             }
         }
 
-        new Dataset(M).getBarycentre().getMatrix().print(1,5);
+        new Dataset(M, PointType.FIDUCIAL).getBarycentre().getMatrix().print(1,5);
         Matrix covariance = covarianceMatrixComputer.compute(M);
         covariance.print(1,5);
 

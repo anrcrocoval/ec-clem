@@ -12,6 +12,7 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.fiducialset;
 
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.DatasetFactory;
 
@@ -28,8 +29,8 @@ public class FiducialSetFactory {
 
     public FiducialSet getFrom(Workspace workspace) {
         return new FiducialSet(
-            datasetFactory.getFrom(workspace.getSourceSequence()),
-            datasetFactory.getFrom(workspace.getTargetSequence())
+            datasetFactory.getFrom(workspace.getSourceSequence(), PointType.FIDUCIAL),
+            datasetFactory.getFrom(workspace.getTargetSequence(), PointType.FIDUCIAL)
         );
     }
 }

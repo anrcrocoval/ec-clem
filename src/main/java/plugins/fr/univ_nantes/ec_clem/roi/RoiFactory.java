@@ -12,21 +12,17 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.roi;
 
+import icy.sequence.Sequence;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import icy.roi.ROI;
 import icy.type.point.Point5D;
 import plugins.kernel.roi.roi2d.ROI2DPoint;
 import plugins.kernel.roi.roi3d.ROI3DPoint;
-
 import javax.inject.Inject;
-
-import java.awt.*;
-
-import static plugins.fr.univ_nantes.ec_clem.EasyCLEMv0.Colortab;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoiFactory {
-
-    private static String fiducialAttribute = "fiducial";
 
     @Inject
     public RoiFactory() {}
@@ -56,12 +52,16 @@ public class RoiFactory {
         return roi;
     }
 
-    public ROI getFiducialRoiFrom(ROI roi, Color color, int id) {
-        roi.setColor(color);
-        roi.setName(String.format("%s_%d", fiducialAttribute, id));
+    public ROI getRoiFrom(ROI roi , int id, PointType pointType) {
+        roi.setColor(pointType.getColor());
+        roi.setName(String.format("%s_%d", pointType, id));
         roi.setShowName(true);
         roi.setStroke(6);
-        roi.setProperty(fiducialAttribute, null);
+        roi.setProperty(pointType.name(), "true");
         return roi;
+    }
+
+    public List<ROI> getFrom(Sequence sequence, PointType pointType) {
+        return sequence.getROIs().stream().filter(roi -> roi.getProperty(pointType.name()) != null).collect(Collectors.toList());
     }
 }

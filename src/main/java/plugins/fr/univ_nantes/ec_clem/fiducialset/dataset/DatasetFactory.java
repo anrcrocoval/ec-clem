@@ -14,6 +14,8 @@ package plugins.fr.univ_nantes.ec_clem.fiducialset.dataset;
 
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
+import plugins.fr.univ_nantes.ec_clem.roi.RoiFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.TransformationFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
@@ -24,35 +26,43 @@ import vtk.vtkPolyData;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DatasetFactory {
 
     private RoiProcessor roiProcessor;
+    private RoiFactory roiFactory;
     private TransformationFactory transformationFactory;
 
     @Inject
-    public DatasetFactory(RoiProcessor roiProcessor, TransformationFactory transformationFactory) {
+    public DatasetFactory(RoiProcessor roiProcessor, RoiFactory roiFactory, TransformationFactory transformationFactory) {
         this.roiProcessor = roiProcessor;
+        this.roiFactory = roiFactory;
         this.transformationFactory = transformationFactory;
     }
 
-    public Dataset getFrom(Sequence sequence) {
+    public Dataset getFrom(Sequence sequence, PointType pointType) {
         Dataset dataset;
         try {
-            dataset = new Dataset(roiProcessor.getPointsFromRoi(sequence.getROIs()));
+            dataset = new Dataset(
+                roiProcessor.getPointsFromRoi(
+                    roiFactory.getFrom(sequence, pointType)
+                ),
+                pointType
+            );
         } catch (RuntimeException e) {
-            dataset = new Dataset(0);
+            dataset = new Dataset(0, pointType);
         }
         return toMicroMeter(dataset, sequence);
     }
 
-    public Dataset getFrom(vtkPolyData points) {
+    public Dataset getFrom(vtkPolyData points, PointType pointType) {
         List<Point> pointList = new ArrayList<>();
         for (int i = 0; i < points.GetNumberOfPoints(); i++) {
             double[] point = points.GetPoint(i);
             pointList.add(new Point(point));
         }
-        return new Dataset(pointList);
+        return new Dataset(pointList, pointType);
     }
 
     public Dataset getFrom(Dataset dataset, TransformationSchema transformationSchema) {
@@ -79,7 +89,7 @@ public class DatasetFactory {
                 M.setMatrix(0, dataset.getN() - 1, d, d, M.getMatrix(0, dataset.getN() - 1, d, d).times(1 / sequence.getPixelSizeZ()));
             }
         }
-        return new Dataset(M);
+        return new Dataset(M, dataset.getPointType());
     }
 
     private Dataset toMicroMeter(Dataset dataset, Sequence sequence) {
@@ -95,6 +105,6 @@ public class DatasetFactory {
                 M.setMatrix(0, dataset.getN() - 1, d, d, M.getMatrix(0, dataset.getN() - 1, d, d).times(sequence.getPixelSizeZ()));
             }
         }
-        return new Dataset(M);
+        return new Dataset(M, dataset.getPointType());
     }
 }

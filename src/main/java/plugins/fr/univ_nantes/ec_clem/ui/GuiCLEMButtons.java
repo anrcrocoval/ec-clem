@@ -22,19 +22,30 @@ import javax.inject.Inject;
 import javax.swing.JPanel;
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 
+import java.awt.*;
+
 public class GuiCLEMButtons extends JPanel {
 
+    private SelectPointTypeBox selectPointTypeBox;
     private UpdateTransformationButton updateTransformationButton;
     private ClearLandmarksButton clearLandmarksButton;
     private UndoButton undoButton;
     private ShowPointsButton showPointsButton;
 
     @Inject
-    public GuiCLEMButtons(UpdateTransformationButton updateTransformationButton, ClearLandmarksButton clearLandmarksButton, UndoButton undoButton, ShowPointsButton showPointsButton) {
+    public GuiCLEMButtons(
+        UpdateTransformationButton updateTransformationButton,
+        ClearLandmarksButton clearLandmarksButton,
+        UndoButton undoButton,
+        ShowPointsButton showPointsButton,
+        SelectPointTypeBox selectPointTypeBox
+    ) {
+        this.selectPointTypeBox = selectPointTypeBox;
         this.updateTransformationButton = updateTransformationButton;
         this.clearLandmarksButton = clearLandmarksButton;
         this.undoButton = undoButton;
         this.showPointsButton = showPointsButton;
+        add(selectPointTypeBox);
         add(updateTransformationButton);
         add(clearLandmarksButton);
         add(undoButton);
@@ -46,19 +57,12 @@ public class GuiCLEMButtons extends JPanel {
         clearLandmarksButton.setWorkspace(workspace);
         undoButton.setWorkspace(workspace);
         showPointsButton.setWorkspace(workspace);
+        selectPointTypeBox.setWorkspace(workspace);
     }
 
-    public void disableButtons() {
-        updateTransformationButton.setEnabled(false);
-        clearLandmarksButton.setEnabled(false);
-        undoButton.setEnabled(false);
-        showPointsButton.setEnabled(false);
-    }
-
-    public void enableButtons() {
-        updateTransformationButton.setEnabled(true);
-        clearLandmarksButton.setEnabled(true);
-        undoButton.setEnabled(true);
-        showPointsButton.setEnabled(true);
+    public void setEnabled(boolean bool) {
+        for(Component component : getComponents()) {
+            component.setEnabled(bool);
+        }
     }
 }

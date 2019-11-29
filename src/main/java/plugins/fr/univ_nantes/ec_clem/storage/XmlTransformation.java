@@ -21,6 +21,7 @@ public class XmlTransformation {
     public static String datasetTypeAttributeName = "type";
     public static String datasetDimensionAttributeName = "dimension";
     public static String datasetNAttributeName = "n";
+    public static String datasetPointTypeAttributeName = "pointType";
     public static String pointElementName = "point";
     public static String pointIdAttributeName = "id";
     public static String coordinateElementName = "coordinate";
