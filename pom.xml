@@ -68,6 +68,16 @@
             <artifactId>vtk</artifactId>
             <version>0.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>fr.univ-nantes</groupId>
+            <artifactId>roi-3d-mesh</artifactId>
+            <version>0.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.univ-nantes</groupId>
+            <artifactId>quickhull</artifactId>
+            <version>0.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>gov.nist.math</groupId>
@@ -288,6 +298,36 @@
                             <artifactId>jai</artifactId>
                             <version>0.0.0</version>
                             <file>${project.basedir}/lib/icy/lib/jai_core.jar</file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>install-roi-3d-mesh</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>fr.univ-nantes</groupId>
+                            <artifactId>roi-3d-mesh</artifactId>
+                            <version>0.0.0</version>
+                            <file>${project.basedir}/lib/icy/plugins/adufour/roi/mesh/ROI3DMeshPlugin.jar</file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>install-quickhull</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>fr.univ-nantes</groupId>
+                            <artifactId>quickhull</artifactId>
+                            <version>0.0.0</version>
+                            <file>${project.basedir}/lib/icy/plugins/adufour/quickhull/QuickHull.jar</file>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>

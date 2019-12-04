@@ -14,7 +14,6 @@ package plugins.fr.univ_nantes.ec_clem.ui;
 
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 import icy.painter.Overlay;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 

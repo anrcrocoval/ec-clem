@@ -42,11 +42,18 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
     @Override
     public void run() {
         Dataset sourceTransformedDataset = datasetFactory.getFrom(datasetFactory.getFrom(sourceSequence, PointType.FIDUCIAL), transformationSchema);
-        Dataset sourceNonFiducialTransformedDataset = datasetFactory.getFrom(datasetFactory.getFrom(sourceSequence, PointType.NOT_FIDUCIAL), transformationSchema);
-        Transformation transformation = transformationFactory.getFrom(transformationSchema);
-        Stack3DVTKTransformer imageTransformer = new Stack3DVTKTransformer(sourceSequence, transformationSchema.getTargetSize(), transformation);
+        Dataset sourceNonFiducialDataset = datasetFactory.getFrom(sourceSequence, PointType.NOT_FIDUCIAL);
+        Dataset sourceNonFiducialTransformedDataset = datasetFactory.getFrom(sourceNonFiducialDataset, transformationSchema);
+
+        Stack3DVTKTransformer imageTransformer = new Stack3DVTKTransformer(
+            sourceSequence,
+            transformationSchema.getTargetSize(),
+            transformationFactory.getFrom(transformationSchema)
+        );
         super.add(imageTransformer);
         sourceSequence = imageTransformer.get();
+
+        roiUpdater.updateErrorRoi(sourceNonFiducialDataset, transformationSchema, sourceSequence);
         roiUpdater.updateRoi(sourceTransformedDataset, sourceSequence);
         roiUpdater.updateRoi(sourceNonFiducialTransformedDataset, sourceSequence);
     }

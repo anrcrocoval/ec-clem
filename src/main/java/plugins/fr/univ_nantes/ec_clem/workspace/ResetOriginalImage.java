@@ -59,6 +59,7 @@ public class ResetOriginalImage implements Runnable, ProgressTrackable {
                 workspace.getTransformationSchema().inverse()
             );
             restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
+            roiUpdater.clear(workspace.getSourceSequence(), PointType.ERROR);;
             roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
             roiUpdater.updateRoi(reversedNonFiducials, workspace.getSourceSequence());
             workspace.setTransformationSchema(null);

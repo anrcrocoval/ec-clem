@@ -22,7 +22,6 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.DatasetFactory;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
-
 import javax.inject.Inject;
 import java.awt.*;
 

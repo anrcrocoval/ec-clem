@@ -12,8 +12,13 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point;
 
+import Jama.Matrix;
 import icy.roi.ROI;
+import icy.sequence.DimensionId;
+import icy.sequence.Sequence;
+import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.roi.RoiProcessor;
+import plugins.fr.univ_nantes.ec_clem.sequence.SequenceSize;
 import vtk.vtkPolyData;
 
 import javax.inject.Inject;
@@ -37,5 +42,21 @@ public class PointFactory {
 
     public Point getFrom(vtkPolyData points) {
         return new Point(points.GetPoint(0));
+    }
+
+    public Point toPixel(Point point, SequenceSize sequenceSize) {
+        Matrix M = point.getMatrix().copy();
+        for(int d = 0; d < point.getDimension(); d++) {
+            if(d == 0) {
+                M.set(d, 0, M.get(d, 0) / sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer());
+            }
+            if(d == 1) {
+                M.set(d, 0, M.get(d, 0) / sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer());
+            }
+            if(d == 2) {
+                M.set(d, 0, M.get(d, 0) / sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer());
+            }
+        }
+        return new Point(M);
     }
 }

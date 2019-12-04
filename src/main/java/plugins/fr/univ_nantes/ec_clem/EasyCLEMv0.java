@@ -21,6 +21,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+
+import icy.roi.ROI;
+import icy.vtk.VtkUtil;
+import plugins.adufour.roi.mesh.polygon.ROI3DPolygonalMesh;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceFactory;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.FiducialRoiListener;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiListenerManager;
@@ -52,6 +56,7 @@ import icy.sequence.SequenceUtil;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import plugins.fr.univ_nantes.ec_clem.misc.GuiCLEMButtonApply;
 import plugins.fr.univ_nantes.ec_clem.misc.advancedmodules;
+import vtk.*;
 
 import javax.inject.Inject;
 
@@ -222,6 +227,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 //		sourceSequence.addListener(sourceSequenceFiducialRoiListener.setSequence(targetSequence).setWorkspaceState(workspace.getWorkspaceState()));
 //		targetSequence.addListener(targetSequenceFiducialRoiListener.setSequence(sourceSequence).setWorkspaceState(workspace.getWorkspaceState()));
+
 		sourceSequence.addOverlay(messageSource);
 		targetSequence.addOverlay(messageTarget);
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
