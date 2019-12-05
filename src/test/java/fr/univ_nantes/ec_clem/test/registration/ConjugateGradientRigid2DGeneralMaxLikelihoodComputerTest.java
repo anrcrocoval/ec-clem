@@ -19,6 +19,7 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.conjugate_gradient.ConjugateGradientRigid2DGeneralMaxLikelihoodComputer;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
 import javax.inject.Inject;
 import static java.lang.Math.cos;
@@ -136,7 +137,7 @@ class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
         Point expected = new Dataset(
                 targetDataset.getMatrix().minus(
                         sourceDataset.getHomogeneousMatrixRight().times(result.getMatrixRight().transpose())
-                )
+                ), PointType.FIDUCIAL
         ).getBarycentre();
         for(int i = 0; i < expected.getDimension(); i++) {
             assertEquals(0, expected.get(i), 0.01);

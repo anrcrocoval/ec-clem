@@ -21,13 +21,13 @@ import plugins.fr.univ_nantes.ec_clem.transformation.SplineTransformationCompone
 import vtk.vtkThinPlateSplineTransform;
 import javax.inject.Inject;
 
-public class NonRigidTransformationComputer implements TransformationComputer {
+public class NonLinearTransformationComputer implements TransformationComputer {
 
     private SplineTransformationComponent splineTransformationComponent;
     private VtkPointsFactory vtkPointsFactory;
 
     @Inject
-    public NonRigidTransformationComputer(VtkPointsFactory vtkPointsFactory) {
+    public NonLinearTransformationComputer(VtkPointsFactory vtkPointsFactory) {
         this.vtkPointsFactory = vtkPointsFactory;
         splineTransformationComponent = DaggerSplineTransformationComponent.create();
     }

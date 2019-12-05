@@ -18,6 +18,7 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.DatasetFactory;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressReport;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackable;
 import plugins.fr.univ_nantes.ec_clem.progress.ChildProgressReport;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.roi.RoiUpdater;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressManager;
 import javax.inject.Inject;
@@ -50,11 +51,17 @@ public class ResetOriginalImage implements Runnable, ProgressTrackable {
     public void run() {
         if(workspace.getTransformationSchema() != null) {
             Dataset reversed = datasetFactory.getFrom(
-                datasetFactory.getFrom(workspace.getSourceSequence()),
+                datasetFactory.getFrom(workspace.getSourceSequence(), PointType.FIDUCIAL),
+                workspace.getTransformationSchema().inverse()
+            );
+            Dataset reversedNonFiducials = datasetFactory.getFrom(
+                datasetFactory.getFrom(workspace.getSourceSequence(), PointType.NOT_FIDUCIAL),
                 workspace.getTransformationSchema().inverse()
             );
             restoreBackup(workspace.getSourceSequence(), workspace.getSourceBackup());
+            roiUpdater.clear(workspace.getSourceSequence(), PointType.ERROR);;
             roiUpdater.updateRoi(reversed, workspace.getSourceSequence());
+            roiUpdater.updateRoi(reversedNonFiducials, workspace.getSourceSequence());
             workspace.setTransformationSchema(null);
             workspace.getSourceSequence().setName(workspace.getOriginalNameofSource());
         }

@@ -20,8 +20,8 @@ import icy.painter.Overlay;
 import icy.sequence.Sequence;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.DatasetFactory;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
-
 import javax.inject.Inject;
 import java.awt.*;
 
@@ -53,7 +53,7 @@ public class PredictedErrorInPositionOverlay extends Overlay {
 
                 g.setColor(Color.ORANGE);
                 g.setStroke(new BasicStroke(1));
-                Dataset sourceDataset = datasetFactory.getFrom(workspace.getSourceSequence());
+                Dataset sourceDataset = datasetFactory.getFrom(workspace.getSourceSequence(), PointType.FIDUCIAL);
                 for (int index = 0; index < sourceDataset.getN(); index++) {
                     double error = treComputer.getExpectedSquareTRE(sourceDataset.getPoint(index));
                     g.drawOval(

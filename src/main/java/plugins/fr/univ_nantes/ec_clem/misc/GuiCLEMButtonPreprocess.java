@@ -24,8 +24,6 @@ import javax.swing.JPanel;
 
 public class GuiCLEMButtonPreprocess extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-
 	public GuiCLEMButtonPreprocess() {
 		PreprocessButton btnNewButton = new PreprocessButton();
 		add(btnNewButton);

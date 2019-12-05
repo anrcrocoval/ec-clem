@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.sequence.DimensionSize;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceSize;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
@@ -71,7 +72,10 @@ public class XmlTransformationReader {
     }
 
     private Dataset readDataset(Element datasetElement) {
-        Dataset result = new Dataset(Integer.valueOf(datasetElement.getAttribute(datasetDimensionAttributeName)));
+        Dataset result = new Dataset(
+            Integer.valueOf(datasetElement.getAttribute(datasetDimensionAttributeName)),
+            PointType.valueOf(datasetElement.getAttribute(datasetPointTypeAttributeName))
+        );
         ArrayList<Element> pointElements = XMLUtil.getElements(datasetElement);
         for(Element pointElement : pointElements) {
             result.addPoint(readPoint(pointElement));

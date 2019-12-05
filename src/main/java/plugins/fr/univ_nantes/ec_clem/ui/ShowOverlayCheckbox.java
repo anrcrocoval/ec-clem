@@ -14,13 +14,11 @@ package plugins.fr.univ_nantes.ec_clem.ui;
 
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 import icy.painter.Overlay;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class ShowOverlayCheckbox extends JCheckBox {
 
-	private static final long serialVersionUID = 1L;
 	private Workspace workspace;
     private Overlay overlay;
 

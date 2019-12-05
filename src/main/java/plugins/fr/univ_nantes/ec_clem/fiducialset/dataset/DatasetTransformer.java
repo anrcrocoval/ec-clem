@@ -20,7 +20,7 @@ public class DatasetTransformer {
 
     public Dataset apply(Dataset dataset, Matrix transformation) {
         Matrix M = dataset.getMatrix().times(transformation);
-        return new Dataset(M.getArray());
+        return new Dataset(M.getArray(), dataset.getPointType());
     }
 
     public Dataset apply(Dataset dataset, Similarity similarity) {

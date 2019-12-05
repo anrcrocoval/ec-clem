@@ -12,42 +12,46 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.sequence_listener;
 
-import icy.gui.frame.progress.AnnounceFrame;
 import icy.main.Icy;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
 import icy.type.point.Point5D;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
+import plugins.fr.univ_nantes.ec_clem.roi.RoiFactory;
 import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-import plugins.fr.univ_nantes.ec_clem.workspace.WorkspaceState;
-
 import javax.inject.Inject;
+import java.awt.*;
 import java.util.List;
 
 import static plugins.fr.univ_nantes.ec_clem.EasyCLEMv0.Colortab;
 
-public class RoiDuplicator implements SequenceListener {
+public class FiducialRoiListener implements SequenceListener {
+
+    private static PointType type = PointType.FIDUCIAL;
 
     private Sequence sequence;
-    private WorkspaceState workspaceState;
+//    private WorkspaceState workspaceState;
     private SequenceListenerUtil sequenceListenerUtil;
+    private RoiFactory roiFactory;
 
     @Inject
-    public RoiDuplicator(SequenceListenerUtil sequenceListenerUtil) {
+    public FiducialRoiListener(SequenceListenerUtil sequenceListenerUtil, RoiFactory roiFactory) {
         this.sequenceListenerUtil = sequenceListenerUtil;
+        this.roiFactory = roiFactory;
     }
 
-    public RoiDuplicator setSequence(Sequence sequence) {
+    public FiducialRoiListener setSequence(Sequence sequence) {
         this.sequence = sequence;
         return this;
     }
 
-    public RoiDuplicator setWorkspaceState(WorkspaceState workspaceState) {
-        this.workspaceState = workspaceState;
-        return this;
-    }
+//    public FiducialRoiListener setWorkspaceState(WorkspaceState workspaceState) {
+//        this.workspaceState = workspaceState;
+//        return this;
+//    }
 
     @Override
     public void sequenceChanged(SequenceEvent event) {
@@ -58,52 +62,38 @@ public class RoiDuplicator implements SequenceListener {
             return;
         }
 
-        workspaceState.setFlagReadyToMove(false);
-        double z = event.getSequence().getFirstViewer().getPositionZ();
+//        workspaceState.setFlagReadyToMove(false);
 
-        ROI roi = (ROI) event.getSource();
-        Point5D pos = roi.getPosition5D();
-        pos.setZ(z);
-        roi.setPosition5D(pos);
+        ROI roi = roiFactory.getRoiFrom(
+            (ROI) event.getSource(),
+            roiFactory.getFrom(event.getSequence(), type).size() + 1,
+            type
+        );
 
-        roi.setColor(Colortab[(event.getSequence().getROICount(ROI.class) - 1) % Colortab.length]);
-        roi.setName("Point " + event.getSequence().getROIs().size());
-        roi.setStroke(6);
-
-        ROI roisource = roi.getCopy();
-        if (sequence == null) {
-            new AnnounceFrame("You've closed the source image");
-            return;
-        }
-        int zs = sequence.getFirstViewer().getPositionZ(); // was
-        Point5D pos2 = roisource.getPosition5D();
-        pos2.setZ(zs);
-        roisource.setPosition5D(pos2);
+        ROI roiCopy = roi.getCopy();
         if ((sequence.getWidth() != event.getSequence().getWidth()) || (sequence.getHeight() != event.getSequence().getHeight())) {
-            Point5D position = (Point5D) pos.clone();
-            position.setLocation(sequence.getWidth() / 2, sequence.getHeight() / 2,
+            Point5D position = (Point5D) roi.getPosition5D().clone();
+            position.setLocation(
+                sequence.getWidth() / 2d,
+                sequence.getHeight() / 2d,
                 sequence.getFirstViewer().getPositionZ(),
-                sequence.getFirstViewer().getPositionT(), pos.getC());
-            roisource.setPosition5D(position);
-
+                sequence.getFirstViewer().getPositionT(),
+                sequence.getFirstViewer().getPositionC()
+            );
+            roiCopy.setPosition5D(position);
         }
-        roisource.setColor(roi.getColor());
-        roisource.setName(roi.getName());
-        roisource.setStroke(roi.getStroke());
-        roisource.setFocused(false);
-        List<SequenceListener> sequenceListeners = sequenceListenerUtil.removeListeners(sequence, RoiDuplicator.class);
-        sequence.addROI(roisource);
+
+        List<SequenceListener> sequenceListeners = sequenceListenerUtil.removeListeners(sequence, FiducialRoiListener.class);
+        sequence.addROI(roiCopy);
         sequenceListenerUtil.addListeners(sequence, sequenceListeners);
-        workspaceState.setFlagReadyToMove(true);
-        workspaceState.setDone(false);
+//        workspaceState.setFlagReadyToMove(true);
+//        workspaceState.setDone(false);
 
         Icy.getMainInterface().setSelectedTool(getSelectedTool(roi).getName());
     }
 
     @Override
-    public void sequenceClosed(Sequence sequence) {
-
-    }
+    public void sequenceClosed(Sequence sequence) {}
 
     private Class<?> getSelectedTool(ROI roi) {
         switch (roi.getDimension()) {

@@ -19,19 +19,17 @@
  */
 package plugins.fr.univ_nantes.ec_clem.ui;
 
-import java.awt.Component;
 import javax.inject.Inject;
 import javax.swing.JPanel;
-
 import plugins.fr.univ_nantes.ec_clem.ui.overlay.ErrorInPositionOverlay;
 import plugins.fr.univ_nantes.ec_clem.ui.overlay.PredictedErrorInPositionOverlay;
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 
 public class GuiCLEMButtons2 extends JPanel {
 
-	private static final long serialVersionUID = 1L;
 	private ComputeErrorMapButton computeErrorMapButton;
 	private MonitorTargetPointButton monitorTargetPointButton;
+
 	private ShowOverlayCheckbox showerror;
 	private ShowOverlayCheckbox showpredictederror;
 	private ErrorInPositionOverlay errorInPositionOverlay;
@@ -86,21 +84,5 @@ public class GuiCLEMButtons2 extends JPanel {
 		monitorTargetPointButton.setEnabled(true);
 		showerror.setEnabled(true);
 		showpredictederror.setEnabled(true);
-	}
-
-	public void removespecificrigidbutton(){
-		Component[] listcomp = this.getComponents();
-		for (int c = 1; c < listcomp.length; c++){
-			Component mycomp = listcomp[c];
-			mycomp.setVisible(false);
-		}
-	}
-
-	public void reshowspecificrigidbutton(){
-		Component[] listcomp = this.getComponents();
-		for (int c = 1; c < listcomp.length; c++){
-			Component mycomp = listcomp[c];
-			mycomp.setVisible(true);
-		}
 	}
 }

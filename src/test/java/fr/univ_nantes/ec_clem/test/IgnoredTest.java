@@ -15,8 +15,6 @@ package fr.univ_nantes.ec_clem.test;
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.error.CovarianceMatrixComputer;
 import plugins.fr.univ_nantes.ec_clem.error.ErrorComputer;
-import plugins.fr.univ_nantes.ec_clem.error.ExtendedKalmanFilter;
-import plugins.fr.univ_nantes.ec_clem.error.KalmanFilterState;
 import plugins.fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
 import plugins.fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
 import org.testng.annotations.Test;
@@ -25,6 +23,7 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.registration.AffineTransformationComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.TLSAffineTransformationComputer;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
@@ -39,7 +38,6 @@ class IgnoredTest {
     private RigidTransformationComputer rigidTransformationComputer;
     private CovarianceMatrixComputer covarianceMatrixComputer;
     private ErrorComputer errorComputer;
-    private ExtendedKalmanFilter extendedKalmanFilter;
     private TLSAffineTransformationComputer tlsAffineTransformationComputer;
     private AffineTransformationComputer affineTransformationComputer;
 
@@ -80,11 +78,6 @@ class IgnoredTest {
     }
 
     @Inject
-    public void setExtendedKalmanFilter(ExtendedKalmanFilter extendedKalmanFilter) {
-        this.extendedKalmanFilter = extendedKalmanFilter;
-    }
-
-    @Inject
     public void setTlsAffineTransformationComputer(TLSAffineTransformationComputer tlsAffineTransformationComputer) {
         this.tlsAffineTransformationComputer = tlsAffineTransformationComputer;
     }
@@ -104,7 +97,7 @@ class IgnoredTest {
         AffineTransformation compute = affineTransformationComputer.compute(randomFromTransformationFiducialSet);
         Dataset error = new Dataset(randomFromTransformationFiducialSet.getTargetDataset().getMatrix().minus(
                 compute.apply(randomFromTransformationFiducialSet.getSourceDataset()).getMatrix()
-        ));
+        ), PointType.FIDUCIAL);
         error.getMatrix().print(1,5);
         error.getBarycentre().getMatrix().print(1,5);
     }
@@ -117,7 +110,7 @@ class IgnoredTest {
         simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
         FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, range, isotropicCovariance);
 
-        Dataset error = new Dataset(3);
+        Dataset error = new Dataset(3, PointType.FIDUCIAL);
 
         for(int i = 0; i < randomFromTransformationFiducialSet.getN(); i++) {
             Point targetRemovedPoint = randomFromTransformationFiducialSet.getTargetDataset().removePoint(0);
@@ -154,24 +147,6 @@ class IgnoredTest {
     }
 
     @Test(enabled = false)
-    void EKF() {
-        double angle = 38;
-        int n = 15;
-        Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation(range.length);
-        simpleRotationTransformation.getHomogeneousMatrix().print(1,5);
-        FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomAndNoisyFromTransformation(simpleRotationTransformation, n, range, isotropicCovariance);
-
-        Similarity leastSquareEstimate = rigidTransformationComputer.compute(randomFromTransformationFiducialSet);
-        KalmanFilterState kalmanFilterState = new KalmanFilterState(leastSquareEstimate.getMatrixRight(), Matrix.identity(12, 12));
-        for(int i = 0; i < 10000; i++) {
-            kalmanFilterState = extendedKalmanFilter.run(randomFromTransformationFiducialSet, kalmanFilterState.getEstimate(), kalmanFilterState.getCovariance());
-        }
-
-        kalmanFilterState.getEstimate().print(1,5);
-        kalmanFilterState.getCovariance().print(1,5);
-    }
-
-    @Test(enabled = false)
     void covariance() {
         double angle = 38;
         int n = 15;
@@ -200,7 +175,7 @@ class IgnoredTest {
             }
         }
 
-        new Dataset(M).getBarycentre().getMatrix().print(1,5);
+        new Dataset(M, PointType.FIDUCIAL).getBarycentre().getMatrix().print(1,5);
         Matrix covariance = covarianceMatrixComputer.compute(M);
         covariance.print(1,5);
 

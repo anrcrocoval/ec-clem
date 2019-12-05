@@ -17,6 +17,8 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +33,7 @@ class DatasetTest {
         points.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
         points.add(new Point(new Matrix(new double[][] {{ 4 }, { 5 }, { 6 }})));
         points.add(new Point(new Matrix(new double[][] {{ 7 }, { 8 }, { 9 }})));
-        subjectUnderTest = new Dataset(points);
+        subjectUnderTest = new Dataset(points, PointType.FIDUCIAL);
     }
 
     @Test

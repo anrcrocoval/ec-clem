@@ -12,15 +12,16 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.roi;
 
-import plugins.fr.univ_nantes.ec_clem.EasyCLEMv0;
+import plugins.fr.univ_nantes.ec_clem.error.ellipse.ConfidenceEllipseFactory;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.DatasetFactory;
-import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiDuplicator;
+import plugins.fr.univ_nantes.ec_clem.sequence.SequenceSizeFactory;
+import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiListenerManager;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.SequenceListenerUtil;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceListener;
-
+import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -29,25 +30,59 @@ public class RoiUpdater {
     private DatasetFactory datasetFactory;
     private RoiFactory roiFactory;
     private SequenceListenerUtil sequenceListenerUtil;
+    private RoiListenerManager roiListenerManager;
+    private ConfidenceEllipseFactory confidenceEllipseFactory;
+    private SequenceSizeFactory sequenceSizeFactory;
 
     @Inject
-    public RoiUpdater(DatasetFactory datasetFactory, RoiFactory roiFactory, SequenceListenerUtil sequenceListenerUtil) {
+    public RoiUpdater(
+        DatasetFactory datasetFactory,
+        RoiFactory roiFactory,
+        SequenceListenerUtil sequenceListenerUtil,
+        RoiListenerManager roiListenerManager,
+        ConfidenceEllipseFactory confidenceEllipseFactory,
+        SequenceSizeFactory sequenceSizeFactory
+    ) {
         this.datasetFactory = datasetFactory;
         this.roiFactory = roiFactory;
         this.sequenceListenerUtil = sequenceListenerUtil;
+        this.roiListenerManager = roiListenerManager;
+        this.confidenceEllipseFactory = confidenceEllipseFactory;
+        this.sequenceSizeFactory = sequenceSizeFactory;
     }
 
     public void updateRoi(Dataset dataset, Sequence sequence) {
         Dataset pixelDataset = datasetFactory.toPixel(dataset, sequence);
-        sequence.removeAllROI();
-        List<SequenceListener> sequenceListeners = sequenceListenerUtil.removeListeners(sequence, RoiDuplicator.class);
+        clear(sequence, dataset.getPointType());
+        List<SequenceListener> sequenceListeners = roiListenerManager.removeAll(sequence);
         for(int i = 0; i < pixelDataset.getN(); i++) {
-            ROI roi = roiFactory.getFrom(pixelDataset.getPoint(i));
-            roi.setName("Point " + (i + 1));
-            roi.setColor(EasyCLEMv0.Colortab[i % EasyCLEMv0.Colortab.length]);
-            roi.setStroke(6);
+            ROI roi = roiFactory.getRoiFrom(
+                roiFactory.getFrom(pixelDataset.getPoint(i)),
+                i + 1,
+                dataset.getPointType()
+            );
             sequence.addROI(roi);
         }
         sequenceListenerUtil.addListeners(sequence, sequenceListeners);
+    }
+
+    public void updateErrorRoi(Dataset dataset, TransformationSchema transformationSchema, Sequence sequence) {
+        clear(sequence, PointType.ERROR);
+        List<SequenceListener> sequenceListeners = roiListenerManager.removeAll(sequence);
+        for(int i = 0; i < dataset.getN(); i++) {
+            ROI ellipseROI = roiFactory.getFrom(
+                confidenceEllipseFactory.getFrom(dataset.getPoint(i), transformationSchema, 0.95),
+                sequenceSizeFactory.getFrom(sequence)
+            );
+            sequence.addROI(ellipseROI);
+        }
+        sequenceListenerUtil.addListeners(sequence, sequenceListeners);
+    }
+
+    public void clear(Sequence sequence, PointType type) {
+        sequence.removeROIs(
+            roiFactory.getFrom(sequence, type),
+            false
+        );
     }
 }

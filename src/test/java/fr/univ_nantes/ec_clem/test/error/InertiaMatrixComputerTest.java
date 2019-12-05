@@ -17,6 +17,8 @@ import org.testng.annotations.Test;
 import plugins.fr.univ_nantes.ec_clem.error.fitzpatrick.InertiaMatrixComputer;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,7 @@ class InertiaMatrixComputerTest {
         points.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
         points.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
         points.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
-        Dataset dataset = new Dataset(points);
+        Dataset dataset = new Dataset(points, PointType.FIDUCIAL);
         Matrix inertiaMatrix = subjectUnderTest.getInertiaMatrix(dataset);
         assertEquals(dataset.getDimension(), inertiaMatrix.getColumnDimension());
         assertEquals(dataset.getDimension(), inertiaMatrix.getRowDimension());
@@ -64,7 +66,7 @@ class InertiaMatrixComputerTest {
         points.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }})));
         points.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }})));
         points.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }})));
-        Dataset dataset = new Dataset(points);
+        Dataset dataset = new Dataset(points, PointType.FIDUCIAL);
         Matrix inertiaMatrix = subjectUnderTest.getInertiaMatrix(dataset);
         assertEquals(dataset.getDimension(), inertiaMatrix.getColumnDimension());
         assertEquals(dataset.getDimension(), inertiaMatrix.getRowDimension());
