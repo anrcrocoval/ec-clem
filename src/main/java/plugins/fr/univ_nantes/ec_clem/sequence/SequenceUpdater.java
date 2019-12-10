@@ -13,8 +13,7 @@
 package plugins.fr.univ_nantes.ec_clem.sequence;
 
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
-import plugins.fr.univ_nantes.ec_clem.transformation.TransformationFactory;
+import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import icy.sequence.Sequence;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.DatasetFactory;
@@ -26,7 +25,7 @@ import javax.inject.Inject;
 
 public class SequenceUpdater extends ProgressTrackableMasterTask implements Runnable {
 
-    private TransformationFactory transformationFactory;
+    private RegistrationParameterFactory transformationFactory;
     private DatasetFactory datasetFactory;
     private RoiUpdater roiUpdater;
 
@@ -48,7 +47,7 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
         Stack3DVTKTransformer imageTransformer = new Stack3DVTKTransformer(
             sourceSequence,
             transformationSchema.getTargetSize(),
-            transformationFactory.getFrom(transformationSchema)
+            transformationFactory.getFrom(transformationSchema).getTransformation()
         );
         super.add(imageTransformer);
         sourceSequence = imageTransformer.get();
@@ -59,7 +58,7 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
     }
 
     @Inject
-    public void setTransformationFactory(TransformationFactory transformationFactory) {
+    public void setTransformationFactory(RegistrationParameterFactory transformationFactory) {
         this.transformationFactory = transformationFactory;
     }
 

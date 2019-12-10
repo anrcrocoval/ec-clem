@@ -21,6 +21,7 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.sequence.DimensionSize;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceSize;
+import plugins.fr.univ_nantes.ec_clem.transformation.schema.NoiseModel;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
 
@@ -31,6 +32,7 @@ public class XmlTransformationReader {
 
     public TransformationSchema read(Element transformationElement) {
         TransformationType transformationType = TransformationType.valueOf(transformationElement.getAttribute(transformationTypeAttributeName));
+        NoiseModel noiseModel = NoiseModel.valueOf(transformationElement.getAttribute(transformationNoiseModelAttributeName));
         ArrayList<Element> datasetElements = XMLUtil.getElements(transformationElement, datasetElementName);
         if(datasetElements.size() != 2) {
             throw new RuntimeException("Element should contain exactly 2 dataset");
@@ -52,9 +54,9 @@ public class XmlTransformationReader {
         SequenceSize targetSequenceSize = readSequenceSize(sequenceSizeElements.get(1));
 
         if(sequenceSizeElements.get(0).getAttribute(sequenceSizeTypeAttributeName).equals("source")) {
-            return new TransformationSchema(fiducialSet, transformationType, sourceSequenceSize, targetSequenceSize);
+            return new TransformationSchema(fiducialSet, transformationType, noiseModel, sourceSequenceSize, targetSequenceSize);
         } else {
-            return new TransformationSchema(fiducialSet, transformationType, targetSequenceSize, sourceSequenceSize);
+            return new TransformationSchema(fiducialSet, transformationType, noiseModel, targetSequenceSize, sourceSequenceSize);
         }
     }
 

@@ -15,7 +15,7 @@ package fr.univ_nantes.ec_clem.test.registration;
 import plugins.fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
 import plugins.fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
 import org.testng.annotations.Test;
-import plugins.fr.univ_nantes.ec_clem.registration.SimilarityTransformationComputer;
+import plugins.fr.univ_nantes.ec_clem.registration.SimilarityRegistrationParameterComputer;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
@@ -30,7 +30,7 @@ class SimilarityTransformationComputerTest {
 
     private TestFiducialSetFactory testFiducialSetFactory;
     private TestTransformationFactory testTransformationFactory;
-    private SimilarityTransformationComputer subjectUnderTest;
+    private SimilarityRegistrationParameterComputer subjectUnderTest;
 
     public SimilarityTransformationComputerTest() {
         DaggerSimilarityTransformationComputerTestComponent.create().inject(this);
@@ -47,14 +47,14 @@ class SimilarityTransformationComputerTest {
     }
 
     @Inject
-    public void setSubjectUnderTest(SimilarityTransformationComputer subjectUnderTest) {
+    public void setSubjectUnderTest(SimilarityRegistrationParameterComputer subjectUnderTest) {
         this.subjectUnderTest = subjectUnderTest;
     }
 
     @Test
     void simpleRotation() {
         FiducialSet simpleRotationFiducialSet = testFiducialSetFactory.getSimpleRotationFiducialSet3D();
-        Similarity result = subjectUnderTest.compute(simpleRotationFiducialSet);
+        Similarity result = (Similarity) subjectUnderTest.compute(simpleRotationFiducialSet).getTransformation();
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
         checkDetIsOne(result);
@@ -94,7 +94,7 @@ class SimilarityTransformationComputerTest {
         int[] range = new int[] {256, 256, 256};
         Similarity simpleRotationTransformation = testTransformationFactory.getSimpleRotationTransformation3D(0, 0, angle);
         FiducialSet randomFromTransformationFiducialSet = testFiducialSetFactory.getRandomFromTransformation(simpleRotationTransformation, 10, range);
-        Similarity result = subjectUnderTest.compute(randomFromTransformationFiducialSet);
+        Similarity result = (Similarity) subjectUnderTest.compute(randomFromTransformationFiducialSet).getTransformation();
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
         checkDetIsOne(result);
@@ -131,7 +131,7 @@ class SimilarityTransformationComputerTest {
     @Test
     void simpleTranslation() {
         FiducialSet simpleTranslationFiducialSet = testFiducialSetFactory.getSimpleTranslationFiducialSet3D();
-        Similarity result = subjectUnderTest.compute(simpleTranslationFiducialSet);
+        Similarity result = (Similarity) subjectUnderTest.compute(simpleTranslationFiducialSet).getTransformation();
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
         checkDetIsOne(result);
@@ -168,7 +168,7 @@ class SimilarityTransformationComputerTest {
     @Test
     void complexRotation() {
         FiducialSet complexRotationFiducialSet = testFiducialSetFactory.getComplexRotationFiducialSet3D();
-        Similarity result = subjectUnderTest.compute(complexRotationFiducialSet);
+        Similarity result = (Similarity) subjectUnderTest.compute(complexRotationFiducialSet).getTransformation();
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
         checkDetIsOne(result);
@@ -205,7 +205,7 @@ class SimilarityTransformationComputerTest {
     @Test
     void translationRotationScaling() {
         FiducialSet translationRotationScalingFiducialSet = testFiducialSetFactory.getTranslationRotationScalingFiducialSet3D();
-        Similarity result = subjectUnderTest.compute(translationRotationScalingFiducialSet);
+        Similarity result = (Similarity) subjectUnderTest.compute(translationRotationScalingFiducialSet).getTransformation();
         assertEquals(3, result.getR().getRowDimension());
         assertEquals(3, result.getR().getColumnDimension());
         checkDetIsOne(result);

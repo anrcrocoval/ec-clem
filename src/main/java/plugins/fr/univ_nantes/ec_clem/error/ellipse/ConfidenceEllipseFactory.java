@@ -3,19 +3,19 @@ package plugins.fr.univ_nantes.ec_clem.error.ellipse;
 import Jama.EigenvalueDecomposition;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
-import plugins.fr.univ_nantes.ec_clem.transformation.TransformationFactory;
+import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
 
 public class ConfidenceEllipseFactory {
 
-    private TransformationFactory transformationFactory;
+    private RegistrationParameterFactory transformationFactory;
     private CovarianceEstimatorFactory covarianceEstimatorFactory;
     private HotellingEstimator hotellingEstimator;
 
     @Inject
     public ConfidenceEllipseFactory(
-        TransformationFactory transformationFactory,
+        RegistrationParameterFactory transformationFactory,
         CovarianceEstimatorFactory covarianceEstimatorFactory,
         HotellingEstimator hotellingEstimator
     ) {
@@ -25,7 +25,7 @@ public class ConfidenceEllipseFactory {
     }
 
     public Ellipse getFrom(Point zSource, TransformationSchema transformationSchema, double alpha) {
-        Transformation transformation = transformationFactory.getFrom(transformationSchema);
+        Transformation transformation = transformationFactory.getFrom(transformationSchema).getTransformation();
         Point zTarget = transformation.apply(zSource);
         EigenvalueDecomposition eigenValueDecomposition = new EigenvalueDecomposition(
             covarianceEstimatorFactory.getFrom(transformationSchema.getTransformationType()).getCovariance(transformationSchema, zSource)

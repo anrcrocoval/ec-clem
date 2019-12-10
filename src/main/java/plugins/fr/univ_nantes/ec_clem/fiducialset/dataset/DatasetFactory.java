@@ -17,25 +17,23 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.roi.RoiFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
-import plugins.fr.univ_nantes.ec_clem.transformation.TransformationFactory;
+import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import icy.sequence.Sequence;
 import plugins.fr.univ_nantes.ec_clem.roi.RoiProcessor;
 import vtk.vtkPolyData;
-
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DatasetFactory {
 
     private RoiProcessor roiProcessor;
     private RoiFactory roiFactory;
-    private TransformationFactory transformationFactory;
+    private RegistrationParameterFactory transformationFactory;
 
     @Inject
-    public DatasetFactory(RoiProcessor roiProcessor, RoiFactory roiFactory, TransformationFactory transformationFactory) {
+    public DatasetFactory(RoiProcessor roiProcessor, RoiFactory roiFactory, RegistrationParameterFactory transformationFactory) {
         this.roiProcessor = roiProcessor;
         this.roiFactory = roiFactory;
         this.transformationFactory = transformationFactory;
@@ -66,7 +64,7 @@ public class DatasetFactory {
     }
 
     public Dataset getFrom(Dataset dataset, TransformationSchema transformationSchema) {
-        Transformation transformation = transformationFactory.getFrom(transformationSchema);
+        Transformation transformation = transformationFactory.getFrom(transformationSchema).getTransformation();
         Dataset transformedDataset;
         try {
             transformedDataset = transformation.apply(dataset);

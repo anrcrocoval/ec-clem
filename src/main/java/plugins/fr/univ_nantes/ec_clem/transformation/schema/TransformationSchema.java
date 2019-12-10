@@ -18,12 +18,20 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 public class TransformationSchema {
     private FiducialSet fiducialSet;
     private TransformationType transformationType;
+    private NoiseModel noiseModel;
     private SequenceSize sourceSize;
     private SequenceSize targetSize;
 
-    public TransformationSchema(FiducialSet fiducialSet, TransformationType transformationType, SequenceSize sourceSize, SequenceSize targetSize) {
+    public TransformationSchema(
+        FiducialSet fiducialSet,
+        TransformationType transformationType,
+        NoiseModel noiseModel,
+        SequenceSize sourceSize,
+        SequenceSize targetSize
+    ) {
         this.fiducialSet = fiducialSet;
         this.transformationType = transformationType;
+        this.noiseModel = noiseModel;
         this.sourceSize = sourceSize;
         this.targetSize = targetSize;
     }
@@ -34,6 +42,10 @@ public class TransformationSchema {
 
     public TransformationType getTransformationType() {
         return transformationType;
+    }
+
+    public NoiseModel getNoiseModel() {
+        return noiseModel;
     }
 
     public SequenceSize getSourceSize() {
@@ -48,6 +60,7 @@ public class TransformationSchema {
         return new TransformationSchema(
             new FiducialSet(fiducialSet.getTargetDataset(), fiducialSet.getSourceDataset()),
             transformationType,
+            noiseModel,
             targetSize,
             sourceSize
         );

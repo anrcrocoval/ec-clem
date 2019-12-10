@@ -19,8 +19,10 @@ import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import java.util.stream.Collectors;
 
 import icy.roi.ROI;
 import icy.vtk.VtkUtil;
@@ -30,6 +32,7 @@ import plugins.fr.univ_nantes.ec_clem.sequence_listener.FiducialRoiListener;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiListenerManager;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.SequenceListenerUtil;
 import plugins.fr.univ_nantes.ec_clem.transformation.configuration.TransformationConfigurationFactory;
+import plugins.fr.univ_nantes.ec_clem.transformation.schema.NoiseModel;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
 import plugins.fr.univ_nantes.ec_clem.ui.GuiCLEMButtons;
 import plugins.fr.univ_nantes.ec_clem.ui.GuiCLEMButtons2;
@@ -101,28 +104,20 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	}
 
 	private Workspace workspace;
-
-	private static String INPUT_SELECTION_RIGID = TransformationType.RIGID.name();
-	private static String INPUT_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
-	private static String INPUT_SELECTION_AFFINE = TransformationType.AFFINE.name();
-	private static String INPUT_SELECTION_SPLINE = TransformationType.SPLINE.name();
-	private static String MESSAGE_SELECTION_RIGID = TransformationType.RIGID.name();
-	private static String MESSAGE_SELECTION_SIMILARITY = TransformationType.SIMILARITY.name();
-	private static String MESSAGE_SELECTION_AFFINE = TransformationType.AFFINE.name();
-	private static String MESSAGE_SELECTION_SPLINE = TransformationType.SPLINE.name();
 	private EzVarText choiceinputsection = new EzVarText(
 		"I want to compute the transformation in:",
-			new String[] {
-				MESSAGE_SELECTION_RIGID,
-				MESSAGE_SELECTION_SIMILARITY,
-				MESSAGE_SELECTION_AFFINE,
-				MESSAGE_SELECTION_SPLINE
-			}, 0, false
+		(String[]) (Arrays.stream(TransformationType.values()).map(variant -> variant.name()).collect(Collectors.toList())).toArray(),
+		0, false
+	);
+	private EzVarText noiseModel = new EzVarText(
+		"Noise model:",
+		(String[]) (Arrays.stream(NoiseModel.values()).map(variant -> variant.name()).collect(Collectors.toList())).toArray()
+		, 0, false
 	);
 	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", true);
 	private EzVarSequence target = new EzVarSequence("Select image that will not be modified (likely EM)");
 	private EzVarSequence source = new EzVarSequence("Select image that will be transformed and resized (likely FM)");
-	private EzGroup inputGroup = new EzGroup("Images to process", source, target, choiceinputsection, showgrid);
+	private EzGroup inputGroup = new EzGroup("Images to process", source, target, choiceinputsection, noiseModel, showgrid);
 
 	public static Color[] Colortab = new Color[] {
 		Color.RED,
@@ -211,6 +206,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		source.setEnabled(false);
 		target.setEnabled(false);
 		choiceinputsection.setEnabled(false);
+		noiseModel.setEnabled(false);
 		showgrid.setEnabled(false);
 
 		String name = sourceSequence.getName() + "_transfo.xml";
@@ -220,7 +216,13 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
 		workspace.setXMLFile(new File(name));
-		workspace.setTransformationConfiguration(transformationConfigurationFactory.getFrom(TransformationType.valueOf(getchoice()), showgrid.getValue()));
+		workspace.setTransformationConfiguration(
+			transformationConfigurationFactory.getFrom(
+				TransformationType.valueOf(choiceinputsection.getValue()),
+				NoiseModel.valueOf(noiseModel.getValue()),
+				showgrid.getValue()
+			)
+		);
 
 		guiCLEMButtons.setworkspace(workspace);
 		rigidspecificbutton.setWorkspace(workspace);
@@ -249,19 +251,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		sourceSequence.removeOverlay(messageSource);
 		targetSequence.removeOverlay(messageTarget);
 	}
-
-	private String getchoice() {
-		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_RIGID)) {
-			return INPUT_SELECTION_RIGID;
-		}
-		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_SIMILARITY)) {
-			return INPUT_SELECTION_SIMILARITY;
-		}
-		if (choiceinputsection.getValue().equals(MESSAGE_SELECTION_AFFINE)) {
-			return INPUT_SELECTION_AFFINE;
-		}
-		return INPUT_SELECTION_SPLINE;
-	}
 	
 	@Override
 	public void clean() {}
@@ -276,6 +265,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		source.setEnabled(true);
 		target.setEnabled(true);
 		choiceinputsection.setEnabled(true);
+		noiseModel.setEnabled(true);
 		showgrid.setEnabled(true);
 		synchronized(this) {
 			notify();

@@ -12,35 +12,38 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.registration;
 
+import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.sequence.VtkPointsFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.DaggerSplineTransformationComponent;
-import plugins.fr.univ_nantes.ec_clem.transformation.SplineTransformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.SplineTransformationComponent;
 import vtk.vtkThinPlateSplineTransform;
 import javax.inject.Inject;
 
-public class NonLinearTransformationComputer implements TransformationComputer {
+public class NonLinearRegistrationParameterComputer implements RegistrationParameterComputer {
 
     private SplineTransformationComponent splineTransformationComponent;
     private VtkPointsFactory vtkPointsFactory;
 
     @Inject
-    public NonLinearTransformationComputer(VtkPointsFactory vtkPointsFactory) {
+    public NonLinearRegistrationParameterComputer(VtkPointsFactory vtkPointsFactory) {
         this.vtkPointsFactory = vtkPointsFactory;
         splineTransformationComponent = DaggerSplineTransformationComponent.create();
     }
 
-    public SplineTransformation compute(FiducialSet fiducialSet) {
+    public RegistrationParameter compute(FiducialSet fiducialSet) {
         return compute(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());
     }
 
-    private SplineTransformation compute(Dataset sourceDataset, Dataset targetDataset) {
+    private RegistrationParameter compute(Dataset sourceDataset, Dataset targetDataset) {
         vtkThinPlateSplineTransform vtkSplineTransformation = new vtkThinPlateSplineTransform();
         vtkSplineTransformation.SetSourceLandmarks(vtkPointsFactory.getFrom(sourceDataset));
         vtkSplineTransformation.SetTargetLandmarks(vtkPointsFactory.getFrom(targetDataset));
         vtkSplineTransformation.SetBasisToR2LogR();
-        return splineTransformationComponent.getSplineTransformation().setSplineTransform(vtkSplineTransformation);
+        return new RegistrationParameter(
+            splineTransformationComponent.getSplineTransformation().setSplineTransform(vtkSplineTransformation),
+            Matrix.identity(sourceDataset.getDimension(), targetDataset.getDimension())
+        );
     }
 }

@@ -12,19 +12,30 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.transformation.configuration;
 
+import plugins.fr.univ_nantes.ec_clem.transformation.schema.NoiseModel;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
 
 public class TransformationConfiguration {
     private TransformationType transformationType;
+    private NoiseModel noiseModel;
     private boolean showGrid;
 
-    public TransformationConfiguration(TransformationType transformationType, boolean showGrid) {
+    public TransformationConfiguration(
+        TransformationType transformationType,
+        NoiseModel noiseModel,
+        boolean showGrid
+    ) {
         this.transformationType = transformationType;
+        this.noiseModel = noiseModel;
         this.showGrid = showGrid;
     }
 
     public TransformationType getTransformationType() {
         return transformationType;
+    }
+
+    public NoiseModel getNoiseModel() {
+        return noiseModel;
     }
 
     public boolean isShowGrid() {

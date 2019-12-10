@@ -16,6 +16,7 @@ public class XmlTransformation {
 
     public static String transformationElementName = "transformation";
     public static String transformationTypeAttributeName = "type";
+    public static String transformationNoiseModelAttributeName = "noiseModel";
     public static String transformationDateAttributeName = "date";
     public static String datasetElementName = "dataset";
     public static String datasetTypeAttributeName = "type";

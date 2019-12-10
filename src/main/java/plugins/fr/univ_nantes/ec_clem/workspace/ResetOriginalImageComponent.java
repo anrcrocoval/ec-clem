@@ -13,8 +13,12 @@
 package plugins.fr.univ_nantes.ec_clem.workspace;
 
 import dagger.Component;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputerModule;
 
-@Component
+import javax.inject.Singleton;
+
+@Singleton
+@Component(modules = Rigid2DMaxLikelihoodComputerModule.class)
 public interface ResetOriginalImageComponent {
     void inject(ResetOriginalImage ResetOriginalImage);
 }

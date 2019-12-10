@@ -13,8 +13,12 @@
 package fr.univ_nantes.ec_clem.test;
 
 import dagger.Component;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputerModule;
 
-@Component
+import javax.inject.Singleton;
+
+@Singleton
+@Component(modules = Rigid2DMaxLikelihoodComputerModule.class)
 public interface IgnoredTestComponent {
     void inject(IgnoredTest ignoredTest);
 }

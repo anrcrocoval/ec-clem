@@ -14,7 +14,7 @@ package plugins.fr.univ_nantes.ec_clem.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;
-import plugins.fr.univ_nantes.ec_clem.transformation.TransformationFactory;
+import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
@@ -26,13 +26,13 @@ import javax.inject.Inject;
 
 public class ErrorComputer {
 
-    private TransformationFactory transformationFactory;
+    private RegistrationParameterFactory transformationFactory;
     private MatrixUtil matrixUtil;
     private CovarianceMatrixComputer covarianceMatrixComputer;
     private EulerAngleFactory eulerAngleFactory;
 
     @Inject
-    public ErrorComputer(TransformationFactory transformationFactory, MatrixUtil matrixUtil, CovarianceMatrixComputer covarianceMatrixComputer, EulerAngleFactory eulerAngleFactory) {
+    public ErrorComputer(RegistrationParameterFactory transformationFactory, MatrixUtil matrixUtil, CovarianceMatrixComputer covarianceMatrixComputer, EulerAngleFactory eulerAngleFactory) {
         this.transformationFactory = transformationFactory;
         this.matrixUtil = matrixUtil;
         this.covarianceMatrixComputer = covarianceMatrixComputer;
@@ -40,7 +40,7 @@ public class ErrorComputer {
     }
 
     public Matrix getCovarianceEstimate(TransformationSchema transformationSchema) {
-        Transformation from = transformationFactory.getFrom(transformationSchema);
+        Transformation from = transformationFactory.getFrom(transformationSchema).getTransformation();
         if(from instanceof SplineTransformation) {
             throw new RuntimeException("Error estimation for SplineTransformation is not supported");
         }

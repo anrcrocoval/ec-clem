@@ -21,47 +21,42 @@ import org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOpt
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
 import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizer;
-import org.apache.commons.math3.random.RandomVectorGenerator;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
+import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.BaseOptimProblem;
-
 import javax.inject.Inject;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class ConjugateGradientRigid2DGeneralMaxLikelihoodComputer extends Rigid2DMaxLikelihoodComputer {
 
     @Inject
-    public ConjugateGradientRigid2DGeneralMaxLikelihoodComputer() {
-        super();
-        DaggerConjugateGradientRigid2DGeneralLikelihoodComputerComponent.create().inject(this);
+    public ConjugateGradientRigid2DGeneralMaxLikelihoodComputer(MatrixUtil matrixUtil) {
+        super(matrixUtil);
+//        DaggerConjugateGradientRigid2DGeneralLikelihoodComputerComponent.create().inject(this);
     }
 
     @Override
     protected double[] optimize(FiducialSet fiducialSet) {
         BaseOptimProblem optimProblem = new BaseOptimProblem(fiducialSet);
-        NonLinearConjugateGradientOptimizer solver = new NonLinearConjugateGradientOptimizer(
-            NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,
-            new SimpleValueChecker(1e-16, 1e-16, 500)
-        );
-        MultiStartMultivariateOptimizer multiStartMultivariateOptimizer = new MultiStartMultivariateOptimizer(solver, 10, new RandomVectorGenerator() {
-            private Random random = new Random();
+        PointValuePair optimize = optimize(optimProblem);
+        while (optimize.getValue().isNaN()) {
+            optimize = optimize(optimProblem);
+        }
+        optimProblem.close();
+        return optimize.getPoint();
+    }
 
-            @Override
-            public double[] nextVector() {
-                return new double[]{
-                    random.nextDouble(),
-                    random.nextDouble(),
-                    random.nextDouble(),
-                    random.nextDouble(),
-                    random.nextDouble(),
-                    random.nextDouble(),
-                    random.nextDouble()
-                };
-            }
-        });
-        PointValuePair optimize = multiStartMultivariateOptimizer.optimize(
+    private PointValuePair optimize(BaseOptimProblem optimProblem) {
+        return new MultiStartMultivariateOptimizer(
+            new NonLinearConjugateGradientOptimizer(
+                NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,
+                new SimpleValueChecker(1e-16, 1e-16, 500)
+//                new SimpleValueChecker(-1, 1e-18, 1000)
+            ),
+            10,
+            () -> optimProblem.getStartingPoint()
+        ).optimize(
             GoalType.MINIMIZE,
             new ObjectiveFunction(
                 point -> optimProblem.getObjectiveValue(point)
@@ -78,7 +73,5 @@ public class ConjugateGradientRigid2DGeneralMaxLikelihoodComputer extends Rigid2
             new InitialGuess(optimProblem.getStartingPoint()),
             MaxEval.unlimited()
         );
-//        System.out.println(Arrays.toString(optimize.getPoint()));
-        return optimize.getPoint();
     }
 }
