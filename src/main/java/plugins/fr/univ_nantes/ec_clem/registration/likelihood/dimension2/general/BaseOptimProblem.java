@@ -13,8 +13,6 @@
 package plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general;
 
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
 import static java.lang.Math.*;
@@ -81,23 +79,13 @@ public class BaseOptimProblem {
         double sum = 0d;
         double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
         double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
-        List<Future<Double>> futures = new LinkedList<>();
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            futures.add(completionService.submit(() -> {
-                double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
-                double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
-                return tmp1 * (tmp1 * lambda11 + tmp2 * lambda12)
-                    + tmp2 * (tmp1 * lambda12 + tmp2 * lambda22);
-            }));
-        }
-        while(!futures.isEmpty()) {
-            try {
-                sum += futures.remove(0).get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += tmp1 * (tmp1 * lambda11 + tmp2 * lambda12)
+                + tmp2 * (tmp1 * lambda12 + tmp2 * lambda22);
         }
         return (log(detV / (2d * PI)) * fiducialSet.getN() - sum / 2d) * -1d;
     }

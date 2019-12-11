@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.conjugate_gradient;
+package plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.simplex;
 
 import org.apache.commons.math3.optim.InitialGuess;
 import org.apache.commons.math3.optim.MaxEval;
@@ -21,17 +21,21 @@ import org.apache.commons.math3.optim.nonlinear.scalar.MultiStartMultivariateOpt
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
 import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient;
 import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizer;
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.MultiDirectionalSimplex;
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex;
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.BaseOptimProblem;
+
 import javax.inject.Inject;
 import java.util.concurrent.ExecutionException;
 
-public class ConjugateGradientRigid2DGeneralMaxLikelihoodComputer extends Rigid2DMaxLikelihoodComputer {
+public class SimplexRigid2DGeneralMaxLikelihoodComputer extends Rigid2DMaxLikelihoodComputer {
 
     @Inject
-    public ConjugateGradientRigid2DGeneralMaxLikelihoodComputer(MatrixUtil matrixUtil) {
+    public SimplexRigid2DGeneralMaxLikelihoodComputer(MatrixUtil matrixUtil) {
         super(matrixUtil);
     }
 
@@ -39,36 +43,21 @@ public class ConjugateGradientRigid2DGeneralMaxLikelihoodComputer extends Rigid2
     protected double[] optimize(FiducialSet fiducialSet) {
         BaseOptimProblem optimProblem = new BaseOptimProblem(fiducialSet);
         PointValuePair optimize = optimize(optimProblem);
-//        while (optimize.getValue().isNaN()) {
-//            optimize = optimize(optimProblem);
-//        }
         optimProblem.close();
         return optimize.getPoint();
     }
 
     private PointValuePair optimize(BaseOptimProblem optimProblem) {
         return new MultiStartMultivariateOptimizer(
-            new NonLinearConjugateGradientOptimizer(
-                NonLinearConjugateGradientOptimizer.Formula.FLETCHER_REEVES,
-//                new SimpleValueChecker(1e-16, 1e-16, 500)
-                new SimpleValueChecker(1e-16, 1e-16, 500)
-            ),
-            10,
+            new SimplexOptimizer(1e-20, 1e-20),
+            1,
             () -> optimProblem.getStartingPoint()
         ).optimize(
             GoalType.MINIMIZE,
             new ObjectiveFunction(
                 point -> optimProblem.getObjectiveValue(point)
             ),
-            new ObjectiveFunctionGradient(point -> {
-                double[] objectiveGradient = null;
-                try {
-                    objectiveGradient = optimProblem.getObjectiveGradient(point);
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return objectiveGradient;
-            }),
+            new MultiDirectionalSimplex(optimProblem.getNParameters()),
             new InitialGuess(optimProblem.getStartingPoint()),
             MaxEval.unlimited()
         );

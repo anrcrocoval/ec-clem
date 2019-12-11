@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.conjugate_gradient.ConjugateGradientRigid2DGeneralMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.interior_point.InteriorPointRigid2DGeneralMaxLikelihoodComputer;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.simplex.SimplexRigid2DGeneralMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.isotropic.interior_point.InteriorPointRigid2DIsotropicMaxLikelihoodComputer;
 
 import javax.inject.Named;
@@ -26,6 +27,12 @@ public class Rigid2DMaxLikelihoodComputerModule {
     @Provides
     @Named("conjugate_gradient")
     public Rigid2DMaxLikelihoodComputer provideConjugateGradientRigid2DGeneralMaxLikelihoodComputer(ConjugateGradientRigid2DGeneralMaxLikelihoodComputer solver) {
+        return solver;
+    }
+
+    @Provides
+    @Named("simplex")
+    public Rigid2DMaxLikelihoodComputer provideSimplexRigid2DGeneralMaxLikelihoodComputer(SimplexRigid2DGeneralMaxLikelihoodComputer solver) {
         return solver;
     }
 }

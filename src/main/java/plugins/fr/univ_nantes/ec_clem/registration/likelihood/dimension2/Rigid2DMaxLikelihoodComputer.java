@@ -21,17 +21,11 @@ import plugins.fr.univ_nantes.ec_clem.registration.RegistrationParameterComputer
 
 import javax.inject.Inject;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
+import static java.lang.Math.*;
 
 public abstract class Rigid2DMaxLikelihoodComputer implements RegistrationParameterComputer {
 
     protected MatrixUtil matrixUtil;
-
-//    public Rigid2DMaxLikelihoodComputer() {
-//        DaggerRigid2DMaxLikelihoodComputerComponent.create().inject(this);
-//    }
-
 
     public Rigid2DMaxLikelihoodComputer(MatrixUtil matrixUtil) {
         this.matrixUtil = matrixUtil;
@@ -51,11 +45,14 @@ public abstract class Rigid2DMaxLikelihoodComputer implements RegistrationParame
             }),
             Matrix.identity(2,2)
         );
+        double lambda11 = pow(optimize[3], 2) + (pow(optimize[5], 2));
+        double lambda12 = optimize[3] * optimize[4] + optimize[5] * optimize[6];
+        double lambda22 = pow(optimize[4], 2) + pow(optimize[6], 2);
         return new RegistrationParameter(
             s,
             matrixUtil.pseudoInverse(new Matrix(new double[][]{
-                { optimize[3], optimize[4] },
-                { optimize[5], optimize[6] }
+                { lambda11, lambda12 },
+                { lambda12, lambda22 }
             }))
         );
     }

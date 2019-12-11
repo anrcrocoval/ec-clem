@@ -9,6 +9,7 @@ import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactor
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 
 public class RigidCovarianceEstimator implements CovarianceEstimator {
 
