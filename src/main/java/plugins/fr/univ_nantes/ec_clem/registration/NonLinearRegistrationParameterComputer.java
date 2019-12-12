@@ -43,7 +43,8 @@ public class NonLinearRegistrationParameterComputer implements RegistrationParam
         vtkSplineTransformation.SetBasisToR2LogR();
         return new RegistrationParameter(
             splineTransformationComponent.getSplineTransformation().setSplineTransform(vtkSplineTransformation),
-            Matrix.identity(sourceDataset.getDimension(), targetDataset.getDimension())
+            Matrix.identity(sourceDataset.getDimension(), targetDataset.getDimension()),
+            Double.NaN
         );
     }
 }

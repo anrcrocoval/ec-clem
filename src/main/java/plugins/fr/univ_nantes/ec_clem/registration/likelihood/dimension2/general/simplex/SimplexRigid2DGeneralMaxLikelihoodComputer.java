@@ -26,6 +26,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.NelderMeadSimplex
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.OptimizationResult;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.BaseOptimProblem;
 
@@ -40,11 +41,14 @@ public class SimplexRigid2DGeneralMaxLikelihoodComputer extends Rigid2DMaxLikeli
     }
 
     @Override
-    protected double[] optimize(FiducialSet fiducialSet) {
+    protected OptimizationResult optimize(FiducialSet fiducialSet) {
         BaseOptimProblem optimProblem = new BaseOptimProblem(fiducialSet);
         PointValuePair optimize = optimize(optimProblem);
         optimProblem.close();
-        return optimize.getPoint();
+        return new OptimizationResult(
+            optimize.getPoint(),
+            optimize.getValue()
+        );
     }
 
     private PointValuePair optimize(BaseOptimProblem optimProblem) {

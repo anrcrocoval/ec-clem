@@ -33,7 +33,8 @@ public abstract class Rigid2DMaxLikelihoodComputer implements RegistrationParame
 
     @Override
     public RegistrationParameter compute(FiducialSet fiducialSet) {
-        double[] optimize = optimize(fiducialSet);
+        OptimizationResult optimizationResult = optimize(fiducialSet);
+        double[] optimize = optimizationResult.getParameters();
         Similarity s = new Similarity(
             new Matrix(new double [][] {
                 { cos(optimize[2]), -sin(optimize[2]) },
@@ -53,14 +54,11 @@ public abstract class Rigid2DMaxLikelihoodComputer implements RegistrationParame
             matrixUtil.pseudoInverse(new Matrix(new double[][]{
                 { lambda11, lambda12 },
                 { lambda12, lambda22 }
-            }))
+            })),
+            optimizationResult.getObjectiveValue()
         );
     }
 
-    protected abstract double[] optimize(FiducialSet fiducialSet);
+    protected abstract OptimizationResult optimize(FiducialSet fiducialSet);
 
-    @Inject
-    public void setMatrixUtil(MatrixUtil matrixUtil) {
-        this.matrixUtil = matrixUtil;
-    }
 }

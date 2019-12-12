@@ -17,17 +17,21 @@ import Jama.SingularValueDecomposition;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
+import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
 
 import javax.inject.Inject;
 
 import static java.lang.Math.max;
 
-public class SimilarityRegistrationParameterComputer implements RegistrationParameterComputer {
+public class SimilarityRegistrationParameterComputer extends AffineRegistrationParameterComputer {
 
     @Inject
-    public SimilarityRegistrationParameterComputer() {}
+    public SimilarityRegistrationParameterComputer(MatrixUtil matrixUtil) {
+        super(matrixUtil);
+    }
 
     public RegistrationParameter compute(FiducialSet fiducialSet) {
         return compute(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());
@@ -45,7 +49,8 @@ public class SimilarityRegistrationParameterComputer implements RegistrationPara
                     new Matrix(dimension, 1, 0),
                     Matrix.identity(dimension, dimension)
                 ),
-                Matrix.identity(dimension, dimension)
+                Matrix.identity(dimension, dimension),
+                Double.NaN
             );
         }
 
@@ -64,9 +69,11 @@ public class SimilarityRegistrationParameterComputer implements RegistrationPara
         Matrix residuals = clonedTargetDataset.getMatrix().minus(
             similarity.apply(clonedSourceDataset).getMatrix()
         );
+        Matrix covariance = residuals.transpose().times(residuals).times((double) 1 / (source.getN()));
         return new RegistrationParameter(
             similarity,
-            residuals.transpose().times(residuals).times((double) 1 / (source.getN()))
+            covariance,
+            getLogLikelihood(residuals, covariance)
         );
     }
 

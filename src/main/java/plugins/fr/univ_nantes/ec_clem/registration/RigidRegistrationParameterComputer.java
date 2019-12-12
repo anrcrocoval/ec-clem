@@ -13,13 +13,16 @@
 package plugins.fr.univ_nantes.ec_clem.registration;
 
 import Jama.Matrix;
+import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
 
 import javax.inject.Inject;
 
 public class RigidRegistrationParameterComputer extends SimilarityRegistrationParameterComputer {
 
     @Inject
-    public RigidRegistrationParameterComputer() {}
+    public RigidRegistrationParameterComputer(MatrixUtil matrixUtil) {
+        super(matrixUtil);
+    }
 
     @Override
     protected Matrix getS(Matrix sourceDataset, Matrix targetDataset, Matrix R) {

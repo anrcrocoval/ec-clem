@@ -37,6 +37,11 @@ class SimilarityTransformationComputerTest {
     }
 
     @Inject
+    public void setSubjectUnderTest(SimilarityRegistrationParameterComputer subjectUnderTest) {
+        this.subjectUnderTest = subjectUnderTest;
+    }
+
+    @Inject
     public void setTestFiducialSetFactory(TestFiducialSetFactory testFiducialSetFactory) {
         this.testFiducialSetFactory = testFiducialSetFactory;
     }
@@ -44,11 +49,6 @@ class SimilarityTransformationComputerTest {
     @Inject
     public void setTestTransformationFactory(TestTransformationFactory testTransformationFactory) {
         this.testTransformationFactory = testTransformationFactory;
-    }
-
-    @Inject
-    public void setSubjectUnderTest(SimilarityRegistrationParameterComputer subjectUnderTest) {
-        this.subjectUnderTest = subjectUnderTest;
     }
 
     @Test
