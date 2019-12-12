@@ -54,7 +54,7 @@ class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
     @Test
     void identity() {
         FiducialSet identityFiducialSet = testFiducialSetFactory.getIdentityFiducialSet2DWithNoise100_0_0_100();
-        Similarity result = subjectUnderTest.compute(identityFiducialSet);
+        Similarity result = (Similarity) subjectUnderTest.compute(identityFiducialSet).getTransformation();
         assertEquals(2, result.getR().getRowDimension());
         assertEquals(2, result.getR().getColumnDimension());
         checkDetIsOne(result);
@@ -80,7 +80,7 @@ class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
     @Test
     void simpleRotation() {
         FiducialSet simpleRotationFiducialSet = testFiducialSetFactory.getSimpleRotationFiducialSet2D();
-        Similarity result = subjectUnderTest.compute(simpleRotationFiducialSet);
+        Similarity result = (Similarity) subjectUnderTest.compute(simpleRotationFiducialSet).getTransformation();
         assertEquals(2, result.getR().getRowDimension());
         assertEquals(2, result.getR().getColumnDimension());
         checkDetIsOne(result);
@@ -106,7 +106,7 @@ class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
     @Test
     void simpleTranslation() {
         FiducialSet simpleTranslationFiducialSet = testFiducialSetFactory.getSimpleTranslationFiducialSet2D();
-        Similarity result = subjectUnderTest.compute(simpleTranslationFiducialSet);
+        Similarity result = (Similarity) subjectUnderTest.compute(simpleTranslationFiducialSet).getTransformation();
         assertEquals(2, result.getR().getRowDimension());
         assertEquals(2, result.getR().getColumnDimension());
         checkDetIsOne(result);

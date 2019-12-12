@@ -24,24 +24,27 @@ import javax.inject.Inject;
 
 import static java.lang.Math.max;
 
-public class SimilarityTransformationComputer implements TransformationComputer {
+public class SimilarityRegistrationParameterComputer implements RegistrationParameterComputer {
 
     @Inject
-    public SimilarityTransformationComputer() {}
+    public SimilarityRegistrationParameterComputer() {}
 
-    public Similarity compute(FiducialSet fiducialSet) {
+    public RegistrationParameter compute(FiducialSet fiducialSet) {
         return compute(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());
     }
 
-    private Similarity compute(Dataset source, Dataset target) {
+    private RegistrationParameter compute(Dataset source, Dataset target) {
         if (source.getN() < 2) {
             int dimension = max(source.getDimension(), target.getDimension());
-            return new Similarity(
-                Matrix.identity(
-                    dimension,
-                    dimension
+            return new RegistrationParameter(
+                new Similarity(
+                    Matrix.identity(
+                        dimension,
+                        dimension
+                    ),
+                    new Matrix(dimension, 1, 0),
+                    Matrix.identity(dimension, dimension)
                 ),
-                new Matrix(dimension, 1, 0),
                 Matrix.identity(dimension, dimension)
             );
         }
@@ -57,7 +60,14 @@ public class SimilarityTransformationComputer implements TransformationComputer 
         Matrix R = getR(clonedSourceDataset, clonedTargetDataset);
         Matrix S = getS(clonedSourceDataset.getMatrix(), clonedTargetDataset.getMatrix(), R);
         Matrix T = getT(sourceBarycentre.getMatrix(), targetBarycentre.getMatrix(), R, S);
-        return new Similarity(R, T, S);
+        Similarity similarity = new Similarity(R, T, S);
+        Matrix residuals = clonedTargetDataset.getMatrix().minus(
+            similarity.apply(clonedSourceDataset).getMatrix()
+        );
+        return new RegistrationParameter(
+            similarity,
+            residuals.transpose().times(residuals).times((double) 1 / (source.getN()))
+        );
     }
 
     protected Matrix getS(Matrix sourceDataset, Matrix targetDataset, Matrix R) {

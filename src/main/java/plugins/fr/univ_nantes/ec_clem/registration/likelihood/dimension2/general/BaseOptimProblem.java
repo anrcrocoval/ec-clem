@@ -12,16 +12,16 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
+import java.util.Random;
 import java.util.concurrent.*;
 import static java.lang.Math.*;
 
 public class BaseOptimProblem {
 
     private FiducialSet fiducialSet;
+
+    private Random random = new Random();
 
     public int getNParameters() {
         return 7;
@@ -40,64 +40,28 @@ public class BaseOptimProblem {
     }
 
     public double[] getStartingPoint() {
-        return new double[] {
-            0, 0, 0, 1, 0, 0, 1
+        double[] doubles = {
+            random.nextInt(100),
+            random.nextInt(100),
+            random.nextInt(100),
+            random.nextInt(100) + 1,
+            0,
+            0,
+            random.nextInt(100) + 1
         };
+        return doubles;
     }
 
-    private LoadingCache<TmpCacheWrapper1, Double> tmp5Cache = CacheBuilder.newBuilder()
-        .maximumSize(1000000)
-        .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-        .build(new CacheLoader<TmpCacheWrapper1, Double>() {
-                   public Double load(TmpCacheWrapper1 key) {
-                       return computetmp1BigDecimal(key.getY(), key.getZ(), key.getTheta(), key.getTx());
-                   }
-               }
-        );
-
-    private LoadingCache<TmpCacheWrapper1, Double> tmp6Cache = CacheBuilder.newBuilder()
-        .maximumSize(1000000)
-        .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-        .build(new CacheLoader<TmpCacheWrapper1, Double>() {
-                   public Double load(TmpCacheWrapper1 key) {
-                       return computetmp2BigDecimal(key.getY(), key.getZ(), key.getTheta(), key.getTx());
-                   }
-               }
-        );
-
-    private LoadingCache<TmpCacheWrapper2, Double> tmp7Cache = CacheBuilder.newBuilder()
-        .maximumSize(1000000)
-        .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-        .build(new CacheLoader<TmpCacheWrapper2, Double>() {
-                   public Double load(TmpCacheWrapper2 key) {
-                       return computetmp3BigDecimal(key.getZ(), key.getTheta());
-                   }
-               }
-        );
-
-    private LoadingCache<TmpCacheWrapper2, Double> tmp8Cache = CacheBuilder.newBuilder()
-        .maximumSize(1000000)
-        .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-        .build(new CacheLoader<TmpCacheWrapper2, Double>() {
-                   public Double load(TmpCacheWrapper2 key) {
-                       return computetmp4BigDecimal(key.getZ(), key.getTheta());
-                   }
-               }
-        );
-
-    private ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    private CompletionService<Double> completionService = new ExecutorCompletionService<>(executorService);
+    private ExecutorService completionService;
 
     public BaseOptimProblem(FiducialSet fiducialSet) {
         this.fiducialSet = fiducialSet;
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            executorService.shutdown();
-            try {
-                executorService.awaitTermination(1, TimeUnit.MINUTES);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }));
+        completionService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    }
+
+    public void close() {
+        completionService.shutdown();
+        completionService = null;
     }
 
     public double getObjectiveValue(double[] point) {
@@ -118,10 +82,10 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += tmp1*(tmp1*lambda11+tmp2*lambda12)
-                + tmp2*(tmp1*lambda12+tmp2*lambda22);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += tmp1 * (tmp1 * lambda11 + tmp2 * lambda12)
+                + tmp2 * (tmp1 * lambda12 + tmp2 * lambda22);
         }
         return (log(detV / (2d * PI)) * fiducialSet.getN() - sum / 2d) * -1d;
     }
@@ -142,9 +106,9 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += tmp1*lambda11+tmp2*lambda12;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += tmp1 * lambda11 + tmp2 * lambda12;
         }
         return sum * -1d;
     }
@@ -165,9 +129,9 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += tmp1*lambda12+tmp2*lambda22;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += tmp1 * lambda12 + tmp2 * lambda22;
         }
         return sum * -1;
     }
@@ -189,12 +153,12 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
-            sum += tmp1*(tmp3*lambda11+tmp4*lambda12)
-                + tmp2*(tmp3*lambda12+tmp4*lambda22);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            double tmp3 = computetmp3BigDecimal(z, theta);
+            double tmp4 = computetmp4BigDecimal(z, theta);
+            sum += tmp1 * (tmp3 * lambda11 + tmp4 * lambda12)
+                + tmp2 * (tmp3 * lambda12 + tmp4 * lambda22);
         }
         return sum;
     }
@@ -214,8 +178,8 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
             sum += 2d*v11*pow(tmp1, 2)
                 + 2d*v12*tmp1*tmp2;
         }
@@ -237,10 +201,10 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += 2d*v11*tmp1*tmp2
-                +2d*v12*pow(tmp2, 2);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += 2d * v11 * tmp1 * tmp2
+                + 2d * v12 * pow(tmp2, 2);
         }
         return (fiducialSet.getN()*v21* -1d / detV - sum / 2d) * -1d;
     }
@@ -260,10 +224,10 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += 2d*v21*pow(tmp1, 2)
-                +2d*v22*tmp1*tmp2;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += 2d * v21 * pow(tmp1, 2)
+                + 2d * v22 * tmp1 * tmp2;
         }
         return (fiducialSet.getN()*v12* -1d / detV - sum / 2d) * -1d;
     }
@@ -283,17 +247,12 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += 2d*v21*tmp1*tmp2
-                +2d*v22*pow(tmp2, 2);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += 2d * v21 * tmp1 * tmp2
+                + 2d * v22 * pow(tmp2, 2);
         }
         return (fiducialSet.getN()*v11/detV - sum / 2d) * -1d;
-    }
-
-    private double gettmp1BigDecimal(double[] y, double[] z, double theta, double tx) {
-        TmpCacheWrapper1 wrap = new TmpCacheWrapper1().setY(y).setZ(z).setTheta(theta).setTx(tx);
-        return tmp5Cache.getUnchecked(wrap);
     }
 
     private double computetmp1BigDecimal(double[] y, double[] z, double theta, double tx) {
@@ -303,11 +262,6 @@ public class BaseOptimProblem {
             - tx;
     }
 
-    private double gettmp2BigDecimal(double[] y, double[] z, double theta, double tx) {
-        TmpCacheWrapper1 wrap = new TmpCacheWrapper1().setY(y).setZ(z).setTheta(theta).setTx(tx);
-        return tmp6Cache.getUnchecked(wrap);
-    }
-
     private double computetmp2BigDecimal(double[] y, double[] z, double theta, double ty) {
         return y[1]
             - z[0] * sin(theta)
@@ -315,19 +269,9 @@ public class BaseOptimProblem {
             - ty;
     }
 
-    private double gettmp3BigDecimal(double[] z, double theta) {
-        TmpCacheWrapper2 wrap = new TmpCacheWrapper2().setZ(z).setTheta(theta);
-        return tmp7Cache.getUnchecked(wrap);
-    }
-
     private double computetmp3BigDecimal(double[] z, double theta) {
         return z[0] * sin(theta)
             + z[1] * cos(theta);
-    }
-
-    private double gettmp4BigDecimal(double[] z, double theta) {
-        TmpCacheWrapper2 wrap = new TmpCacheWrapper2().setZ(z).setTheta(theta);
-        return tmp8Cache.getUnchecked(wrap);
     }
 
     private double computetmp4BigDecimal(double[] z, double theta) {
@@ -360,8 +304,7 @@ public class BaseOptimProblem {
         double v11 = point[3];
         double v21 = point[5];
         double lambda11 = pow(v11, 2) + (pow(v21, 2));
-
-        return fiducialSet.getN()*lambda11;
+        return fiducialSet.getN() * lambda11;
     }
 
     // tx*ty
@@ -371,8 +314,7 @@ public class BaseOptimProblem {
         double v21 = point[5];
         double v22 = point[6];
         double lambda12 = v11 * v12 + v21 * v22;
-
-        return fiducialSet.getN()*lambda12;
+        return fiducialSet.getN() * lambda12;
     }
 
     // ty²
@@ -380,8 +322,7 @@ public class BaseOptimProblem {
         double v12 = point[4];
         double v22 = point[6];
         double lambda22 = pow(v12, 2) + pow(v22, 2);
-
-        return fiducialSet.getN()*lambda22;
+        return fiducialSet.getN() * lambda22;
     }
 
     // tx*theta
@@ -397,13 +338,11 @@ public class BaseOptimProblem {
         double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
         double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            double[] y = target[i];
             double[] z = source[i];
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
-            sum += tmp3*lambda11+tmp4*lambda12;
+            double tmp3 = computetmp3BigDecimal(z, theta);
+            double tmp4 = computetmp4BigDecimal(z, theta);
+            sum += tmp3 * lambda11 + tmp4 * lambda12;
         }
-
         return sum * -1d;
     }
 
@@ -420,13 +359,11 @@ public class BaseOptimProblem {
         double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
         double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
         for(int i = 0; i < fiducialSet.getN(); i++) {
-            double[] y = target[i];
             double[] z = source[i];
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
-            sum += tmp3*lambda12+tmp4*lambda22;
+            double tmp3 = computetmp3BigDecimal(z, theta);
+            double tmp4 = computetmp4BigDecimal(z, theta);
+            sum += tmp3 * lambda12 + tmp4 * lambda22;
         }
-
         return sum * -1d;
     }
 
@@ -448,14 +385,14 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
-            sum += tmp1*(-tmp4*lambda11+tmp3*lambda12)
-                +tmp3*(tmp3*lambda11+tmp4*lambda12)
-                +tmp2*(-tmp4*lambda12+tmp3*lambda22)
-                +tmp4*(tmp3*lambda12+tmp4*lambda22);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            double tmp3 = computetmp3BigDecimal(z, theta);
+            double tmp4 = computetmp4BigDecimal(z, theta);
+            sum += tmp1 * (-tmp4 * lambda11 + tmp3 * lambda12)
+                + tmp3 * (tmp3 * lambda11 + tmp4 * lambda12)
+                + tmp2 * (-tmp4 * lambda12 + tmp3 * lambda22)
+                + tmp4 * (tmp3 * lambda12 + tmp4 * lambda22);
         }
 
         return sum;
@@ -474,12 +411,11 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += 2d*v11*tmp1
-                +v12*tmp2;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += 2d * v11 * tmp1
+                + v12 * tmp2;
         }
-
         return sum * -1d;
     }
 
@@ -494,8 +430,8 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            sum += v12*tmp1;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            sum += v12 * tmp1;
         }
 
         return sum * -1d;
@@ -514,13 +450,13 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
-            sum += 2d*v11*tmp3*tmp1
-                +v12*tmp4*tmp1
-                +v12*tmp3*tmp2;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            double tmp3 = computetmp3BigDecimal(z, theta);
+            double tmp4 = computetmp4BigDecimal(z, theta);
+            sum += 2d * v11 * tmp3 * tmp1
+                + v12 * tmp4 * tmp1
+                + v12 * tmp3 * tmp2;
         }
 
         return sum;
@@ -541,7 +477,7 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
             sum += 2d*pow(tmp1, 2);
         }
         return (fiducialSet.getN()*pow(v22, 2)* -1d / pow(detV, 2) - sum / 2d) * -1d;
@@ -558,8 +494,8 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += v11*tmp2;
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += v11 * tmp2;
         }
         return sum * -1d;
     }
@@ -577,10 +513,10 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += v11*tmp1
-                +2d*v12*tmp2;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += v11 * tmp1
+                + 2d * v12 * tmp2;
         }
         return sum * -1d;
     }
@@ -598,13 +534,13 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
-            sum += v11*tmp4*tmp1
-                +v11*tmp3*tmp2
-                +2d*v12*tmp4*tmp2;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            double tmp3 = computetmp3BigDecimal(z, theta);
+            double tmp4 = computetmp4BigDecimal(z, theta);
+            sum += v11 * tmp4 * tmp1
+                + v11 * tmp3 * tmp2
+                + 2d * v12 * tmp4 * tmp2;
         }
         return sum;
     }
@@ -625,9 +561,9 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += 2d*tmp1*tmp2;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += 2d * tmp1 * tmp2;
         }
         return (fiducialSet.getN()*v21*v22 / pow(detV, 2) - sum / 2d) * -1d;
     }
@@ -647,8 +583,8 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += 2d*pow(tmp2, 2);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += 2d * pow(tmp2, 2);
         }
         return (fiducialSet.getN()*pow(v21, 2) * -1d / pow(detV, 2) - sum / 2d) * -1d;
     }
@@ -666,10 +602,10 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            sum += 2d*v21*tmp1
-                +v22*tmp2;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            sum += 2d * v21 * tmp1
+                + v22 * tmp2;
         }
         return sum * -1d;
     }
@@ -685,8 +621,8 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            sum += v22*tmp1;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            sum += v22 * tmp1;
         }
         return sum * -1d;
     }
@@ -704,13 +640,13 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
-            sum += 2d*v21*tmp3*tmp1
-                +v22*tmp4*tmp1
-                +v22*tmp3*tmp2;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            double tmp3 = computetmp3BigDecimal(z, theta);
+            double tmp4 = computetmp4BigDecimal(z, theta);
+            sum += 2d * v21 * tmp3 * tmp1
+                + v22 * tmp4 * tmp1
+                + v22 * tmp3 * tmp2;
         }
         return sum;
     }
@@ -722,7 +658,6 @@ public class BaseOptimProblem {
         double v21 = point[5];
         double v22 = point[6];
         double detV = v11 * v22 - v21 * v12;
-
         return (fiducialSet.getN()*v12*v22 / pow(detV, 2)) * -1d;
     }
 
@@ -733,7 +668,6 @@ public class BaseOptimProblem {
         double v21 = point[5];
         double v22 = point[6];
         double detV = v11 * v22 - v21 * v12;
-
         return fiducialSet.getN()*v11*v22* -1d / pow(detV, 2) * -1d;
     }
 
@@ -752,7 +686,7 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
             sum +=2d*pow(tmp1, 2);
         }
         return (fiducialSet.getN()*pow(v12, 2) * -1d / pow(detV, 2) - sum / 2d) * -1d;
@@ -769,7 +703,7 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
             sum += v21*tmp2;
         }
         return sum * -1d;
@@ -788,8 +722,8 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
             sum += v21*tmp1
                 +2d*v22*tmp2;
         }
@@ -809,13 +743,13 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
-            double tmp3 = gettmp3BigDecimal(z, theta);
-            double tmp4 = gettmp4BigDecimal(z, theta);
-            sum += v21*tmp4*tmp1
-                    +v21*tmp3*tmp2
-                    +2d*v22*tmp4*tmp2;
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
+            double tmp3 = computetmp3BigDecimal(z, theta);
+            double tmp4 = computetmp4BigDecimal(z, theta);
+            sum += v21 * tmp4 * tmp1
+                    + v21 * tmp3 * tmp2
+                    + 2d * v22 * tmp4 * tmp2;
         }
         return sum;
     }
@@ -827,7 +761,6 @@ public class BaseOptimProblem {
         double v21 = point[5];
         double v22 = point[6];
         double detV = v11 * v22 - v21 * v12;
-
         return (fiducialSet.getN()*v12*v21*-1d / pow(detV, 2)) * -1d;
     }
 
@@ -857,8 +790,8 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp1 = gettmp1BigDecimal(y, z, theta, tx);
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
+            double tmp1 = computetmp1BigDecimal(y, z, theta, tx);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
             sum +=2d*tmp1*tmp2;
         }
         return (fiducialSet.getN()*v11*v12 / pow(detV, 2) - sum / 2d) * -1d;
@@ -879,7 +812,7 @@ public class BaseOptimProblem {
         for(int i = 0; i < fiducialSet.getN(); i++) {
             double[] y = target[i];
             double[] z = source[i];
-            double tmp2 = gettmp2BigDecimal(y, z, theta, ty);
+            double tmp2 = computetmp2BigDecimal(y, z, theta, ty);
             sum +=2d*pow(tmp2, 2);
         }
         return (fiducialSet.getN()*pow(v11, 2) * -1d / pow(detV, 2) - sum / 2d) * -1d;

@@ -10,15 +10,14 @@
  * (at your option) any later version.
  *
  **/
-package fr.univ_nantes.ec_clem.test;
+package plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.simplex;
 
 import dagger.Component;
-import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputerModule;
 
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = Rigid2DMaxLikelihoodComputerModule.class)
-public interface IgnoredTestComponent {
-    void inject(IgnoredTest ignoredTest);
+@Component
+public interface SimplexRigid2DGeneralLikelihoodComputerComponent {
+    void inject(SimplexRigid2DGeneralMaxLikelihoodComputer rigid2DGeneralMaxLikelihoodComputer2);
 }

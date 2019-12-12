@@ -15,24 +15,24 @@ package plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2;
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
+import plugins.fr.univ_nantes.ec_clem.registration.RegistrationParameter;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
-import plugins.fr.univ_nantes.ec_clem.registration.TransformationComputer;
+import plugins.fr.univ_nantes.ec_clem.registration.RegistrationParameterComputer;
 
 import javax.inject.Inject;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
+import static java.lang.Math.*;
 
-public abstract class Rigid2DMaxLikelihoodComputer implements TransformationComputer {
+public abstract class Rigid2DMaxLikelihoodComputer implements RegistrationParameterComputer {
 
     protected MatrixUtil matrixUtil;
 
-    public Rigid2DMaxLikelihoodComputer() {
-        DaggerRigid2DMaxLikelihoodComputerComponent.create().inject(this);
+    public Rigid2DMaxLikelihoodComputer(MatrixUtil matrixUtil) {
+        this.matrixUtil = matrixUtil;
     }
 
     @Override
-    public Similarity compute(FiducialSet fiducialSet) {
+    public RegistrationParameter compute(FiducialSet fiducialSet) {
         double[] optimize = optimize(fiducialSet);
         Similarity s = new Similarity(
             new Matrix(new double [][] {
@@ -45,15 +45,16 @@ public abstract class Rigid2DMaxLikelihoodComputer implements TransformationComp
             }),
             Matrix.identity(2,2)
         );
-
-        double lambdaInv11 = (Math.pow(optimize[3], 2) + Math.pow(optimize[5], 2));
-        double lambdaInv22 = (Math.pow(optimize[6], 2) + Math.pow(optimize[4], 2));
-        double lambdaInv12 = (optimize[3] * optimize[4]) + (optimize[6] * optimize[5]);
-        double det = (lambdaInv11 * lambdaInv22) - (lambdaInv12 * lambdaInv12);
-//        System.out.println(lambdaInv22 / det);
-//        System.out.println(-lambdaInv12 / det);
-//        System.out.println(lambdaInv11 / det);
-        return s;
+        double lambda11 = pow(optimize[3], 2) + (pow(optimize[5], 2));
+        double lambda12 = optimize[3] * optimize[4] + optimize[5] * optimize[6];
+        double lambda22 = pow(optimize[4], 2) + pow(optimize[6], 2);
+        return new RegistrationParameter(
+            s,
+            matrixUtil.pseudoInverse(new Matrix(new double[][]{
+                { lambda11, lambda12 },
+                { lambda12, lambda22 }
+            }))
+        );
     }
 
     protected abstract double[] optimize(FiducialSet fiducialSet);

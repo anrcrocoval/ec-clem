@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.registration.AffineTransformationComputer;
+import plugins.fr.univ_nantes.ec_clem.registration.AffineRegistrationParameterComputer;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
 import javax.inject.Inject;
@@ -27,14 +27,14 @@ import java.util.List;
 import static org.testng.Assert.assertEquals;
 
 class AffineTransformationComputerTest {
-    private AffineTransformationComputer subjectUnderTest;
+    private AffineRegistrationParameterComputer subjectUnderTest;
 
     public AffineTransformationComputerTest() {
         DaggerAffineTransformationComputerTestComponent.create().inject(this);
     }
 
     @Inject
-    public void setSubjectUnderTest(AffineTransformationComputer subjectUnderTest) {
+    public void setSubjectUnderTest(AffineRegistrationParameterComputer subjectUnderTest) {
         this.subjectUnderTest = subjectUnderTest;
     }
 
@@ -54,7 +54,7 @@ class AffineTransformationComputerTest {
         targetPoints.add(new Point(new Matrix(new double[][] {{ -4 }, { 2 }, { 6 }})));
         Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
 
-        AffineTransformation result = subjectUnderTest.compute(new FiducialSet(source, target));
+        AffineTransformation result = (AffineTransformation) subjectUnderTest.compute(new FiducialSet(source, target)).getTransformation();
         assertEquals(4, result.getHomogeneousMatrix().getRowDimension());
         assertEquals(4, result.getHomogeneousMatrix().getColumnDimension());
         assertEquals(0, result.getHomogeneousMatrix().get(0, 0), 0.0000000001);
@@ -91,7 +91,7 @@ class AffineTransformationComputerTest {
         targetPoints.add(new Point(new Matrix(new double[][] {{ 2 }, { 3 }, { 4 }})));
         Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
 
-        AffineTransformation result = subjectUnderTest.compute(new FiducialSet(source, target));
+        AffineTransformation result = (AffineTransformation) subjectUnderTest.compute(new FiducialSet(source, target)).getTransformation();
         assertEquals(4, result.getHomogeneousMatrix().getRowDimension());
         assertEquals(4, result.getHomogeneousMatrix().getColumnDimension());
         assertEquals(1, result.getHomogeneousMatrix().get(0, 0), 0.0000000001);
@@ -128,7 +128,7 @@ class AffineTransformationComputerTest {
         targetPoints.add(new Point(new Matrix(new double[][] {{ -3.5355340 }, { 1 }, { 0.7071068 }})));
         Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
 
-        AffineTransformation result = subjectUnderTest.compute(new FiducialSet(source, target));
+        AffineTransformation result = (AffineTransformation) subjectUnderTest.compute(new FiducialSet(source, target)).getTransformation();
         assertEquals(4, result.getHomogeneousMatrix().getRowDimension());
         assertEquals(4, result.getHomogeneousMatrix().getColumnDimension());
         assertEquals(0, result.getHomogeneousMatrix().get(0, 0), 0.0000001);

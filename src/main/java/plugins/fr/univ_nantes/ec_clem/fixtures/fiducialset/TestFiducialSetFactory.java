@@ -24,6 +24,7 @@ import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TestFiducialSetFactory {
@@ -181,10 +182,11 @@ public class TestFiducialSetFactory {
     }
 
     public FiducialSet getRandomFromTransformation(Transformation transformation, int n, int[] range) {
-        Dataset source = new Dataset(range.length, PointType.FIDUCIAL);
+        List<Point> points = new LinkedList<>();
         for(int i = 0; i < n; i++) {
-            source.addPoint(getRandomPoint(range));
+            points.add(getRandomPoint(range));
         }
+        Dataset source = new Dataset(points, PointType.FIDUCIAL);
         Dataset target = transformation.apply(source);
         return new FiducialSet(source, target);
     }
@@ -193,6 +195,7 @@ public class TestFiducialSetFactory {
         double[] means = new double[covariance.length];
         Arrays.fill(means, 0);
         MultivariateNormalDistribution multivariateNormalDistribution = new MultivariateNormalDistribution(random, means, covariance);
+
         return multivariateNormalDistribution.sample();
     }
 

@@ -2,32 +2,30 @@ package plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid;
 
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.error.ellipse.CovarianceEstimator;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
-import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
-import plugins.fr.univ_nantes.ec_clem.transformation.TransformationFactory;
+import plugins.fr.univ_nantes.ec_clem.registration.RegistrationParameter;
+import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 
 public class RigidCovarianceEstimator implements CovarianceEstimator {
 
     private MatrixUtil matrixUtil;
-    private TransformationFactory transformationFactory;
+    private RegistrationParameterFactory transformationFactory;
 
     @Inject
-    public RigidCovarianceEstimator(TransformationFactory transformationFactory, MatrixUtil matrixUtil) {
+    public RigidCovarianceEstimator(RegistrationParameterFactory transformationFactory, MatrixUtil matrixUtil) {
         this.transformationFactory = transformationFactory;
         this.matrixUtil = matrixUtil;
     }
 
     @Override
     public Matrix getCovariance(TransformationSchema transformationSchema, Point zSource) {
-        Matrix residuals = transformationSchema.getFiducialSet().getTargetDataset().getMatrix().minus(
-            transformationFactory.getFrom(transformationSchema).apply(transformationSchema.getFiducialSet().getSourceDataset()).getMatrix()
-        );
-        Matrix lambda = residuals.transpose().times(residuals).times((double) 1 / (transformationSchema.getFiducialSet().getN()));
+        RegistrationParameter from = transformationFactory.getFrom(transformationSchema);
+        Matrix lambda = from.getNoiseCovariance();
         Matrix lambdaInv = matrixUtil.pseudoInverse(lambda);
 
         Matrix jtt = lambdaInv.times(-1 * transformationSchema.getFiducialSet().getN());
@@ -40,9 +38,7 @@ public class RigidCovarianceEstimator implements CovarianceEstimator {
                 { -transformationSchema.getFiducialSet().getSourceDataset().getPoint(i).get(0) }
             });
             jto.plusEquals(lambdaInv.times(x));
-            joo.plusEquals(
-                x.transpose().times(lambdaInv).times(x).times(-1)
-            );
+            joo.plusEquals(x.transpose().times(lambdaInv).times(x).times(-1));
         }
 
         Matrix J = new Matrix(3, 3);

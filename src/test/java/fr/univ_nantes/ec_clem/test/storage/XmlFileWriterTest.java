@@ -26,6 +26,7 @@ import plugins.fr.univ_nantes.ec_clem.sequence.SequenceSize;
 import plugins.fr.univ_nantes.ec_clem.storage.XmlFileReader;
 import plugins.fr.univ_nantes.ec_clem.storage.XmlFileWriter;
 import plugins.fr.univ_nantes.ec_clem.storage.XmlTransformationWriter;
+import plugins.fr.univ_nantes.ec_clem.transformation.schema.NoiseModel;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
 import plugins.fr.univ_nantes.ec_clem.storage.XmlTransformationReader;
@@ -58,6 +59,7 @@ class XmlFileWriterTest {
         TransformationSchema transformationSchema = new TransformationSchema(
             new FiducialSet(sourceDataset, targetDataset),
             TransformationType.SIMILARITY,
+            NoiseModel.ISOTROPIC,
             sourceSequenceSize,
             targetSequenceSize
         );

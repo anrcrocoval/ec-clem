@@ -35,6 +35,7 @@ public class TransformationSchemaFactory {
         return new TransformationSchema(
             fiducialSet,
             workspace.getTransformationConfiguration().getTransformationType(),
+            workspace.getTransformationConfiguration().getNoiseModel(),
             sequenceSizeFactory.getFrom(workspace.getSourceSequence()),
             sequenceSizeFactory.getFrom(workspace.getTargetSequence())
         );

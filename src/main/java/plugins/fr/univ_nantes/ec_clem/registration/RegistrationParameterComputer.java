@@ -12,17 +12,8 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.registration;
 
-import Jama.Matrix;
+import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 
-import javax.inject.Inject;
-
-public class RigidTransformationComputer extends SimilarityTransformationComputer {
-
-    @Inject
-    public RigidTransformationComputer() {}
-
-    @Override
-    protected Matrix getS(Matrix sourceDataset, Matrix targetDataset, Matrix R) {
-        return Matrix.identity(R.getRowDimension(), R.getColumnDimension());
-    }
+public interface RegistrationParameterComputer {
+    RegistrationParameter compute(FiducialSet fiducialSet);
 }

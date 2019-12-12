@@ -16,26 +16,40 @@ import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
 import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
-
 import javax.inject.Inject;
 
-public class AffineTransformationComputer implements TransformationComputer {
+public class AffineRegistrationParameterComputer implements RegistrationParameterComputer {
 
     private MatrixUtil matrixUtil;
 
     @Inject
-    public AffineTransformationComputer(MatrixUtil matrixUtil) {
+    public AffineRegistrationParameterComputer(MatrixUtil matrixUtil) {
         this.matrixUtil = matrixUtil;
     }
 
     @Override
-    public AffineTransformation compute(FiducialSet fiducialSet) {
+    public RegistrationParameter compute(FiducialSet fiducialSet) {
         Matrix A = fiducialSet.getSourceDataset().getHomogeneousMatrixLeft();
         Matrix B = fiducialSet.getTargetDataset().getMatrix();
         Matrix result = matrixUtil.pseudoInverse(A.transpose().times(A)).times(A.transpose()).times(B).transpose();
-        return new AffineTransformation(
+
+        AffineTransformation affineTransformation = new AffineTransformation(
             result.getMatrix(0, result.getRowDimension() - 1, 1, result.getColumnDimension() - 1),
             result.getMatrix(0, result.getRowDimension() - 1, 0, 0)
+        );
+
+        Matrix residuals = fiducialSet.getTargetDataset().getMatrix().minus(
+            affineTransformation.apply(fiducialSet.getSourceDataset()).getMatrix()
+        );
+
+        return new RegistrationParameter(
+            affineTransformation,
+            residuals.transpose().times(residuals)
+                .times((double) 1 / (
+                    fiducialSet.getN()
+                    - fiducialSet.getSourceDataset().getDimension()
+                    - fiducialSet.getSourceDataset().getDimension()
+                ))
         );
     }
 }

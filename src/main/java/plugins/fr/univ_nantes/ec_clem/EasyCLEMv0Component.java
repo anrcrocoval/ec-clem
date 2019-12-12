@@ -13,10 +13,12 @@
 package plugins.fr.univ_nantes.ec_clem;
 
 import dagger.Component;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputerModule;
+
 import javax.inject.Singleton;
 
 @Singleton
-@Component
+@Component(modules = Rigid2DMaxLikelihoodComputerModule.class)
 public interface EasyCLEMv0Component {
     void inject(EasyCLEMv0 easyCLEMv0);
 }

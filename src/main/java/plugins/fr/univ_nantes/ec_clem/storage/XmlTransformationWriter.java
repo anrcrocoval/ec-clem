@@ -34,6 +34,7 @@ public class XmlTransformationWriter {
     public void write(TransformationSchema transformationSchema) {
         Element transformationElement = XMLUtil.addElement(document.getDocumentElement(), XmlTransformation.transformationElementName);
         transformationElement.setAttribute(XmlTransformation.transformationTypeAttributeName, transformationSchema.getTransformationType().name());
+        transformationElement.setAttribute(XmlTransformation.transformationNoiseModelAttributeName, transformationSchema.getNoiseModel().name());
         transformationElement.setAttribute(XmlTransformation.transformationDateAttributeName, ZonedDateTime.now().toString());
         write(transformationSchema.getSourceSize(), "source", transformationElement);
         write(transformationSchema.getTargetSize(), "target", transformationElement);
