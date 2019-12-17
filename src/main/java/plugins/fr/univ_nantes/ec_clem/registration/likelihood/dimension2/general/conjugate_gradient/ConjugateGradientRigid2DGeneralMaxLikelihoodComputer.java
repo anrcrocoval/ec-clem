@@ -51,7 +51,7 @@ public class ConjugateGradientRigid2DGeneralMaxLikelihoodComputer extends Rigid2
         return new MultiStartMultivariateOptimizer(
             new NonLinearConjugateGradientOptimizer(
                 NonLinearConjugateGradientOptimizer.Formula.FLETCHER_REEVES,
-                new SimpleValueChecker(1e-16, 1e-16, 500)
+                new SimpleValueChecker(1e-20, 1e-20, 500)
             ),
             10,
             () -> optimProblem.getStartingPoint()

@@ -53,7 +53,9 @@ public class SimplexRigid2DGeneralMaxLikelihoodComputer extends Rigid2DMaxLikeli
 
     private PointValuePair optimize(BaseOptimProblem optimProblem) {
         return new MultiStartMultivariateOptimizer(
-            new SimplexOptimizer(1e-20, 1e-20),
+            new SimplexOptimizer(new SimpleValueChecker(
+                    1e-20, 1e-20, 500
+            )),
             1,
             () -> optimProblem.getStartingPoint()
         ).optimize(

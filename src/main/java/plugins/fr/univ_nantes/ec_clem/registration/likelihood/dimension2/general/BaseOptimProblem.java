@@ -76,6 +76,7 @@ public class BaseOptimProblem {
         double lambda12 = v11 * v12 + v21 * v22;
         double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
+//        double detLambda = lambda11 * lambda22 - lambda12 * lambda12;
         double sum = 0d;
         double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
         double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();

@@ -18,8 +18,7 @@ import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
 import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
 import javax.inject.Inject;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.log;
+import static java.lang.Math.*;
 import static ucar.nc2.util.net.HTTPSession.log;
 
 public class AffineRegistrationParameterComputer implements RegistrationParameterComputer {
@@ -67,6 +66,6 @@ public class AffineRegistrationParameterComputer implements RegistrationParamete
             Matrix current = residuals.getMatrix(i, i, 0, residuals.getColumnDimension() - 1);
             sum += (current).times(inverseCovariance).times(current.transpose()).get(0, 0);
         }
-        return (log(inverseCovariance.det() / (2d * PI)) * residuals.getRowDimension() - sum / 2d);
+        return (log(sqrt(inverseCovariance.det()) / (2d * PI)) * residuals.getRowDimension() - sum / 2d);
     }
 }
