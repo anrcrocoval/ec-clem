@@ -25,6 +25,11 @@
 <!--        </dependency>-->
         <dependency>
             <groupId>fr.univ-nantes</groupId>
+            <artifactId>ipopt</artifactId>
+            <version>0.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.univ-nantes</groupId>
             <artifactId>icy</artifactId>
             <version>0.0.0</version>
         </dependency>

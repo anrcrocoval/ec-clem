@@ -51,24 +51,16 @@ public class ConjugateGradientRigid2DGeneralMaxLikelihoodComputer extends Rigid2
         return new MultiStartMultivariateOptimizer(
             new NonLinearConjugateGradientOptimizer(
                 NonLinearConjugateGradientOptimizer.Formula.FLETCHER_REEVES,
-                new SimpleValueChecker(1e-20, 1e-20, 500)
+                new SimpleValueChecker(1e-20, 1e-20, 1000)
             ),
             10,
-            () -> optimProblem.getStartingPoint()
+            optimProblem::getStartingPoint
         ).optimize(
             GoalType.MINIMIZE,
             new ObjectiveFunction(
-                point -> optimProblem.getObjectiveValue(point)
+                optimProblem::getObjectiveValue
             ),
-            new ObjectiveFunctionGradient(point -> {
-                double[] objectiveGradient = null;
-                try {
-                    objectiveGradient = optimProblem.getObjectiveGradient(point);
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return objectiveGradient;
-            }),
+            new ObjectiveFunctionGradient(optimProblem::getObjectiveGradient),
             new InitialGuess(optimProblem.getStartingPoint()),
             MaxEval.unlimited()
         );

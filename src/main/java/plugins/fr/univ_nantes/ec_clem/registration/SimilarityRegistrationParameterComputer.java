@@ -18,28 +18,28 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DCovarianceMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import static java.lang.Math.max;
 
 public class SimilarityRegistrationParameterComputer extends AffineRegistrationParameterComputer {
 
+
+
     @Inject
-    public SimilarityRegistrationParameterComputer(MatrixUtil matrixUtil) {
-        super(matrixUtil);
+    public SimilarityRegistrationParameterComputer(MatrixUtil matrixUtil, Rigid2DCovarianceMaxLikelihoodComputer rigid2DCovarianceMaxLikelihoodComputer) {
+        super(matrixUtil, rigid2DCovarianceMaxLikelihoodComputer);
+
     }
 
     public RegistrationParameter compute(FiducialSet fiducialSet) {
-        return compute(fiducialSet.getSourceDataset(), fiducialSet.getTargetDataset());
-    }
-
-    private RegistrationParameter compute(Dataset source, Dataset target) {
-        if (source.getN() < 2) {
-            int dimension = max(source.getDimension(), target.getDimension());
+        if (fiducialSet.getN() < 2) {
+            int dimension = max(fiducialSet.getSourceDataset().getDimension(), fiducialSet.getTargetDataset().getDimension());
             return new RegistrationParameter(
                 new Similarity(
                     Matrix.identity(
@@ -54,8 +54,8 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
             );
         }
 
-        Dataset clonedSourceDataset = source.clone();
-        Dataset clonedTargetDataset = target.clone();
+        Dataset clonedSourceDataset = fiducialSet.getSourceDataset().clone();
+        Dataset clonedTargetDataset = fiducialSet.getTargetDataset().clone();
         Point sourceBarycentre = clonedSourceDataset.getBarycentre();
         Point targetBarycentre = clonedTargetDataset.getBarycentre();
 
@@ -69,7 +69,10 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
         Matrix residuals = clonedTargetDataset.getMatrix().minus(
             similarity.apply(clonedSourceDataset).getMatrix()
         );
-        Matrix covariance = residuals.transpose().times(residuals).times((double) 1 / (source.getN()));
+
+
+//        Matrix covariance = residuals.transpose().times(residuals).times((double) 1 / (source.getN()));
+        Matrix covariance = rigid2DCovarianceMaxLikelihoodComputer.compute(fiducialSet, similarity);
         return new RegistrationParameter(
             similarity,
             covariance,
@@ -102,4 +105,9 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
     private Matrix getT(Matrix sourceBarycentre, Matrix targetBarycentre, Matrix R, Matrix scale) {
         return targetBarycentre.minus(R.times(scale).times(sourceBarycentre));
     }
+
+//    @Inject
+//    public void setRigid2DCovarianceMaxLikelihoodComputer(Rigid2DCovarianceMaxLikelihoodComputer rigid2DCovarianceMaxLikelihoodComputer) {
+//        this.rigid2DCovarianceMaxLikelihoodComputer = rigid2DCovarianceMaxLikelihoodComputer;
+//    }
 }

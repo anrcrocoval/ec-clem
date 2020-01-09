@@ -103,7 +103,7 @@ public class ConstrainedOptimProblem extends BaseOptimProblem {
 
     private double[] getConstraint0Hessian(double[] point) {
         return new double[] {
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 2d, 0, 0, 0, 0, -2d, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, -2d
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 2d, 0, 0, 0, 0, -2d, 0, 0, 0, 0, 0, 2d, 0, 0, 0, 0, 0, 0, -2d
         };
     }
 
