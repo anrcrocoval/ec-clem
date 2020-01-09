@@ -105,6 +105,23 @@ public class TestFiducialSetFactory {
         return new FiducialSet(source, target);
     }
 
+    public FiducialSet getIdentityFiducialSet3D() {
+        List<Point> sourcePoints = new ArrayList<>();
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 1 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
+        sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
+        Dataset source = new Dataset(sourcePoints, PointType.FIDUCIAL);
+
+        List<Point> targetPoints = new ArrayList<>();
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 1 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ -1 }, { 2 }, { 2 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 0 }, { -2 }, { 3 }})));
+        targetPoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 3 }})));
+        Dataset target = new Dataset(targetPoints, PointType.FIDUCIAL);
+        return new FiducialSet(source, target);
+    }
+
     public FiducialSet getSimpleRotationFiducialSet3D() {
         List<Point> sourcePoints = new ArrayList<>();
         sourcePoints.add(new Point(new Matrix(new double[][] {{ 1 }, { 2 }, { 1 }})));

@@ -15,6 +15,7 @@ package plugins.fr.univ_nantes.ec_clem.registration;
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DCovarianceMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
 import javax.inject.Inject;
 
@@ -24,10 +25,12 @@ import static ucar.nc2.util.net.HTTPSession.log;
 public class AffineRegistrationParameterComputer implements RegistrationParameterComputer {
 
     private MatrixUtil matrixUtil;
+    protected Rigid2DCovarianceMaxLikelihoodComputer rigid2DCovarianceMaxLikelihoodComputer;
 
     @Inject
-    public AffineRegistrationParameterComputer(MatrixUtil matrixUtil) {
+    public AffineRegistrationParameterComputer(MatrixUtil matrixUtil, Rigid2DCovarianceMaxLikelihoodComputer rigid2DCovarianceMaxLikelihoodComputer) {
         this.matrixUtil = matrixUtil;
+        this.rigid2DCovarianceMaxLikelihoodComputer = rigid2DCovarianceMaxLikelihoodComputer;
     }
 
     @Override

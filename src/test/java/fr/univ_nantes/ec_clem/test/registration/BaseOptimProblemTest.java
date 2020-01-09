@@ -39,7 +39,7 @@ public class BaseOptimProblemTest {
     }
 
     @Test
-    void testObjectiveGradient() throws ExecutionException, InterruptedException {
+    void testObjectiveGradient() {
         BaseOptimProblem baseOptimProblem = new BaseOptimProblem(testFiducialSetFactory.getIdentityFiducialSet2DWithNoise100_0_0_100());
         double[] point = baseOptimProblem.getStartingPoint();
 

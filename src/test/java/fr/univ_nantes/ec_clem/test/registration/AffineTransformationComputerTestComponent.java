@@ -13,8 +13,11 @@
 package fr.univ_nantes.ec_clem.test.registration;
 
 import dagger.Component;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DCovarianceMaxLikelihoodComputerModule;
 
-@Component
+@Component(modules = {
+    Rigid2DCovarianceMaxLikelihoodComputerModule.class
+})
 public interface AffineTransformationComputerTestComponent {
     void inject(AffineTransformationComputerTest affineTransformationComputerTest);
 }
