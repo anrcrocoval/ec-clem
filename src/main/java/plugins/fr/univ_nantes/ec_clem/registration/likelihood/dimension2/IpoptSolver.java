@@ -16,7 +16,7 @@ public class IpoptSolver extends Ipopt {
             optimProblem.getNonZeroElementsInParametersHessian(),
             Ipopt.C_STYLE
         );
-        this.setIntegerOption("max_iter", 1000);
+        this.setIntegerOption("max_iter", 5000);
         this.setStringOption("ma57_automatic_scaling", "yes");
         this.setNumericOption("tol", 1e-16);
         this.setNumericOption("acceptable_tol", 1e-15);

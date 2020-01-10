@@ -55,7 +55,7 @@ public abstract class Rigid2DMaxLikelihoodComputer implements RegistrationParame
                 { lambda11, lambda12 },
                 { lambda12, lambda22 }
             })),
-            optimizationResult.getObjectiveValue()
+            optimizationResult.getObjectiveValue() * -1
         );
     }
 

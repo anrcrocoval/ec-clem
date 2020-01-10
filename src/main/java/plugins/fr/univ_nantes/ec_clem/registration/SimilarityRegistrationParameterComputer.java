@@ -71,12 +71,22 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
         );
 
 
-//        Matrix covariance = residuals.transpose().times(residuals).times((double) 1 / (source.getN()));
-        Matrix covariance = rigid2DCovarianceMaxLikelihoodComputer.compute(fiducialSet, similarity);
+//        Matrix covariance = residuals.transpose().times(residuals).times((double) 1 / (fiducialSet.getN()));
+        RegistrationParameter registrationParameter = rigid2DCovarianceMaxLikelihoodComputer.compute(fiducialSet, similarity);
+//        similarity.getHomogeneousMatrix().print(1,5);
+//        registrationParameter.getNoiseCovariance().print(1,5);
+//        System.out.println(registrationParameter.getLogLikelihood());
+//
+//        System.out.println("Isotropic rigid (schonnemann)");
+//        return new RegistrationParameter(
+//            similarity,
+//            covariance,
+//            getLogLikelihood(residuals, covariance)
+//        );
         return new RegistrationParameter(
             similarity,
-            covariance,
-            getLogLikelihood(residuals, covariance)
+            registrationParameter.getNoiseCovariance(),
+            registrationParameter.getLogLikelihood()
         );
     }
 

@@ -15,6 +15,7 @@ package plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2;
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
+import plugins.fr.univ_nantes.ec_clem.registration.RegistrationParameter;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
 
 public abstract class Rigid2DCovarianceMaxLikelihoodComputer  {
@@ -25,14 +26,16 @@ public abstract class Rigid2DCovarianceMaxLikelihoodComputer  {
         this.matrixUtil = matrixUtil;
     }
 
-    public Matrix compute(FiducialSet fiducialSet, Transformation transformation) {
+    public RegistrationParameter compute(FiducialSet fiducialSet, Transformation transformation) {
         OptimizationResult optimizationResult = optimize(fiducialSet, transformation);
         double[] optimize = optimizationResult.getParameters();
 
         Matrix v = new Matrix(optimize,  fiducialSet.getTargetDataset().getDimension());
         Matrix lambdaInv = v.transpose().times(v);
-        return matrixUtil.pseudoInverse(
-            lambdaInv
+        return new RegistrationParameter(
+            null,
+            matrixUtil.pseudoInverse(lambdaInv),
+            optimizationResult.getObjectiveValue() * -1
         );
     }
 
