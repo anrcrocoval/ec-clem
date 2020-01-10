@@ -10,19 +10,16 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.transformation;
+package fr.univ_nantes.ec_clem.test.registration;
 
 import dagger.Component;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DCovarianceMaxLikelihoodComputerModule;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputerModule;
 
-import javax.inject.Singleton;
-
-@Singleton
 @Component(modules = {
     Rigid2DMaxLikelihoodComputerModule.class,
     Rigid2DCovarianceMaxLikelihoodComputerModule.class
 })
-public interface SplineTransformationComponent {
-    SplineTransformation getSplineTransformation();
+public interface SimplexRigid2DGeneralMaxLikelihoodComputerTestComponent {
+    void inject(SimplexRigid2DGeneralMaxLikelihoodComputerTest component);
 }

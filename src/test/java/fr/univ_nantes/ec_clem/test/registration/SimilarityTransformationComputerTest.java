@@ -12,16 +12,18 @@
  **/
 package fr.univ_nantes.ec_clem.test.registration;
 
+import org.testng.annotations.Test;
+import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
+import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
+import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
 import plugins.fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
-import org.testng.annotations.Test;
 import plugins.fr.univ_nantes.ec_clem.registration.SimilarityRegistrationParameterComputer;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
+
 import javax.inject.Inject;
+
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static org.testng.Assert.assertEquals;
@@ -37,6 +39,11 @@ class SimilarityTransformationComputerTest {
     }
 
     @Inject
+    public void setSubjectUnderTest(SimilarityRegistrationParameterComputer subjectUnderTest) {
+        this.subjectUnderTest = subjectUnderTest;
+    }
+
+    @Inject
     public void setTestFiducialSetFactory(TestFiducialSetFactory testFiducialSetFactory) {
         this.testFiducialSetFactory = testFiducialSetFactory;
     }
@@ -44,11 +51,6 @@ class SimilarityTransformationComputerTest {
     @Inject
     public void setTestTransformationFactory(TestTransformationFactory testTransformationFactory) {
         this.testTransformationFactory = testTransformationFactory;
-    }
-
-    @Inject
-    public void setSubjectUnderTest(SimilarityRegistrationParameterComputer subjectUnderTest) {
-        this.subjectUnderTest = subjectUnderTest;
     }
 
     @Test

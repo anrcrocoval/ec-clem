@@ -33,11 +33,6 @@ class AffineTransformationComputerTest {
         DaggerAffineTransformationComputerTestComponent.create().inject(this);
     }
 
-    @Inject
-    public void setSubjectUnderTest(AffineRegistrationParameterComputer subjectUnderTest) {
-        this.subjectUnderTest = subjectUnderTest;
-    }
-
     @Test
     void simpleRotation() {
         List<Point> sourcePoints = new ArrayList<>();
@@ -147,5 +142,10 @@ class AffineTransformationComputerTest {
         assertEquals(0, result.getHomogeneousMatrix().get(1, 3), 0.0000001);
         assertEquals(0, result.getHomogeneousMatrix().get(2, 3), 0.000001);
         assertEquals(1, result.getHomogeneousMatrix().get(3, 3), 0.000001);
+    }
+
+    @Inject
+    public void setSubjectUnderTest(AffineRegistrationParameterComputer subjectUnderTest) {
+        this.subjectUnderTest = subjectUnderTest;
     }
 }

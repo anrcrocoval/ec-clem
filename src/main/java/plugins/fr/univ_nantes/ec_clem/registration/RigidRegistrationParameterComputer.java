@@ -13,13 +13,17 @@
 package plugins.fr.univ_nantes.ec_clem.registration;
 
 import Jama.Matrix;
-
+import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DCovarianceMaxLikelihoodComputer;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public class RigidRegistrationParameterComputer extends SimilarityRegistrationParameterComputer {
 
     @Inject
-    public RigidRegistrationParameterComputer() {}
+    public RigidRegistrationParameterComputer(MatrixUtil matrixUtil, Rigid2DCovarianceMaxLikelihoodComputer rigid2DCovarianceMaxLikelihoodComputer) {
+        super(matrixUtil, rigid2DCovarianceMaxLikelihoodComputer);
+    }
 
     @Override
     protected Matrix getS(Matrix sourceDataset, Matrix targetDataset, Matrix R) {

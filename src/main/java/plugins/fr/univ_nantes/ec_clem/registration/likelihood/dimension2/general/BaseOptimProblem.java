@@ -17,7 +17,7 @@ import java.util.Random;
 import java.util.concurrent.*;
 import static java.lang.Math.*;
 
-public class BaseOptimProblem {
+public class BaseOptimProblem implements OptimProblem {
 
     private FiducialSet fiducialSet;
 
@@ -76,6 +76,7 @@ public class BaseOptimProblem {
         double lambda12 = v11 * v12 + v21 * v22;
         double lambda22 = pow(v12, 2) + pow(v22, 2);
         double detV = v11 * v22 - v21 * v12;
+//        double detLambda = lambda11 * lambda22 - lambda12 * lambda12;
         double sum = 0d;
         double[][] target = fiducialSet.getTargetDataset().getMatrix().getArray();
         double[][] source = fiducialSet.getSourceDataset().getMatrix().getArray();
@@ -279,7 +280,7 @@ public class BaseOptimProblem {
             + z[1] * sin(theta);
     }
 
-    public double[] getObjectiveGradient(double[] point) throws ExecutionException, InterruptedException {
+    public double[] getObjectiveGradient(double[] point) {
         Future<Double> submit0 = completionService.submit(() -> getderivative0Value(point));
         Future<Double> submit1 = completionService.submit(() -> getderivative1Value(point));
         Future<Double> submit2 = completionService.submit(() -> getderivative2Value(point));
@@ -288,15 +289,23 @@ public class BaseOptimProblem {
         Future<Double> submit5 = completionService.submit(() -> getderivative5Value(point));
         Future<Double> submit6 = completionService.submit(() -> getderivative6Value(point));
 
-        return new double[] {
-            submit0.get(),
-            submit1.get(),
-            submit2.get(),
-            submit3.get(),
-            submit4.get(),
-            submit5.get(),
-            submit6.get()
-        };
+        double[] result = null;
+        try {
+            result = new double[] {
+                submit0.get(),
+                submit1.get(),
+                submit2.get(),
+                submit3.get(),
+                submit4.get(),
+                submit5.get(),
+                submit6.get()
+            };
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     // tx²
@@ -818,7 +827,7 @@ public class BaseOptimProblem {
         return (fiducialSet.getN()*pow(v11, 2) * -1d / pow(detV, 2) - sum / 2d) * -1d;
     }
 
-    public double[] getObjectiveHessian(double[] point) throws ExecutionException, InterruptedException {
+    public double[] getObjectiveHessian(double[] point) {
         Future<Double> submit0 = completionService.submit(() -> getSecondDerivative0Value(point));
         Future<Double> submit1 = completionService.submit(() -> getSecondDerivative1Value(point));
         Future<Double> submit2 = completionService.submit(() -> getSecondDerivative2Value(point));
@@ -847,37 +856,44 @@ public class BaseOptimProblem {
         Future<Double> submit25 = completionService.submit(() -> getSecondDerivative25Value(point));
         Future<Double> submit26 = completionService.submit(() -> getSecondDerivative26Value(point));
         Future<Double> submit27 = completionService.submit(() -> getSecondDerivative27Value(point));
-
-        return new double[] {
-            submit0.get(),
-            submit1.get(),
-            submit2.get(),
-            submit3.get(),
-            submit4.get(),
-            submit5.get(),
-            submit6.get(),
-            submit7.get(),
-            submit8.get(),
-            submit9.get(),
-            submit10.get(),
-            submit11.get(),
-            submit12.get(),
-            submit13.get(),
-            submit14.get(),
-            submit15.get(),
-            submit16.get(),
-            submit17.get(),
-            submit18.get(),
-            submit19.get(),
-            submit20.get(),
-            submit21.get(),
-            submit22.get(),
-            submit23.get(),
-            submit24.get(),
-            submit25.get(),
-            submit26.get(),
-            submit27.get(),
-        };
+        double[] result = null;
+        try {
+            result = new double[] {
+                submit0.get(),
+                submit1.get(),
+                submit2.get(),
+                submit3.get(),
+                submit4.get(),
+                submit5.get(),
+                submit6.get(),
+                submit7.get(),
+                submit8.get(),
+                submit9.get(),
+                submit10.get(),
+                submit11.get(),
+                submit12.get(),
+                submit13.get(),
+                submit14.get(),
+                submit15.get(),
+                submit16.get(),
+                submit17.get(),
+                submit18.get(),
+                submit19.get(),
+                submit20.get(),
+                submit21.get(),
+                submit22.get(),
+                submit23.get(),
+                submit24.get(),
+                submit25.get(),
+                submit26.get(),
+                submit27.get(),
+            };
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public double[] getConstraints(double[] point) {

@@ -18,10 +18,15 @@
     </properties>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>fr.univ-nantes</groupId>-->
+<!--            <artifactId>solver</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>fr.univ-nantes</groupId>
-            <artifactId>solver</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>ipopt</artifactId>
+            <version>0.0.0</version>
         </dependency>
         <dependency>
             <groupId>fr.univ-nantes</groupId>

@@ -23,6 +23,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunctionGradient
 import org.apache.commons.math3.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizer;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
+import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.OptimizationResult;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.BaseOptimProblem;
 import javax.inject.Inject;
@@ -36,39 +37,30 @@ public class ConjugateGradientRigid2DGeneralMaxLikelihoodComputer extends Rigid2
     }
 
     @Override
-    protected double[] optimize(FiducialSet fiducialSet) {
+    protected OptimizationResult optimize(FiducialSet fiducialSet) {
         BaseOptimProblem optimProblem = new BaseOptimProblem(fiducialSet);
         PointValuePair optimize = optimize(optimProblem);
-//        while (optimize.getValue().isNaN()) {
-//            optimize = optimize(optimProblem);
-//        }
         optimProblem.close();
-        return optimize.getPoint();
+        return new OptimizationResult(
+            optimize.getPoint(),
+            optimize.getValue()
+        );
     }
 
     private PointValuePair optimize(BaseOptimProblem optimProblem) {
         return new MultiStartMultivariateOptimizer(
             new NonLinearConjugateGradientOptimizer(
                 NonLinearConjugateGradientOptimizer.Formula.FLETCHER_REEVES,
-//                new SimpleValueChecker(1e-16, 1e-16, 500)
-                new SimpleValueChecker(1e-16, 1e-16, 500)
+                new SimpleValueChecker(1e-20, 1e-20, 1000)
             ),
             10,
-            () -> optimProblem.getStartingPoint()
+            optimProblem::getStartingPoint
         ).optimize(
             GoalType.MINIMIZE,
             new ObjectiveFunction(
-                point -> optimProblem.getObjectiveValue(point)
+                optimProblem::getObjectiveValue
             ),
-            new ObjectiveFunctionGradient(point -> {
-                double[] objectiveGradient = null;
-                try {
-                    objectiveGradient = optimProblem.getObjectiveGradient(point);
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return objectiveGradient;
-            }),
+            new ObjectiveFunctionGradient(optimProblem::getObjectiveGradient),
             new InitialGuess(optimProblem.getStartingPoint()),
             MaxEval.unlimited()
         );

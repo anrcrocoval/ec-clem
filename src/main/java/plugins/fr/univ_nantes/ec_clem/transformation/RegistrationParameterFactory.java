@@ -17,7 +17,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import plugins.fr.univ_nantes.ec_clem.registration.*;
 import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputer;
-import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.general.interior_point.InteriorPointRigid2DGeneralMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.registration.AffineRegistrationParameterComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.SimilarityRegistrationParameterComputer;
@@ -47,7 +46,7 @@ public class RegistrationParameterFactory {
     @Inject
     public RegistrationParameterFactory(
         RigidRegistrationParameterComputer rigidTransformationComputer,
-        @Named("ipopt_general") Rigid2DMaxLikelihoodComputer anisotripicRigidTransformationComputer,
+        @Named("simplex") Rigid2DMaxLikelihoodComputer anisotripicRigidTransformationComputer,
         SimilarityRegistrationParameterComputer similarityTransformationComputer,
         NonLinearRegistrationParameterComputer nonLinearTransformationComputer,
         AffineRegistrationParameterComputer affineTransformationComputer
