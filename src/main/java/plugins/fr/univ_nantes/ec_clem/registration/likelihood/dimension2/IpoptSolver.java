@@ -17,9 +17,8 @@ public class IpoptSolver extends Ipopt {
             Ipopt.C_STYLE
         );
         this.setIntegerOption("max_iter", 5000);
-        this.setStringOption("ma57_automatic_scaling", "yes");
-        this.setNumericOption("tol", 1e-16);
-        this.setNumericOption("acceptable_tol", 1e-15);
+        this.setNumericOption("tol", 1e-25);
+        this.setNumericOption("acceptable_tol", 1e-25);
         this.setNumericOption("print_frequency_time", 0);
         this.setIntegerOption("print_frequency_iter", 1);
         this.setIntegerOption("print_level", 0);

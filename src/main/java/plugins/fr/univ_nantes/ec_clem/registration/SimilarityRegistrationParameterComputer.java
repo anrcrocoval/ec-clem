@@ -18,23 +18,16 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
-import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DCovarianceMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
-
 import javax.inject.Inject;
-import javax.inject.Named;
-
 import static java.lang.Math.max;
 
 public class SimilarityRegistrationParameterComputer extends AffineRegistrationParameterComputer {
 
-
-
     @Inject
-    public SimilarityRegistrationParameterComputer(MatrixUtil matrixUtil, Rigid2DCovarianceMaxLikelihoodComputer rigid2DCovarianceMaxLikelihoodComputer) {
-        super(matrixUtil, rigid2DCovarianceMaxLikelihoodComputer);
-
+    public SimilarityRegistrationParameterComputer(MatrixUtil matrixUtil) {
+        super(matrixUtil);
     }
 
     public RegistrationParameter compute(FiducialSet fiducialSet) {
@@ -70,23 +63,15 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
             similarity.apply(clonedSourceDataset).getMatrix()
         );
 
+        Matrix covariance = residuals.transpose().times(residuals).times((double) 1 / (fiducialSet.getN()));
+        similarity.getHomogeneousMatrix().print(1,5);
+        Matrix lambda = Matrix.identity(fiducialSet.getSourceDataset().getDimension(), fiducialSet.getTargetDataset().getDimension())
+            .times(covariance.trace() / fiducialSet.getTargetDataset().getDimension());
 
-//        Matrix covariance = residuals.transpose().times(residuals).times((double) 1 / (fiducialSet.getN()));
-        RegistrationParameter registrationParameter = rigid2DCovarianceMaxLikelihoodComputer.compute(fiducialSet, similarity);
-//        similarity.getHomogeneousMatrix().print(1,5);
-//        registrationParameter.getNoiseCovariance().print(1,5);
-//        System.out.println(registrationParameter.getLogLikelihood());
-//
-//        System.out.println("Isotropic rigid (schonnemann)");
-//        return new RegistrationParameter(
-//            similarity,
-//            covariance,
-//            getLogLikelihood(residuals, covariance)
-//        );
         return new RegistrationParameter(
             similarity,
-            registrationParameter.getNoiseCovariance(),
-            registrationParameter.getLogLikelihood()
+            lambda,
+            getLogLikelihood(residuals, lambda)
         );
     }
 

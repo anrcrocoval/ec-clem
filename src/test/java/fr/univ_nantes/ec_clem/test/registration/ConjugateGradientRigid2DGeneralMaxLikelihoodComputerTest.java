@@ -36,7 +36,7 @@ class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
         DaggerConjugateGradientRigid2DGeneralMaxLikelihoodComputerTestComponent.create().inject(this);
     }
 
-    @Test
+    @Test(enabled = false)
     void identity() {
         FiducialSet identityFiducialSet = testFiducialSetFactory.getIdentityFiducialSet2DWithNoise100_0_0_100();
         Similarity result = (Similarity) subjectUnderTest.compute(identityFiducialSet).getTransformation();
@@ -62,7 +62,7 @@ class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
         assertEquals(0, result.getT().get(1, 0), 1);
     }
 
-    @Test
+    @Test(enabled = false)
     void simpleRotation() {
         FiducialSet simpleRotationFiducialSet = testFiducialSetFactory.getSimpleRotationFiducialSet2D();
         Similarity result = (Similarity) subjectUnderTest.compute(simpleRotationFiducialSet).getTransformation();
@@ -88,7 +88,7 @@ class ConjugateGradientRigid2DGeneralMaxLikelihoodComputerTest {
         assertEquals(0, result.getT().get(1, 0), 0.00001);
     }
 
-    @Test
+    @Test(enabled = false)
     void simpleTranslation() {
         FiducialSet simpleTranslationFiducialSet = testFiducialSetFactory.getSimpleTranslationFiducialSet2D();
         Similarity result = (Similarity) subjectUnderTest.compute(simpleTranslationFiducialSet).getTransformation();
