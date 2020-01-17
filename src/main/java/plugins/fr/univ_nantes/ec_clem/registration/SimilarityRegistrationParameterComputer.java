@@ -64,7 +64,7 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
         );
 
         Matrix covariance = residuals.transpose().times(residuals).times((double) 1 / (fiducialSet.getN()));
-        similarity.getHomogeneousMatrix().print(1,5);
+//        similarity.getHomogeneousMatrix().print(1,5);
         Matrix lambda = Matrix.identity(fiducialSet.getSourceDataset().getDimension(), fiducialSet.getTargetDataset().getDimension())
             .times(covariance.trace() / fiducialSet.getTargetDataset().getDimension());
 
