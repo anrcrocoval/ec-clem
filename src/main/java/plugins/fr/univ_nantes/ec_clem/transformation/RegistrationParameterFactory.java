@@ -46,7 +46,7 @@ public class RegistrationParameterFactory {
     @Inject
     public RegistrationParameterFactory(
         RigidRegistrationParameterComputer rigidTransformationComputer,
-        @Named("simplex") Rigid2DMaxLikelihoodComputer anisotripicRigidTransformationComputer,
+        @Named("ipopt_general") Rigid2DMaxLikelihoodComputer anisotripicRigidTransformationComputer,
         SimilarityRegistrationParameterComputer similarityTransformationComputer,
         NonLinearRegistrationParameterComputer nonLinearTransformationComputer,
         AffineRegistrationParameterComputer affineTransformationComputer

@@ -1,23 +1,21 @@
 package plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid;
 
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
+import javax.inject.Inject;
 
 public class RotationParameters2D {
 
-    private double theta;
+    @Inject
+    public RotationParameters2D() {}
 
-    public RotationParameters2D(Similarity similarity) {
+    public double getTheta(Similarity similarity) {
         if(
             (similarity.getR().getRowDimension() !=
-            similarity.getR().getColumnDimension()) ||
-            similarity.getR().getColumnDimension() != 2
+                similarity.getR().getColumnDimension()) ||
+                similarity.getR().getColumnDimension() != 2
         ) {
             throw new RuntimeException("Use this class with 2D rotations");
         }
-        theta = Math.atan2(similarity.getR().get(1, 0), similarity.getR().get(0, 0));
-    }
-
-    public double getTheta() {
-        return theta;
+        return Math.atan2(similarity.getR().get(1, 0), similarity.getR().get(0, 0));
     }
 }
