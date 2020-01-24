@@ -47,7 +47,7 @@ public class AffineRegistrationParameterComputer implements RegistrationParamete
             .times((double) 1 / (
                 fiducialSet.getN()
                     - fiducialSet.getSourceDataset().getDimension()
-                    - fiducialSet.getSourceDataset().getDimension()
+                    - fiducialSet.getTargetDataset().getDimension()
             ));
 
         return new RegistrationParameter(

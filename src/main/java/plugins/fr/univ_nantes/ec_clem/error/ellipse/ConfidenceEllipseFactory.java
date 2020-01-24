@@ -1,6 +1,8 @@
 package plugins.fr.univ_nantes.ec_clem.error.ellipse;
 
 import Jama.EigenvalueDecomposition;
+import Jama.Matrix;
+import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactory;
@@ -37,6 +39,17 @@ public class ConfidenceEllipseFactory {
             eigenValueDecomposition.getRealEigenvalues(),
             eigenValueDecomposition.getV(),
             zTarget
+        );
+    }
+
+    public Ellipse getFrom(Point zPredictedTarget, FiducialSet fiducialSet, Matrix covariance, double alpha) {
+        EigenvalueDecomposition eigenValueDecomposition = new EigenvalueDecomposition(
+            covariance.times(hotellingEstimator.getFrom(fiducialSet, alpha))
+        );
+        return new Ellipse(
+            eigenValueDecomposition.getRealEigenvalues(),
+            eigenValueDecomposition.getV(),
+            zPredictedTarget
         );
     }
 }

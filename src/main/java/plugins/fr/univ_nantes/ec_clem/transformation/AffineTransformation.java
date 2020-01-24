@@ -25,6 +25,11 @@ public class AffineTransformation implements Transformation {
         this.T = T;
     }
 
+    public AffineTransformation(Matrix M) {
+        this.A = M.getMatrix(0, M.getRowDimension() - 2, 0, M.getColumnDimension() - 2);
+        this.T = M.getMatrix(0, M.getRowDimension() - 2, M.getColumnDimension() - 1, M.getColumnDimension() - 1);
+    }
+
     public Point apply(Point point) {
         return new Point(A.times(point.getMatrix()).plus(T));
     }

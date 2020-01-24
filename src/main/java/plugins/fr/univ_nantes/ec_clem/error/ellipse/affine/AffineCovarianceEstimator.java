@@ -24,13 +24,15 @@ public class AffineCovarianceEstimator implements CovarianceEstimator {
     @Override
     public Matrix getCovariance(TransformationSchema transformationSchema, Point zSource) {
         double coeff = (
-            zSource.getMatrix().transpose().times(
-                matrixUtil.pseudoInverse(
-                    transformationSchema.getFiducialSet().getSourceDataset().getMatrix().transpose().times(
-                        transformationSchema.getFiducialSet().getSourceDataset().getMatrix()
+            (
+                zSource.getMatrix().transpose().times(
+                    matrixUtil.pseudoInverse(
+                        transformationSchema.getFiducialSet().getSourceDataset().getMatrix().transpose().times(
+                            transformationSchema.getFiducialSet().getSourceDataset().getMatrix()
+                        )
                     )
-                )
-            ).times(zSource.getMatrix()).get(0, 0) + 1
+                ).times(zSource.getMatrix())
+            ).get(0, 0) + 1
         );
 
         RegistrationParameter from = transformationFactory.getFrom(transformationSchema);

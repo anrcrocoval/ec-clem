@@ -13,6 +13,7 @@
 package plugins.fr.univ_nantes.ec_clem.fiducialset;
 
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
+import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 
 public class FiducialSet implements Cloneable {
@@ -54,6 +55,12 @@ public class FiducialSet implements Cloneable {
         n--;
     }
 
+    public void add(int i, Point source, Point target) {
+        sourceDataset.addPoint(source, i);
+        targetDataset.addPoint(target, i);
+        n++;
+    }
+
     public Dataset getSourceDataset() {
         return sourceDataset;
     }
@@ -64,11 +71,5 @@ public class FiducialSet implements Cloneable {
 
     public int getN() {
         return n;
-    }
-
-    public FiducialSet sort(Integer[] indices) {
-        sourceDataset.sort(indices);
-        targetDataset.sort(indices);
-        return this;
     }
 }

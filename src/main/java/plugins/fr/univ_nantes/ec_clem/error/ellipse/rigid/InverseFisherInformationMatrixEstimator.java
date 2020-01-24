@@ -14,6 +14,7 @@ public abstract class InverseFisherInformationMatrixEstimator {
     }
 
     public Matrix getInverseFisherInformationMatrix(FiducialSet fiducialSet, RegistrationParameter registrationParameter) {
+        Matrix noiseCovarianceInv = matrixUtil.pseudoInverse(registrationParameter.getNoiseCovariance());
         Matrix H = new Matrix(getNParameters(), getNParameters(), 0);
         for(int i = 0; i < getNParameters(); i++) {
             for(int j = 0; j <= i; j++) {
@@ -21,13 +22,13 @@ public abstract class InverseFisherInformationMatrixEstimator {
                 for(int n = 0; n < fiducialSet.getN(); n++) {
                     Hij += (
                         (
-                            matrixUtil.pseudoInverse(registrationParameter.getNoiseCovariance())
+                            noiseCovarianceInv
                             .times(2)
                             .times(getGradientX(fiducialSet, registrationParameter, n, j))
                         ).transpose().times(getGradientX(fiducialSet, registrationParameter, n, i))
                     ).plus(
                         (
-                            matrixUtil.pseudoInverse(registrationParameter.getNoiseCovariance())
+                            noiseCovarianceInv
                             .times(2)
                             .times(getX(fiducialSet, registrationParameter, n))
                         ).transpose().times(getHessianX(fiducialSet, registrationParameter, n, i, j))

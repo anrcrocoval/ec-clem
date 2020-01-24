@@ -18,6 +18,8 @@ import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static java.lang.Integer.max;
 import static java.lang.Math.sqrt;
 
 public class Dataset implements Cloneable {
@@ -155,15 +157,21 @@ public class Dataset implements Cloneable {
         return this;
     }
 
-    public Dataset sort(Integer[] indices) {
-        if(indices.length != n) {
-            throw new RuntimeException(String.format("Incompatible indices: %d and %d", indices.length, n));
+    public Dataset addPoint(Point point, int i) {
+        Matrix M = new Matrix(n + 1, dimension);
+        if(i == 0) {
+            M.setMatrix(0, 0, 0, point.getDimension() - 1, point.getMatrix().transpose());
+            M.setMatrix(1, n, 0, dimension - 1, points);
+        } else if(i == n + 1) {
+            M.setMatrix(0, n - 1, 0, dimension - 1, points);
+            M.setMatrix(n, n, 0, point.getDimension() - 1, point.getMatrix().transpose());
+        } else {
+            M.setMatrix(0, i - 1, 0, dimension - 1, points.getMatrix(0, i - 1, 0, dimension - 1));
+            M.setMatrix(i, i, 0, point.getDimension() - 1, point.getMatrix().transpose());
+            M.setMatrix(i + 1, n, 0, dimension - 1, points.getMatrix(i, n - 1, 0, dimension - 1));
         }
-        Matrix clone = points.copy();
-        for(int i = 0; i < n; i++) {
-            clone.setMatrix(indices[i], indices[i], 0, dimension - 1, points.getMatrix(i, i, 0, dimension - 1));
-        }
-        points = clone;
+        points = M;
+        n = points.getRowDimension();
         return this;
     }
 
