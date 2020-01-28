@@ -15,12 +15,12 @@ public class HotellingEstimator {
             fiducialSet.getN() - fiducialSet.getSourceDataset().getDimension() - fiducialSet.getTargetDataset().getDimension()
         );
 
-        return  (double) (
+        return  ((double) (
             fiducialSet.getTargetDataset().getDimension()
                 * (fiducialSet.getN() - fiducialSet.getSourceDataset().getDimension() - 1)
-        ) / (
+        ) / (double) (
             fiducialSet.getN() - fiducialSet.getSourceDataset().getDimension()
                 - fiducialSet.getTargetDataset().getDimension()
-        ) * fisher.inverseCumulativeProbability(alpha);
+        )) * fisher.inverseCumulativeProbability(alpha);
     }
 }

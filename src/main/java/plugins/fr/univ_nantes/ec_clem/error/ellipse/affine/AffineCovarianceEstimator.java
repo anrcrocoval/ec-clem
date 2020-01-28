@@ -7,7 +7,6 @@ import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;
 import plugins.fr.univ_nantes.ec_clem.registration.RegistrationParameter;
 import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
-
 import javax.inject.Inject;
 
 public class AffineCovarianceEstimator implements CovarianceEstimator {
@@ -23,17 +22,20 @@ public class AffineCovarianceEstimator implements CovarianceEstimator {
 
     @Override
     public Matrix getCovariance(TransformationSchema transformationSchema, Point zSource) {
+        Matrix hSource = new Matrix(zSource.getDimension() + 1, 1, 1);
+        hSource.setMatrix(1, hSource.getRowDimension() - 1, 0, 0, zSource.getMatrix());
+        Matrix M = (hSource.transpose()).times(
+            matrixUtil.pseudoInverse(
+                (transformationSchema.getFiducialSet().getSourceDataset().getHomogeneousMatrixLeft().transpose())
+                    .times(transformationSchema.getFiducialSet().getSourceDataset().getHomogeneousMatrixLeft())
+            )
+        ).times(hSource);
+        assert M.getRowDimension() == 1;
+        assert M.getColumnDimension() == 1;
         double coeff = (
-            (
-                zSource.getMatrix().transpose().times(
-                    matrixUtil.pseudoInverse(
-                        transformationSchema.getFiducialSet().getSourceDataset().getMatrix().transpose().times(
-                            transformationSchema.getFiducialSet().getSourceDataset().getMatrix()
-                        )
-                    )
-                ).times(zSource.getMatrix())
-            ).get(0, 0) + 1
+            M.get(0, 0) + 1
         );
+        assert coeff != 0;
 
         RegistrationParameter from = transformationFactory.getFrom(transformationSchema);
 

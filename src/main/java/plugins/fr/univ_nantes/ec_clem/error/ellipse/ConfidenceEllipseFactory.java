@@ -29,22 +29,15 @@ public class ConfidenceEllipseFactory {
     public Ellipse getFrom(Point zSource, TransformationSchema transformationSchema, double alpha) {
         Transformation transformation = transformationFactory.getFrom(transformationSchema).getTransformation();
         Point zTarget = transformation.apply(zSource);
-        EigenvalueDecomposition eigenValueDecomposition = new EigenvalueDecomposition(
-            covarianceEstimatorFactory.getFrom(transformationSchema.getTransformationType()).getCovariance(transformationSchema, zSource)
-                .times(
-                    hotellingEstimator.getFrom(transformationSchema.getFiducialSet(), alpha)
-                )
-        );
-        return new Ellipse(
-            eigenValueDecomposition.getRealEigenvalues(),
-            eigenValueDecomposition.getV(),
-            zTarget
-        );
+        Matrix covariance = covarianceEstimatorFactory.getFrom(transformationSchema.getTransformationType()).getCovariance(transformationSchema, zSource);
+        return getFrom(zTarget, transformationSchema.getFiducialSet(), covariance, alpha);
     }
 
     public Ellipse getFrom(Point zPredictedTarget, FiducialSet fiducialSet, Matrix covariance, double alpha) {
         EigenvalueDecomposition eigenValueDecomposition = new EigenvalueDecomposition(
-            covariance.times(hotellingEstimator.getFrom(fiducialSet, alpha))
+            covariance
+                .times(hotellingEstimator.getFrom(fiducialSet, alpha))
+                .times((double) fiducialSet.getN() / (double) (fiducialSet.getN() - fiducialSet.getSourceDataset().getDimension() - 1))
         );
         return new Ellipse(
             eigenValueDecomposition.getRealEigenvalues(),

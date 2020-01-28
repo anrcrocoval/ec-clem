@@ -31,7 +31,7 @@ public class AffineTransformation implements Transformation {
     }
 
     public Point apply(Point point) {
-        return new Point(A.times(point.getMatrix()).plus(T));
+        return new Point((A.times(point.getMatrix())).plus(T));
     }
 
     // A then T

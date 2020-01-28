@@ -59,8 +59,7 @@ public class RegistrationParameterFactory {
     }
 
     public RegistrationParameter getFrom(TransformationSchema transformationSchema) {
-//        return cache.getUnchecked(transformationSchema);
-        return get(transformationSchema);
+        return cache.getUnchecked(transformationSchema);
     }
 
     private RegistrationParameter get(TransformationSchema transformationSchema) {

@@ -32,11 +32,11 @@ public class AffineRegistrationParameterComputer implements RegistrationParamete
     public RegistrationParameter compute(FiducialSet fiducialSet) {
         Matrix A = fiducialSet.getSourceDataset().getHomogeneousMatrixLeft();
         Matrix B = fiducialSet.getTargetDataset().getMatrix();
-        Matrix result = matrixUtil.pseudoInverse(A.transpose().times(A)).times(A.transpose()).times(B).transpose();
+        Matrix result = (matrixUtil.pseudoInverse(A.transpose().times(A)).times(A.transpose()).times(B));
 
         AffineTransformation affineTransformation = new AffineTransformation(
-            result.getMatrix(0, result.getRowDimension() - 1, 1, result.getColumnDimension() - 1),
-            result.getMatrix(0, result.getRowDimension() - 1, 0, 0)
+            result.getMatrix(1, result.getRowDimension() - 1, 0, result.getColumnDimension() - 1).transpose(),
+            result.getMatrix(0, 0, 0, result.getColumnDimension() - 1).transpose()
         );
 
         Matrix residuals = fiducialSet.getTargetDataset().getMatrix().minus(
@@ -44,11 +44,7 @@ public class AffineRegistrationParameterComputer implements RegistrationParamete
         );
 
         Matrix covariance = residuals.transpose().times(residuals)
-            .times((double) 1 / (
-                fiducialSet.getN()
-                    - fiducialSet.getSourceDataset().getDimension()
-                    - fiducialSet.getTargetDataset().getDimension()
-            ));
+            .times((double) 1 / (fiducialSet.getN()));
 
         return new RegistrationParameter(
             affineTransformation,
