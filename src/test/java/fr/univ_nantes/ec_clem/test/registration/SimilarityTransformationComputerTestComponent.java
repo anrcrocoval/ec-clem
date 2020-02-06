@@ -13,11 +13,8 @@
 package fr.univ_nantes.ec_clem.test.registration;
 
 import dagger.Component;
-import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DCovarianceMaxLikelihoodComputerModule;
 
-@Component(modules = {
-    Rigid2DCovarianceMaxLikelihoodComputerModule.class
-})
+@Component()
 public interface SimilarityTransformationComputerTestComponent {
     void inject(SimilarityTransformationComputerTest similarityTransformationComputerTest);
 }

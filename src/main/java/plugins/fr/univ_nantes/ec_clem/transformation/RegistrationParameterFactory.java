@@ -16,20 +16,16 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import plugins.fr.univ_nantes.ec_clem.registration.*;
-import plugins.fr.univ_nantes.ec_clem.registration.likelihood.dimension2.Rigid2DMaxLikelihoodComputer;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.registration.AffineRegistrationParameterComputer;
 import plugins.fr.univ_nantes.ec_clem.registration.SimilarityRegistrationParameterComputer;
-
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 @Singleton
 public class RegistrationParameterFactory {
 
     private RigidRegistrationParameterComputer rigidTransformationComputer;
-    private Rigid2DMaxLikelihoodComputer anisotripicRigidTransformationComputer;
     private SimilarityRegistrationParameterComputer similarityTransformationComputer;
     private NonLinearRegistrationParameterComputer nonLinearTransformationComputer;
     private AffineRegistrationParameterComputer affineTransformationComputer;
@@ -46,13 +42,11 @@ public class RegistrationParameterFactory {
     @Inject
     public RegistrationParameterFactory(
         RigidRegistrationParameterComputer rigidTransformationComputer,
-        @Named("ipopt_general") Rigid2DMaxLikelihoodComputer anisotripicRigidTransformationComputer,
         SimilarityRegistrationParameterComputer similarityTransformationComputer,
         NonLinearRegistrationParameterComputer nonLinearTransformationComputer,
         AffineRegistrationParameterComputer affineTransformationComputer
     ) {
         this.rigidTransformationComputer = rigidTransformationComputer;
-        this.anisotripicRigidTransformationComputer = anisotripicRigidTransformationComputer;
         this.similarityTransformationComputer = similarityTransformationComputer;
         this.nonLinearTransformationComputer = nonLinearTransformationComputer;
         this.affineTransformationComputer = affineTransformationComputer;
@@ -64,10 +58,7 @@ public class RegistrationParameterFactory {
 
     private RegistrationParameter get(TransformationSchema transformationSchema) {
         switch (transformationSchema.getTransformationType()) {
-            case RIGID: switch (transformationSchema.getNoiseModel()) {
-                case ISOTROPIC: return rigidTransformationComputer.compute(transformationSchema.getFiducialSet());
-                case ANISOTROPIC: return anisotripicRigidTransformationComputer.compute(transformationSchema.getFiducialSet());
-            }
+            case RIGID: return rigidTransformationComputer.compute(transformationSchema.getFiducialSet());
             case SIMILARITY: return similarityTransformationComputer.compute(transformationSchema.getFiducialSet());
             case AFFINE: return affineTransformationComputer.compute(transformationSchema.getFiducialSet());
             case SPLINE: return  nonLinearTransformationComputer.compute(transformationSchema.getFiducialSet());
