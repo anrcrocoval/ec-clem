@@ -22,6 +22,8 @@ import plugins.fr.univ_nantes.ec_clem.sequence.SequenceSize;
 import vtk.vtkPolyData;
 
 import javax.inject.Inject;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PointFactory {
 
@@ -42,6 +44,14 @@ public class PointFactory {
 
     public Point getFrom(vtkPolyData points) {
         return new Point(points.GetPoint(0));
+    }
+
+    public List<Point> getFrom(Dataset dataset) {
+        List<Point> list = new LinkedList<>();
+        for(int i = 0; i < dataset.getN(); i++) {
+            list.add(dataset.getPoint(i));
+        }
+        return list;
     }
 
     public Point toPixel(Point point, SequenceSize sequenceSize) {

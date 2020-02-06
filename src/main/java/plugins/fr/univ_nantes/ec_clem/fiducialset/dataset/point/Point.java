@@ -15,6 +15,7 @@ package plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point;
 import Jama.Matrix;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Point {
     private Matrix coordinates;
@@ -69,6 +70,17 @@ public class Point {
 
     public double getSumOfSquare() {
         return coordinates.transpose().times(coordinates).get(0, 0);
+    }
+
+    public Point getNearest(List<Point> list) {
+        Point nearest = list.get(0);
+        for(int i = 1; i < list.size(); i++) {
+            Point current = list.get(i);
+            if(this.getDistance(current) < this.getDistance(nearest)) {
+                nearest = current;
+            }
+        }
+        return nearest;
     }
 
     @Override
