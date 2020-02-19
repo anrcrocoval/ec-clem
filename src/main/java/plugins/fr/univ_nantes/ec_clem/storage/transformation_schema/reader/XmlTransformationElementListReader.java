@@ -10,13 +10,15 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.storage;
+package plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.reader;
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.XmlTransformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 
+import javax.inject.Inject;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,7 +26,12 @@ import java.util.List;
 
 public class XmlTransformationElementListReader {
 
-    private XmlTransformationReader xmlTransformationReader = new XmlTransformationReader();
+    private XmlTransformationReader xmlTransformationReader;
+
+    @Inject
+    public XmlTransformationElementListReader(XmlTransformationReader xmlTransformationReader) {
+        this.xmlTransformationReader = xmlTransformationReader;
+    }
 
     public Element getLastTransformationElement(Document document) {
         List<Element> list = read(document);
@@ -48,5 +55,10 @@ public class XmlTransformationElementListReader {
 
     private void sortTransformationElementsByDate(List<Element> list) {
         list.sort(Comparator.comparing(o -> ZonedDateTime.parse(o.getAttribute(XmlTransformation.transformationDateAttributeName))));
+    }
+
+    @Inject
+    public void setXmlTransformationReader(XmlTransformationReader xmlTransformationReader) {
+        this.xmlTransformationReader = xmlTransformationReader;
     }
 }

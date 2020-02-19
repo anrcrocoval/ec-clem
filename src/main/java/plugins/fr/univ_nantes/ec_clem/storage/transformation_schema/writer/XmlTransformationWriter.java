@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.storage;
+package plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.writer;
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -19,19 +19,17 @@ import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.sequence.DimensionSize;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceSize;
+import plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.XmlTransformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
-
+import javax.inject.Inject;
 import java.time.ZonedDateTime;
 
 public class XmlTransformationWriter {
 
-    private Document document;
+    @Inject
+    public XmlTransformationWriter() {}
 
-    public XmlTransformationWriter(Document document) {
-        this.document = document;
-    }
-
-    public void write(TransformationSchema transformationSchema) {
+    public void write(Document document, TransformationSchema transformationSchema) {
         Element transformationElement = XMLUtil.addElement(document.getDocumentElement(), XmlTransformation.transformationElementName);
         transformationElement.setAttribute(XmlTransformation.transformationTypeAttributeName, transformationSchema.getTransformationType().name());
         transformationElement.setAttribute(XmlTransformation.transformationNoiseModelAttributeName, transformationSchema.getNoiseModel().name());

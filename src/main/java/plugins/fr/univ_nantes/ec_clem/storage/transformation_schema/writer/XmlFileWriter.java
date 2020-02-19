@@ -10,32 +10,19 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.storage;
+package plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.writer;
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
-
+import javax.inject.Inject;
 import java.io.File;
 
 public class XmlFileWriter {
 
-    private File file;
-    private Document document;
+    @Inject
+    public XmlFileWriter() {}
 
-    public XmlFileWriter(Document document, File file) {
-        this.document = document;
-        this.file = file;
-    }
-
-    public void write() {
+    public void write(Document document, File file) {
         XMLUtil.saveDocument(document, file);
-    }
-
-    public void clear() {
-
-    }
-
-    public Document getDocument() {
-        return document;
     }
 }

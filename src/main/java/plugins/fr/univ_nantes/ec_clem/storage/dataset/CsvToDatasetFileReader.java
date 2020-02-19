@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.storage;
+package plugins.fr.univ_nantes.ec_clem.storage.dataset;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -6,7 +6,6 @@ import org.apache.commons.csv.CSVRecord;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.PointFactory;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
-
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;

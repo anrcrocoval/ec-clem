@@ -14,14 +14,13 @@ package plugins.fr.univ_nantes.ec_clem.workspace;
 
 import plugins.fr.univ_nantes.ec_clem.error.fitzpatrick.TREComputer;
 import plugins.fr.univ_nantes.ec_clem.error.fitzpatrick.TREComputerFactory;
-import plugins.fr.univ_nantes.ec_clem.storage.XmlFileWriter;
-import plugins.fr.univ_nantes.ec_clem.storage.XmlTransformationWriter;
+import plugins.fr.univ_nantes.ec_clem.storage.transformation.TransformationToCsvFileWriter;
+import plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
+import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchemaFactory;
 import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;
-import icy.util.XMLUtil;
-import org.w3c.dom.Document;
 import plugins.fr.univ_nantes.ec_clem.monitor.MonitorTargetPoint;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackableMasterTask;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceFactory;
@@ -36,11 +35,13 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
     private TransformationSchemaFactory transformationSchemaFactory;
     private TREComputerFactory treComputerFactory;
     private SequenceFactory sequenceFactory;
+    private RegistrationParameterFactory registrationParameterFactory;
 
     private List<Integer> listofNvalues = new ArrayList<>();
     private List<Double> listoftrevalues = new ArrayList<>();
-    private XmlFileWriter xmlFileWriter;
-    private XmlTransformationWriter xmlWriter;
+
+    private TransformationSchemaToXmlFileWriter transformationSchemaToXmlFileWriter;
+    private TransformationToCsvFileWriter transformationToCsvFileWriter;
 
     private Workspace workspace;
 
@@ -73,11 +74,9 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         super.add(sequenceUpdater);
         sequenceUpdater.run();
 
-        Document document = XMLUtil.createDocument(true);
-        xmlWriter = new XmlTransformationWriter(document);
-        xmlWriter.write(workspace.getTransformationSchema());
-        xmlFileWriter = new XmlFileWriter(document, workspace.getXMLFile());
-        xmlFileWriter.write();
+        transformationSchemaToXmlFileWriter.save(workspace.getTransformationSchema(), workspace.getTransformationSchemaOutputFile());
+        transformationToCsvFileWriter.save(registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(), workspace.getTransformationOutputFile());
+
         if (workspace.getMonitoringConfiguration().isMonitor()) {
             TREComputer treComputer = treComputerFactory.getFrom(workspace);
 
@@ -111,5 +110,20 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
     @Inject
     public void setSequenceFactory(SequenceFactory sequenceFactory) {
         this.sequenceFactory = sequenceFactory;
+    }
+
+    @Inject
+    public void setTransformationSchemaToXmlFileWriter(TransformationSchemaToXmlFileWriter transformationSchemaToXmlFileWriter) {
+        this.transformationSchemaToXmlFileWriter = transformationSchemaToXmlFileWriter;
+    }
+
+    @Inject
+    public void setTransformationToCsvFileWriter(TransformationToCsvFileWriter transformationToCsvFileWriter) {
+        this.transformationToCsvFileWriter = transformationToCsvFileWriter;
+    }
+
+    @Inject
+    public void setRegistrationParameterFactory(RegistrationParameterFactory registrationParameterFactory) {
+        this.registrationParameterFactory = registrationParameterFactory;
     }
 }

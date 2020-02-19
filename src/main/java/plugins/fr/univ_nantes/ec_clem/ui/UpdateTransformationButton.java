@@ -27,7 +27,7 @@ public class UpdateTransformationButton extends JButton {
 
     @Inject
     public UpdateTransformationButton(ProgressBarManager progressBarManager) {
-        super("Update TransformationSchema");
+        super("Update Transformation");
         this.progressBarManager = progressBarManager;
         setToolTipText("Press this button if you have moved the points, prepared set of points, \n or obtained some black part of the image. This will refresh it");
         addActionListener((arg0) -> action());

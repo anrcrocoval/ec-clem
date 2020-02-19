@@ -25,7 +25,8 @@ public class Workspace {
     private Sequence targetSequence;
     private Sequence sourceBackup;
     private TransformationSchema transformationSchema;
-    private File XMLFile;
+    private File transformationSchemaOutputFile;
+    private File transformationOutputFile;
     private WorkspaceState workspaceState;
     private TransformationConfiguration transformationConfiguration;
 
@@ -34,11 +35,20 @@ public class Workspace {
         monitoringConfiguration = new MonitoringConfiguration(false, false);
     }
 
-    public Workspace(Sequence sourceSequence, Sequence targetSequence, Sequence sourceBackup, File XMLFile, WorkspaceState workspaceState, MonitoringConfiguration monitoringConfiguration) {
+    public Workspace(
+        Sequence sourceSequence,
+        Sequence targetSequence,
+        Sequence sourceBackup,
+        File transformationSchemaOutputFile,
+        File transformationOutputFile,
+        WorkspaceState workspaceState,
+        MonitoringConfiguration monitoringConfiguration
+    ) {
         this.sourceSequence = sourceSequence;
         this.targetSequence = targetSequence;
         this.sourceBackup = sourceBackup;
-        this.XMLFile = XMLFile;
+        this.transformationSchemaOutputFile = transformationSchemaOutputFile;
+        this.transformationOutputFile = transformationOutputFile;
         this.workspaceState = workspaceState;
         this.monitoringConfiguration = monitoringConfiguration;
     }
@@ -73,12 +83,20 @@ public class Workspace {
         this.targetSequence = targetSequence;
     }
 
-    public File getXMLFile() {
-        return XMLFile;
+    public File getTransformationSchemaOutputFile() {
+        return transformationSchemaOutputFile;
     }
 
-    public void setXMLFile(File XMLFile) {
-        this.XMLFile = XMLFile;
+    public void setTransformationSchemaOutputFile(File transformationSchemaOutputFile) {
+        this.transformationSchemaOutputFile = transformationSchemaOutputFile;
+    }
+
+    public File getTransformationOutputFile() {
+        return transformationOutputFile;
+    }
+
+    public void setTransformationOutputFile(File transformationOutputFile) {
+        this.transformationOutputFile = transformationOutputFile;
     }
 
     public WorkspaceState getWorkspaceState() {

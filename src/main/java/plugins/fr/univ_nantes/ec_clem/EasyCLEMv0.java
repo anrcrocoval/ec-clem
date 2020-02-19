@@ -18,19 +18,12 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-import java.util.stream.Collectors;
-
-import icy.roi.ROI;
-import icy.vtk.VtkUtil;
-import plugins.adufour.roi.mesh.polygon.ROI3DPolygonalMesh;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceFactory;
-import plugins.fr.univ_nantes.ec_clem.sequence_listener.FiducialRoiListener;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiListenerManager;
-import plugins.fr.univ_nantes.ec_clem.sequence_listener.SequenceListenerUtil;
 import plugins.fr.univ_nantes.ec_clem.transformation.configuration.TransformationConfigurationFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.NoiseModel;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
@@ -57,9 +50,8 @@ import icy.painter.Overlay;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-import plugins.fr.univ_nantes.ec_clem.misc.GuiCLEMButtonApply;
+//import plugins.fr.univ_nantes.ec_clem.misc.GuiCLEMButtonApply;
 import plugins.fr.univ_nantes.ec_clem.misc.advancedmodules;
-import vtk.*;
 
 import javax.inject.Inject;
 
@@ -105,14 +97,14 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	private Workspace workspace;
 	private EzVarText choiceinputsection = new EzVarText(
-		"I want to compute the transformation in:",
-		(String[]) (Arrays.stream(TransformationType.values()).map(variant -> variant.name()).collect(Collectors.toList())).toArray(),
+		"Transformation model:",
+		TransformationType.toArray(),
 		0, false
 	);
 	private EzVarText noiseModel = new EzVarText(
 		"Noise model:",
-		(String[]) (Arrays.stream(NoiseModel.values()).map(variant -> variant.name()).collect(Collectors.toList())).toArray()
-		, 0, false
+		NoiseModel.toArray(),
+		0, false
 	);
 	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", true);
 	private EzVarSequence target = new EzVarSequence("Select image that will not be modified (likely EM)");
@@ -158,7 +150,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		String classPath = this.getClass().getResource(className).toString();
 		String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
 		Manifest manifest = null;
-		try {
+		try (InputStream inputStream = new URL(manifestPath).openStream()) {
 			manifest = new Manifest(new URL(manifestPath).openStream());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -175,7 +167,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 				+ "<br> <li> Use zoom and Lock views to help you!</li> "
 				+ "</html>","startmessage");
 		addEzComponent(new EzLabel(getVersionString()));
-		addComponent(new GuiCLEMButtonApply());
+//		addComponent(new GuiCLEMButtonApply());
 		addComponent(new advancedmodules(this));
 		addEzComponent(inputGroup);
 
@@ -209,13 +201,12 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		noiseModel.setEnabled(false);
 		showgrid.setEnabled(false);
 
-		String name = sourceSequence.getName() + "_transfo.xml";
-
 		workspace = new Workspace();
 		workspace.setSourceSequence(sourceSequence);
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
-		workspace.setXMLFile(new File(name));
+		workspace.setTransformationSchemaOutputFile(new File(String.format("%s.transformation_schema.xml", sourceSequence.getName())));
+		workspace.setTransformationOutputFile(new File(String.format("%s.transformation.csv", sourceSequence.getName())));
 		workspace.setTransformationConfiguration(
 			transformationConfigurationFactory.getFrom(
 				TransformationType.valueOf(choiceinputsection.getValue()),

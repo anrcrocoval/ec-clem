@@ -10,17 +10,28 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.storage;
+package plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.writer;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.reader.XmlTransformationElementListReader;
+
+import javax.inject.Inject;
 
 public class XmlTransformationElementListWriter {
 
-    private XmlTransformationElementListReader xmlTransformationElementListReader = new XmlTransformationElementListReader();
+    private XmlTransformationElementListReader xmlTransformationElementListReader;
+
+    @Inject
+    public XmlTransformationElementListWriter() {}
 
     public void removeLastTransformationElement(Document document) {
         Element lastTransformationElement = xmlTransformationElementListReader.getLastTransformationElement(document);
         lastTransformationElement.getParentNode().removeChild(lastTransformationElement);
+    }
+
+    @Inject
+    public void setXmlTransformationElementListReader(XmlTransformationElementListReader xmlTransformationElementListReader) {
+        this.xmlTransformationElementListReader = xmlTransformationElementListReader;
     }
 }

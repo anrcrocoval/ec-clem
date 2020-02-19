@@ -1,12 +1,12 @@
-package plugins.fr.univ_nantes.ec_clem.storage;
+package plugins.fr.univ_nantes.ec_clem.storage.transformation;
 
+import plugins.fr.univ_nantes.ec_clem.storage.Formatter;
 import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.SplineTransformation;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
-
 import javax.inject.Inject;
 
-public class TransformationToCsvFormatter {
+public class TransformationToCsvFormatter implements Formatter<Transformation> {
 
     private MatrixToCsvFormatter matrixToCsvFormatter;
 

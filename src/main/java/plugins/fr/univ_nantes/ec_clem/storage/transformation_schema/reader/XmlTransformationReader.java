@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.storage;
+package plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.reader;
 
 import icy.sequence.DimensionId;
 import icy.util.XMLUtil;
@@ -25,10 +25,14 @@ import plugins.fr.univ_nantes.ec_clem.transformation.schema.NoiseModel;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
-import static plugins.fr.univ_nantes.ec_clem.storage.XmlTransformation.*;
+import static plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.XmlTransformation.*;
 
 public class XmlTransformationReader {
+
+    @Inject
+    public XmlTransformationReader() {}
 
     public TransformationSchema read(Element transformationElement) {
         TransformationType transformationType = TransformationType.valueOf(transformationElement.getAttribute(transformationTypeAttributeName));

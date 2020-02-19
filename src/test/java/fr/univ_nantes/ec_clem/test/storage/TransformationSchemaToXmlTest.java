@@ -13,36 +13,35 @@
 package fr.univ_nantes.ec_clem.test.storage;
 
 import icy.sequence.DimensionId;
-import icy.util.XMLUtil;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import org.w3c.dom.Document;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.sequence.DimensionSize;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceSize;
-import plugins.fr.univ_nantes.ec_clem.storage.XmlFileReader;
-import plugins.fr.univ_nantes.ec_clem.storage.XmlFileWriter;
-import plugins.fr.univ_nantes.ec_clem.storage.XmlTransformationWriter;
+import plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
+import plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.NoiseModel;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
-import plugins.fr.univ_nantes.ec_clem.storage.XmlTransformationReader;
+import javax.inject.Inject;
 import java.io.File;
-
 import static org.testng.Assert.assertEquals;
-import static plugins.fr.univ_nantes.ec_clem.storage.XmlTransformation.transformationElementName;
 
-class XmlFileWriterTest {
-    private File file = new File("XmlFileWriterTest.storage");
-    private XmlFileReader xmlFileReader = new XmlFileReader();
-    private XmlFileWriter xmlFileWriter;
-    private XmlTransformationReader xmlReader = new XmlTransformationReader();
-    private XmlTransformationWriter xmlWriter;
+class TransformationSchemaToXmlTest {
+    private File file = new File(String.format("%s.test", getClass().getSimpleName()));
+
+    private TransformationSchemaToXmlFileWriter transformationSchemaToXmlFileWriter;
+    private XmlToTransformationSchemaFileReader xmlToTransformationSchemaFileReader;
+
     private SequenceSize sourceSequenceSize = new SequenceSize();
     private SequenceSize targetSequenceSize = new SequenceSize();
+
+    public TransformationSchemaToXmlTest() {
+        DaggerTransformationSchemaToXmlTestComponent.create().inject(this);
+    }
 
     @BeforeTest
     @AfterTest
@@ -68,21 +67,25 @@ class XmlFileWriterTest {
         assertEquals(transformationSchema.getTransformationType(), read.getTransformationType());
         assertEquals(
             transformationSchema.getFiducialSet().getSourceDataset().getMatrix().getColumnDimension(),
-            read.getFiducialSet().getSourceDataset().getMatrix().getColumnDimension());
+            read.getFiducialSet().getSourceDataset().getMatrix().getColumnDimension()
+        );
     }
 
     private void write(TransformationSchema transformationSchema) {
-        Document document = xmlFileReader.loadFile(file);
-        xmlFileWriter = new XmlFileWriter(document, file);
-        xmlWriter = new XmlTransformationWriter(document);
-        xmlWriter.write(transformationSchema);
-        xmlFileWriter.write();
+        transformationSchemaToXmlFileWriter.save(transformationSchema, file);
     }
 
     private TransformationSchema read() {
-        Document document = xmlFileReader.loadFile(file);
-        return xmlReader.read(
-            XMLUtil.getElement(document.getDocumentElement(), transformationElementName)
-        );
+        return xmlToTransformationSchemaFileReader.read(file);
+    }
+
+    @Inject
+    public void setTransformationSchemaToXmlFileWriter(TransformationSchemaToXmlFileWriter transformationSchemaToXmlFileWriter) {
+        this.transformationSchemaToXmlFileWriter = transformationSchemaToXmlFileWriter;
+    }
+
+    @Inject
+    public void setXmlToTransformationSchemaFileReader(XmlToTransformationSchemaFileReader xmlToTransformationSchemaFileReader) {
+        this.xmlToTransformationSchemaFileReader = xmlToTransformationSchemaFileReader;
     }
 }
