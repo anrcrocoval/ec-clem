@@ -12,6 +12,7 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.error.fitzpatrick;
 
+import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 import javax.inject.Inject;
 
@@ -31,6 +32,13 @@ public class TargetRegistrationErrorMapFactory {
         return new TargetRegistrationErrorMapSupplier(
             workspace.getTransformationSchema().getTargetSize(),
             treComputerFactory.getFrom(workspace)
+        );
+    }
+
+    public TargetRegistrationErrorMapSupplier getFrom(TransformationSchema transformationSchema) {
+        return new TargetRegistrationErrorMapSupplier(
+            transformationSchema.getTargetSize(),
+            treComputerFactory.getFrom(transformationSchema)
         );
     }
 }

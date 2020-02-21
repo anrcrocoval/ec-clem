@@ -18,12 +18,11 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+import plugins.adufour.ezplug.*;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceFactory;
-import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiListenerManager;
 import plugins.fr.univ_nantes.ec_clem.transformation.configuration.TransformationConfigurationFactory;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.NoiseModel;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
@@ -33,13 +32,6 @@ import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 import icy.gui.viewer.Viewer;
 import icy.main.Icy;
 import icy.system.thread.ThreadUtil;
-import plugins.adufour.ezplug.EzGroup;
-import plugins.adufour.ezplug.EzLabel;
-import plugins.adufour.ezplug.EzPlug;
-import plugins.adufour.ezplug.EzStoppable;
-import plugins.adufour.ezplug.EzVarBoolean;
-import plugins.adufour.ezplug.EzVarSequence;
-import plugins.adufour.ezplug.EzVarText;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.gui.dialog.MessageDialog;
@@ -62,38 +54,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	private TransformationConfigurationFactory transformationConfigurationFactory;
 	private SequenceFactory sequenceFactory;
-	private RoiListenerManager roiListenerManager;
 	private GuiCLEMButtons guiCLEMButtons;
 	private GuiCLEMButtons2 rigidspecificbutton;
-
-	public EasyCLEMv0() {
-		DaggerEasyCLEMv0Component.builder().build().inject(this);
-	}
-
-	@Inject
-	public void setTransformationConfigurationFactory(TransformationConfigurationFactory transformationConfigurationFactory) {
-		this.transformationConfigurationFactory = transformationConfigurationFactory;
-	}
-
-	@Inject
-	public void setSequenceFactory(SequenceFactory sequenceFactory) {
-		this.sequenceFactory = sequenceFactory;
-	}
-
-	@Inject
-	public void setRoiListenerManager(RoiListenerManager roiListenerManager) {
-		this.roiListenerManager = roiListenerManager;
-	}
-
-	@Inject
-	public void setGuiCLEMButtons(GuiCLEMButtons guiCLEMButtons) {
-		this.guiCLEMButtons = guiCLEMButtons;
-	}
-
-	@Inject
-	public void setRigidspecificbutton(GuiCLEMButtons2 rigidspecificbutton) {
-		this.rigidspecificbutton = rigidspecificbutton;
-	}
 
 	private Workspace workspace;
 	private EzVarText choiceinputsection = new EzVarText(
@@ -123,6 +85,10 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		Color.ORANGE
 	};
 
+	public EasyCLEMv0() {
+		DaggerEasyCLEMv0Component.builder().build().inject(this);
+	}
+
 	private class MessageOverlay extends Overlay {
 		String message;
 
@@ -150,7 +116,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		String classPath = this.getClass().getResource(className).toString();
 		String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
 		Manifest manifest = null;
-		try (InputStream inputStream = new URL(manifestPath).openStream()) {
+		try {
 			manifest = new Manifest(new URL(manifestPath).openStream());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -218,12 +184,10 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		guiCLEMButtons.setworkspace(workspace);
 		rigidspecificbutton.setWorkspace(workspace);
 
-//		sourceSequence.addListener(sourceSequenceFiducialRoiListener.setSequence(targetSequence).setWorkspaceState(workspace.getWorkspaceState()));
-//		targetSequence.addListener(targetSequenceFiducialRoiListener.setSequence(sourceSequence).setWorkspaceState(workspace.getWorkspaceState()));
-
 		sourceSequence.addOverlay(messageSource);
 		targetSequence.addOverlay(messageTarget);
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
+
 		new AnnounceFrame("Select point on image" + targetSequence.getName() + ", then drag it on source image and RIGHT CLICK", 5);
 
 		guiCLEMButtons.setEnabled(true);
@@ -238,7 +202,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			}
 		}
 
-//		roiListenerManager.clear();
 		sourceSequence.removeOverlay(messageSource);
 		targetSequence.removeOverlay(messageTarget);
 	}
@@ -249,7 +212,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	@Override
 	public void stopExecution() {
 		ThreadUtil.invokeLater(() -> new Viewer(
-				sequenceFactory.getMergeSequence(workspace.getSourceSequence(), workspace.getTargetSequence())
+			sequenceFactory.getMergeSequence(workspace.getSourceSequence(), workspace.getTargetSequence())
 		));
 		guiCLEMButtons.setEnabled(false);
 		rigidspecificbutton.disableButtons();
@@ -261,5 +224,25 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		synchronized(this) {
 			notify();
 		}
+	}
+
+	@Inject
+	public void setTransformationConfigurationFactory(TransformationConfigurationFactory transformationConfigurationFactory) {
+		this.transformationConfigurationFactory = transformationConfigurationFactory;
+	}
+
+	@Inject
+	public void setSequenceFactory(SequenceFactory sequenceFactory) {
+		this.sequenceFactory = sequenceFactory;
+	}
+
+	@Inject
+	public void setGuiCLEMButtons(GuiCLEMButtons guiCLEMButtons) {
+		this.guiCLEMButtons = guiCLEMButtons;
+	}
+
+	@Inject
+	public void setRigidspecificbutton(GuiCLEMButtons2 rigidspecificbutton) {
+		this.rigidspecificbutton = rigidspecificbutton;
 	}
 }

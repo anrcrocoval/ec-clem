@@ -22,7 +22,7 @@ public class SelectPointTypeBox extends JPanel {
     public SelectPointTypeBox(RoiListenerManager roiListenerManager) {
         this.roiListenerManager = roiListenerManager;
         jLabel = new JLabel("Point type");
-        stringJComboBox = new JComboBox<>(PointType.values());
+        stringJComboBox = new JComboBox<>(new PointType[] { PointType.FIDUCIAL, PointType.NOT_FIDUCIAL});
         stringJComboBox.addItemListener(itemEvent -> {
             if(itemEvent.getStateChange() == ItemEvent.SELECTED) {
                 roiListenerManager.set((PointType) itemEvent.getItem());

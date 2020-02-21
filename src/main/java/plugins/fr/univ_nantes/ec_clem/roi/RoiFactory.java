@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 
 public class RoiFactory {
 
+    private static String POINT_TYPE_PROPERTY = "point_type";
     private VtkAbstractTransformFactory vtkAbstractTransformFactory;
     private PointFactory pointFactory;
 
@@ -50,7 +51,7 @@ public class RoiFactory {
     public ROI getFrom(Rectangle2D ellipseBound) {
         ROI roi =  new ROI2DEllipse(ellipseBound);
         roi.setColor(PointType.ERROR.getColor());
-        roi.setProperty(PointType.ERROR.name(), "true");
+        roi.setProperty(POINT_TYPE_PROPERTY, PointType.ERROR.name());
         return roi;
     }
 
@@ -84,12 +85,12 @@ public class RoiFactory {
         roi.setName(String.format("%s_%d", pointType, id));
         roi.setShowName(true);
         roi.setStroke(6);
-        roi.setProperty(pointType.name(), "true");
+        roi.setProperty(POINT_TYPE_PROPERTY, pointType.name());
         return roi;
     }
 
     public List<ROI> getFrom(Sequence sequence, PointType pointType) {
-        return sequence.getROIs().stream().filter(roi -> roi.getProperty(pointType.name()) != null).collect(Collectors.toList());
+        return sequence.getROIs().stream().filter(roi -> pointType.name().equals(roi.getProperty(POINT_TYPE_PROPERTY))).collect(Collectors.toList());
     }
 
     public ROI getFrom(Ellipse ellipse, SequenceSize sequenceSize) {
@@ -118,7 +119,8 @@ public class RoiFactory {
             toPixel.get(2) - mesh.getBounds3D().getSizeZ() / 2d
         );
         mesh.setPosition3D(position3D);
-        mesh.setProperty(PointType.ERROR.name(), "true");
+        mesh.setProperty(POINT_TYPE_PROPERTY, PointType.ERROR.name());
+        mesh.setColor(PointType.ERROR.getColor());
 
         return mesh;
     }

@@ -39,6 +39,14 @@ public class TREComputerFactory {
         this.datasetFactory = datasetFactory;
     }
 
+    public TREComputer getFrom(Workspace workspace) {
+        if(workspace.getTransformationSchema() != null) {
+            return getFrom(workspace.getTransformationSchema());
+        }
+
+        return getFrom(transformationSchemaFactory.getFrom(workspace));
+    }
+
     public TREComputer getFrom(TransformationSchema transformationSchema) {
         return getFrom(
             datasetFactory.getFrom(
@@ -47,14 +55,6 @@ public class TREComputerFactory {
             ),
             transformationSchema.getFiducialSet().getTargetDataset()
         );
-    }
-
-    public TREComputer getFrom(Workspace workspace) {
-        if(workspace.getTransformationSchema() != null) {
-            return getFrom(workspace.getTransformationSchema());
-        }
-
-        return getFrom(transformationSchemaFactory.getFrom(workspace));
     }
 
     private TREComputer getFrom(Dataset sourceTransformedDataset, Dataset targetDataset) {

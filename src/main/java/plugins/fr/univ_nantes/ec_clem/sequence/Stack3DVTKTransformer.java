@@ -55,22 +55,6 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		super.add(vtkDataSequenceSupplier);
 	}
 
-	private void setSourceSequence(Sequence sequence) {
-		this.sequence = sequence;
-		InputSpacingx = sequence.getPixelSizeX();
-		InputSpacingy = sequence.getPixelSizeY();
-		InputSpacingz = sequence.getPixelSizeZ();
-	}
-
-	private void setTargetSize(SequenceSize sequenceSize) {
-		this.extentx = sequenceSize.get(DimensionId.X).getSize();
-		this.extenty = sequenceSize.get(DimensionId.Y).getSize();
-		this.extentz = sequenceSize.get(DimensionId.Z).getSize();
-		this.spacingx = sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer();
-		this.spacingy = sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer();
-		this.spacingz = sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer();
-	}
-
 	@Override
 	public Sequence get() {
 		vtkAbstractTransform mytransfo = vtkAbstractTransformFactory.getFrom(transformation);
@@ -92,6 +76,22 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		}
 
 		return vtkDataSequenceSupplier.get();
+	}
+
+	private void setSourceSequence(Sequence sequence) {
+		this.sequence = sequence;
+		InputSpacingx = sequence.getPixelSizeX();
+		InputSpacingy = sequence.getPixelSizeY();
+		InputSpacingz = sequence.getPixelSizeZ();
+	}
+
+	private void setTargetSize(SequenceSize sequenceSize) {
+		this.extentx = sequenceSize.get(DimensionId.X).getSize();
+		this.extenty = sequenceSize.get(DimensionId.Y).getSize();
+		this.extentz = sequenceSize.get(DimensionId.Z).getSize();
+		this.spacingx = sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer();
+		this.spacingy = sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer();
+		this.spacingz = sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer();
 	}
 
 	private vtkImageData converttoVtkImageData(int posC) {

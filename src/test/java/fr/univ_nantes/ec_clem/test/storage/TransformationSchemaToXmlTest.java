@@ -51,8 +51,8 @@ class TransformationSchemaToXmlTest {
 
     @Test
     void writeAndRead() {
-        Dataset sourceDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }}, PointType.FIDUCIAL);
-        Dataset targetDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }}, PointType.FIDUCIAL);
+        Dataset sourceDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }, { 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }, { 1, 2, 0 }}, PointType.FIDUCIAL);
+        Dataset targetDataset = new Dataset(new double[][] {{ 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }, { 1, 2, 0 }, { 2, 3, 0}, { 3, 4, 1 }, { 1, 2, 0 }}, PointType.FIDUCIAL);
         sourceSequenceSize.add(new DimensionSize(DimensionId.X, 10, 1));
         targetSequenceSize.add(new DimensionSize(DimensionId.X, 10, 1));
         TransformationSchema transformationSchema = new TransformationSchema(

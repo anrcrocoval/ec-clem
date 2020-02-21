@@ -17,7 +17,6 @@ import icy.sequence.Sequence;
 import icy.type.DataType;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackableChildTask;
 import vtk.*;
-
 import java.lang.reflect.Array;
 import java.util.function.Supplier;
 
@@ -35,7 +34,6 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
 
     public VtkDataSequenceSupplier(Sequence sequence, vtkPointData[] vtkDataSetArray, int xSize, int ySize, int zSize, int tSize, double spacingX, double spacingY, double spacingZ) {
         super(sequence.getSizeC() * tSize * zSize);
-        DaggerVtkDataSequenceSupplierComponent.builder().build().inject(this);
         this.sequence = sequence;
         this.vtkDataSetArray = vtkDataSetArray;
         this.xSize = xSize;
