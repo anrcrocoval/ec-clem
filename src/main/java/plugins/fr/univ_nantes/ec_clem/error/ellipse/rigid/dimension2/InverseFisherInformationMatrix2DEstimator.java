@@ -1,6 +1,7 @@
-package plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid;
+package plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid.dimension2;
 
 import Jama.Matrix;
+import plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid.InverseFisherInformationMatrixEstimator;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.matrix.MatrixUtil;

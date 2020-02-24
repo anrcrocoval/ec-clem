@@ -1,6 +1,7 @@
-package plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid;
+package plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid.dimension2;
 
 import Jama.Matrix;
+import plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid.JacobianMatrix;
 import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.registration.RegistrationParameter;
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
@@ -10,7 +11,7 @@ import javax.inject.Inject;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class JacobianMatrix2D {
+public class JacobianMatrix2D implements JacobianMatrix {
 
     private RotationParameters2D rotationParameters2D;
 

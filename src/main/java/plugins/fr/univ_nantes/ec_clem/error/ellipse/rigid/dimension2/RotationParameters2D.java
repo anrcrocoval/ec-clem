@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid;
+package plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid.dimension2;
 
 import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
 import javax.inject.Inject;

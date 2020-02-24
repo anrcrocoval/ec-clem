@@ -1,10 +1,8 @@
 package plugins.fr.univ_nantes.ec_clem.ui;
 
 import plugins.fr.univ_nantes.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.sequence_listener.FiducialRoiListener;
 import plugins.fr.univ_nantes.ec_clem.sequence_listener.RoiListenerManager;
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
-import plugins.fr.univ_nantes.ec_clem.workspace.WorkspaceState;
 import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
