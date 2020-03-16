@@ -275,6 +275,14 @@ public class TestFiducialSetFactory {
         return dataset;
     }
 
+    public Dataset addUniformNoise(Dataset dataset, int[] range) {
+        for(int i = 0; i < dataset.getN(); i++) {
+            Point point = dataset.getPoint(i);
+            dataset.setPoint(i, point.plus(getRandomPoint(range)));
+        }
+        return dataset;
+    }
+
     public Point addGaussianNoise(Point point, double[][] covariance) {
         Point noise = new Point(getGaussian(covariance));
         return point.plus(noise);

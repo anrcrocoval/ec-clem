@@ -63,10 +63,16 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
             similarity.apply(clonedSourceDataset).getMatrix()
         );
 
-        Matrix covariance = residuals.transpose().times(residuals).times((double) 1 / (fiducialSet.getN()));
-//        similarity.getHomogeneousMatrix().print(1,5);
-        Matrix lambda = Matrix.identity(fiducialSet.getSourceDataset().getDimension(), fiducialSet.getTargetDataset().getDimension())
-            .times(covariance.trace() / fiducialSet.getTargetDataset().getDimension());
+        double sum = 0;
+        for(int i = 0; i < residuals.getRowDimension(); i++) {
+            Matrix current = residuals.getMatrix(i, i, 0, residuals.getColumnDimension() - 1);
+            Matrix times = (current).times(current.transpose());
+            assert times.getRowDimension() == 1;
+            assert times.getColumnDimension() == 1;
+            sum += times.get(0, 0);
+        }
+        Matrix lambda = Matrix.identity(fiducialSet.getTargetDataset().getDimension(), fiducialSet.getTargetDataset().getDimension())
+            .times(sum / (double) (fiducialSet.getN() * fiducialSet.getTargetDataset().getDimension()));
 
         return new RegistrationParameter(
             similarity,
@@ -100,9 +106,4 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
     private Matrix getT(Matrix sourceBarycentre, Matrix targetBarycentre, Matrix R, Matrix scale) {
         return targetBarycentre.minus(R.times(scale).times(sourceBarycentre));
     }
-
-//    @Inject
-//    public void setRigid2DCovarianceMaxLikelihoodComputer(Rigid2DCovarianceMaxLikelihoodComputer rigid2DCovarianceMaxLikelihoodComputer) {
-//        this.rigid2DCovarianceMaxLikelihoodComputer = rigid2DCovarianceMaxLikelihoodComputer;
-//    }
 }

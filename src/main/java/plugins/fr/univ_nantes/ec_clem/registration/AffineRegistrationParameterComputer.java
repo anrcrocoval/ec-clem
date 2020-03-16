@@ -44,7 +44,7 @@ public class AffineRegistrationParameterComputer implements RegistrationParamete
         );
 
         Matrix covariance = residuals.transpose().times(residuals)
-            .times((double) 1 / (fiducialSet.getN()));
+            .times(1d / (double) (fiducialSet.getN()));
 
         return new RegistrationParameter(
             affineTransformation,
@@ -58,8 +58,12 @@ public class AffineRegistrationParameterComputer implements RegistrationParamete
         double sum = 0;
         for(int i = 0; i < residuals.getRowDimension(); i++) {
             Matrix current = residuals.getMatrix(i, i, 0, residuals.getColumnDimension() - 1);
-            sum += (current).times(inverseCovariance).times(current.transpose()).get(0, 0);
+            Matrix times = (current).times(inverseCovariance).times(current.transpose());
+            assert times.getRowDimension() == 1;
+            assert times.getColumnDimension() == 1;
+            sum += times.get(0, 0);
         }
-        return (log(sqrt(inverseCovariance.det()) / (2d * PI)) * residuals.getRowDimension() - sum / 2d);
+//        return log(sqrt(inverseCovariance.det()) / sqrt(pow(2d * PI, residuals.getColumnDimension()))) * residuals.getRowDimension() - (sum / 2d);
+        return log(1d / sqrt(pow(2d * PI, residuals.getColumnDimension()) * covariance.det())) * residuals.getRowDimension() - (sum / 2d);
     }
 }
