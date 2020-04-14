@@ -31,6 +31,7 @@ public class GuiCLEMButtons extends JPanel {
     private ClearLandmarksButton clearLandmarksButton;
     private UndoButton undoButton;
     private ShowPointsButton showPointsButton;
+    private MergeButton mergeButton;
 
     @Inject
     public GuiCLEMButtons(
@@ -38,18 +39,21 @@ public class GuiCLEMButtons extends JPanel {
         ClearLandmarksButton clearLandmarksButton,
         UndoButton undoButton,
         ShowPointsButton showPointsButton,
-        SelectPointTypeBox selectPointTypeBox
+        SelectPointTypeBox selectPointTypeBox,
+        MergeButton mergeButton
     ) {
         this.selectPointTypeBox = selectPointTypeBox;
         this.updateTransformationButton = updateTransformationButton;
         this.clearLandmarksButton = clearLandmarksButton;
         this.undoButton = undoButton;
         this.showPointsButton = showPointsButton;
+        this.mergeButton = mergeButton;
         add(selectPointTypeBox);
         add(updateTransformationButton);
         add(clearLandmarksButton);
         add(undoButton);
         add(showPointsButton);
+        add(mergeButton);
     }
 
     public void setworkspace(Workspace workspace) {
@@ -58,6 +62,7 @@ public class GuiCLEMButtons extends JPanel {
         undoButton.setWorkspace(workspace);
         showPointsButton.setWorkspace(workspace);
         selectPointTypeBox.setWorkspace(workspace);
+        mergeButton.setWorkspace(workspace);
     }
 
     public void setEnabled(boolean bool) {
