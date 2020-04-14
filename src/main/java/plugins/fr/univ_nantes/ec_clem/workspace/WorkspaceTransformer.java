@@ -73,7 +73,6 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         SequenceUpdater sequenceUpdater = new SequenceUpdater(workspace.getSourceSequence(), workspace.getTransformationSchema());
         super.add(sequenceUpdater);
         sequenceUpdater.run();
-
         transformationSchemaToXmlFileWriter.save(workspace.getTransformationSchema(), workspace.getTransformationSchemaOutputFile());
         transformationToCsvFileWriter.save(registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(), workspace.getTransformationOutputFile());
 
