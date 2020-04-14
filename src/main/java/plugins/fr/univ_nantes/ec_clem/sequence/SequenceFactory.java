@@ -12,6 +12,7 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.sequence;
 
+import icy.gui.frame.progress.ProgressFrame;
 import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
@@ -30,6 +31,7 @@ public class SequenceFactory {
     }
 
     public Sequence getMergeSequence(Sequence source, Sequence target) {
+        ProgressFrame progressFrame = new ProgressFrame("Merge sequence");
         Sequence result = SequenceUtil.concatC(
             new Sequence[] {
                 SequenceUtil.convertToType(source, target.getDataType_(), true),
@@ -37,7 +39,7 @@ public class SequenceFactory {
             },
             false,
             false,
-            null
+            progressFrame
         );
         result.setName("Merged");
         return result;

@@ -211,9 +211,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	@Override
 	public void stopExecution() {
-		ThreadUtil.invokeLater(() -> new Viewer(
-			sequenceFactory.getMergeSequence(workspace.getSourceSequence(), workspace.getTargetSequence())
-		));
 		guiCLEMButtons.setEnabled(false);
 		rigidspecificbutton.disableButtons();
 		source.setEnabled(true);
