@@ -16,14 +16,13 @@ import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
 import icy.type.DataType;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackableChildTask;
-import vtk.*;
 import java.lang.reflect.Array;
 import java.util.function.Supplier;
 
 public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implements Supplier<Sequence> {
 
     private Sequence sequence;
-    private vtkPointData[] vtkDataSetArray;
+    private Object[] vtkDataSetArray;
     private int xSize;
     private int ySize;
     private int zSize;
@@ -32,7 +31,7 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
     private double spacingY;
     private double spacingZ;
 
-    public VtkDataSequenceSupplier(Sequence sequence, vtkPointData[] vtkDataSetArray, int xSize, int ySize, int zSize, int tSize, double spacingX, double spacingY, double spacingZ) {
+    public VtkDataSequenceSupplier(Sequence sequence, Object[] vtkDataSetArray, int xSize, int ySize, int zSize, int tSize, double spacingX, double spacingY, double spacingZ) {
         super(sequence.getSizeC() * tSize * zSize);
         this.sequence = sequence;
         this.vtkDataSetArray = vtkDataSetArray;
@@ -53,7 +52,7 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
         sequence.removeAllImages();
         try {
             for (int c = 0; c < channels; c++) {
-                Object inData = getPrimitiveArray(dataType, vtkDataSetArray[c].GetScalars());
+                Object inData = vtkDataSetArray[c];
                 for (int t = 0; t < tSize; t++) {
                     for (int z = 0; z < zSize; z++) {
                         IcyBufferedImage image = sequence.getImage(t, z);
@@ -77,27 +76,5 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
         sequence.setPixelSizeY(spacingY);
         sequence.setPixelSizeZ(spacingZ);
         return sequence;
-    }
-
-    private Object getPrimitiveArray(DataType datatype, vtkDataArray dataArray) {
-        switch(datatype) {
-            case UBYTE:
-                return ((vtkUnsignedCharArray) dataArray).GetJavaArray();
-            case BYTE:
-                return ((vtkUnsignedCharArray) dataArray).GetJavaArray();
-            case USHORT:
-                return ((vtkUnsignedShortArray) dataArray).GetJavaArray();
-            case SHORT:
-                return ((vtkShortArray) dataArray).GetJavaArray();
-            case INT:
-                return ((vtkIntArray) dataArray).GetJavaArray();
-            case UINT:
-                return ((vtkUnsignedIntArray) dataArray).GetJavaArray();
-            case FLOAT:
-                return ((vtkFloatArray) dataArray).GetJavaArray();
-            case DOUBLE:
-                return ((vtkDoubleArray) dataArray).GetJavaArray();
-            default : throw new RuntimeException("Unsupported type");
-        }
     }
 }

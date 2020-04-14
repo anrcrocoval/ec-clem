@@ -12,6 +12,7 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.sequence;
 
+import icy.vtk.VtkUtil;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
 public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implements Supplier<Sequence> {
 
 	private vtkImageReslice imageReslice;
-	private vtkPointData[] imageData;
+	private Object[] imageData;
 
 	private Sequence sequence;
 	private Transformation transformation;
@@ -50,7 +51,7 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		setSourceSequence(sequence);
 		setTargetSize(sequenceSize);
 		this.transformation = transformation;
-		imageData = new vtkPointData[sequence.getSizeC()];
+		imageData = new Object[sequence.getSizeC()];
 		vtkDataSequenceSupplier = new VtkDataSequenceSupplier(sequence, imageData, extentx, extenty, extentz, sequence.getSizeT(), spacingx, spacingy, spacingz);
 		super.add(vtkDataSequenceSupplier);
 	}
@@ -67,14 +68,12 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		imageReslice.SetInterpolationModeToLinear();
 
 		for (int c = 0; c < sequence.getSizeC(); c++) {
-			imageReslice.SetInputData(converttoVtkImageData(c));
+			vtkImageData vtkImageData = converttoVtkImageData(c);
+			imageReslice.SetInputData(vtkImageData);
 			imageReslice.Modified();
 			imageReslice.Update();
-			vtkImageData copy = new vtkImageData();
-			copy.DeepCopy(imageReslice.GetOutput());
-			imageData[c] = copy.GetPointData();
+			imageData[c] = VtkUtil.getJavaArray(imageReslice.GetOutput().GetPointData().GetScalars());
 		}
-
 		return vtkDataSequenceSupplier.get();
 	}
 
