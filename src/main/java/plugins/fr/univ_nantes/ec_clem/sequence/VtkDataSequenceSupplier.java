@@ -32,7 +32,7 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
     private double spacingZ;
 
     public VtkDataSequenceSupplier(Sequence sequence, Object[] vtkDataSetArray, int xSize, int ySize, int zSize, int tSize, double spacingX, double spacingY, double spacingZ) {
-        super(sequence.getSizeC() * tSize * zSize);
+        super(vtkDataSetArray.length * tSize * zSize);
         this.sequence = sequence;
         this.vtkDataSetArray = vtkDataSetArray;
         this.xSize = xSize;
@@ -46,7 +46,7 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
 
     @Override
     public Sequence get() {
-        int channels = sequence.getSizeC();
+        int channels = vtkDataSetArray.length;
         DataType dataType = sequence.getDataType_();
         sequence.beginUpdate();
         sequence.removeAllImages();

@@ -20,6 +20,7 @@ import icy.type.DataType;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackableMasterTask;
 import vtk.*;
 import javax.inject.Inject;
+import java.lang.reflect.Array;
 import java.util.function.Supplier;
 
 /**
@@ -52,8 +53,6 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		setTargetSize(sequenceSize);
 		this.transformation = transformation;
 		imageData = new Object[sequence.getSizeC()];
-		vtkDataSequenceSupplier = new VtkDataSequenceSupplier(sequence, imageData, extentx, extenty, extentz, sequence.getSizeT(), spacingx, spacingy, spacingz);
-		super.add(vtkDataSequenceSupplier);
 	}
 
 	@Override
@@ -74,6 +73,8 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 			imageReslice.Update();
 			imageData[c] = VtkUtil.getJavaArray(imageReslice.GetOutput().GetPointData().GetScalars());
 		}
+		vtkDataSequenceSupplier = new VtkDataSequenceSupplier(sequence, imageData, extentx, extenty, extentz, this.sequence.getSizeT(), spacingx, spacingy, spacingz);
+		super.add(vtkDataSequenceSupplier);
 		return vtkDataSequenceSupplier.get();
 	}
 
@@ -94,69 +95,86 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 	}
 
 	private vtkImageData converttoVtkImageData(int posC) {
+
 		int sizeX = sequence.getSizeX();
 		int sizeY = sequence.getSizeY();
 		int sizeZ = sequence.getSizeZ();
 		DataType dataType = sequence.getDataType_();
 
-		vtkImageData newImageData = new vtkImageData();
-		newImageData.SetDimensions(sizeX, sizeY, sizeZ);
-		newImageData.SetSpacing(InputSpacingx, InputSpacingy, InputSpacingz);
-		vtkDataArray array;
-		switch (dataType) {
-			case UBYTE:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_CHAR, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkUnsignedCharArray) array).SetJavaArray(sequence.getDataCopyXYZTAsByte(posC));
-				break;
+		vtkImageData image = new vtkImageData();
+		image.SetDimensions(sizeX, sizeY, sizeZ);
+  		image.SetOrigin(0.0, 0.0, 0.0);
+  		image.SetSpacing(InputSpacingx, InputSpacingy, InputSpacingz);
+		image.AllocateScalars(VtkUtil.getVtkType(dataType), 1);
+  		vtkDataArray array = image.GetPointData().GetScalars();
 
-			case BYTE:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_CHAR, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkUnsignedCharArray) array).SetJavaArray(sequence.getDataCopyXYZTAsByte(posC));
-				break;
-
-			case USHORT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_SHORT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkUnsignedShortArray) array).SetJavaArray(sequence.getDataCopyXYZTAsShort(posC));
-				break;
-
-			case SHORT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_SHORT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkShortArray) array).SetJavaArray(sequence.getDataCopyXYZTAsShort(posC));
-				break;
-
-			case UINT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_INT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkUnsignedIntArray) array).SetJavaArray(sequence.getDataCopyXYZTAsInt(posC));
-				break;
-
-			case INT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_INT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkIntArray) array).SetJavaArray(sequence.getDataCopyXYZTAsInt(posC));
-				break;
-
-			case FLOAT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_FLOAT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkFloatArray) array).SetJavaArray(sequence.getDataCopyXYZTAsFloat(posC));
-				break;
-
-			case DOUBLE:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_DOUBLE, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkDoubleArray) array).SetJavaArray(sequence.getDataCopyXYZTAsDouble(posC));
-				break;
-
-			default:
-				throw new RuntimeException("Unsupported type");
+		Object input = sequence.getDataXYZT(posC);
+		for(int t = 0; t < sequence.getSizeT(); t++){
+			for(int z= 0; z < sequence.getSizeZ(); z++){
+				for(int xy = 0; xy < sequence.getSizeX() * sequence.getSizeY(); xy++){
+					array.InsertNextTuple1(Array.getDouble(Array.get(Array.get(input, t), z), xy));
+				}
+			}
 		}
 
-		return newImageData;
+//		vtkImageData newImageData = new vtkImageData();
+//		newImageData.SetDimensions(sizeX, sizeY, sizeZ);
+//		newImageData.SetSpacing(InputSpacingx, InputSpacingy, InputSpacingz);
+//		vtkDataArray array;
+//		switch (dataType) {
+//			case UBYTE:
+//				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_CHAR, 1);
+//				array = newImageData.GetPointData().GetScalars();
+//				((vtkUnsignedCharArray) array).SetJavaArray(sequence.getDataCopyXYZTAsByte(posC));
+//				break;
+//
+//			case BYTE:
+//				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_CHAR, 1);
+//				array = newImageData.GetPointData().GetScalars();
+//				((vtkUnsignedCharArray) array).SetJavaArray(sequence.getDataCopyXYZTAsByte(posC));
+//				break;
+//
+//			case USHORT:
+//				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_SHORT, 1);
+//				array = newImageData.GetPointData().GetScalars();
+//				((vtkUnsignedShortArray) array).SetJavaArray(sequence.getDataCopyXYZTAsShort(posC));
+//				break;
+//
+//			case SHORT:
+//				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_SHORT, 1);
+//				array = newImageData.GetPointData().GetScalars();
+//				((vtkShortArray) array).SetJavaArray(sequence.getDataCopyXYZTAsShort(posC));
+//				break;
+//
+//			case UINT:
+//				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_INT, 1);
+//				array = newImageData.GetPointData().GetScalars();
+//				((vtkUnsignedIntArray) array).SetJavaArray(sequence.getDataCopyXYZTAsInt(posC));
+//				break;
+//
+//			case INT:
+//				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_INT, 1);
+//				array = newImageData.GetPointData().GetScalars();
+//				((vtkIntArray) array).SetJavaArray(sequence.getDataCopyXYZTAsInt(posC));
+//				break;
+//
+//			case FLOAT:
+//				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_FLOAT, 1);
+//				array = newImageData.GetPointData().GetScalars();
+//				((vtkFloatArray) array).SetJavaArray(sequence.getDataCopyXYZTAsFloat(posC));
+//				break;
+//
+//			case DOUBLE:
+//				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_DOUBLE, 1);
+//				array = newImageData.GetPointData().GetScalars();
+//				((vtkDoubleArray) array).SetJavaArray(sequence.getDataCopyXYZTAsDouble(posC));
+//				break;
+//
+//			default:
+//				throw new RuntimeException("Unsupported type");
+//		}
+
+		return image;
 	}
 
 	@Inject
