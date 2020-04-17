@@ -50,4 +50,8 @@ public abstract class ProgressTrackableMasterTask extends ProgressReport impleme
     public int getTotal() {
         return tasks.size();
     }
+
+    protected List<ProgressTrackable> getTaskList() {
+        return tasks;
+    }
 }

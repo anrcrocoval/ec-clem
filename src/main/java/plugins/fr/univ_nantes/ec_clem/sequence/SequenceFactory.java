@@ -13,11 +13,10 @@
 package plugins.fr.univ_nantes.ec_clem.sequence;
 
 import icy.gui.frame.progress.ProgressFrame;
-import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import icy.vtk.VtkUtil;
-import vtk.*;
+import vtk.vtkImageGridSource;
 import javax.inject.Inject;
 import static icy.type.DataType.UBYTE;
 
@@ -48,16 +47,16 @@ public class SequenceFactory {
     public Sequence getGridSequence(int xSize, int ySize, int zSize, double spacingX, double spacingY, double spacingZ) {
         vtkImageGridSource sourceGrid = vtkImageGridSourceFactory.getFrom(xSize, ySize, zSize, spacingX, spacingY, spacingZ);
         Sequence grid = new Sequence();
-        for(int z = 0; z < zSize; z++) {
-            grid.setImage(0, z, new IcyBufferedImage(xSize, ySize, 1, UBYTE));
-        }
         VtkDataSequenceSupplier vtkDataSequenceSupplier = new VtkDataSequenceSupplier(
             grid,
-            new Object[] {VtkUtil.getJavaArray(sourceGrid.GetOutput().GetPointData().GetScalars())},
+            UBYTE,
+            VtkUtil.getJavaArray(sourceGrid.GetOutput().GetPointData().GetScalars()),
+            0,
+            1,
             xSize,
             ySize,
             zSize,
-            grid.getSizeT(),
+            1,
             spacingX,
             spacingY,
             spacingZ

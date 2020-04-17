@@ -28,7 +28,8 @@ public class VtkImageGridSourceFactory {
         sourceGrid.SetFillValue(0);
         sourceGrid.SetDataScalarType(icy.vtk.VtkUtil.VTK_UNSIGNED_CHAR);
         sourceGrid.SetDataSpacing(spacingX, spacingY, spacingZ);
-        sourceGrid.SetGridSpacing(Math.round(xSize / 10), Math.round(ySize / 10), 0);
+        sourceGrid.SetGridSpacing(Math.round((float) xSize / 10), Math.round((float) ySize / 10), 0);
+        sourceGrid.ReleaseDataFlagOn();
         sourceGrid.Update();
         return sourceGrid;
     }

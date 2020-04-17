@@ -25,7 +25,6 @@ import plugins.fr.univ_nantes.ec_clem.monitor.MonitorTargetPoint;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackableMasterTask;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceFactory;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceUpdater;
-
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
