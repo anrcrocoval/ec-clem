@@ -22,23 +22,29 @@ import java.util.function.Supplier;
 public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implements Supplier<Sequence> {
 
     private Sequence sequence;
-    private Object[] vtkDataSetArray;
+    private DataType dataType;
+    private Object vtkDataSetArray;
     private int xSize;
     private int ySize;
     private int zSize;
     private int tSize;
+    private int cSize;
+    private int channel;
     private double spacingX;
     private double spacingY;
     private double spacingZ;
 
-    public VtkDataSequenceSupplier(Sequence sequence, Object[] vtkDataSetArray, int xSize, int ySize, int zSize, int tSize, double spacingX, double spacingY, double spacingZ) {
-        super(sequence.getSizeC() * tSize * zSize);
+    public VtkDataSequenceSupplier(Sequence sequence, DataType dataType, Object vtkDataSetArray, int channel, int cSize, int xSize, int ySize, int zSize, int tSize, double spacingX, double spacingY, double spacingZ) {
+        super(tSize * zSize);
         this.sequence = sequence;
+        this.dataType = dataType;
         this.vtkDataSetArray = vtkDataSetArray;
         this.xSize = xSize;
         this.ySize = ySize;
         this.zSize = zSize;
         this.tSize = tSize;
+        this.cSize = cSize;
+        this.channel = channel;
         this.spacingX = spacingX;
         this.spacingY = spacingY;
         this.spacingZ = spacingZ;
@@ -46,25 +52,22 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
 
     @Override
     public Sequence get() {
-        int channels = sequence.getSizeC();
-        DataType dataType = sequence.getDataType_();
         sequence.beginUpdate();
-        sequence.removeAllImages();
         try {
-            for (int c = 0; c < channels; c++) {
-                Object inData = vtkDataSetArray[c];
-                for (int t = 0; t < tSize; t++) {
-                    for (int z = 0; z < zSize; z++) {
-                        IcyBufferedImage image = sequence.getImage(t, z);
-                        if(image == null) {
-                            image = new IcyBufferedImage(xSize, ySize, channels, dataType);
-                            sequence.setImage(t, z, image);
-                        }
-                        Object outData = Array.newInstance(dataType.toPrimitiveClass(), xSize * ySize);
-                        System.arraycopy(inData, (t * zSize * xSize * ySize) + (z * xSize * ySize), outData, 0, xSize * ySize);
-                        image.setDataXY(c, outData);
-                        super.incrementCompleted();
+            Object outData = Array.newInstance(dataType.toPrimitiveClass(), xSize * ySize);
+            for(int t = 0; t < tSize; t++) {
+                for(int z = 0; z < zSize; z++) {
+                    IcyBufferedImage image = sequence.getImage(t, z);
+                    if(image == null) {
+                        image = new IcyBufferedImage(xSize, ySize, cSize, dataType);
+                        image.setVolatile(true);
+                        sequence.setImage(t, z, image);
                     }
+                    image.beginUpdate();
+                    System.arraycopy(vtkDataSetArray, (t * zSize * xSize * ySize) + (z * xSize * ySize), outData, 0, xSize * ySize);
+                    image.setDataXY(channel, outData);
+                    image.endUpdate();
+                    super.incrementCompleted();
                 }
             }
         } catch (Exception e) {
@@ -75,6 +78,12 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
         sequence.setPixelSizeX(spacingX);
         sequence.setPixelSizeY(spacingY);
         sequence.setPixelSizeZ(spacingZ);
+        this.vtkDataSetArray = null;
         return sequence;
+    }
+
+    public VtkDataSequenceSupplier setData(Object vtkDataSetArray) {
+        this.vtkDataSetArray = vtkDataSetArray;
+        return this;
     }
 }

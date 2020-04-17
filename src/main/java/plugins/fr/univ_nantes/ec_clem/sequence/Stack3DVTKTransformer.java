@@ -12,14 +12,19 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.sequence;
 
+import icy.sequence.SequenceUtil;
 import icy.vtk.VtkUtil;
+import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackable;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-import icy.type.DataType;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackableMasterTask;
-import vtk.*;
+import vtk.vtkAbstractTransform;
+import vtk.vtkImageData;
+import vtk.vtkImageReslice;
 import javax.inject.Inject;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -29,8 +34,6 @@ import java.util.function.Supplier;
 public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implements Supplier<Sequence> {
 
 	private vtkImageReslice imageReslice;
-	private Object[] imageData;
-
 	private Sequence sequence;
 	private Transformation transformation;
 	private int extentx;
@@ -42,18 +45,29 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 	private double InputSpacingz;
 	private double InputSpacingx;
 	private double InputSpacingy;
-
 	private VtkAbstractTransformFactory vtkAbstractTransformFactory;
-	private VtkDataSequenceSupplier vtkDataSequenceSupplier;
 
 	public Stack3DVTKTransformer(Sequence sequence, SequenceSize sequenceSize, Transformation transformation) {
 		DaggerStack3DVTKTransformerComponent.builder().build().inject(this);
 		setSourceSequence(sequence);
 		setTargetSize(sequenceSize);
 		this.transformation = transformation;
-		imageData = new Object[sequence.getSizeC()];
-		vtkDataSequenceSupplier = new VtkDataSequenceSupplier(sequence, imageData, extentx, extenty, extentz, sequence.getSizeT(), spacingx, spacingy, spacingz);
-		super.add(vtkDataSequenceSupplier);
+		for(int c = 0; c < sequence.getSizeC(); c++) {
+			super.add(new VtkDataSequenceSupplier(
+					sequence,
+					sequence.getDataType_(),
+					null,
+					c,
+					sequence.getSizeC(),
+					extentx,
+					extenty,
+					extentz,
+					sequence.getSizeT(),
+					spacingx,
+					spacingy,
+					spacingz
+			));
+		}
 	}
 
 	@Override
@@ -66,15 +80,25 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		imageReslice.SetOutputExtent(0, extentx - 1, 0, extenty - 1, 0, extentz - 1);
 		imageReslice.SetResliceTransform(mytransfo);
 		imageReslice.SetInterpolationModeToLinear();
+		imageReslice.ReleaseDataFlagOn();
 
-		for (int c = 0; c < sequence.getSizeC(); c++) {
-			vtkImageData vtkImageData = converttoVtkImageData(c);
+		List<Sequence> channels = new LinkedList<>();
+		for(int c = 0; c < sequence.getSizeC(); c++) {
+			channels.add(SequenceUtil.extractChannel(sequence, c));
+		}
+		sequence.removeAllImages();
+		List<ProgressTrackable> taskList = super.getTaskList();
+		for(int i = 0; i < taskList.size(); i++) {
+			vtkImageData vtkImageData = converttoVtkImageData(channels.remove(0));
+			vtkImageData.GlobalReleaseDataFlagOn();
 			imageReslice.SetInputData(vtkImageData);
 			imageReslice.Modified();
 			imageReslice.Update();
-			imageData[c] = VtkUtil.getJavaArray(imageReslice.GetOutput().GetPointData().GetScalars());
+			((VtkDataSequenceSupplier) taskList.get(i))
+				.setData(VtkUtil.getJavaArray(imageReslice.GetOutput().GetPointData().GetScalars()))
+				.get();
 		}
-		return vtkDataSequenceSupplier.get();
+		return sequence;
 	}
 
 	private void setSourceSequence(Sequence sequence) {
@@ -93,69 +117,12 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		this.spacingz = sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer();
 	}
 
-	private vtkImageData converttoVtkImageData(int posC) {
-		int sizeX = sequence.getSizeX();
-		int sizeY = sequence.getSizeY();
-		int sizeZ = sequence.getSizeZ();
-		DataType dataType = sequence.getDataType_();
-
+	private vtkImageData converttoVtkImageData(Sequence singleChannelSequence) {
 		vtkImageData newImageData = new vtkImageData();
-		newImageData.SetDimensions(sizeX, sizeY, sizeZ);
+		newImageData.SetDimensions(singleChannelSequence.getSizeX(), singleChannelSequence.getSizeY(), singleChannelSequence.getSizeZ());
 		newImageData.SetSpacing(InputSpacingx, InputSpacingy, InputSpacingz);
-		vtkDataArray array;
-		switch (dataType) {
-			case UBYTE:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_CHAR, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkUnsignedCharArray) array).SetJavaArray(sequence.getDataCopyXYZTAsByte(posC));
-				break;
-
-			case BYTE:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_CHAR, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkUnsignedCharArray) array).SetJavaArray(sequence.getDataCopyXYZTAsByte(posC));
-				break;
-
-			case USHORT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_SHORT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkUnsignedShortArray) array).SetJavaArray(sequence.getDataCopyXYZTAsShort(posC));
-				break;
-
-			case SHORT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_SHORT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkShortArray) array).SetJavaArray(sequence.getDataCopyXYZTAsShort(posC));
-				break;
-
-			case UINT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_UNSIGNED_INT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkUnsignedIntArray) array).SetJavaArray(sequence.getDataCopyXYZTAsInt(posC));
-				break;
-
-			case INT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_INT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkIntArray) array).SetJavaArray(sequence.getDataCopyXYZTAsInt(posC));
-				break;
-
-			case FLOAT:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_FLOAT, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkFloatArray) array).SetJavaArray(sequence.getDataCopyXYZTAsFloat(posC));
-				break;
-
-			case DOUBLE:
-				newImageData.AllocateScalars(icy.vtk.VtkUtil.VTK_DOUBLE, 1);
-				array = newImageData.GetPointData().GetScalars();
-				((vtkDoubleArray) array).SetJavaArray(sequence.getDataCopyXYZTAsDouble(posC));
-				break;
-
-			default:
-				throw new RuntimeException("Unsupported type");
-		}
-
+		Object dataCopyXYZT = singleChannelSequence.getDataCopyXYZT(0);
+		newImageData.GetPointData().SetScalars(VtkUtil.getVtkArray(dataCopyXYZT, true));
 		return newImageData;
 	}
 
