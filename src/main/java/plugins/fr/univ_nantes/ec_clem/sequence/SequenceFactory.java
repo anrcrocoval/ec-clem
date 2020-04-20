@@ -50,9 +50,9 @@ public class SequenceFactory {
         VtkDataSequenceSupplier vtkDataSequenceSupplier = new VtkDataSequenceSupplier(
             grid,
             UBYTE,
+             0,
+             1,
             VtkUtil.getJavaArray(sourceGrid.GetOutput().GetPointData().GetScalars()),
-            0,
-            1,
             xSize,
             ySize,
             zSize,

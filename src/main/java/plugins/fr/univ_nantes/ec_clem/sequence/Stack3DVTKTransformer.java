@@ -45,6 +45,11 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 	private double InputSpacingz;
 	private double InputSpacingx;
 	private double InputSpacingy;
+
+	private DataType dataType;
+	private int sizeT;
+	private int sizeC;
+
 	private VtkAbstractTransformFactory vtkAbstractTransformFactory;
 
 	public Stack3DVTKTransformer(Sequence sequence, SequenceSize sequenceSize, Transformation transformation) {
@@ -52,21 +57,20 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		setSourceSequence(sequence);
 		setTargetSize(sequenceSize);
 		this.transformation = transformation;
-		for(int c = 0; c < sequence.getSizeC(); c++) {
-			super.add(new VtkDataSequenceSupplier(
+		this.dataType = sequence.getDataType_();
+		this.sizeT = sequence.getSizeT();
+		this.sizeC = sequence.getSizeC();
+		for(int i = 0; i < sequence.getSizeC(); i++) {
+			super.add(
+				new VtkDataSequenceSupplier(
 					sequence,
-					sequence.getDataType_(),
+					dataType,
+					i,
+					sizeC,
 					null,
-					c,
-					sequence.getSizeC(),
-					extentx,
-					extenty,
-					extentz,
-					sequence.getSizeT(),
-					spacingx,
-					spacingy,
-					spacingz
-			));
+					extentx, extenty, extentz, sizeT, spacingx, spacingy, spacingz
+				)
+			);
 		}
 	}
 
@@ -88,15 +92,14 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		}
 		sequence.removeAllImages();
 		List<ProgressTrackable> taskList = super.getTaskList();
-		for(int i = 0; i < taskList.size(); i++) {
+		for (int c = 0; c < sizeC; c++) {
 			vtkImageData vtkImageData = converttoVtkImageData(channels.remove(0));
-			vtkImageData.GlobalReleaseDataFlagOn();
 			imageReslice.SetInputData(vtkImageData);
 			imageReslice.Modified();
 			imageReslice.Update();
-			((VtkDataSequenceSupplier) taskList.get(i))
-				.setData(VtkUtil.getJavaArray(imageReslice.GetOutput().GetPointData().GetScalars()))
-				.get();
+			VtkDataSequenceSupplier progressTrackable = (VtkDataSequenceSupplier) taskList.get(c);
+			progressTrackable.setData(VtkUtil.getJavaArray(imageReslice.GetOutput().GetPointData().GetScalars()));
+			progressTrackable.get();
 		}
 		return sequence;
 	}
