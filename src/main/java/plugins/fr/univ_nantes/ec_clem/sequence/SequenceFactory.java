@@ -16,7 +16,7 @@ import icy.gui.frame.progress.ProgressFrame;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import icy.vtk.VtkUtil;
-import vtk.*;
+import vtk.vtkImageGridSource;
 import javax.inject.Inject;
 import static icy.type.DataType.UBYTE;
 
@@ -50,13 +50,13 @@ public class SequenceFactory {
         VtkDataSequenceSupplier vtkDataSequenceSupplier = new VtkDataSequenceSupplier(
             grid,
             UBYTE,
-                0,
-                1,
+             0,
+             1,
             VtkUtil.getJavaArray(sourceGrid.GetOutput().GetPointData().GetScalars()),
             xSize,
             ySize,
             zSize,
-            grid.getSizeT(),
+            1,
             spacingX,
             spacingY,
             spacingZ

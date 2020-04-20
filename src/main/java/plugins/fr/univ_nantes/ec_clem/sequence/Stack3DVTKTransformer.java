@@ -18,9 +18,10 @@ import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackable;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-import icy.type.DataType;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackableMasterTask;
-import vtk.*;
+import vtk.vtkAbstractTransform;
+import vtk.vtkImageData;
+import vtk.vtkImageReslice;
 import javax.inject.Inject;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,7 +72,6 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 				)
 			);
 		}
-
 	}
 
 	@Override
@@ -84,6 +84,7 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		imageReslice.SetOutputExtent(0, extentx - 1, 0, extenty - 1, 0, extentz - 1);
 		imageReslice.SetResliceTransform(mytransfo);
 		imageReslice.SetInterpolationModeToLinear();
+		imageReslice.ReleaseDataFlagOn();
 
 		List<Sequence> channels = new LinkedList<>();
 		for(int c = 0; c < sequence.getSizeC(); c++) {

@@ -22,11 +22,14 @@ import java.util.function.Supplier;
 public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implements Supplier<Sequence> {
 
     private Sequence sequence;
+
     private Object vtkDataSetArray;
     private int xSize;
     private int ySize;
     private int zSize;
     private int tSize;
+    private int cSize;
+    private int channel;
     private double spacingX;
     private double spacingY;
     private double spacingZ;
@@ -37,11 +40,14 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
     public VtkDataSequenceSupplier(Sequence sequence, DataType datatype, int c, int sizeC, Object vtkDataSetArray, int xSize, int ySize, int zSize, int tSize, double spacingX, double spacingY, double spacingZ) {
         super(tSize * zSize);
         this.sequence = sequence;
+        this.dataType = dataType;
         this.vtkDataSetArray = vtkDataSetArray;
         this.xSize = xSize;
         this.ySize = ySize;
         this.zSize = zSize;
         this.tSize = tSize;
+        this.cSize = cSize;
+        this.channel = channel;
         this.spacingX = spacingX;
         this.spacingY = spacingY;
         this.spacingZ = spacingZ;
