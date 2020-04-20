@@ -13,6 +13,7 @@
 package plugins.fr.univ_nantes.ec_clem.sequence;
 
 import icy.sequence.SequenceUtil;
+import icy.type.DataType;
 import icy.vtk.VtkUtil;
 import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackable;
 import plugins.fr.univ_nantes.ec_clem.transformation.Transformation;
