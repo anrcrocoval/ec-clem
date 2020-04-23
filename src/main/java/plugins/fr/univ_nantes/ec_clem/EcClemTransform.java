@@ -14,7 +14,7 @@ import javax.inject.Inject;
 public class EcClemTransform extends EzPlug implements Block {
 
     private XmlToTransformationSchemaFileReader xmlToTransformationSchemaFileReader;
-    private EzVarFile inputFiducialFile = new EzVarFile("fiducial file", null);
+    private EzVarFile inputFiducialFile = new EzVarFile("transformation schema file", null);
     private EzVarSequence inputSequence = new EzVarSequence("input sequence");
 
     public EcClemTransform() {
