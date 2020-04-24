@@ -70,8 +70,8 @@ public class XmlTransformationReader {
         for(Element dimension : elements) {
             sequenceSize.add(new DimensionSize(
                 DimensionId.valueOf(dimension.getAttribute(dimensionSizeDimensionNameAttributeName)),
-                Integer.valueOf(dimension.getTextContent()),
-                Double.valueOf(dimension.getAttribute(dimensionSizePixelSizeAttributeName))
+                Integer.parseInt(dimension.getTextContent()),
+                Double.parseDouble(dimension.getAttribute(dimensionSizePixelSizeAttributeName))
             ));
         }
         return sequenceSize;
@@ -79,7 +79,7 @@ public class XmlTransformationReader {
 
     private Dataset readDataset(Element datasetElement) {
         Dataset result = new Dataset(
-            Integer.valueOf(datasetElement.getAttribute(datasetDimensionAttributeName)),
+            Integer.parseInt(datasetElement.getAttribute(datasetDimensionAttributeName)),
             PointType.valueOf(datasetElement.getAttribute(datasetPointTypeAttributeName))
         );
         ArrayList<Element> pointElements = XMLUtil.getElements(datasetElement);
@@ -93,7 +93,7 @@ public class XmlTransformationReader {
         ArrayList<Element> coordinateElements = XMLUtil.getElements(pointElement);
         Point result = new Point(coordinateElements.size());
         for(Element coordinate : coordinateElements) {
-            result.getMatrix().set(Integer.valueOf(coordinate.getAttribute(coordinateDimensionAttributeName)), 0, Double.valueOf(coordinate.getTextContent()));
+            result.getMatrix().set(Integer.parseInt(coordinate.getAttribute(coordinateDimensionAttributeName)), 0, Double.parseDouble(coordinate.getTextContent()));
         }
         return result;
     }

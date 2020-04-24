@@ -88,17 +88,16 @@ public class EcClemCascadeTransform extends EzPlug {
     private TransformationSchema getNewTransformationSchema(List<TransformationSchema> schemas) {
         TransformationType transformationType = getTransformationType(schemas);
         NoiseModel noiseModel = getNoiseModel(schemas);
-        TransformationSchema remove = schemas.remove(0);
-        Dataset transformedDataset = remove.getFiducialSet().getTargetDataset();
+        Dataset transformedDataset = schemas.get(0).getFiducialSet().getSourceDataset();
         for(int i = 0; i < schemas.size(); i++) {
             RegistrationParameter from = registrationParameterFactory.getFrom(schemas.get(i));
             transformedDataset = from.getTransformation().apply(transformedDataset);
         }
         return new TransformationSchema(
-            new FiducialSet(remove.getFiducialSet().getSourceDataset(), transformedDataset),
+            new FiducialSet(schemas.get(0).getFiducialSet().getSourceDataset(), transformedDataset),
             transformationType,
             noiseModel,
-            remove.getSourceSize(),
+            schemas.get(0).getSourceSize(),
             schemas.get(schemas.size() - 1).getTargetSize()
         );
     }
