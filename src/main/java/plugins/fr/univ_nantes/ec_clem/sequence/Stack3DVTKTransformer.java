@@ -87,6 +87,7 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		imageReslice.SetInterpolationModeToLinear();
 		imageReslice.ReleaseDataFlagOn();
 
+//		sequence.setAutoUpdateChannelBounds(false);
 		List<Sequence> channels = new LinkedList<>();
 		for(int c = 0; c < sequence.getSizeC(); c++) {
 			channels.add(SequenceUtil.extractChannel(sequence, c));
@@ -101,7 +102,13 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 			VtkDataSequenceSupplier progressTrackable = (VtkDataSequenceSupplier) taskList.get(c);
 			progressTrackable.setData(VtkUtil.getJavaArray(imageReslice.GetOutput().GetPointData().GetScalars()));
 			progressTrackable.get();
+			vtkImageData.ReleaseData();
+			vtkImageData.Delete();
 		}
+		imageReslice.Delete();
+		VtkUtil.vtkGC();
+//		sequence.setAutoUpdateChannelBounds(true);
+//		sequence.updateChannelsBounds(true);
 		return sequence;
 	}
 

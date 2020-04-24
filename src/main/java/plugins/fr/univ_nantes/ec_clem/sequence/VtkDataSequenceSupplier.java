@@ -68,7 +68,7 @@ public class VtkDataSequenceSupplier extends ProgressTrackableChildTask implemen
                     if(image == null) {
                         image = new IcyBufferedImage(xSize, ySize, sizeC, dataType);
                         sequence.setImage(t, z, image);
-                        image.setVolatile(true);
+                        image.setVolatile(sequence.isVolatile());
                     }
 
                     System.arraycopy(inData, (t * zSize * xSize * ySize) + (z * xSize * ySize), outData, 0, xSize * ySize);

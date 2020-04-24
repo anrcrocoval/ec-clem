@@ -69,9 +69,9 @@ public class ResetOriginalImage implements Runnable, ProgressTrackable {
     }
 
     private void restoreBackup(Sequence sequence, Sequence backup) {
-        sequence.setAutoUpdateChannelBounds(false);
-        sequence.beginUpdate();
+//        sequence.setAutoUpdateChannelBounds(false);
         sequence.removeAllImages();
+        sequence.beginUpdate();
         try {
             for (int t = 0; t < backup.getSizeT(); t++) {
                 for (int z = 0; z < backup.getSizeZ(); z++) {
@@ -83,6 +83,8 @@ public class ResetOriginalImage implements Runnable, ProgressTrackable {
             sequence.setPixelSizeZ(backup.getPixelSizeZ());
         } finally {
             sequence.endUpdate();
+//            sequence.setAutoUpdateChannelBounds(true);
+//            sequence.updateChannelsBounds(true);
         }
     }
 
