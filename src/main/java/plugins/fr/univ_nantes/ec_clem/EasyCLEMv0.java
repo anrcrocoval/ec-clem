@@ -69,8 +69,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		0, false
 	);
 	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", true);
-	private EzVarSequence target = new EzVarSequence("Select image that will not be modified (likely EM)");
-	private EzVarSequence source = new EzVarSequence("Select image that will be transformed and resized (likely FM)");
+	private EzVarSequence target = new EzVarSequence("Target sequence");
+	private EzVarSequence source = new EzVarSequence("Source sequence");
 	private EzGroup inputGroup = new EzGroup("Images to process", source, target, choiceinputsection, noiseModel, showgrid);
 
 	public static Color[] Colortab = new Color[] {

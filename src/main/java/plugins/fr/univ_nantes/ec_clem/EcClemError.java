@@ -30,7 +30,7 @@ public class EcClemError extends EzPlug implements Block {
     private TargetRegistrationErrorMapFactory targetRegistrationErrorMapFactory;
     private TransformationToCsvFileWriter transformationToCsvFileWriter;
 
-    private EzVarFile inputFiducialFile = new EzVarFile("fiducial file", null);
+    private EzVarFile inputFiducialFile = new EzVarFile("transformation schema file", null);
     private VarFile outputTransformationFile = new VarFile("transformation file", null);
     private VarSequence outputErrorMap = new VarSequence("error map", null);
 
