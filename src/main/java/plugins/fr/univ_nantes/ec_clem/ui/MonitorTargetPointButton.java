@@ -18,7 +18,6 @@ import icy.plugin.PluginLauncher;
 import icy.plugin.PluginLoader;
 import plugins.fr.univ_nantes.ec_clem.workspace.Workspace;
 import plugins.fr.univ_nantes.ec_clem.monitor.MonitorTargetPoint;
-
 import javax.inject.Inject;
 import javax.swing.*;
 
@@ -39,10 +38,11 @@ public class MonitorTargetPointButton extends JButton {
 
     private void action() {
         PluginDescriptor plugin = PluginLoader.getPlugin(MonitorTargetPoint.class.getName());
+        MonitorTargetPoint monitorTargetPoint = (MonitorTargetPoint) PluginLauncher.start(plugin);
+        workspace.addMonitoringPoint(monitorTargetPoint);
         MonitorTargetOverlay monitorTargetOverlay = new MonitorTargetOverlay(
-            workspace.getMonitoringConfiguration()
+            monitorTargetPoint
         );
         workspace.getTargetSequence().addOverlay(monitorTargetOverlay);
-        PluginLauncher.start(plugin);
     }
 }

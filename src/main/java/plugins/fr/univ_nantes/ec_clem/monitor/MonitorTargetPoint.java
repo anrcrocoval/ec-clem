@@ -15,39 +15,35 @@ package plugins.fr.univ_nantes.ec_clem.monitor;
 import icy.gui.frame.IcyFrame;
 import icy.gui.util.GuiUtil;
 import icy.plugin.abstract_.PluginActionable;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-
 import javax.swing.JPanel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-
 import org.jfree.ui.RectangleInsets;
+import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
 
 public class MonitorTargetPoint extends PluginActionable {
 
-    private static JFreeChart jfreechart;
-    private static XYSeries yintervalseries;
+    private JFreeChart jfreechart;
+    private XYSeries yintervalseries;
 	private JPanel mainPanel = GuiUtil.generatePanel("Graph");
     private IcyFrame mainFrame = GuiUtil.generateTitleFrame("Target Registration Error (predicted)", mainPanel, new Dimension(300, 100), true, true, true, true);
 	private int N;
+	private Point monitoringPoint;
 
     @Override
     public void run() {
-        N=0;
+        N = 0;
         XYDataset dataset = createDataset(N);
         createChart(dataset);
         ChartPanel chartPanel = new ChartPanel(jfreechart);
@@ -62,8 +58,24 @@ public class MonitorTargetPoint extends PluginActionable {
         mainFrame.requestFocus();
     }
 
-    private static XYDataset createDataset(int N) {
-        yintervalseries = new XYSeries("TRE in nm");
+    public void UpdatePoint(double x, double y) {
+        yintervalseries.addOrUpdate(x, y);
+        XYPlot xyplot = (XYPlot) jfreechart.getPlot();
+        NumberAxis numberaxis = (NumberAxis) xyplot.getRangeAxis();
+        numberaxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        numberaxis.setAutoRangeIncludesZero(false);
+    }
+
+    public Point getMonitoringPoint() {
+        return monitoringPoint;
+    }
+
+    public void setMonitoringPoint(Point monitoringPoint) {
+        this.monitoringPoint = monitoringPoint;
+    }
+
+    private XYDataset createDataset(int N) {
+        yintervalseries = new XYSeries("TRE in nm", true, false);
         for (int i = 1; i <= N; i++) {
             yintervalseries.add(i, i);
         }
@@ -88,16 +100,5 @@ public class MonitorTargetPoint extends PluginActionable {
         NumberAxis numberaxis = (NumberAxis) xyplot.getRangeAxis();
         numberaxis.setAutoRangeIncludesZero(true);
         numberaxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-    }
-
-    public static void UpdatePoint(double[][] newvalues) {
-        yintervalseries.clear();
-        for (double[] newvalue : newvalues) {
-            yintervalseries.add(newvalue[0], newvalue[1]);
-            XYPlot xyplot = (XYPlot) jfreechart.getPlot();
-            NumberAxis numberaxis = (NumberAxis) xyplot.getRangeAxis();
-            numberaxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-            numberaxis.setAutoRangeIncludesZero(false);
-        }
     }
 }
