@@ -14,6 +14,9 @@ package plugins.fr.univ_nantes.ec_clem.workspace;
 
 import plugins.fr.univ_nantes.ec_clem.error.fitzpatrick.TREComputer;
 import plugins.fr.univ_nantes.ec_clem.error.fitzpatrick.TREComputerFactory;
+import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.DatasetFactory;
+import plugins.fr.univ_nantes.ec_clem.roi.PointType;
+import plugins.fr.univ_nantes.ec_clem.roi.RoiUpdater;
 import plugins.fr.univ_nantes.ec_clem.storage.transformation.TransformationToCsvFileWriter;
 import plugins.fr.univ_nantes.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
 import plugins.fr.univ_nantes.ec_clem.transformation.RegistrationParameterFactory;
@@ -26,8 +29,6 @@ import plugins.fr.univ_nantes.ec_clem.progress.ProgressTrackableMasterTask;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceFactory;
 import plugins.fr.univ_nantes.ec_clem.sequence.SequenceUpdater;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
 public class WorkspaceTransformer extends ProgressTrackableMasterTask implements Runnable {
 
@@ -35,9 +36,8 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
     private TREComputerFactory treComputerFactory;
     private SequenceFactory sequenceFactory;
     private RegistrationParameterFactory registrationParameterFactory;
-
-    private List<Integer> listofNvalues = new ArrayList<>();
-    private List<Double> listoftrevalues = new ArrayList<>();
+    private RoiUpdater roiUpdater;
+    private DatasetFactory datasetFactory;
 
     private TransformationSchemaToXmlFileWriter transformationSchemaToXmlFileWriter;
     private TransformationToCsvFileWriter transformationToCsvFileWriter;
@@ -72,6 +72,7 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         SequenceUpdater sequenceUpdater = new SequenceUpdater(workspace.getSourceSequence(), workspace.getTransformationSchema());
         super.add(sequenceUpdater);
         sequenceUpdater.run();
+        roiUpdater.updateRoi(datasetFactory.getFrom(workspace.getTargetSequence(), PointType.FIDUCIAL), workspace.getTargetSequence());
         transformationSchemaToXmlFileWriter.save(workspace.getTransformationSchema(), workspace.getTransformationSchemaOutputFile());
         transformationToCsvFileWriter.save(registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(), workspace.getTransformationOutputFile());
 
@@ -114,5 +115,15 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
     @Inject
     public void setRegistrationParameterFactory(RegistrationParameterFactory registrationParameterFactory) {
         this.registrationParameterFactory = registrationParameterFactory;
+    }
+
+    @Inject
+    public void setRoiUpdater(RoiUpdater roiUpdater) {
+        this.roiUpdater = roiUpdater;
+    }
+
+    @Inject
+    public void setDatasetFactory(DatasetFactory datasetFactory) {
+        this.datasetFactory = datasetFactory;
     }
 }
