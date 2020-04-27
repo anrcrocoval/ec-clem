@@ -12,12 +12,13 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.workspace;
 
+import plugins.fr.univ_nantes.ec_clem.monitor.MonitorTargetPoint;
 import plugins.fr.univ_nantes.ec_clem.transformation.configuration.TransformationConfiguration;
 import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
 import icy.sequence.Sequence;
-import plugins.fr.univ_nantes.ec_clem.monitor.MonitoringConfiguration;
-
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Workspace {
 
@@ -29,10 +30,11 @@ public class Workspace {
     private File transformationOutputFile;
     private WorkspaceState workspaceState;
     private TransformationConfiguration transformationConfiguration;
+    private List<MonitorTargetPoint> monitorTargetPoints;
 
     public Workspace() {
         workspaceState = new WorkspaceState(false, false, null);
-        monitoringConfiguration = new MonitoringConfiguration(false, false);
+        monitorTargetPoints = new LinkedList<>();
     }
 
     public Workspace(
@@ -41,8 +43,7 @@ public class Workspace {
         Sequence sourceBackup,
         File transformationSchemaOutputFile,
         File transformationOutputFile,
-        WorkspaceState workspaceState,
-        MonitoringConfiguration monitoringConfiguration
+        WorkspaceState workspaceState
     ) {
         this.sourceSequence = sourceSequence;
         this.targetSequence = targetSequence;
@@ -50,10 +51,8 @@ public class Workspace {
         this.transformationSchemaOutputFile = transformationSchemaOutputFile;
         this.transformationOutputFile = transformationOutputFile;
         this.workspaceState = workspaceState;
-        this.monitoringConfiguration = monitoringConfiguration;
+        monitorTargetPoints = new LinkedList<>();
     }
-
-    private MonitoringConfiguration monitoringConfiguration;
 
     public Sequence getSourceSequence() {
         return sourceSequence;
@@ -103,10 +102,6 @@ public class Workspace {
         return workspaceState;
     }
 
-    public MonitoringConfiguration getMonitoringConfiguration() {
-        return monitoringConfiguration;
-    }
-
     public TransformationConfiguration getTransformationConfiguration() {
         return transformationConfiguration;
     }
@@ -121,5 +116,13 @@ public class Workspace {
 
     public void setTransformationSchema(TransformationSchema transformationSchema) {
         this.transformationSchema = transformationSchema;
+    }
+
+    public List<MonitorTargetPoint> getMonitorTargetPoints() {
+        return monitorTargetPoints;
+    }
+
+    public void addMonitoringPoint(MonitorTargetPoint monitorTargetPoint) {
+        monitorTargetPoints.add(monitorTargetPoint);
     }
 }

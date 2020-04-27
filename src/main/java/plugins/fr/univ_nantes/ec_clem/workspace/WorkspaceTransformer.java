@@ -75,23 +75,14 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         transformationSchemaToXmlFileWriter.save(workspace.getTransformationSchema(), workspace.getTransformationSchemaOutputFile());
         transformationToCsvFileWriter.save(registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(), workspace.getTransformationOutputFile());
 
-        if (workspace.getMonitoringConfiguration().isMonitor()) {
-            TREComputer treComputer = treComputerFactory.getFrom(workspace);
-
-            listofNvalues.add(listofNvalues.size(), workspace.getTransformationSchema().getFiducialSet().getN());
-            listoftrevalues.add(
-                listoftrevalues.size(),
-                treComputer.getExpectedSquareTRE(workspace.getMonitoringConfiguration().getMonitoringPoint())
-            );
-
-            double[][] TREValues = new double[listofNvalues.size()][2];
-
-            for (int i = 0; i < listofNvalues.size(); i++) {
-                TREValues[i][0] = listofNvalues.get(i);
-                TREValues[i][1] = listoftrevalues.get(i);
-                System.out.println("N=" + TREValues[i][0] + ", TRE=" + TREValues[i][1]);
+        for(MonitorTargetPoint monitorTargetPoint : workspace.getMonitorTargetPoints()) {
+            if(monitorTargetPoint.getMonitoringPoint() != null) {
+                TREComputer treComputer = treComputerFactory.getFrom(workspace);
+                monitorTargetPoint.UpdatePoint(
+                        workspace.getTransformationSchema().getFiducialSet().getN(),
+                        treComputer.getExpectedSquareTRE(monitorTargetPoint.getMonitoringPoint())
+                );
             }
-            MonitorTargetPoint.UpdatePoint(TREValues);
         }
     }
 
