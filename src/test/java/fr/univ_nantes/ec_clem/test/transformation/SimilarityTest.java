@@ -14,7 +14,7 @@ package fr.univ_nantes.ec_clem.test.transformation;
 
 import Jama.Matrix;
 import org.testng.annotations.Test;
-import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
 
 import static org.testng.Assert.assertEquals;
 

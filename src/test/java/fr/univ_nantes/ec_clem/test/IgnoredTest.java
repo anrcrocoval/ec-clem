@@ -13,24 +13,24 @@
 package fr.univ_nantes.ec_clem.test;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.error.CovarianceMatrixComputer;
-import plugins.fr.univ_nantes.ec_clem.error.ErrorComputer;
-import plugins.fr.univ_nantes.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
-import plugins.fr.univ_nantes.ec_clem.fixtures.transformation.TestTransformationFactory;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.error.CovarianceMatrixComputer;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ErrorComputer;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.fixtures.transformation.TestTransformationFactory;
 import org.testng.annotations.Test;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.registration.AffineRegistrationParameterComputer;
-import plugins.fr.univ_nantes.ec_clem.registration.RegistrationParameter;
-import plugins.fr.univ_nantes.ec_clem.registration.RigidRegistrationParameterComputer;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.AffineRegistrationParameterComputer;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RegistrationParameter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RigidRegistrationParameterComputer;
 //import plugins.fr.univ_nantes.ec_clem.registration.TLSAffineRegistrationParameterComputer;
-import plugins.fr.univ_nantes.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
-import plugins.fr.univ_nantes.ec_clem.transformation.schema.NoiseModel;
-import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationSchema;
-import plugins.fr.univ_nantes.ec_clem.transformation.schema.TransformationType;
-import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.NoiseModel;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationType;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
 
 import javax.inject.Inject;
 
