@@ -2,9 +2,9 @@ package fr.univ_nantes.ec_clem.test.error.ellipse.rigid.dimension3;
 
 import Jama.Matrix;
 import org.testng.annotations.Test;
-import plugins.fr.univ_nantes.ec_clem.error.ellipse.rigid.dimension3.RotationParameters3D;
-import plugins.fr.univ_nantes.ec_clem.fixtures.matrix.TestMatrixFactory;
-import plugins.fr.univ_nantes.ec_clem.transformation.Similarity;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.dimension3.RotationParameters3D;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.fixtures.matrix.TestMatrixFactory;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
 
 import javax.inject.Inject;
 

@@ -14,12 +14,12 @@ package fr.univ_nantes.ec_clem.test.registration;
 
 import Jama.Matrix;
 import org.testng.annotations.Test;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.registration.AffineRegistrationParameterComputer;
-import plugins.fr.univ_nantes.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.transformation.AffineTransformation;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.AffineRegistrationParameterComputer;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
