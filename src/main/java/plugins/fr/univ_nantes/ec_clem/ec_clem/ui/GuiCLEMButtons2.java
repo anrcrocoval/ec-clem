@@ -22,7 +22,6 @@ package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
 import javax.inject.Inject;
 import javax.swing.JPanel;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.ui.overlay.ErrorInPositionOverlay;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.ui.overlay.PredictedErrorInPositionOverlay;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
 
 public class GuiCLEMButtons2 extends JPanel {
@@ -31,16 +30,19 @@ public class GuiCLEMButtons2 extends JPanel {
 	private MonitorTargetPointButton monitorTargetPointButton;
 	private ShowOverlayCheckbox showerror;
 	private ErrorInPositionOverlay errorInPositionOverlay;
+	private ShowPredictedErrorOverlaysCheckbox showPredictedErrorOverlaysCheckbox;
 
 	@Inject
 	public GuiCLEMButtons2(
 			ComputeErrorMapButton computeErrorMapButton,
 			MonitorTargetPointButton monitorTargetPointButton,
-			ErrorInPositionOverlay errorInPositionOverlay
+			ErrorInPositionOverlay errorInPositionOverlay,
+			ShowPredictedErrorOverlaysCheckbox showPredictedErrorOverlaysCheckbox
 	) {
 		this.computeErrorMapButton = computeErrorMapButton;
 		this.monitorTargetPointButton = monitorTargetPointButton;
 		this.errorInPositionOverlay = errorInPositionOverlay;
+		this.showPredictedErrorOverlaysCheckbox = showPredictedErrorOverlaysCheckbox;
 		showerror = new ShowOverlayCheckbox(
 			null,
 			"Show Difference in Positions",
@@ -48,6 +50,7 @@ public class GuiCLEMButtons2 extends JPanel {
 		);
 
 		add(showerror);
+		add(showPredictedErrorOverlaysCheckbox);
 		add(computeErrorMapButton);
 		add(monitorTargetPointButton);
 	}
@@ -57,17 +60,20 @@ public class GuiCLEMButtons2 extends JPanel {
 		monitorTargetPointButton.setWorkspace(workspace);
 		showerror.setWorkspace(workspace);
 		showerror.setOverlay(errorInPositionOverlay.setWorkspace(workspace));
+		showPredictedErrorOverlaysCheckbox.setWorkspace(workspace);
 	}
 
 	public void disableButtons() {
 		computeErrorMapButton.setEnabled(false);
 		monitorTargetPointButton.setEnabled(false);
 		showerror.setEnabled(false);
+		showPredictedErrorOverlaysCheckbox.setEnabled(false);
 	}
 
 	public void enableButtons() {
 		computeErrorMapButton.setEnabled(true);
 		monitorTargetPointButton.setEnabled(true);
 		showerror.setEnabled(true);
+		showPredictedErrorOverlaysCheckbox.setEnabled(true);
 	}
 }
