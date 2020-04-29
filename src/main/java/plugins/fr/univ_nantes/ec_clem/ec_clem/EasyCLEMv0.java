@@ -40,7 +40,6 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.misc.advancedmodules;
-
 import javax.inject.Inject;
 
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
