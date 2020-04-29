@@ -22,16 +22,13 @@ import java.net.URL;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import plugins.adufour.ezplug.*;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.configuration.TransformationConfigurationFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.NoiseModel;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationType;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.ui.GuiCLEMButtons;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.ui.GuiCLEMButtons2;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
-import icy.gui.viewer.Viewer;
 import icy.main.Icy;
-import icy.system.thread.ThreadUtil;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.gui.dialog.MessageDialog;
@@ -42,7 +39,6 @@ import icy.painter.Overlay;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-//import plugins.fr.univ_nantes.ec_clem.misc.GuiCLEMButtonApply;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.misc.advancedmodules;
 
 import javax.inject.Inject;
@@ -53,7 +49,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private MessageOverlay messageTarget = new MessageOverlay("Target");
 
 	private TransformationConfigurationFactory transformationConfigurationFactory;
-	private SequenceFactory sequenceFactory;
 	private GuiCLEMButtons guiCLEMButtons;
 	private GuiCLEMButtons2 rigidspecificbutton;
 
@@ -207,7 +202,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	}
 	
 	@Override
-	public void clean() {}
+	public void clean() {
+		clearWorkspace();
+	}
 
 	@Override
 	public void stopExecution() {
@@ -218,19 +215,28 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		choiceinputsection.setEnabled(true);
 		noiseModel.setEnabled(true);
 		showgrid.setEnabled(true);
+		clearWorkspace();
 		synchronized(this) {
 			notify();
+		}
+	}
+
+	private void clearWorkspace() {
+		if(workspace != null) {
+			workspace.setSourceSequence(null);
+			workspace.setTargetSequence(null);
+			workspace.setSourceBackup(null);
+			workspace.setTransformationConfiguration(null);
+			workspace.setTransformationSchema(null);
+			workspace.setTransformationOutputFile(null);
+			workspace.setTransformationSchemaOutputFile(null);
+			workspace = null;
 		}
 	}
 
 	@Inject
 	public void setTransformationConfigurationFactory(TransformationConfigurationFactory transformationConfigurationFactory) {
 		this.transformationConfigurationFactory = transformationConfigurationFactory;
-	}
-
-	@Inject
-	public void setSequenceFactory(SequenceFactory sequenceFactory) {
-		this.sequenceFactory = sequenceFactory;
 	}
 
 	@Inject
