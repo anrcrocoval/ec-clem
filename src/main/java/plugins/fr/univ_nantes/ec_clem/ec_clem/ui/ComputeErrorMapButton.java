@@ -59,7 +59,6 @@ public class ComputeErrorMapButton extends JButton {
                         .setColorMap(new FireColorMap(), false);
                 }));
         } catch(RuntimeException e) {
-            e.printStackTrace();
             MessageDialog.showDialog(e.getMessage(), MessageDialog.ERROR_MESSAGE);
         }
     }

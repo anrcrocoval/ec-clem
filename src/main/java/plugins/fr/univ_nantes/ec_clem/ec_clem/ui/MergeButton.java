@@ -27,7 +27,6 @@ public class MergeButton extends JButton {
                     new Viewer(sequence);
                 }));
         } catch(RuntimeException e) {
-            e.printStackTrace();
             MessageDialog.showDialog(e.getMessage(), MessageDialog.ERROR_MESSAGE);
         }
     }
