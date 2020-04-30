@@ -20,7 +20,7 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.TransformationToCsvFileWriter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
