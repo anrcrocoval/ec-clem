@@ -167,7 +167,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
 		workspace.setTransformationSchemaOutputFile(new File(String.format("%s.transformation_schema.xml", sourceSequence.getName())));
-		workspace.setTransformationOutputFile(new File(String.format("%s.transformation.csv", sourceSequence.getName())));
+		workspace.setCsvTransformationOutputFile(new File(String.format("%s.transformation.csv", sourceSequence.getName())));
+		workspace.setXmlTransformationOutputFile(new File(String.format("%s.transformation.xml", sourceSequence.getName())));
 		workspace.setTransformationConfiguration(
 			transformationConfigurationFactory.getFrom(
 				TransformationType.valueOf(choiceinputsection.getValue()),
@@ -228,7 +229,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			workspace.setSourceBackup(null);
 			workspace.setTransformationConfiguration(null);
 			workspace.setTransformationSchema(null);
-			workspace.setTransformationOutputFile(null);
+			workspace.setCsvTransformationOutputFile(null);
+			workspace.setXmlTransformationOutputFile(null);
 			workspace.setTransformationSchemaOutputFile(null);
 			workspace = null;
 		}
