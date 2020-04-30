@@ -23,7 +23,6 @@ import javax.inject.Inject;
 
 public class TREComputerFactory {
 
-    private Mean mean = new Mean();
     private InertiaMatrixComputer inertiaMatrixComputer;
     private FREComputer freComputer;
     private FLEComputer fleComputer;
@@ -91,6 +90,7 @@ public class TREComputerFactory {
     }
 
     private double[] getF(Dataset dataset, Matrix eigenVectors) {
+        Mean mean = new Mean();
         double[] f = new double[dataset.getDimension()];
         for(int j = 0; j < dataset.getDimension(); j++) {
             mean.clear();
