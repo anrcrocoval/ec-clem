@@ -14,10 +14,8 @@ package plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.rea
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
-
 import javax.inject.Inject;
 import java.io.File;
-import java.io.IOException;
 
 public class XmlFileReader {
 
@@ -25,20 +23,6 @@ public class XmlFileReader {
     public XmlFileReader() {}
 
     public Document loadFile(File XMLFile) {
-//        checkFileExists(XMLFile);
         return XMLUtil.loadDocument(XMLFile, true);
     }
-
-//    private void checkFileExists(File XMLFile) {
-//        if(!XMLFile.exists()) {
-//            try {
-//                XMLFile.createNewFile();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            Document document = XMLUtil.createDocument(true);
-//            XmlFileWriter xmlFileWriter = new XmlFileWriter(document, XMLFile);
-//            xmlFileWriter.write();
-//        }
-//    }
 }
