@@ -41,6 +41,7 @@ public class SequenceFactory {
             progressFrame
         );
         result.setName("Merged");
+        progressFrame.close();
         return result;
     }
 
