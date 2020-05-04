@@ -12,15 +12,13 @@ import plugins.adufour.vars.lang.VarSequence;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapSupplier;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RegistrationParameter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.TransformationToCsvFileWriter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.TransformationToCsvFormatter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFormatter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class EcClemError extends EzPlug implements Block {
 

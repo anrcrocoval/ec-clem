@@ -1,6 +1,5 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation;
+package plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.Formatter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.Formatter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.SplineTransformation;

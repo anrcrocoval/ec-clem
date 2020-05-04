@@ -20,7 +20,8 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.TransformationToCsvFileWriter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.xml.TransformationToXmlFileWriter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
@@ -41,6 +42,7 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
 
     private TransformationSchemaToXmlFileWriter transformationSchemaToXmlFileWriter;
     private TransformationToCsvFileWriter transformationToCsvFileWriter;
+    private TransformationToXmlFileWriter transformationToXmlFileWriter;
 
     private Workspace workspace;
 
@@ -74,7 +76,13 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         sequenceUpdater.run();
         roiUpdater.updateRoi(datasetFactory.getFrom(workspace.getTargetSequence(), PointType.FIDUCIAL), workspace.getTargetSequence());
         transformationSchemaToXmlFileWriter.save(workspace.getTransformationSchema(), workspace.getTransformationSchemaOutputFile());
-        transformationToCsvFileWriter.save(registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(), workspace.getTransformationOutputFile());
+        transformationToCsvFileWriter.save(registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(), workspace.getCsvTransformationOutputFile());
+        transformationToXmlFileWriter.save(
+            registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(),
+            workspace.getTransformationSchema().getTargetSize(),
+            workspace.getTransformationSchema().getFiducialSet().getN(),
+            workspace.getXmlTransformationOutputFile()
+        );
 
         for(MonitorTargetPoint monitorTargetPoint : workspace.getMonitorTargetPoints()) {
             if(monitorTargetPoint.getMonitoringPoint() != null) {
@@ -125,5 +133,10 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
     @Inject
     public void setDatasetFactory(DatasetFactory datasetFactory) {
         this.datasetFactory = datasetFactory;
+    }
+
+    @Inject
+    public void setTransformationToXmlFileWriter(TransformationToXmlFileWriter transformationToXmlFileWriter) {
+        this.transformationToXmlFileWriter = transformationToXmlFileWriter;
     }
 }

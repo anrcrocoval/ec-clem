@@ -13,7 +13,6 @@
 package plugins.fr.univ_nantes.ec_clem.ec_clem.workspace;
 
 import plugins.fr.univ_nantes.ec_clem.ec_clem.monitor.MonitorTargetPoint;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.monitor.MonitorTargetPoint;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.configuration.TransformationConfiguration;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import icy.sequence.Sequence;
@@ -28,7 +27,8 @@ public class Workspace {
     private Sequence sourceBackup;
     private TransformationSchema transformationSchema;
     private File transformationSchemaOutputFile;
-    private File transformationOutputFile;
+    private File csvTransformationOutputFile;
+    private File xmlTransformationOutputFile;
     private WorkspaceState workspaceState;
     private TransformationConfiguration transformationConfiguration;
     private List<MonitorTargetPoint> monitorTargetPoints;
@@ -43,14 +43,14 @@ public class Workspace {
         Sequence targetSequence,
         Sequence sourceBackup,
         File transformationSchemaOutputFile,
-        File transformationOutputFile,
+        File csvTransformationOutputFile,
         WorkspaceState workspaceState
     ) {
         this.sourceSequence = sourceSequence;
         this.targetSequence = targetSequence;
         this.sourceBackup = sourceBackup;
         this.transformationSchemaOutputFile = transformationSchemaOutputFile;
-        this.transformationOutputFile = transformationOutputFile;
+        this.csvTransformationOutputFile = csvTransformationOutputFile;
         this.workspaceState = workspaceState;
         monitorTargetPoints = new LinkedList<>();
     }
@@ -91,12 +91,20 @@ public class Workspace {
         this.transformationSchemaOutputFile = transformationSchemaOutputFile;
     }
 
-    public File getTransformationOutputFile() {
-        return transformationOutputFile;
+    public File getCsvTransformationOutputFile() {
+        return csvTransformationOutputFile;
     }
 
-    public void setTransformationOutputFile(File transformationOutputFile) {
-        this.transformationOutputFile = transformationOutputFile;
+    public void setCsvTransformationOutputFile(File csvTransformationOutputFile) {
+        this.csvTransformationOutputFile = csvTransformationOutputFile;
+    }
+
+    public File getXmlTransformationOutputFile() {
+        return xmlTransformationOutputFile;
+    }
+
+    public void setXmlTransformationOutputFile(File xmlTransformationOutputFile) {
+        this.xmlTransformationOutputFile = xmlTransformationOutputFile;
     }
 
     public WorkspaceState getWorkspaceState() {

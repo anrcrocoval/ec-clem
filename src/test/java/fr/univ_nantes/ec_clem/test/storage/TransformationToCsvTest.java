@@ -4,8 +4,8 @@ import Jama.Matrix;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.CsvToMatrixFileReader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.TransformationToCsvFileWriter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv.CsvToMatrixFileReader;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
 
 import javax.inject.Inject;
