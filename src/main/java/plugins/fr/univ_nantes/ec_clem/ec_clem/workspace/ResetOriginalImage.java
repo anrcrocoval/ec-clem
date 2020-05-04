@@ -12,6 +12,9 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.ec_clem.workspace;
 
+import icy.gui.viewer.Viewer;
+import icy.image.colormodel.IcyColorModel;
+import icy.image.lut.LUT;
 import icy.sequence.Sequence;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ChildProgressReport;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressManager;
@@ -21,13 +24,9 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressReport;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackable;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ChildProgressReport;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressManager;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResetOriginalImage implements Runnable, ProgressTrackable {
 
@@ -75,7 +74,13 @@ public class ResetOriginalImage implements Runnable, ProgressTrackable {
     }
 
     private void restoreBackup(Sequence sequence, Sequence backup) {
-//        sequence.setAutoUpdateChannelBounds(false);
+        List<LUT> lutList = new ArrayList<>();
+        List<Viewer> viewers = sequence.getViewers();
+        for(Viewer viewer : viewers) {
+            viewer.refreshCanvasCombo();
+            lutList.add(viewer.getLut());
+        }
+        sequence.beginUpdate();
         sequence.removeAllImages();
         sequence.beginUpdate();
         try {
@@ -89,9 +94,13 @@ public class ResetOriginalImage implements Runnable, ProgressTrackable {
             sequence.setPixelSizeZ(backup.getPixelSizeZ());
         } finally {
             sequence.endUpdate();
-//            sequence.setAutoUpdateChannelBounds(true);
-//            sequence.updateChannelsBounds(true);
         }
+//        sequence.updateChannelsBounds(true);
+        for(int i = 0; i < viewers.size(); i++) {
+            viewers.get(i).setLut(lutList.get(i));
+            sequence.setAutoUpdateChannelBounds(true);
+        }
+        sequence.endUpdate();
     }
 
     @Inject

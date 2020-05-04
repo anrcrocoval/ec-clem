@@ -12,6 +12,12 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.ec_clem.sequence;
 
+import icy.gui.viewer.Viewer;
+import icy.image.colormap.IcyColorMap;
+import icy.image.colormodel.IcyColorModel;
+import icy.image.colormodel.IcyColorModelEvent;
+import icy.image.lut.LUT;
+import icy.main.Icy;
 import icy.sequence.SequenceUtil;
 import icy.type.DataType;
 import icy.vtk.VtkUtil;
@@ -26,6 +32,7 @@ import vtk.vtkAbstractTransform;
 import vtk.vtkImageData;
 import vtk.vtkImageReslice;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -89,7 +96,14 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		imageReslice.SetInterpolationModeToLinear();
 		imageReslice.ReleaseDataFlagOn();
 
-//		sequence.setAutoUpdateChannelBounds(false);
+		List<LUT> lutList = new ArrayList<>();
+		List<Viewer> viewers = sequence.getViewers();
+		for(Viewer viewer : viewers) {
+			viewer.refreshCanvasCombo();
+			lutList.add(viewer.getLut());
+		}
+
+		sequence.beginUpdate();
 		List<Sequence> channels = new LinkedList<>();
 		for(int c = 0; c < sequence.getSizeC(); c++) {
 			channels.add(SequenceUtil.extractChannel(sequence, c));
@@ -109,8 +123,12 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		}
 		imageReslice.Delete();
 		VtkUtil.vtkGC();
-//		sequence.setAutoUpdateChannelBounds(true);
 //		sequence.updateChannelsBounds(true);
+		for(int i = 0; i < viewers.size(); i++) {
+			viewers.get(i).setLut(lutList.get(i));
+			sequence.setAutoUpdateChannelBounds(true);
+		}
+		sequence.endUpdate();
 		return sequence;
 	}
 
