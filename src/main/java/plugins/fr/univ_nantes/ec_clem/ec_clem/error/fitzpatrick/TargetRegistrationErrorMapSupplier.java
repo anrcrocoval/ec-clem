@@ -49,15 +49,15 @@ public class TargetRegistrationErrorMapSupplier extends ProgressTrackableChildTa
         Sequence newSequence = sequenceFactory.getFrom(sequenceSize);
         newSequence.beginUpdate();
         for (int z = 0; z < sequenceSize.get(DimensionId.Z).getSize(); z++) {
-            final double finalz = z;
+//            final double finalz = z;
             Point point = new Point(sequenceSize.getN());
+            point.getMatrix().set(2, 0, z * sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer());
             resultMap.put(completionService.submit(() -> {
                 float[] dataArray = new float[sequenceSize.get(DimensionId.X).getSize() * sequenceSize.get(DimensionId.Y).getSize()];
                 for (int x = 0; x < sequenceSize.get(DimensionId.X).getSize(); x++) {
                     for (int y = 0; y < sequenceSize.get(DimensionId.Y).getSize(); y++) {
                         point.getMatrix().set(0, 0, x * sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer());
                         point.getMatrix().set(1, 0, y * sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer());
-                        point.getMatrix().set(2, 0, finalz * sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer());
                         dataArray[(y * sequenceSize.get(DimensionId.X).getSize()) + x] = (float) treComputer.getExpectedSquareTRE(point);
                     }
                 }
@@ -78,7 +78,7 @@ public class TargetRegistrationErrorMapSupplier extends ProgressTrackableChildTa
         }
 
         newSequence.setAutoUpdateChannelBounds(false);
-        newSequence.setName("Prediction of registration only error in nanometers (if calibration settings were correct)");
+        newSequence.setName("Error map (\u03BCm)");
         ColorBarOverlay mycolorbar = new ColorBarOverlay(null);
         mycolorbar.setDisplayMinMax(true);
         newSequence.addOverlay(mycolorbar);

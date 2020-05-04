@@ -24,7 +24,6 @@ public class TREComputer {
     private double[] f;
     private Matrix eigenVectors;
     private Matrix barycentre;
-    private Mean mean = new Mean();
 
     @Inject
     public TREComputer(double n, double[] f, Matrix eigenVectors, Matrix barycentre, double expectedSquareFLE) {
@@ -44,6 +43,7 @@ public class TREComputer {
     }
 
     public double getExpectedSquareTRE(Point point) {
+        Mean mean = new Mean();
         double[] d = new double[point.getDimension()];
         for (int i = 0; i < point.getDimension(); i++) {
             d[i] += point.getSquareDistance(eigenVectors.getMatrix(0, eigenVectors.getRowDimension() - 1, i, i), barycentre);
