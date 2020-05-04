@@ -62,7 +62,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		NoiseModel.toArray(),
 		0, false
 	);
-	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", true);
+	private EzVarBoolean showgrid = new EzVarBoolean(" Show grid deformation", false);
 	private EzVarSequence target = new EzVarSequence("Target sequence");
 	private EzVarSequence source = new EzVarSequence("Source sequence");
 	private EzGroup inputGroup = new EzGroup("Images to process", source, target, choiceinputsection, noiseModel, showgrid);

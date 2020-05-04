@@ -123,7 +123,6 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		}
 		imageReslice.Delete();
 		VtkUtil.vtkGC();
-//		sequence.updateChannelsBounds(true);
 		for(int i = 0; i < viewers.size(); i++) {
 			viewers.get(i).setLut(lutList.get(i));
 			sequence.setAutoUpdateChannelBounds(true);

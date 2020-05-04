@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.util.Objects;
 
 public class SelectPointTypeBox extends JPanel {
 
@@ -34,12 +35,18 @@ public class SelectPointTypeBox extends JPanel {
         this.workspace = workspace;
         roiListenerManager.setSequences(workspace.getSourceSequence(), workspace.getTargetSequence());
         stringJComboBox.setSelectedItem(PointType.FIDUCIAL);
-        roiListenerManager.set(PointType.FIDUCIAL);
     }
 
-    public void setEnabled(boolean bool) {
+    public void setEnabled(boolean enabled) {
         for(Component component : getComponents()) {
-            component.setEnabled(bool);
+            component.setEnabled(enabled);
+        }
+        if(workspace != null) {
+            if(enabled) {
+                roiListenerManager.set((PointType) Objects.requireNonNull(stringJComboBox.getSelectedItem()));
+            } else {
+                roiListenerManager.clear();
+            }
         }
     }
 }

@@ -20,22 +20,15 @@ import icy.sequence.SequenceListener;
 import icy.type.point.Point5D;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiFactory;
 import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import javax.inject.Inject;
-import java.awt.*;
 import java.util.List;
-
-import static plugins.fr.univ_nantes.ec_clem.ec_clem.EasyCLEMv0.Colortab;
 
 public class FiducialRoiListener implements SequenceListener {
 
     private static PointType type = PointType.FIDUCIAL;
-
     private Sequence sequence;
-//    private WorkspaceState workspaceState;
     private SequenceListenerUtil sequenceListenerUtil;
     private RoiFactory roiFactory;
 
@@ -50,11 +43,6 @@ public class FiducialRoiListener implements SequenceListener {
         return this;
     }
 
-//    public FiducialRoiListener setWorkspaceState(WorkspaceState workspaceState) {
-//        this.workspaceState = workspaceState;
-//        return this;
-//    }
-
     @Override
     public void sequenceChanged(SequenceEvent event) {
         if (
@@ -63,8 +51,6 @@ public class FiducialRoiListener implements SequenceListener {
         ) {
             return;
         }
-
-//        workspaceState.setFlagReadyToMove(false);
 
         ROI roi = roiFactory.getRoiFrom(
             (ROI) event.getSource(),
@@ -88,9 +74,6 @@ public class FiducialRoiListener implements SequenceListener {
         List<SequenceListener> sequenceListeners = sequenceListenerUtil.removeListeners(sequence, FiducialRoiListener.class);
         sequence.addROI(roiCopy);
         sequenceListenerUtil.addListeners(sequence, sequenceListeners);
-//        workspaceState.setFlagReadyToMove(true);
-//        workspaceState.setDone(false);
-
         Icy.getMainInterface().setSelectedTool(getSelectedTool(roi).getName());
     }
 
