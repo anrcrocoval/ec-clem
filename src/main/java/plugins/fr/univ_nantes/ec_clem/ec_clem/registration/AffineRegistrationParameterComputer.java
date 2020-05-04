@@ -63,7 +63,6 @@ public class AffineRegistrationParameterComputer implements RegistrationParamete
             assert times.getColumnDimension() == 1;
             sum += times.get(0, 0);
         }
-//        return log(sqrt(inverseCovariance.det()) / sqrt(pow(2d * PI, residuals.getColumnDimension()))) * residuals.getRowDimension() - (sum / 2d);
         return log(1d / sqrt(pow(2d * PI, residuals.getColumnDimension()) * covariance.det())) * residuals.getRowDimension() - (sum / 2d);
     }
 }

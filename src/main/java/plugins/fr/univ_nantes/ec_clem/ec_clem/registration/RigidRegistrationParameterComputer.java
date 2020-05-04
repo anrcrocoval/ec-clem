@@ -14,7 +14,6 @@ package plugins.fr.univ_nantes.ec_clem.ec_clem.registration;
 
 import Jama.Matrix;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixUtil;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixUtil;
 import javax.inject.Inject;
 
 public class RigidRegistrationParameterComputer extends SimilarityRegistrationParameterComputer {

@@ -13,7 +13,6 @@
 package plugins.fr.univ_nantes.ec_clem.ec_clem.registration;
 
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
 
 public interface RegistrationParameterComputer {
     RegistrationParameter compute(FiducialSet fiducialSet);
