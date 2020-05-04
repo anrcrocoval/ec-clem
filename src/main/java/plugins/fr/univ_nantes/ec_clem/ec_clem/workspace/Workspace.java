@@ -34,7 +34,7 @@ public class Workspace {
     private List<MonitorTargetPoint> monitorTargetPoints;
 
     public Workspace() {
-        workspaceState = new WorkspaceState(false, false, null);
+        workspaceState = new WorkspaceState(false, false, null, false);
         monitorTargetPoints = new LinkedList<>();
     }
 

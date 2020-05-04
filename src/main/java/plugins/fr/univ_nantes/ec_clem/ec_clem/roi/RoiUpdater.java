@@ -12,6 +12,8 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.ec_clem.roi;
 
+import icy.canvas.IcyCanvas;
+import icy.gui.viewer.Viewer;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.ConfidenceEllipseFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
@@ -23,6 +25,7 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceListener;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoiUpdater {
@@ -84,5 +87,19 @@ public class RoiUpdater {
             roiFactory.getFrom(sequence, type),
             false
         );
+    }
+
+    public void setLayersVisible(Sequence sequence, PointType pointType, boolean visible) {
+        List<ROI> roiList = roiFactory.getFrom(sequence, pointType);
+        for(ROI roi : roiList) {
+            setLayersVisible(roi, visible);
+        }
+    }
+
+    private void setLayersVisible(ROI roi, boolean visible) {
+        List<IcyCanvas> attachedCanvas = roi.getOverlay().getAttachedCanvas();
+        for(IcyCanvas canvas : attachedCanvas) {
+            canvas.getLayer(roi).setVisible(visible);
+        }
     }
 }
