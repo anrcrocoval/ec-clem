@@ -54,7 +54,8 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
         super.add(imageTransformer);
         sourceSequence = imageTransformer.get();
 
-        roiUpdater.clear(sourceSequence, PointType.ERROR);
+        roiUpdater.clear(sourceSequence, PointType.PREDICTED_ERROR);
+        roiUpdater.clear(sourceSequence, PointType.MEASURED_ERROR);
         try {
             roiUpdater.updateErrorRoi(sourceFiducialDataset, transformationSchema, sourceSequence);
             roiUpdater.updateErrorRoi(sourceNonFiducialDataset, transformationSchema, sourceSequence);

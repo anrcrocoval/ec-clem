@@ -76,8 +76,22 @@ public class RoiUpdater {
                 confidenceEllipseFactory.getFrom(dataset.getPoint(i), transformationSchema, 0.95),
                 sequenceSizeFactory.getFrom(sequence)
             );
-            ellipseROI.setName(String.format("%s_%s_%d", PointType.ERROR.name(), dataset.getPointType().name(), i + 1));
+            ellipseROI.setName(String.format("%s_%s_%d", PointType.PREDICTED_ERROR.name(), dataset.getPointType().name(), i + 1));
             sequence.addROI(ellipseROI);
+        }
+        sequenceListenerUtil.addListeners(sequence, sequenceListeners);
+    }
+
+    public void updateMeasuredErrorRoi(Dataset sourceDataset, Dataset targetDataset, Sequence sequence) {
+        assert sourceDataset.getDimension() == targetDataset.getDimension();
+        List<SequenceListener> sequenceListeners = roiListenerManager.removeAll(sequence);
+        for(int i = 0; i < sourceDataset.getN(); i++) {
+            ROI lineROI = roiFactory.getFrom(
+                sourceDataset.getPoint(i),
+                targetDataset.getPoint(i)
+            );
+            lineROI.setName(String.format("%s_%s_%d", PointType.MEASURED_ERROR.name(), sourceDataset.getPointType().name(), i + 1));
+            sequence.addROI(lineROI);
         }
         sequenceListenerUtil.addListeners(sequence, sequenceListeners);
     }
