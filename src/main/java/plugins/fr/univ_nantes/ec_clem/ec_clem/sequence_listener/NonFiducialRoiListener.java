@@ -16,7 +16,6 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.util.List;
 
-import static plugins.fr.univ_nantes.ec_clem.ec_clem.EasyCLEMv0.Colortab;
 
 public class NonFiducialRoiListener implements SequenceListener {
 

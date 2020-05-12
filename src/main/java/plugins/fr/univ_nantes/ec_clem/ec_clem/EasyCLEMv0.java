@@ -67,18 +67,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private EzVarSequence source = new EzVarSequence("Source sequence");
 	private EzGroup inputGroup = new EzGroup("Images to process", source, target, choiceinputsection, noiseModel, showgrid);
 
-	public static Color[] Colortab = new Color[] {
-		Color.RED,
-		Color.YELLOW,
-		Color.PINK,
-		Color.GREEN,
-		Color.BLUE,
-		Color.CYAN,
-		Color.LIGHT_GRAY,
-		Color.MAGENTA,
-		Color.ORANGE
-	};
-
 	public EasyCLEMv0() {
 		DaggerEasyCLEMv0Component.builder().build().inject(this);
 	}
