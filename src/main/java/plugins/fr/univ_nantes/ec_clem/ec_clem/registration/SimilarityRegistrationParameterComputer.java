@@ -19,14 +19,8 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixUtil;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixUtil;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
 import javax.inject.Inject;
-import static java.lang.Math.max;
 
 public class SimilarityRegistrationParameterComputer extends AffineRegistrationParameterComputer {
 
@@ -36,22 +30,6 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
     }
 
     public RegistrationParameter compute(FiducialSet fiducialSet) {
-        if (fiducialSet.getN() < 2) {
-            int dimension = Math.max(fiducialSet.getSourceDataset().getDimension(), fiducialSet.getTargetDataset().getDimension());
-            return new RegistrationParameter(
-                new Similarity(
-                    Matrix.identity(
-                        dimension,
-                        dimension
-                    ),
-                    new Matrix(dimension, 1, 0),
-                    Matrix.identity(dimension, dimension)
-                ),
-                Matrix.identity(dimension, dimension),
-                Double.NaN
-            );
-        }
-
         Dataset clonedSourceDataset = fiducialSet.getSourceDataset().clone();
         Dataset clonedTargetDataset = fiducialSet.getTargetDataset().clone();
         Point sourceBarycentre = clonedSourceDataset.getBarycentre();

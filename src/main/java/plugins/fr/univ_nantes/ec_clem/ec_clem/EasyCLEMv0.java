@@ -19,6 +19,12 @@ import java.awt.Graphics2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import plugins.adufour.ezplug.*;
@@ -67,18 +73,6 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	private EzVarSequence source = new EzVarSequence("Source sequence");
 	private EzGroup inputGroup = new EzGroup("Images to process", source, target, choiceinputsection, noiseModel, showgrid);
 
-	public static Color[] Colortab = new Color[] {
-		Color.RED,
-		Color.YELLOW,
-		Color.PINK,
-		Color.GREEN,
-		Color.BLUE,
-		Color.CYAN,
-		Color.LIGHT_GRAY,
-		Color.MAGENTA,
-		Color.ORANGE
-	};
-
 	public EasyCLEMv0() {
 		DaggerEasyCLEMv0Component.builder().build().inject(this);
 	}
@@ -123,15 +117,18 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 	@Override
 	protected void initialize() {
-		new ToolTipFrame("<html>" + "<br> Press Play when ready. " + "<br> <li> Add point (2D or 3D ROI) on any image and drag it to its correct position in the other image.</li> "
-				+ "<br> <li> Use zoom and Lock views to help you!</li> "
-				+ "</html>","startmessage");
+		new ToolTipFrame(
+	"<html>"
+			+ "<br> Press Play when ready. "
+			+ "<br> <li> Add point (2D or 3D ROI) on any image and drag it to its correct position in the other image.</li> "
+			+ "<br> <li> Use zoom and Lock views to help you!</li> "
+			+ "</html>","startmessage"
+		);
 		addEzComponent(new EzLabel(getVersionString()));
 //		addComponent(new GuiCLEMButtonApply());
 		addComponent(new advancedmodules(this));
 		addEzComponent(inputGroup);
 
-		choiceinputsection.setToolTipText("2D transform will be only in the plane XY " + "but can be applied to all dimensions.\n WARNING make sure to have the metadata correctly set in 3D");
 		guiCLEMButtons.setEnabled(false);
 		addComponent(guiCLEMButtons);
 		rigidspecificbutton.disableButtons();
@@ -165,9 +162,21 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setSourceSequence(sourceSequence);
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
-		workspace.setTransformationSchemaOutputFile(new File(String.format("%s.transformation_schema.xml", sourceSequence.getName())));
-		workspace.setCsvTransformationOutputFile(new File(String.format("%s.transformation.csv", sourceSequence.getName())));
-		workspace.setXmlTransformationOutputFile(new File(String.format("%s.transformation.xml", sourceSequence.getName())));
+		Path parent = Paths.get(sourceSequence.getFilename()).getParent();
+		LocalDateTime date = LocalDateTime.now();
+
+		File transformationSchemaOutputFile = new File(String.format("%s/%s_to_%s_%s.transformation_schema.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date.toString()));
+		System.out.println(String.format("Transformation schema saved at : %s", transformationSchemaOutputFile.toString()));
+		workspace.setTransformationSchemaOutputFile(transformationSchemaOutputFile);
+
+		File csvTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.csv", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date.toString()));
+		System.out.println(String.format("CSV format transformation saved at : %s", csvTransformationFile.toString()));
+		workspace.setCsvTransformationOutputFile(csvTransformationFile);
+		
+		File XmlTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date.toString()));
+		System.out.println(String.format("XML format transformation saved at : %s", XmlTransformationFile.toString()));
+		workspace.setXmlTransformationOutputFile(XmlTransformationFile);
+
 		workspace.setTransformationConfiguration(
 			transformationConfigurationFactory.getFrom(
 				TransformationType.valueOf(choiceinputsection.getValue()),
@@ -183,7 +192,12 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		targetSequence.addOverlay(messageTarget);
 		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
 
-		new AnnounceFrame("Select point on image" + targetSequence.getName() + ", then drag it on source image and RIGHT CLICK", 5);
+		new ToolTipFrame(
+	"<html>"
+			+ "<br> Set at least 3 fiducial points and click on <b>Update transformation</b> button. "
+			+ "<br> Set at least 7 fiducial points to unlock error estimation capabilities. "
+			+ "</html>","runmessage"
+		);
 
 		guiCLEMButtons.setEnabled(true);
 		rigidspecificbutton.enableButtons();

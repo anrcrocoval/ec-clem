@@ -18,7 +18,7 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
 
 public class FiducialSet implements Cloneable {
-    private int minNumberOfPoints = 7;
+    private int minNumberOfPoints = 3;
     private Dataset sourceDataset;
     private Dataset targetDataset;
     private int n;

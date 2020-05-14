@@ -75,7 +75,13 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         super.add(sequenceUpdater);
         sequenceUpdater.run();
         roiUpdater.updateRoi(datasetFactory.getFrom(workspace.getTargetSequence(), PointType.FIDUCIAL), workspace.getTargetSequence());
-        roiUpdater.setLayersVisible(workspace.getSourceSequence(), PointType.ERROR, workspace.getWorkspaceState().isShowPredictedError());
+        roiUpdater.updateMeasuredErrorRoi(
+            datasetFactory.toPixel(datasetFactory.getFrom(workspace.getSourceSequence(), PointType.FIDUCIAL), workspace.getSourceSequence()),
+            datasetFactory.toPixel(datasetFactory.getFrom(workspace.getTargetSequence(), PointType.FIDUCIAL), workspace.getTargetSequence()),
+            workspace.getSourceSequence()
+        );
+        roiUpdater.setLayersVisible(workspace.getSourceSequence(), PointType.MEASURED_ERROR, workspace.getWorkspaceState().isShowMeasuredError());
+        roiUpdater.setLayersVisible(workspace.getSourceSequence(), PointType.PREDICTED_ERROR, workspace.getWorkspaceState().isShowPredictedError());
         transformationSchemaToXmlFileWriter.save(workspace.getTransformationSchema(), workspace.getTransformationSchemaOutputFile());
         transformationToCsvFileWriter.save(registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(), workspace.getCsvTransformationOutputFile());
         transformationToXmlFileWriter.save(

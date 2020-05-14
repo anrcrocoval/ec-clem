@@ -13,6 +13,7 @@
 package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
 
 import icy.gui.dialog.MessageDialog;
+import icy.gui.frame.progress.AnnounceFrame;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.util.XMLUtil;
@@ -43,6 +44,7 @@ public class ClearLandmarksButton extends JButton {
         }
         clearLandmarks(workspace.getSourceSequence());
         clearLandmarks(workspace.getTargetSequence());
+        new AnnounceFrame("All fiducial points have been cleared", 5);
     }
 
     private void clearLandmarks(Sequence sequence) {
