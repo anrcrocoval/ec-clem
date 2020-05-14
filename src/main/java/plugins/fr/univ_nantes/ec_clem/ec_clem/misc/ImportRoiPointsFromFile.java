@@ -38,7 +38,7 @@ import java.io.FileReader;
 import java.io.IOException;
 /**
  * ec-clem utility: read a csv file and import ROI to the selected sequence as roi point, in the same order
- * 
+ *
  * @author paul-gilloteaux-p
  *
  */
@@ -47,7 +47,7 @@ public class ImportRoiPointsFromFile extends EzPlug implements Block{
 	private EzVarSequence source=new EzVarSequence("sequence");
 
 	private EzVarFile csvfile=new EzVarFile(" csv file)", ApplicationPreferences.getPreferences().node("frame/imageLoader").get("path", "."));;
-	
+
 	private double converttopixelXY;
 	private double converttopixelZ;
 	private EzVarText choiceinputsection= new EzVarText("Unit of the points in csv file",
@@ -61,7 +61,7 @@ public class ImportRoiPointsFromFile extends EzPlug implements Block{
 	@Override
 	public void clean() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -104,9 +104,9 @@ public class ImportRoiPointsFromFile extends EzPlug implements Block{
 			        // use comma as separator
 				String[] coordinates = line.split(cvsSplitBy);
 
-				System.out.println("x= " + coordinates[0] 
+				System.out.println("x= " + coordinates[0]
 	                                 + "  y=" + coordinates[1]  + " z="+coordinates[2] );
-				
+
 				double x=Double.parseDouble(coordinates[0])/converttopixelXY;
 				double y=Double.parseDouble(coordinates[1])/converttopixelXY;
 				double z=Double.parseDouble(coordinates[2])/converttopixelZ;
@@ -117,9 +117,9 @@ public class ImportRoiPointsFromFile extends EzPlug implements Block{
 					int offset=1;
 					z=Double.parseDouble(coordinates[2])-offset;
 				}
-				
+
 				ROI3DPoint roi =new ROI3DPoint();
-					
+
 					Point5D position = roi.getPosition5D();
 					position.setX(x);
 					position.setY(y);
@@ -134,7 +134,7 @@ public class ImportRoiPointsFromFile extends EzPlug implements Block{
 			} catch (ArrayIndexOutOfBoundsException e) {
 				MessageDialog.showDialog("check the format of your file \n (open it in text editor):\n It should be x;y;z or x,y,z \n and that you have selected the right format");
 				e.printStackTrace();
-			} 
+			}
 			index=index-1;
 			MessageDialog.showDialog("Number of Roi added: "+index );
 		} catch (FileNotFoundException e) {
@@ -150,13 +150,13 @@ public class ImportRoiPointsFromFile extends EzPlug implements Block{
 				}
 			}
 		}
-		
+
 	}
 
 	@Override
 	protected void initialize() {
-		
-		new ToolTipFrame(    			
+
+		new ToolTipFrame(
     			"<html>"+
     			"<br>This will load Rois to the image and numbered them in line order. "+
     			"<br>File should be in ascii format (txt or csv for example), with one point per line and "+
@@ -169,37 +169,37 @@ public class ImportRoiPointsFromFile extends EzPlug implements Block{
 		         " <br> assuming a starting slice numbered at 1 in IJ, starting at 0 in Icy)"+
     			"</html>","importmessage"
     			);
-		
+
 
 		String varName ="Please select the ROI file (csv format)";
 		if (source.getValue()!=null)
 			csvfile=new EzVarFile(varName, source.getValue().getFilename());
 		else
 			csvfile=new EzVarFile(varName, ApplicationPreferences.getPreferences().node("frame/imageLoader").get("path", "."));
-		
+
 		addEzComponent(csvfile);
 		addEzComponent(choiceinputsection);
 		addEzComponent(choicefileformat);
 		addEzComponent(choicez);
 		addEzComponent(source);
 		// we will express everything in pixel, by using a converttopixel factor
-		
-		
-		
-		
 
-		
+
+
+
+
+
 	}
 
 	@Override
 	public void declareInput(VarList inputMap) {
 		// TODO Auto-generated method stub
-		
+
 		inputMap.add("Sequence to process",source.getVariable());
-		
-		
+
+
 		inputMap.add("CSV File to import",csvfile.getVariable());
-		
+
 		inputMap.add("unit",choiceinputsection.getVariable());
 		inputMap.add("format",choicefileformat.getVariable());
 		inputMap.add("z fiji",choicez.getVariable());

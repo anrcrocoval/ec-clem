@@ -21,10 +21,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import plugins.adufour.ezplug.*;
@@ -38,14 +36,13 @@ import icy.main.Icy;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.gui.dialog.MessageDialog;
-import icy.gui.frame.progress.AnnounceFrame;
 import icy.gui.frame.progress.ToolTipFrame;
 import icy.gui.util.FontUtil;
 import icy.painter.Overlay;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.misc.advancedmodules;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.misc.AdvancedmodulesButton;
 import javax.inject.Inject;
 
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
@@ -125,8 +122,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			+ "</html>","startmessage"
 		);
 		addEzComponent(new EzLabel(getVersionString()));
-//		addComponent(new GuiCLEMButtonApply());
-		addComponent(new advancedmodules(this));
+		addComponent(new AdvancedmodulesButton());
 		addEzComponent(inputGroup);
 
 		guiCLEMButtons.setEnabled(false);
@@ -170,17 +166,17 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		if(parent == null) {
 			parent = Paths.get(System.getProperty("user.dir"));
 		}
-		LocalDateTime date = LocalDateTime.now();
+		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss"));
 
-		File transformationSchemaOutputFile = new File(String.format("%s/%s_to_%s_%s.transformation_schema.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date.toString()));
+		File transformationSchemaOutputFile = new File(String.format("%s/%s_to_%s_%s.transformation_schema.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
 		System.out.println(String.format("Transformation schema saved at : %s", transformationSchemaOutputFile.toString()));
 		workspace.setTransformationSchemaOutputFile(transformationSchemaOutputFile);
 
-		File csvTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.csv", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date.toString()));
+		File csvTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.csv", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
 		System.out.println(String.format("CSV format transformation saved at : %s", csvTransformationFile.toString()));
 		workspace.setCsvTransformationOutputFile(csvTransformationFile);
 		
-		File XmlTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date.toString()));
+		File XmlTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
 		System.out.println(String.format("XML format transformation saved at : %s", XmlTransformationFile.toString()));
 		workspace.setXmlTransformationOutputFile(XmlTransformationFile);
 

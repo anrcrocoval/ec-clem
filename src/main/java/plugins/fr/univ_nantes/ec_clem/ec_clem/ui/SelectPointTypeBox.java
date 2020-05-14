@@ -34,6 +34,7 @@ public class SelectPointTypeBox extends JPanel {
     public void setWorkspace(Workspace workspace) {
         this.workspace = workspace;
         roiListenerManager.setSequences(workspace.getSourceSequence(), workspace.getTargetSequence());
+        roiListenerManager.setWorkspace(workspace);
         stringJComboBox.setSelectedItem(PointType.FIDUCIAL);
     }
 

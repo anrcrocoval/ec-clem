@@ -4,6 +4,8 @@ import icy.sequence.Sequence;
 import icy.sequence.SequenceListener;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+
 import javax.inject.Inject;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class RoiListenerManager {
 
     private Sequence sourceSequence;
     private Sequence targetSequence;
+    private Workspace workspace;
 
     private SequenceListenerUtil sequenceListenerUtil;
     private FiducialRoiListener sourceSequenceFiducialRoiListener;
@@ -20,21 +23,6 @@ public class RoiListenerManager {
     @Inject
     public RoiListenerManager(SequenceListenerUtil sequenceListenerUtil) {
         this.sequenceListenerUtil = sequenceListenerUtil;
-    }
-
-    @Inject
-    public void setSourceSequenceFiducialRoiListener(FiducialRoiListener sourceSequenceFiducialRoiListener) {
-        this.sourceSequenceFiducialRoiListener = sourceSequenceFiducialRoiListener;
-    }
-
-    @Inject
-    public void setTargetSequenceFiducialRoiListener(FiducialRoiListener targetSequenceFiducialRoiListener) {
-        this.targetSequenceFiducialRoiListener = targetSequenceFiducialRoiListener;
-    }
-
-    @Inject
-    public void setTargetSequenceNonFiducialRoiListener(NonFiducialRoiListener targetSequenceNonFiducialRoiListener) {
-        this.targetSequenceNonFiducialRoiListener = targetSequenceNonFiducialRoiListener;
     }
 
     public void set(PointType pointType) {
@@ -70,5 +58,26 @@ public class RoiListenerManager {
         this.targetSequence = targetSequence;
         sourceSequenceFiducialRoiListener.setSequence(targetSequence);
         targetSequenceFiducialRoiListener.setSequence(sourceSequence);
+    }
+
+    public void setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
+        sourceSequenceFiducialRoiListener.setWorkspace(workspace);
+        targetSequenceFiducialRoiListener.setWorkspace(workspace);
+    }
+
+    @Inject
+    public void setSourceSequenceFiducialRoiListener(FiducialRoiListener sourceSequenceFiducialRoiListener) {
+        this.sourceSequenceFiducialRoiListener = sourceSequenceFiducialRoiListener;
+    }
+
+    @Inject
+    public void setTargetSequenceFiducialRoiListener(FiducialRoiListener targetSequenceFiducialRoiListener) {
+        this.targetSequenceFiducialRoiListener = targetSequenceFiducialRoiListener;
+    }
+
+    @Inject
+    public void setTargetSequenceNonFiducialRoiListener(NonFiducialRoiListener targetSequenceNonFiducialRoiListener) {
+        this.targetSequenceNonFiducialRoiListener = targetSequenceNonFiducialRoiListener;
     }
 }

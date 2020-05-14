@@ -35,7 +35,6 @@ import vtk.vtkParametricFunctionSource;
 import vtk.vtkTransformPolyDataFilter;
 import javax.inject.Inject;
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -100,6 +99,13 @@ public class RoiFactory {
 
     public ROI getFrom(Ellipse ellipse, SequenceSize sequenceSize) {
         double[] eigenValues = ellipse.getEigenValues();
+        if(
+            Math.sqrt(eigenValues[0]) / sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer() > sequenceSize.get(DimensionId.X).getSize() * 2 ||
+            Math.sqrt(eigenValues[1]) / sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer() > sequenceSize.get(DimensionId.Y).getSize() * 2 ||
+            Math.sqrt(eigenValues[2]) / sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer() > sequenceSize.get(DimensionId.Z).getSize() * 2
+        ) {
+            throw new RuntimeException("Error too large");
+        }
         vtkParametricEllipsoid ellipsoid = new vtkParametricEllipsoid();
         ellipsoid.SetXRadius(Math.max(Math.sqrt(eigenValues[0]) / sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer(), 1));
         ellipsoid.SetYRadius(Math.max(Math.sqrt(eigenValues[1]) / sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer(), 1));
