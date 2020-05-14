@@ -59,7 +59,7 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
         try {
             roiUpdater.updateErrorRoi(sourceFiducialDataset, transformationSchema, sourceSequence);
             roiUpdater.updateErrorRoi(sourceNonFiducialDataset, transformationSchema, sourceSequence);
-        } catch (NotStrictlyPositiveException e) {
+        } catch (RuntimeException e) {
             System.err.println(String.format("Error estimation aborted because there is not enough fiducial points : %s", e.getMessage()));
         }
         roiUpdater.updateRoi(sourceTransformedDataset, sourceSequence);

@@ -12,8 +12,8 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.ec_clem.sequence;
 
+import icy.vtk.VtkUtil;
 import vtk.vtkImageGridSource;
-
 import javax.inject.Inject;
 
 public class VtkImageGridSourceFactory {
@@ -26,7 +26,7 @@ public class VtkImageGridSourceFactory {
         sourceGrid.SetDataExtent(0, xSize -1, 0,  ySize - 1, 0,  zSize - 1);
         sourceGrid.SetLineValue(255);
         sourceGrid.SetFillValue(0);
-        sourceGrid.SetDataScalarType(icy.vtk.VtkUtil.VTK_UNSIGNED_CHAR);
+        sourceGrid.SetDataScalarType(VtkUtil.VTK_UNSIGNED_CHAR);
         sourceGrid.SetDataSpacing(spacingX, spacingY, spacingZ);
         sourceGrid.SetGridSpacing(Math.round((float) xSize / 10), Math.round((float) ySize / 10), 0);
         sourceGrid.ReleaseDataFlagOn();
