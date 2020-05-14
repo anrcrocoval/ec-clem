@@ -22,6 +22,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import plugins.adufour.ezplug.*;
@@ -158,17 +159,17 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setTargetSequence(targetSequence);
 		workspace.setSourceBackup(SequenceUtil.getCopy(sourceSequence));
 		Path parent = Paths.get(sourceSequence.getFilename()).getParent();
-		LocalDateTime date = LocalDateTime.now();
+		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss"));
 
-		File transformationSchemaOutputFile = new File(String.format("%s/%s_to_%s_%s.transformation_schema.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date.toString()));
+		File transformationSchemaOutputFile = new File(String.format("%s/%s_to_%s_%s.transformation_schema.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
 		System.out.println(String.format("Transformation schema saved at : %s", transformationSchemaOutputFile.toString()));
 		workspace.setTransformationSchemaOutputFile(transformationSchemaOutputFile);
 
-		File csvTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.csv", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date.toString()));
+		File csvTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.csv", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
 		System.out.println(String.format("CSV format transformation saved at : %s", csvTransformationFile.toString()));
 		workspace.setCsvTransformationOutputFile(csvTransformationFile);
 		
-		File XmlTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date.toString()));
+		File XmlTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
 		System.out.println(String.format("XML format transformation saved at : %s", XmlTransformationFile.toString()));
 		workspace.setXmlTransformationOutputFile(XmlTransformationFile);
 
