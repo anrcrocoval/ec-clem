@@ -43,11 +43,13 @@ public class RoiFactory {
     private static String POINT_TYPE_PROPERTY = "point_type";
     private VtkAbstractTransformFactory vtkAbstractTransformFactory;
     private PointFactory pointFactory;
+    private ColorPicker colorPicker;
 
     @Inject
-    public RoiFactory(VtkAbstractTransformFactory vtkAbstractTransformFactory, PointFactory pointFactory) {
+    public RoiFactory(VtkAbstractTransformFactory vtkAbstractTransformFactory, PointFactory pointFactory, ColorPicker colorPicker) {
         this.vtkAbstractTransformFactory = vtkAbstractTransformFactory;
         this.pointFactory = pointFactory;
+        this.colorPicker = colorPicker;
     }
 
     public ROI getFrom(Rectangle2D ellipseBound) {
@@ -83,7 +85,7 @@ public class RoiFactory {
     }
 
     public ROI getRoiFrom(ROI roi , int id, PointType pointType) {
-        roi.setColor(pointType.getColor());
+        roi.setColor(colorPicker.get());
         roi.setName(String.format("%s_%d", pointType, id));
         roi.setShowName(true);
         roi.setStroke(6);
