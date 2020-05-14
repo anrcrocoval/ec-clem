@@ -58,8 +58,8 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 	String[] listofChannelnames;
 	@Override
 	public void clean() {
-		
-		
+
+
 	}
 
 	@Override
@@ -85,17 +85,17 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			tobeprocessed.beginUpdate();
 			try{
 			Sequence channelextracted=SequenceUtil.extractChannel(tobeprocessed,indc);
-			
+
 			tobeprocessed.removeAllImages();
 			for (int t=0; t<sizet; t++){
 				for (int z=0; z< sizez; z++){
 					IcyBufferedImage image= channelextracted.getImage(t, z);
 					tobeprocessed.setImage(t, z, image);
-					
+
 
 				}
 			}
-			
+
 			}
 			finally {
 				tobeprocessed.endUpdate();
@@ -107,12 +107,12 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 		// Apply denoising if asked
 		if (denoise.getValue()==true){
 			int nbchannel=tobeprocessed.getSizeC();
-			
-			
+
+
 			double objectdiameter=choiceobjectsize.getValue();
-			
+
 			 Sequence duplicate1=SequenceUtil.getCopy(tobeprocessed);
-			 
+
 			 duplicate1.beginUpdate();
 			Kernels1D gaussianXY = Kernels1D.CUSTOM_GAUSSIAN.createGaussianKernel1D(objectdiameter);
            // Kernels1D gaussianZ = Kernels1D.CUSTOM_GAUSSIAN.createGaussianKernel1D(preFilter * scaleXZ);
@@ -126,7 +126,7 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 				e.printStackTrace();
 			}
             duplicate1.endUpdate();
-            
+
             tobeprocessed.beginUpdate();
             try{
             	for (int t=0;t<tobeprocessed.getSizeT();t++)
@@ -146,11 +146,11 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 				for (int z=0; z< sizez; z++){
 					 IcyBufferedImage imagedenoised=new IcyBufferedImage(duplicate2.getWidth(), duplicate2.getHeight(), nbchannel, duplicate2.getDataType_());
 			for (int c=0; c<nbchannel;c++){
-				
+
 
 				if (choicemethoddenoising.getValue() == "small make up"){
-					
-					 
+
+
 					  IcyBufferedImage imagedenoised2=TVDenoising.regularizeTVImage(duplicate2.getImage(t, z), c, 10, objectdiameter,TVFISTA.RegularizationType.ISOTROPIC );
 					  imagedenoised.setDataXY(c,imagedenoised2.getDataXY(0));
 					// we keep it as a sequence because Blurred image required the block protocol to be imported as well.
@@ -161,23 +161,23 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 				}
 				//double[] doubleArray = Array1DUtil.arrayToDoubleArray(result.getDataXY(c), result.isSignedDataType());
 
-			
-						
-						
 
-				
+
+
+
+
 			}
-						tobeprocessed.setImage(t, z, imagedenoised);// done twice for nothing 
-						
+						tobeprocessed.setImage(t, z, imagedenoised);// done twice for nothing
+
 					}
 
 				}
-				
 
-			
-			
-			
-			
+
+
+
+
+
 		}
 			finally{
 			tobeprocessed.endUpdate();
@@ -186,12 +186,12 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			}
 		}
 
-			
 
-		
-		
+
+
+
 		//addSequence(duplicate);
-		// apply MAX flatening method if asked 
+		// apply MAX flatening method if asked
 		if ((choicemethodflatten.getValue() == "Do a maximum intensity projection")
 							&& (flatten.getValue() == true))
 		{
@@ -200,14 +200,14 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			boolean max=true;
 			tobeprocessed.removeAllImages();
 			tobeprocessed.beginUpdate();
-			
+
 			try{
 			for (int t=0; t< sizet; t++){
 				IcyBufferedImage image2 = getProj(max, duplicate, t);
 				tobeprocessed.setImage(t, 0, image2);
-				
+
 			}
-			
+
 			}
 			finally{
 			tobeprocessed.endUpdate();
@@ -215,8 +215,8 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			tobeprocessed.setName(tobeprocessed.getName()+ " (max projection)");
 			}
 		}
-		
-		// apply MIN flatening method if asked 
+
+		// apply MIN flatening method if asked
 				if ((choicemethodflatten.getValue() == "Do a minimum intensity projection")
 									&& (flatten.getValue() == true))
 				{
@@ -226,13 +226,13 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 					tobeprocessed.removeAllImages();
 					tobeprocessed.beginUpdate();
 					try{
-					
+
 					for (int t=0; t< duplicate.getSizeT(); t++){
 						IcyBufferedImage image2 = getProj(max, duplicate, t);
 						tobeprocessed.setImage(t, 0, image2);
-						
+
 					}
-					
+
 					}
 					finally{
 					tobeprocessed.endUpdate();
@@ -240,8 +240,8 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 					tobeprocessed.setName(tobeprocessed.getName()+ " (min projection)");
 					}
 				}
-				
-				
+
+
 		// Apply EPFL flatenning method
 		if ((choicemethodflatten.getValue() == "Create an optimized in focus slice (EDF EPFL Plugin)")
 				&& (flatten.getValue() == true)) {
@@ -249,8 +249,8 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			String directory = FileUtil.getApplicationDirectory()+ FileUtil.separator+"ij"+FileUtil.separator+ "plugins" +FileUtil.separator+"EDF";
 			if (!(FileUtil.exists(directory))){
 
-			
-				new ToolTipFrame(    			
+
+				new ToolTipFrame(
 						"<html>"+
 								"<br> EPFL ImageJ plugin seems not not be installed"+
 								"<br> download it here <a href=\"http://bigwww.epfl.ch/demo/edf/EDF.zip\">http://bigwww.epfl.ch/demo/edf/EDF.zip</a>"+
@@ -259,7 +259,7 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 								"</html>"
 						);
 				return;
-			
+
 			}
 			ProgressFrame progress = new ProgressFrame("Computing Optimized focus slice...");
 			progress.setPosition(0.2);
@@ -314,11 +314,11 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 					}
 			    }
 			}*/
-			
-			
+
+
 			IJ.run("EDF Easy ",
 					"quality='4' topology='1' show-topology='off' show-view='off'");// TODO: Mettre un slider sur la qualite en parametres
-			
+
 			while (ij.WindowManager.getImageCount() < 2) {
 				//System.out.println("running");
 			try {
@@ -328,11 +328,11 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 				e.printStackTrace();
 			}
 			}
-			
-			
-			
+
+
+
 			// show the sequence
-			
+
 			ImagePlus test4 = IJ.getImage();
 			Sequence test2 = ImageJUtil.convertToIcySequence(test4,
 					new ProgressListener() {
@@ -357,13 +357,13 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			}
 			tobeprocessed.beginUpdate();
 			tobeprocessed.removeAllImages();
-			
+
 			try{
 				Sequence tmp= SequenceUtil.concatC(arrayofimage);
 				IcyBufferedImage test3= tmp.getImage(0, 0);
-					
+
 			tobeprocessed.setImage(0, 0, test3);
-			
+
 			}
 			finally{
 			tobeprocessed.endUpdate();
@@ -374,11 +374,11 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			progress.close();
 
 		}
-		
+
 	}
 
 	private IcyBufferedImage substractbg(Sequence ori, Sequence bg,int t, int z) {
-		
+
 				IcyBufferedImage result= new IcyBufferedImage(ori.getSizeX(), ori.getSizeY(),ori.getSizeC(), ori.getDataType_());
 				for (int c=0;c<ori.getSizeC();c++){
 					Object dataArrayori = ori.getDataXY(t, z, c);
@@ -391,14 +391,14 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 					Array1DUtil.doubleArrayToArray(imgDoubleArray,result.getDataXY(c));
 				}
 				result.dataChanged();
-			
-	
+
+
 		return result;
 	}
 
 	@Override
 	protected void initialize() {
-		
+
 		EzLabel textinfo=new EzLabel("Please select the image on which you want to preprocess (likely Light microscopy Image).");
 		//EzLabel textinfo2=new EzLabel(
 		textinfo.setToolTipText("Once the transform will have been computed on this image, \n you can apply it to the full stack afterwards using ApplyTransformation.");
@@ -409,14 +409,14 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 		EzLabel textinfo3=new EzLabel("Select the pre-processing to be applied.");
 		textinfo3.setToolTipText("Once the transform will have been computed on this image, \n you can apply it to the full stack afterwards using ApplyTransformation.");
 		addEzComponent(textinfo3);
-		
+
 		listofChannelnames=new String[source.getValue().getSizeC()];
 		for (int i=0;i<source.getValue().getSizeC();i++){
 			listofChannelnames[i]=source.getValue().getChannelName(i);
 		}
 		choicechannel= new EzVarText("Work on Channel", listofChannelnames
 				 , 0, false);
-		
+
 		Applytoallchanels.setToolTipText("if unchecked you will have to select the channel on which it has to be applied \n (i.e the most useful to help the alignment)");
 		flatten.setToolTipText("a 3D stack will become an optimized 2D image");
 		addEzComponent(Applytoallchanels);
@@ -425,27 +425,27 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 		addEzComponent(choicemethoddenoising);
 		addEzComponent(choiceobjectsize);
 		denoise.setToolTipText(" This will launch the Edge preserving smoothing (TV regularization) denoising plugin with some predefined settings");
-		
+
 		addEzComponent(flatten);
 		addEzComponent(choicemethodflatten);
-		
+
 		if (source.getValue().getSizeZ()>1){
 			flatten.setVisible(true);
 			choicemethodflatten.setVisible(true);
 			flatten.addVisibilityTriggerTo(choicemethodflatten, true);
 		}
 		if (source.getValue().getSizeZ()==1){
-			
+
 			flatten.setVisible(false);
 			choicemethodflatten.setVisible(false);
 			//flatten.addVisibilityTriggerTo(choicemethodflatten, true);
 		}
-		
+
 		denoise.addVisibilityTriggerTo(choicemethoddenoising, true);
 		denoise.addVisibilityTriggerTo(choiceobjectsize,true);
 		Applytoallchanels.addVisibilityTriggerTo(choicechannel, false);
-		
-		 
+
+
 		EzVarListener<Sequence> seqlistener =new EzVarListener<Sequence>()
 				{
 			@Override
@@ -462,7 +462,7 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 					flatten.addVisibilityTriggerTo(choicemethodflatten, true);
 				}
 				if (source.getValue().getSizeZ()==1){
-					
+
 					flatten.setVisible(false);
 					choicemethodflatten.setVisible(false);
 					//flatten.addVisibilityTriggerTo(choicemethodflatten, true);
@@ -470,30 +470,30 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			}
 			}
 		};
-		
+
 		source.addVarChangeListener(seqlistener);
-		
+
 	}
-	
+
 	IcyBufferedImage getProj(boolean max, Sequence sequence,int t){
 		IcyBufferedImage result= new IcyBufferedImage(sequence.getSizeX(), sequence.getSizeY(),sequence.getSizeC(), sequence.getDataType_());
 		if (!max)
 			result.setDataXY(0,sequence.getDataCopyCXY(t,0));// in order to get it different from 0, otherwise min is always 0...
-		
-			
+
+
 		for (int c=0;c<sequence.getSizeC();c++){
 			double[] doubleArray = Array1DUtil.arrayToDoubleArray(result.getDataXY(c), result.isSignedDataType());
 		for (int z = 0; z<sequence.getSizeZ();z++){
 			project(max, sequence,t,z,c, doubleArray);
 		}
 			Array1DUtil.doubleArrayToArray(doubleArray, result.getDataXY(c));
-		
-		
+
+
 		}
 		result.dataChanged();
 		return result;
-		
-		
+
+
 	}
 	void project(boolean max, Sequence sequence, int t, int z, int c, double[] result){
 		Object dataArray = sequence.getDataXY(t, z, c);
