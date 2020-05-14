@@ -20,134 +20,164 @@ import icy.system.thread.ThreadUtil;
 import plugins.adufour.ezplug.EzLabel;
 import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarText;
+import plugins.fr.univ_nantes.ec_clem.cascade_transform.EcClemCascadeTransform;
+import plugins.fr.univ_nantes.ec_clem.error.EcClemError;
+import plugins.fr.univ_nantes.ec_clem.invert_transformation_schema.EcClemTransformationSchemaInverter;
+import plugins.fr.univ_nantes.ec_clem.transform.EcClemTransform;
+import plugins.fr.univ_nantes.ec_clem.transformation_schema_loader.EcClemTransformationSchemaLoader;
 
 public class AdvancedEcClemOptions extends EzPlug  {
-	
+//	private final String AUTOFINDER = "AutoFinder (help me to find my cell from EM to LM)";
+	private final String APPLY_TRANSFORMATION = "Apply a reduced scaled transform to a full size image";
+	private final String TRANSFORM_ROI = "Transform ROIs, not the images";
+	private final String IMPORT_ROI = "Import Roi from csv file (Amira or other)";
+//	private final String PROTOCOL = "Create a protocol";
+//	private final String ERROR_LOO = "Study errors (leave one out vs predicted)";
+//	private final String ERROR_FLE = "Study errors (study influence of N and FLE)";
+
+	private final String LOAD = "Load transformation schema";
+	private final String APPLY_TRANSFORMATION_SCHEMA = "Apply transformation schema";
+	private final String INVERT = "Invert transformation schema";
+	private final String CASCADE = "Compute cascading transformation schema";
+	private final String ERROR_MAP = "Compute error map";
+
 	EzVarText choiceplugin = new EzVarText("List of plugin utilities", new String[] {
-			"AutoFinder (help me to find my cell from EM to LM)",
-			"Apply a reduced scaled transform to a full size image",
-			"Transform ROIs, not the images",
-			"Import Roi from csv file (Amira or other)", "Create a protocol",
-			"Study errors (leave one out vs predicted)",
-			"Study errors (study influence of N and FLE)"}, 0, false);
+//		AUTOFINDER,
+//		APPLY,
+//		TRANSFORM_ROI,
+//		IMPORT_ROI,
+//		PROTOCOL,
+//		ERROR_LOO,
+//		ERROR_FLE,
+			APPLY_TRANSFORMATION,
+			TRANSFORM_ROI,
+			IMPORT_ROI,
+			LOAD,
+			APPLY_TRANSFORMATION_SCHEMA,
+			INVERT,
+			CASCADE,
+			ERROR_MAP
+	}, 0, false);
 	
 	@Override
 	public void clean() {}
 
 	@Override
 	protected void execute() {
-		if (choiceplugin.getValue() == "AutoFinder (help me to find my cell from EM to LM)"){
-			//launch autofinder
-			for (final PluginDescriptor pluginDescriptor : PluginLoader
-					.getPlugins()) {
-				
-				if (pluginDescriptor.getSimpleClassName()
-						.compareToIgnoreCase("EcclemAutoFinder") == 0) {
-					ThreadUtil.invokeLater(new Runnable() {
-						public void run() {
-					PluginLauncher.start(pluginDescriptor);
-						}});
-				}
+		String pluginClassName;
+		switch (choiceplugin.getValue()) {
+			case APPLY_TRANSFORMATION: {
+				pluginClassName = ApplyTransformation.class.getName();
+				break;
 			}
-		}
-		if (choiceplugin.getValue() == "Apply a reduced scaled transform to a full size image"){
-			//launch scaled transform
-			for (final PluginDescriptor pluginDescriptor : PluginLoader
-					.getPlugins()) {
-				
-				if (pluginDescriptor.getSimpleClassName()
-						.compareToIgnoreCase("ApplyTransfotoScaledImage") == 0) {
-					ThreadUtil.invokeLater(new Runnable() {
-						public void run() {
-					PluginLauncher.start(pluginDescriptor);
-						}});
-				}
+			case TRANSFORM_ROI: {
+				pluginClassName = ApplyTransformationtoRoi.class.getName();
+				break;
 			}
-		}
-		if (choiceplugin.getValue() == "Transform ROIs, not the images"){
-			//launch ROI transforms
-			for (final PluginDescriptor pluginDescriptor : PluginLoader
-					.getPlugins()) {
-				
-				if (pluginDescriptor.getSimpleClassName()
-						.compareToIgnoreCase("ApplyTransformationtoRoi") == 0) {
-					ThreadUtil.invokeLater(new Runnable() {
-						public void run() {
-					PluginLauncher.start(pluginDescriptor);
-						}});
-				}
+			case IMPORT_ROI: {
+				pluginClassName = ImportRoiPointsFromFile.class.getName();
+				break;
 			}
-		}
-		if (choiceplugin.getValue() == "Study errors (leave one out vs predicted)"){
-			//launch autofinder
-			for (final PluginDescriptor pluginDescriptor : PluginLoader
-					.getPlugins()) {
-				
-				if (pluginDescriptor.getSimpleClassName()
-						.compareToIgnoreCase("MonteCarloTREstudy_Validation") == 0) {
-					ThreadUtil.invokeLater(new Runnable() {
-						public void run() {
-					PluginLauncher.start(pluginDescriptor);
-						}});
-				}
+			case LOAD: {
+				pluginClassName = EcClemTransformationSchemaLoader.class.getName();
+				break;
 			}
-		}
-		if (choiceplugin.getValue() == "Study errors (study influence of N and FLE)"){
-			//launch autofinder
-			for (final PluginDescriptor pluginDescriptor : PluginLoader
-					.getPlugins()) {
-				
-				if (pluginDescriptor.getSimpleClassName()
-						.compareToIgnoreCase("StudyLandmarksConfagainstN") == 0) {
-					ThreadUtil.invokeLater(new Runnable() {
-						public void run() {
-					PluginLauncher.start(pluginDescriptor);
-						}});
-				}
+			case APPLY_TRANSFORMATION_SCHEMA: {
+				pluginClassName = EcClemTransform.class.getName();
+				break;
 			}
-		}
-		if (choiceplugin.getValue() == "Import Roi from csv file (Amira or other)"){
-			//launch autofinder
-			for (final PluginDescriptor pluginDescriptor : PluginLoader
-					.getPlugins()) {
-				
-				if (pluginDescriptor.getSimpleClassName()
-						.compareToIgnoreCase("ImportRoiPointsFromFile") == 0) {
-					ThreadUtil.invokeLater(new Runnable() {
-						public void run() {
-					PluginLauncher.start(pluginDescriptor);
-						}});
-				}
+			case INVERT: {
+				pluginClassName = EcClemTransformationSchemaInverter.class.getName();
+				break;
 			}
+			case CASCADE: {
+				pluginClassName = EcClemCascadeTransform.class.getName();
+				break;
+			}
+			case ERROR_MAP: {
+				pluginClassName = EcClemError.class.getName();
+				break;
+			}
+			default: throw new RuntimeException("Not supported");
 		}
-		
-		if (choiceplugin.getValue() == "Create a protocol"){
-			new ToolTipFrame(    			
-	    			"<html>"+
-	    			"<br>You can use the Icy feature of visual programming: "+
-	    			"<br> <b>Protocols</b> to apply any transform," +
-	    			"<br>computed in EC-Clem (2D, 3D, or non rigid) by using the"+
-	    			"<br> <b>ApplyTransformation</b> block in your own protocol."+
-	    			
-	    			"</html>"
-	    			);
-		 
-			for (final PluginDescriptor pluginDescriptor : PluginLoader
-					.getPlugins()) {
-				
-				if (pluginDescriptor.getSimpleClassName()
-						.compareToIgnoreCase("Protocols") == 0) {
-					
-					PluginLauncher.start(pluginDescriptor);
+		ThreadUtil.invokeLater(() -> PluginLauncher.start(PluginLoader.getPlugin(pluginClassName)));
+//		if (choiceplugin.getValue().equals(AUTOFINDER)) {
+//			PluginLauncher.start(PluginLoader.getPlugin("EcclemAutoFinder"));
+//			for (final PluginDescriptor pluginDescriptor : PluginLoader.getPlugins()) {
+//				if (pluginDescriptor.getSimpleClassName().compareToIgnoreCase("EcclemAutoFinder") == 0) {
+//					ThreadUtil.invokeLater(() -> PluginLauncher.start(pluginDescriptor));
+//				}
+//			}
+//		}
 
-				}
-			}
-		}
+//		if (choiceplugin.getValue().equals(APPLY)) {
+//			PluginLauncher.start(PluginLoader.getPlugin("ApplyTransfotoScaledImage"));
+//			for (final PluginDescriptor pluginDescriptor : PluginLoader.getPlugins()) {
+//				if (pluginDescriptor.getSimpleClassName().compareToIgnoreCase("ApplyTransfotoScaledImage") == 0) {
+//					ThreadUtil.invokeLater(() -> PluginLauncher.start(pluginDescriptor));
+//				}
+//			}
+//		}
+
+//		if (choiceplugin.getValue().equals(TRANSFORM_ROI)){
+//			PluginLauncher.start(PluginLoader.getPlugin("ApplyTransformationtoRoi"));
+//			for (final PluginDescriptor pluginDescriptor : PluginLoader.getPlugins()) {
+//				if (pluginDescriptor.getSimpleClassName().compareToIgnoreCase("ApplyTransformationtoRoi") == 0) {
+//					ThreadUtil.invokeLater(() -> PluginLauncher.start(pluginDescriptor));
+//				}
+//			}
+//		}
+
+//		if (choiceplugin.getValue().equals(IMPORT_ROI)) {
+//			PluginLauncher.start(PluginLoader.getPlugin("ImportRoiPointsFromFile"));
+//			for (final PluginDescriptor pluginDescriptor : PluginLoader.getPlugins()) {
+//				if (pluginDescriptor.getSimpleClassName().compareToIgnoreCase("ImportRoiPointsFromFile") == 0) {
+//					ThreadUtil.invokeLater(() -> PluginLauncher.start(pluginDescriptor));
+//				}
+//			}
+//		}
+
+//		if (choiceplugin.getValue().equals(PROTOCOL)) {
+//			new ToolTipFrame(
+//				"<html>" +
+//				"<br>You can use the Icy feature of visual programming: " +
+//				"<br> <b>Protocols</b> to apply any transform," +
+//				"<br>computed in EC-Clem (2D, 3D, or non rigid) by using the" +
+//				"<br> <b>ApplyTransformation</b> block in your own protocol." +
+//				"</html>"
+//			);
+//
+//			PluginLauncher.start(PluginLoader.getPlugin(plugins.adufour.protocols.Protocols.class.getName()));
+
+//			for (final PluginDescriptor pluginDescriptor : PluginLoader.getPlugins()) {
+//				if (pluginDescriptor.getSimpleClassName().compareToIgnoreCase("Protocols") == 0) {
+//					PluginLauncher.start(pluginDescriptor);
+//				}
+//			}
+//		}
+
+//		if (choiceplugin.getValue().equals(ERROR_LOO)) {
+//			PluginLauncher.start(PluginLoader.getPlugin("MonteCarloTREstudy_Validation"));
+//			for (final PluginDescriptor pluginDescriptor : PluginLoader.getPlugins()) {
+//				if (pluginDescriptor.getSimpleClassName().compareToIgnoreCase("MonteCarloTREstudy_Validation") == 0) {
+//					ThreadUtil.invokeLater(() -> PluginLauncher.start(pluginDescriptor));
+//				}
+//			}
+//		}
+
+//		if (choiceplugin.getValue().equals(ERROR_FLE)) {
+//			PluginLauncher.start(PluginLoader.getPlugin("StudyLandmarksConfagainstN"));
+//			for (final PluginDescriptor pluginDescriptor : PluginLoader.getPlugins()) {
+//				if (pluginDescriptor.getSimpleClassName().compareToIgnoreCase("StudyLandmarksConfagainstN") == 0) {
+//					ThreadUtil.invokeLater(() -> PluginLauncher.start(pluginDescriptor));
+//				}
+//			}
+//		}
 	}
 
 	@Override
 	protected void initialize() {
-		EzLabel textinfo=new EzLabel("Here is a list of additional features you may find useful.");
+		EzLabel textinfo = new EzLabel("Here is a list of additional features you may find useful.");
 		addEzComponent(textinfo);
 		addEzComponent(choiceplugin);
 	}
