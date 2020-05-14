@@ -21,6 +21,7 @@ import icy.sequence.SequenceListener;
 import icy.type.point.Point5D;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiFactory;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
 import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import javax.inject.Inject;
@@ -31,6 +32,8 @@ public class FiducialRoiListener implements SequenceListener {
 
     private static PointType type = PointType.FIDUCIAL;
     private Sequence sequence;
+    private Workspace workspace;
+
     private SequenceListenerUtil sequenceListenerUtil;
     private RoiFactory roiFactory;
 
@@ -42,6 +45,11 @@ public class FiducialRoiListener implements SequenceListener {
 
     public FiducialRoiListener setSequence(Sequence sequence) {
         this.sequence = sequence;
+        return this;
+    }
+
+    public FiducialRoiListener setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
         return this;
     }
 
@@ -61,18 +69,18 @@ public class FiducialRoiListener implements SequenceListener {
         );
 
         ROI roiCopy = roi.getCopy();
-        Point2D.Double imagePosition = ((IcyCanvas2D) sequence.getFirstViewer().getCanvas()).canvasToImage(
-        sequence.getFirstViewer().getCanvas().getCanvasSizeX() / 2,
-        sequence.getFirstViewer().getCanvas().getCanvasSizeY() / 2
-        );
         Point5D position = (Point5D) roi.getPosition5D().clone();
-        position.setLocation(
-            imagePosition.getX(),
-            imagePosition.getY(),
-            sequence.getFirstViewer().getPositionZ(),
-            sequence.getFirstViewer().getPositionT(),
-            sequence.getFirstViewer().getPositionC()
-        );
+        if(workspace.getTransformationSchema() == null) {
+            Point2D.Double imagePosition = ((IcyCanvas2D) sequence.getFirstViewer().getCanvas()).canvasToImage(
+                    sequence.getFirstViewer().getCanvas().getCanvasSizeX() / 2,
+                    sequence.getFirstViewer().getCanvas().getCanvasSizeY() / 2
+            );
+            position.setX(imagePosition.getX());
+            position.setY(imagePosition.getY());
+        }
+        position.setZ(sequence.getFirstViewer().getPositionZ());
+        position.setT(sequence.getFirstViewer().getPositionT());
+        position.setC(sequence.getFirstViewer().getPositionC());
         roiCopy.setPosition5D(position);
 
         List<SequenceListener> sequenceListeners = sequenceListenerUtil.removeListeners(sequence, FiducialRoiListener.class);
