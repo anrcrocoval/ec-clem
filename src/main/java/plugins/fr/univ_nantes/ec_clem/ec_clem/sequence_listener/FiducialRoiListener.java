@@ -30,7 +30,6 @@ import java.util.List;
 public class FiducialRoiListener implements SequenceListener {
 
     private static PointType type = PointType.FIDUCIAL;
-
     private Sequence sequence;
     private SequenceListenerUtil sequenceListenerUtil;
     private RoiFactory roiFactory;
