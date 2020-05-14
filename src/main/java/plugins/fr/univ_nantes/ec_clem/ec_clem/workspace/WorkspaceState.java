@@ -21,12 +21,14 @@ public class WorkspaceState {
     private boolean flagReadyToMove;
     private boolean done;
     private boolean showPredictedError;
+    private boolean showMeasuredError;
 
-    public WorkspaceState(boolean flagReadyToMove, boolean done, PointType pointType, boolean showPredictedError) {
+    public WorkspaceState(boolean flagReadyToMove, boolean done, PointType pointType, boolean showPredictedError, boolean showMeasuredError) {
         this.flagReadyToMove = flagReadyToMove;
         this.done = done;
         this.pointType = pointType;
         this.showPredictedError = showPredictedError;
+        this.showMeasuredError = showMeasuredError;
     }
 
     public boolean isFlagReadyToMove() {
@@ -59,5 +61,13 @@ public class WorkspaceState {
 
     public void setShowPredictedError(boolean showPredictedError) {
         this.showPredictedError = showPredictedError;
+    }
+
+    public boolean isShowMeasuredError() {
+        return showMeasuredError;
+    }
+
+    public void setShowMeasuredError(boolean showMeasuredError) {
+        this.showMeasuredError = showMeasuredError;
     }
 }

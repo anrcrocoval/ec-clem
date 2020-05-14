@@ -28,29 +28,33 @@ public class GuiCLEMButtons2 extends JPanel {
 
 	private ComputeErrorMapButton computeErrorMapButton;
 	private MonitorTargetPointButton monitorTargetPointButton;
-	private ShowOverlayCheckbox showerror;
-	private ErrorInPositionOverlay errorInPositionOverlay;
+//	private ShowOverlayCheckbox showerror;
+//	private ErrorInPositionOverlay errorInPositionOverlay;
 	private ShowPredictedErrorOverlaysCheckbox showPredictedErrorOverlaysCheckbox;
+	private ShowMeasuredErrorOverlaysCheckbox showMeasuredErrorOverlaysCheckbox;
 
 	@Inject
 	public GuiCLEMButtons2(
 			ComputeErrorMapButton computeErrorMapButton,
 			MonitorTargetPointButton monitorTargetPointButton,
-			ErrorInPositionOverlay errorInPositionOverlay,
-			ShowPredictedErrorOverlaysCheckbox showPredictedErrorOverlaysCheckbox
+//			ErrorInPositionOverlay errorInPositionOverlay,
+			ShowPredictedErrorOverlaysCheckbox showPredictedErrorOverlaysCheckbox,
+			ShowMeasuredErrorOverlaysCheckbox showMeasuredErrorOverlaysCheckbox
 	) {
 		this.computeErrorMapButton = computeErrorMapButton;
 		this.monitorTargetPointButton = monitorTargetPointButton;
-		this.errorInPositionOverlay = errorInPositionOverlay;
+//		this.errorInPositionOverlay = errorInPositionOverlay;
 		this.showPredictedErrorOverlaysCheckbox = showPredictedErrorOverlaysCheckbox;
-		showerror = new ShowOverlayCheckbox(
-			null,
-			"Show Difference in Positions",
-			"This will draw around each point on source image a red circle which radius is the difference between source point and target point positions (called Fiducial registration error)"
-		);
+		this.showMeasuredErrorOverlaysCheckbox = showMeasuredErrorOverlaysCheckbox;
+//		showerror = new ShowOverlayCheckbox(
+//			null,
+//			"Show Difference in Positions",
+//			"This will draw around each point on source image a red circle which radius is the difference between source point and target point positions (called Fiducial registration error)"
+//		);
 
-		add(showerror);
+//		add(showerror);
 		add(showPredictedErrorOverlaysCheckbox);
+		add(showMeasuredErrorOverlaysCheckbox);
 		add(computeErrorMapButton);
 		add(monitorTargetPointButton);
 	}
@@ -58,22 +62,25 @@ public class GuiCLEMButtons2 extends JPanel {
 	public void setWorkspace(Workspace workspace) {
 		computeErrorMapButton.setWorkspace(workspace);
 		monitorTargetPointButton.setWorkspace(workspace);
-		showerror.setWorkspace(workspace);
-		showerror.setOverlay(errorInPositionOverlay.setWorkspace(workspace));
+//		showerror.setWorkspace(workspace);
+//		showerror.setOverlay(errorInPositionOverlay.setWorkspace(workspace));
 		showPredictedErrorOverlaysCheckbox.setWorkspace(workspace);
+		showMeasuredErrorOverlaysCheckbox.setWorkspace(workspace);
 	}
 
 	public void disableButtons() {
 		computeErrorMapButton.setEnabled(false);
 		monitorTargetPointButton.setEnabled(false);
-		showerror.setEnabled(false);
+//		showerror.setEnabled(false);
 		showPredictedErrorOverlaysCheckbox.setEnabled(false);
+		showMeasuredErrorOverlaysCheckbox.setEnabled(false);
 	}
 
 	public void enableButtons() {
 		computeErrorMapButton.setEnabled(true);
 		monitorTargetPointButton.setEnabled(true);
-		showerror.setEnabled(true);
+//		showerror.setEnabled(true);
 		showPredictedErrorOverlaysCheckbox.setEnabled(true);
+		showMeasuredErrorOverlaysCheckbox.setEnabled(true);
 	}
 }

@@ -26,7 +26,9 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.VtkAbstractTransformFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
 import plugins.kernel.roi.roi2d.ROI2DEllipse;
+import plugins.kernel.roi.roi2d.ROI2DLine;
 import plugins.kernel.roi.roi2d.ROI2DPoint;
+import plugins.kernel.roi.roi3d.ROI3DLine;
 import plugins.kernel.roi.roi3d.ROI3DPoint;
 import vtk.vtkParametricEllipsoid;
 import vtk.vtkParametricFunctionSource;
@@ -50,8 +52,8 @@ public class RoiFactory {
 
     public ROI getFrom(Rectangle2D ellipseBound) {
         ROI roi =  new ROI2DEllipse(ellipseBound);
-        roi.setColor(PointType.ERROR.getColor());
-        roi.setProperty(POINT_TYPE_PROPERTY, PointType.ERROR.name());
+        roi.setColor(PointType.PREDICTED_ERROR.getColor());
+        roi.setProperty(POINT_TYPE_PROPERTY, PointType.PREDICTED_ERROR.name());
         return roi;
     }
 
@@ -119,9 +121,28 @@ public class RoiFactory {
             toPixel.get(2) - mesh.getBounds3D().getSizeZ() / 2d
         );
         mesh.setPosition3D(position3D);
-        mesh.setProperty(POINT_TYPE_PROPERTY, PointType.ERROR.name());
-        mesh.setColor(PointType.ERROR.getColor());
+        mesh.setProperty(POINT_TYPE_PROPERTY, PointType.PREDICTED_ERROR.name());
+        mesh.setColor(PointType.PREDICTED_ERROR.getColor());
 
         return mesh;
+    }
+
+    public ROI getFrom(Point registered, Point target) {
+        assert registered.getDimension() == target.getDimension();
+        ROI line;
+        switch (registered.getDimension()) {
+            case 2 : {
+                line = new ROI2DLine(registered.get(0), registered.get(1), target.get(0), target.get(1));
+                break;
+            }
+            case 3 : {
+                line = new ROI3DLine(registered.get(0), registered.get(1), registered.get(2), target.get(0), target.get(1), target.get(2));
+                break;
+            }
+            default: throw new RuntimeException("Unsupported dimension : " + registered.getDimension());
+        }
+        line.setProperty(POINT_TYPE_PROPERTY, PointType.MEASURED_ERROR.name());
+        line.setColor(PointType.MEASURED_ERROR.getColor());
+        return line;
     }
 }
