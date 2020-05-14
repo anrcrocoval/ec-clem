@@ -35,7 +35,6 @@ import vtk.vtkParametricFunctionSource;
 import vtk.vtkTransformPolyDataFilter;
 import javax.inject.Inject;
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
