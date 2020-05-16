@@ -71,15 +71,18 @@ public class RoiUpdater {
 
     public void updateErrorRoi(Dataset dataset, TransformationSchema transformationSchema, Sequence sequence) {
         List<SequenceListener> sequenceListeners = roiListenerManager.removeAll(sequence);
-        for(int i = 0; i < dataset.getN(); i++) {
-            ROI ellipseROI = roiFactory.getFrom(
-                confidenceEllipseFactory.getFrom(dataset.getPoint(i), transformationSchema, 0.95),
-                sequenceSizeFactory.getFrom(sequence)
-            );
-            ellipseROI.setName(String.format("%s_%s_%d", PointType.PREDICTED_ERROR.name(), dataset.getPointType().name(), i + 1));
-            sequence.addROI(ellipseROI);
+        try {
+            for(int i = 0; i < dataset.getN(); i++) {
+                ROI ellipseROI = roiFactory.getFrom(
+                    confidenceEllipseFactory.getFrom(dataset.getPoint(i), transformationSchema, 0.95),
+                    sequenceSizeFactory.getFrom(sequence)
+                );
+                ellipseROI.setName(String.format("%s_%s_%d", PointType.PREDICTED_ERROR.name(), dataset.getPointType().name(), i + 1));
+                sequence.addROI(ellipseROI);
+            }
+        } finally {
+            sequenceListenerUtil.addListeners(sequence, sequenceListeners);
         }
-        sequenceListenerUtil.addListeners(sequence, sequenceListeners);
     }
 
     public void updateMeasuredErrorRoi(Dataset sourceDataset, Dataset targetDataset, Sequence sequence) {
