@@ -19,6 +19,7 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.XmlT
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.DimensionSize;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceName;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.XmlTransformation;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
@@ -37,6 +38,8 @@ public class XmlTransformationWriter {
         transformationElement.setAttribute(XmlTransformation.transformationDateAttributeName, ZonedDateTime.now().toString());
         write(transformationSchema.getSourceSize(), "source", transformationElement);
         write(transformationSchema.getTargetSize(), "target", transformationElement);
+        write(transformationSchema.getSourceName(), "source", transformationElement);
+        write(transformationSchema.getTargetName(), "target", transformationElement);
         write(transformationSchema.getFiducialSet().getSourceDataset(), "source", transformationElement);
         write(transformationSchema.getFiducialSet().getTargetDataset(), "target", transformationElement);
     }
@@ -52,6 +55,16 @@ public class XmlTransformationWriter {
             value.setTextContent(String.valueOf(entry.getSize()));
             element.appendChild(value);
         }
+    }
+    
+    private void write(SequenceName sequenceName, String type, Element transformationElement) {
+        Element element = XMLUtil.addElement(transformationElement, XmlTransformation.sequenceFileName);
+        XMLUtil.setAttributeValue(element, XmlTransformation.sequenceFileNameTypeAttributeName, String.valueOf(sequenceName.getPathName()));
+        
+        element.setTextContent(sequenceName.getPathName());
+        
+            
+        
     }
 
     private void write(Dataset dataset, String type, Element transformationElement) {

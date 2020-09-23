@@ -29,8 +29,10 @@ public class XmlTransformation {
     public static String coordinateDimensionAttributeName = "dimension";
 
     public static String sequenceSizeElementName = "sequenceSize";
+    public static String sequenceFileName = "sequenceFileName";
     public static String sequenceSizeDimensionAttributeName = "dimension";
     public static String sequenceSizeTypeAttributeName = "type";
+    public static String sequenceFileNameTypeAttributeName = "path";
     public static String dimensionSizeElementName = "dimensionSize";
     public static String dimensionSizePixelSizeAttributeName = "pixelSize";
     public static String dimensionSizeDimensionNameAttributeName = "name";
