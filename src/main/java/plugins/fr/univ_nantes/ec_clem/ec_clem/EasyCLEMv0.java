@@ -35,6 +35,7 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
 import icy.main.Icy;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
+import icy.file.FileUtil;
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.ToolTipFrame;
 import icy.gui.util.FontUtil;
@@ -159,13 +160,14 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setTargetSequence(targetSequence);
 		Sequence copy = SequenceUtil.getCopy(sourceSequence);
 		workspace.setSourceBackup(copy);
-		Path parent = Paths.get(sourceSequence.getFilename()).getParent();
-		if(parent == null) {
+		Path parent= Paths.get(FileUtil.getApplicationDirectory());
+		if (!(sourceSequence.getFilename().isEmpty())) {
+			parent = Paths.get(sourceSequence.getFilename()).getParent();	
+			}
+		else if (!(targetSequence.getFilename().isEmpty())) {
 			parent = Paths.get(targetSequence.getFilename()).getParent();
 		}
-		if(parent == null) {
-			parent = Paths.get(System.getProperty("user.dir"));
-		}
+		
 		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss"));
 
 		File transformationSchemaOutputFile = new File(String.format("%s/%s_to_%s_%s.transformation_schema.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
@@ -193,7 +195,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		sourceSequence.addOverlay(messageSource);
 		targetSequence.addOverlay(messageTarget);
-		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
+		//why would you do that? sourceSequence.setFilename(sourceSequence.getName() + ".tif");
 
 		new ToolTipFrame(
 	"<html>"
