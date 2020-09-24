@@ -47,7 +47,7 @@ public class XmlTransformationWriter {
     private void write(SequenceSize sequenceSize, String type, Element transformationElement) {
         Element element = XMLUtil.addElement(transformationElement, XmlTransformation.sequenceSizeElementName);
         XMLUtil.setAttributeValue(element, XmlTransformation.sequenceSizeDimensionAttributeName, String.valueOf(sequenceSize.getN()));
-        XMLUtil.setAttributeValue(element, XmlTransformation.sequenceSizeTypeAttributeName, type);
+        XMLUtil.setAttributeValue(element, XmlTransformation.sequenceTypeAttributeName, type);
         for(DimensionSize entry : sequenceSize.getDimensions()) {
             Element value = XMLUtil.addElement(element, XmlTransformation.dimensionSizeElementName);
             value.setAttribute(XmlTransformation.dimensionSizeDimensionNameAttributeName, entry.getDimensionId().name());
@@ -59,11 +59,11 @@ public class XmlTransformationWriter {
     
     private void write(SequenceName sequenceName, String type, Element transformationElement) {
         Element element = XMLUtil.addElement(transformationElement, XmlTransformation.sequenceFileName);
-        XMLUtil.setAttributeValue(element, XmlTransformation.sequenceFileNameTypeAttributeName, String.valueOf(sequenceName.getPathName()));
+        XMLUtil.setAttributeValue(element, XmlTransformation.sequenceTypeAttributeName, type);
+       
+        element.setTextContent(sequenceName.getPath()+sequenceName.getName());
         
-        element.setTextContent(sequenceName.getPathName());
         
-            
         
     }
 

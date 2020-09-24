@@ -16,18 +16,27 @@ package plugins.fr.univ_nantes.ec_clem.ec_clem.sequence;
 
 public class SequenceName {
 
-    private String PathName = new String();
-
-    public String getPathName() {
-        return PathName;
-    }
-
+    private String Path = new String();
+    private String Name = new String();
     
-    public void set(String pathName) {
-        PathName=pathName;
+    public void set(String pathName,String filename) {
+        Path=pathName;
+        Name=filename;
+    }
+    public void setPath(String pathName) {
+        Path=pathName;
+        
+    }
+    
+    public void setName(String name) {
+        Name=name;
+        
     }
 
-    public String get() {
-       return PathName;
+    public String getName() {
+       return Name;
     }
+    public String getPath() {
+        return Path;
+     }
 }

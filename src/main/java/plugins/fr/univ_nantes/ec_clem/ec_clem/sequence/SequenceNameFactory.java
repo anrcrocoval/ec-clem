@@ -12,8 +12,11 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.ec_clem.sequence;
 
+import icy.file.FileUtil;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
+
+import java.nio.file.Paths;
 
 import javax.inject.Inject;
 
@@ -24,9 +27,17 @@ public class SequenceNameFactory {
 
     public SequenceName getFrom(Sequence sequence) {
         SequenceName sequenceName = new SequenceName();
-        if (sequence.getFilename().isEmpty())
-        	sequenceName.set(sequence.getName());
-        else sequenceName.set(sequence.getFilename());
+        
+        if (sequence.getFilename().isEmpty()) {
+        	sequenceName.setName("Unsavedondisk_"+sequence.getName());
+        	sequenceName.setPath(FileUtil.getApplicationDirectory());
+        }
+        else 
+        	{
+        	sequenceName.setName(sequence.getFilename());
+        	sequenceName.setPath(Paths.get(sequence.getFilename()).getParent().toString());
+        	
+        	}
 
        
 
