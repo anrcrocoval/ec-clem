@@ -80,7 +80,7 @@ public class TransformationSchema {
     }
     
     public SequenceName getTargetName() {
-    	return sourceName;
+    	return targetName;
     }
     public TransformationSchema inverse() {
         return new TransformationSchema(

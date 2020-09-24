@@ -161,12 +161,21 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		Sequence copy = SequenceUtil.getCopy(sourceSequence);
 		workspace.setSourceBackup(copy);
 		Path parent= Paths.get(FileUtil.getApplicationDirectory());
-		if (!(sourceSequence.getFilename().isEmpty())) {
+		String warningmessagestorage="All saved files will be under "+FileUtil.getApplicationDirectory();
+		if (sourceSequence.getFilename()==null ){
+			if (targetSequence.getFilename()==null) {
+				MessageDialog.showDialog("Note that Source and Target are not saved on disk, \n  "+warningmessagestorage, MessageDialog.WARNING_MESSAGE);
+			}
+			else {
+				parent = Paths.get(targetSequence.getFilename()).getParent();
+				MessageDialog.showDialog("Note that Source is not saved on disk, \n  "+warningmessagestorage, MessageDialog.WARNING_MESSAGE);
+			}
+		}
+			
+		else {
 			parent = Paths.get(sourceSequence.getFilename()).getParent();	
 			}
-		else if (!(targetSequence.getFilename().isEmpty())) {
-			parent = Paths.get(targetSequence.getFilename()).getParent();
-		}
+		
 		
 		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss"));
 
@@ -229,11 +238,13 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	public void stopExecution() {
 		guiCLEMButtons.setEnabled(false);
 		rigidspecificbutton.disableButtons();
+		source.getValue().setFilename(source.getValue().getFilename()+"_transformed.tif");
 		source.setEnabled(true);
 		target.setEnabled(true);
 		choiceinputsection.setEnabled(true);
 		noiseModel.setEnabled(true);
 		showgrid.setEnabled(true);
+		
 		clearWorkspace();
 		synchronized(this) {
 			notify();
