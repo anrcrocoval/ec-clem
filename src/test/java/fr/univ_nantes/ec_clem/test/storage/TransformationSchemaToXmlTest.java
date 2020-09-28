@@ -62,6 +62,8 @@ class TransformationSchemaToXmlTest {
             sourceSequenceSize,
             targetSequenceSize
         );
+       
+       
         write(transformationSchema);
         TransformationSchema read = read();
         assertEquals(transformationSchema.getTransformationType(), read.getTransformationType());

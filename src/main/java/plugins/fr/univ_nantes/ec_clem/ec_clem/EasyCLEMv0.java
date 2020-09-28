@@ -176,7 +176,9 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 			parent = Paths.get(sourceSequence.getFilename()).getParent();	
 			}
 		
-		
+		if (parent==null) {
+			parent=Paths.get(FileUtil.getApplicationDirectory());
+		}
 		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss"));
 
 		File transformationSchemaOutputFile = new File(String.format("%s/%s_to_%s_%s.transformation_schema.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));

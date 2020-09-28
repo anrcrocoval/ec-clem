@@ -28,7 +28,7 @@ public class SequenceNameFactory {
     public SequenceName getFrom(Sequence sequence) {
         SequenceName sequenceName = new SequenceName();
         
-        if (sequence.getFilename().isEmpty()) {
+        if (sequence.getFilename()==null) {
         	sequenceName.setName("Unsavedondisk_"+sequence.getName());
         	sequenceName.setPath(FileUtil.getApplicationDirectory());
         }

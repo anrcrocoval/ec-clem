@@ -39,4 +39,18 @@ public class SequenceSizeFactory {
 
         return sequenceSize;
     }
+    public SequenceSize getFrom(DimensionSize sizeX,DimensionSize sizeY, DimensionSize sizeZ) {
+        SequenceSize sequenceSize = new SequenceSize();
+
+            sequenceSize.add(sizeX);
+        
+
+        
+            sequenceSize.add(sizeY);
+        
+
+            sequenceSize.add(sizeZ);
+
+        return sequenceSize;
+    }
 }

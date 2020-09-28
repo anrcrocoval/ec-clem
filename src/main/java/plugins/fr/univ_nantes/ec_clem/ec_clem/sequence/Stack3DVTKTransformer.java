@@ -37,10 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-/**
- * The difference with 2D transform is that the tranform is computed in REAL UNITS, because vtk apply it in real unit,
- * which can be quite convenient for dealing with anisotropy!
- */
+
 public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implements Supplier<Sequence> {
 
 	private vtkImageReslice imageReslice;

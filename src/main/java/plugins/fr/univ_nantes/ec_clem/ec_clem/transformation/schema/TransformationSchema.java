@@ -12,6 +12,7 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema;
 
+import icy.sequence.DimensionId;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceName;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
@@ -74,7 +75,9 @@ public class TransformationSchema {
     public SequenceSize getTargetSize() {
         return targetSize;
     }
-    
+    public void setTargetSize(SequenceSize targetsize) {
+        targetSize=targetsize;
+    }
     public SequenceName getSourceName() {
     	return sourceName;
     }
