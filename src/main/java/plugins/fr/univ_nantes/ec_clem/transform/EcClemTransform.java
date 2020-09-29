@@ -59,7 +59,7 @@ public class EcClemTransform extends EzPlug implements Block {
         	 SequenceSize newtargetsize=newtargetSizefactory.getFrom(copy);
         	 newtargetsize=newtargetSizefactory.getFrom(transformationSchema.getTargetSize().get(DimensionId.X),transformationSchema.getTargetSize().get(DimensionId.Y),newtargetsize.get(DimensionId.Z));
         	 transformationSchema.setTargetSize(newtargetsize);
-        	 System.out.println("Youhou " + newtargetsize.get(DimensionId.Z).getSize());
+        	 
         }
         
         SequenceUpdater sequenceUpdater = new SequenceUpdater(copy, transformationSchema);
