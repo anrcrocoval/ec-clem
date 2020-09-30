@@ -12,7 +12,9 @@
  **/
 package plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema;
 
+import icy.sequence.DimensionId;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceName;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
@@ -23,6 +25,8 @@ public class TransformationSchema {
     private NoiseModel noiseModel;
     private SequenceSize sourceSize;
     private SequenceSize targetSize;
+    private SequenceName sourceName;
+    private SequenceName targetName;
 
     public TransformationSchema(
         FiducialSet fiducialSet,
@@ -36,9 +40,23 @@ public class TransformationSchema {
         this.noiseModel = noiseModel;
         this.sourceSize = sourceSize;
         this.targetSize = targetSize;
+        this.sourceName=new SequenceName();
+        this.targetName=new SequenceName();
     }
 
-    public FiducialSet getFiducialSet() {
+    public TransformationSchema(FiducialSet fiducialSet, TransformationType transformationType,
+			NoiseModel noiseModel, SequenceSize sourceSize, SequenceSize targetSize, SequenceName sourceName, SequenceName targetName) {
+    	 this.fiducialSet = fiducialSet;
+         this.transformationType = transformationType;
+         this.noiseModel = noiseModel;
+         this.sourceSize = sourceSize;
+         this.targetSize = targetSize;
+         this.sourceName=sourceName;
+         this.targetName=targetName;
+         
+	}
+
+	public FiducialSet getFiducialSet() {
         return fiducialSet;
     }
 
@@ -57,14 +75,25 @@ public class TransformationSchema {
     public SequenceSize getTargetSize() {
         return targetSize;
     }
-
+    public void setTargetSize(SequenceSize targetsize) {
+        targetSize=targetsize;
+    }
+    public SequenceName getSourceName() {
+    	return sourceName;
+    }
+    
+    public SequenceName getTargetName() {
+    	return targetName;
+    }
     public TransformationSchema inverse() {
         return new TransformationSchema(
             new FiducialSet(fiducialSet.getTargetDataset(), fiducialSet.getSourceDataset()),
             transformationType,
             noiseModel,
             targetSize,
-            sourceSize
+            sourceSize,
+            targetName,
+            sourceName
         );
     }
 }

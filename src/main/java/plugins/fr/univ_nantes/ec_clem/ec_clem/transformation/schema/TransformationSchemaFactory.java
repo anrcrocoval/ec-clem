@@ -14,6 +14,7 @@ package plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema;
 
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSetFactory;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceNameFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSizeFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSizeFactory;
@@ -27,11 +28,13 @@ public class TransformationSchemaFactory {
 
     private FiducialSetFactory fiducialSetFactory;
     private SequenceSizeFactory sequenceSizeFactory;
+    private SequenceNameFactory sequenceNameFactory;
 
     @Inject
-    public TransformationSchemaFactory(FiducialSetFactory fiducialSetFactory, SequenceSizeFactory sequenceSizeFactory) {
+    public TransformationSchemaFactory(FiducialSetFactory fiducialSetFactory, SequenceSizeFactory sequenceSizeFactory, SequenceNameFactory sequenceNameFactory) {
         this.fiducialSetFactory = fiducialSetFactory;
         this.sequenceSizeFactory = sequenceSizeFactory;
+        this.sequenceNameFactory = sequenceNameFactory;
     }
 
     public TransformationSchema getFrom(Workspace workspace) {
@@ -41,7 +44,12 @@ public class TransformationSchemaFactory {
             workspace.getTransformationConfiguration().getTransformationType(),
             workspace.getTransformationConfiguration().getNoiseModel(),
             sequenceSizeFactory.getFrom(workspace.getSourceSequence()),
-            sequenceSizeFactory.getFrom(workspace.getTargetSequence())
+            sequenceSizeFactory.getFrom(workspace.getTargetSequence()),
+            sequenceNameFactory.getFrom(workspace.getSourceSequence()),
+            sequenceNameFactory.getFrom(workspace.getTargetSequence())
+            
         );
     }
+    
+    
 }

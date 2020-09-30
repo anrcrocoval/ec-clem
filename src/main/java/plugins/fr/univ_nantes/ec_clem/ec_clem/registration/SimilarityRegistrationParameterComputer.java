@@ -39,9 +39,21 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
         clonedTargetDataset.substractBarycentre();
 
         Matrix R = getR(clonedSourceDataset, clonedTargetDataset);
+        //fixture
+        if(R.get(2, 2)==-1)
+        	R.set(2, 2, 1);
         Matrix S = getS(clonedSourceDataset.getMatrix(), clonedTargetDataset.getMatrix(), R);
         Matrix T = getT(sourceBarycentre.getMatrix(), targetBarycentre.getMatrix(), R, S);
-
+        /*System.out.println("source barycentre is :");
+        sourceBarycentre.getMatrix().print(4, 2);
+        System.out.println("target barycentre is :");
+        targetBarycentre.getMatrix().print(4, 2);
+        System.out.println("R is :");
+        R.print(4, 2);
+        System.out.println("S is :");
+        S.print(4, 2);
+        System.out.println("T is :");
+        T.print(4, 2);*/
         Similarity similarity = new Similarity(R, T, S);
         Matrix residuals = fiducialSet.getTargetDataset().getMatrix().minus(
             similarity.apply(fiducialSet.getSourceDataset()).getMatrix()

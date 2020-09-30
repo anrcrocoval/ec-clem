@@ -35,6 +35,7 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
 import icy.main.Icy;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
+import icy.file.FileUtil;
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.ToolTipFrame;
 import icy.gui.util.FontUtil;
@@ -159,12 +160,24 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 		workspace.setTargetSequence(targetSequence);
 		Sequence copy = SequenceUtil.getCopy(sourceSequence);
 		workspace.setSourceBackup(copy);
-		Path parent = Paths.get(sourceSequence.getFilename()).getParent();
-		if(parent == null) {
-			parent = Paths.get(targetSequence.getFilename()).getParent();
+		Path parent= Paths.get(FileUtil.getApplicationDirectory());
+		String warningmessagestorage="All saved files will be under "+FileUtil.getApplicationDirectory();
+		if (sourceSequence.getFilename()==null ){
+			if (targetSequence.getFilename()==null) {
+				MessageDialog.showDialog("Note that Source and Target are not saved on disk, \n  "+warningmessagestorage, MessageDialog.WARNING_MESSAGE);
+			}
+			else {
+				parent = Paths.get(targetSequence.getFilename()).getParent();
+				MessageDialog.showDialog("Note that Source is not saved on disk, \n  "+warningmessagestorage, MessageDialog.WARNING_MESSAGE);
+			}
 		}
-		if(parent == null) {
-			parent = Paths.get(System.getProperty("user.dir"));
+			
+		else {
+			parent = Paths.get(sourceSequence.getFilename()).getParent();	
+			}
+		
+		if (parent==null) {
+			parent=Paths.get(FileUtil.getApplicationDirectory());
 		}
 		String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss"));
 
@@ -193,7 +206,7 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 
 		sourceSequence.addOverlay(messageSource);
 		targetSequence.addOverlay(messageTarget);
-		sourceSequence.setFilename(sourceSequence.getName() + ".tif");
+		//why would you do that? sourceSequence.setFilename(sourceSequence.getName() + ".tif");
 
 		new ToolTipFrame(
 	"<html>"
@@ -227,11 +240,13 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	public void stopExecution() {
 		guiCLEMButtons.setEnabled(false);
 		rigidspecificbutton.disableButtons();
+		source.getValue().setFilename(source.getValue().getFilename()+"_transformed.tif");
 		source.setEnabled(true);
 		target.setEnabled(true);
 		choiceinputsection.setEnabled(true);
 		noiseModel.setEnabled(true);
 		showgrid.setEnabled(true);
+		
 		clearWorkspace();
 		synchronized(this) {
 			notify();

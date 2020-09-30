@@ -80,6 +80,7 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
             datasetFactory.toPixel(datasetFactory.getFrom(workspace.getTargetSequence(), PointType.FIDUCIAL), workspace.getTargetSequence()),
             workspace.getSourceSequence()
         );
+        
         roiUpdater.setLayersVisible(workspace.getSourceSequence(), PointType.MEASURED_ERROR, workspace.getWorkspaceState().isShowMeasuredError());
         roiUpdater.setLayersVisible(workspace.getSourceSequence(), PointType.PREDICTED_ERROR, workspace.getWorkspaceState().isShowPredictedError());
         transformationSchemaToXmlFileWriter.save(workspace.getTransformationSchema(), workspace.getTransformationSchemaOutputFile());

@@ -59,7 +59,7 @@ public class XmlTransformationReader {
         SequenceSize sourceSequenceSize = readSequenceSize(sequenceSizeElements.get(0));
         SequenceSize targetSequenceSize = readSequenceSize(sequenceSizeElements.get(1));
 
-        if(sequenceSizeElements.get(0).getAttribute(XmlTransformation.sequenceSizeTypeAttributeName).equals("source")) {
+        if(sequenceSizeElements.get(0).getAttribute(XmlTransformation.sequenceTypeAttributeName).equals("source")) {
             return new TransformationSchema(fiducialSet, transformationType, noiseModel, sourceSequenceSize, targetSequenceSize);
         } else {
             return new TransformationSchema(fiducialSet, transformationType, noiseModel, targetSequenceSize, sourceSequenceSize);

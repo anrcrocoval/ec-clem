@@ -18,6 +18,7 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
@@ -37,6 +38,8 @@ public class SequenceUpdater extends ProgressTrackableMasterTask implements Runn
         DaggerSequenceUpdaterComponent.builder().build().inject(this);
         this.sourceSequence = sourceSequence;
         this.transformationSchema = transformationSchema;
+        
+        
     }
 
     @Override
