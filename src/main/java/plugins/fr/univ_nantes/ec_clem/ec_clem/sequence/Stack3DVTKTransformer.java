@@ -24,6 +24,7 @@ import icy.vtk.VtkUtil;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackable;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackable;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Transformation;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;

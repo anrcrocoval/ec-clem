@@ -14,6 +14,8 @@ import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSizeFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceUpdater;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchemaFactory;
+
 import javax.inject.Inject;
 
 public class EcClemTransform extends EzPlug implements Block {
@@ -53,12 +55,18 @@ public class EcClemTransform extends EzPlug implements Block {
         {
         	 throw new RuntimeException("Source size different from the one in the transformation schema");
         }
+        if (copy.getPixelSizeX()!=transformationSchema.getSourceSize().get(DimensionId.X).getPixelSizeInMicrometer())
+        {
+        	 throw new RuntimeException("Pixel Size in micrometers is different from the ones stored in the transformation schema.\n Check the metadata of your image.");
+        }
+        
         if (copy.getSizeZ()!=transformationSchema.getSourceSize().get(DimensionId.Z).getSize())
         {
         	 SequenceSizeFactory newtargetSizefactory=new SequenceSizeFactory();
         	 SequenceSize newtargetsize=newtargetSizefactory.getFrom(copy);
         	 newtargetsize=newtargetSizefactory.getFrom(transformationSchema.getTargetSize().get(DimensionId.X),transformationSchema.getTargetSize().get(DimensionId.Y),newtargetsize.get(DimensionId.Z));
         	 transformationSchema.setTargetSize(newtargetsize);
+        	 
         	 
         }
         
