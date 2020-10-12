@@ -35,9 +35,10 @@ public class TransformationToXmlFileWriter {
         Document document = XMLUtil.createDocument(true);
        
         writeMatrix(document, transformation.getHomogeneousMatrix());
-        XMLUtil.saveDocument(document, xmlFile);
+        
         XmlTransformationWriter writer = new XmlTransformationWriter();
         writer.writeSequenceInfoOnly(document, transformationSchema);
+        XMLUtil.saveDocument(document, xmlFile);
     }
 
    
