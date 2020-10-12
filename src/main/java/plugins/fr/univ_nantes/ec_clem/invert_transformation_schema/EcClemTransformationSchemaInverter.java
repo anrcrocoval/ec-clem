@@ -4,9 +4,15 @@ import plugins.adufour.blocks.lang.Block;
 import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RegistrationParameter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.xml.TransformationToXmlFileWriter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+
+import java.io.File;
+
 import javax.inject.Inject;
 
 public class EcClemTransformationSchemaInverter extends EzPlug implements Block {
@@ -16,7 +22,9 @@ public class EcClemTransformationSchemaInverter extends EzPlug implements Block 
 
     private XmlToTransformationSchemaFileReader xmlToTransformationSchemaFileReader;
     private TransformationSchemaToXmlFileWriter transformationSchemaToXmlFileWriter;
-
+    private TransformationToXmlFileWriter transformationToXmlFileWriter;
+    private RegistrationParameterFactory registrationParameterFactory;
+    
     public EcClemTransformationSchemaInverter() {
         DaggerEcClemTransformationSchemaInverterComponent.builder().build().inject(this);
     }
@@ -40,6 +48,12 @@ public class EcClemTransformationSchemaInverter extends EzPlug implements Block 
     protected void execute() {
         TransformationSchema read = xmlToTransformationSchemaFileReader.read(inputTransformationSchema.getValue());
         transformationSchemaToXmlFileWriter.save(read.inverse(), outputTransformationSchema.getValue());
+        RegistrationParameter from = registrationParameterFactory.getFrom(read.inverse());
+        transformationToXmlFileWriter.save(
+                from.getTransformation(),
+                read.inverse(),
+                new File(outputTransformationSchema.getValue().getPath().replace(".xml", "matrixtransfo.xml"))
+            );
     }
 
     @Override
@@ -53,5 +67,13 @@ public class EcClemTransformationSchemaInverter extends EzPlug implements Block 
     @Inject
     public void setTransformationSchemaToXmlFileWriter(TransformationSchemaToXmlFileWriter transformationSchemaToXmlFileWriter) {
         this.transformationSchemaToXmlFileWriter = transformationSchemaToXmlFileWriter;
+    }
+    @Inject
+    public void setTransformationToXmlFileWriter(TransformationToXmlFileWriter transformationToXmlFileWriter) {
+        this.transformationToXmlFileWriter = transformationToXmlFileWriter;
+    }
+    @Inject
+    public void setRegistrationParameterFactory(RegistrationParameterFactory registrationParameterFactory) {
+        this.registrationParameterFactory = registrationParameterFactory;
     }
 }

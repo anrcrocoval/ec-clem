@@ -43,6 +43,17 @@ public class XmlTransformationWriter {
         write(transformationSchema.getFiducialSet().getSourceDataset(), "source", transformationElement);
         write(transformationSchema.getFiducialSet().getTargetDataset(), "target", transformationElement);
     }
+    public void writeSequenceInfoOnly(Document document, TransformationSchema transformationSchema) {
+        Element transformationElement = XMLUtil.addElement(document.getDocumentElement(), XmlTransformation.transformationElementName);
+        transformationElement.setAttribute(XmlTransformation.transformationTypeAttributeName, transformationSchema.getTransformationType().name());
+        transformationElement.setAttribute(XmlTransformation.transformationNoiseModelAttributeName, transformationSchema.getNoiseModel().name());
+        transformationElement.setAttribute(XmlTransformation.transformationDateAttributeName, ZonedDateTime.now().toString());
+        write(transformationSchema.getSourceSize(), "source", transformationElement);
+        write(transformationSchema.getTargetSize(), "target", transformationElement);
+        write(transformationSchema.getSourceName(), "source", transformationElement);
+        write(transformationSchema.getTargetName(), "target", transformationElement);
+       
+    }
 
     private void write(SequenceSize sequenceSize, String type, Element transformationElement) {
         Element element = XMLUtil.addElement(transformationElement, XmlTransformation.sequenceSizeElementName);

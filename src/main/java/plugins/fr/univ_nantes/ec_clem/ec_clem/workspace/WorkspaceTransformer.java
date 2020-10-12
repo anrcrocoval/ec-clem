@@ -87,8 +87,7 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         transformationToCsvFileWriter.save(registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(), workspace.getCsvTransformationOutputFile());
         transformationToXmlFileWriter.save(
             registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation(),
-            workspace.getTransformationSchema().getTargetSize(),
-            workspace.getTransformationSchema().getFiducialSet().getN(),
+            workspace.getTransformationSchema(),
             workspace.getXmlTransformationOutputFile()
         );
 

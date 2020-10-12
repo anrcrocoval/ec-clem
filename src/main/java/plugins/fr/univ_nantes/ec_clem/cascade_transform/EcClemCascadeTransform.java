@@ -6,6 +6,7 @@ import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
 import plugins.adufour.ezplug.EzVarText;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RegistrationParameter;
+import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.xml.TransformationToXmlFileWriter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
@@ -48,6 +49,7 @@ public class EcClemCascadeTransform extends EzPlug implements Block {
 
     private XmlToTransformationSchemaFileReader xmlToTransformationSchemaFileReader;
     private TransformationSchemaToXmlFileWriter transformationSchemaToXmlFileWriter;
+    private TransformationToXmlFileWriter transformationToXmlFileWriter;
     private RegistrationParameterFactory registrationParameterFactory;
 
     public EcClemCascadeTransform() {
@@ -99,7 +101,12 @@ public class EcClemCascadeTransform extends EzPlug implements Block {
 //        }
 
         transformationSchemaToXmlFileWriter.save(result, outputFile.getValue(true));
-
+        RegistrationParameter from = registrationParameterFactory.getFrom(result);
+        transformationToXmlFileWriter.save(
+                from.getTransformation(),
+                result,
+                new File(outputFile.getValue().getPath().replace(".xml", "matrix.xml"))
+            );
         fileList.setEnabled(true);
         keepSelection.setEnabled(true);
         outputFile.setEnabled(true);
@@ -109,6 +116,7 @@ public class EcClemCascadeTransform extends EzPlug implements Block {
         TransformationType transformationType = getTransformationType(schemas);
         NoiseModel noiseModel = getNoiseModel(schemas);
         Dataset transformedDataset = schemas.get(0).getFiducialSet().getSourceDataset();
+        
         for(int i = 0; i < schemas.size(); i++) {
             RegistrationParameter from = registrationParameterFactory.getFrom(schemas.get(i));
             transformedDataset = from.getTransformation().apply(transformedDataset);
@@ -118,13 +126,15 @@ public class EcClemCascadeTransform extends EzPlug implements Block {
             transformationType,
             noiseModel,
             schemas.get(0).getSourceSize(),
-            schemas.get(schemas.size() - 1).getTargetSize()
+            schemas.get(schemas.size() - 1).getTargetSize(),
+            schemas.get(0).getSourceName(),
+            schemas.get(schemas.size() - 1).getTargetName()
         );
     }
 
     private List<TransformationSchema> getTransformationSchemaList(List<File> files) {
         List<TransformationSchema> list = new LinkedList<>();
-        for(File file : files) {
+        for(File file : files) { //TODO Add some catcher here when not a transfo.xml
             list.add(xmlToTransformationSchemaFileReader.read(file));
         }
         return list;
@@ -192,5 +202,10 @@ public class EcClemCascadeTransform extends EzPlug implements Block {
     @Inject
     public void setRegistrationParameterFactory(RegistrationParameterFactory registrationParameterFactory) {
         this.registrationParameterFactory = registrationParameterFactory;
+    }
+    
+    @Inject
+    public void setTransformationToXmlFileWriter(TransformationToXmlFileWriter transformationToXmlFileWriter) {
+        this.transformationToXmlFileWriter = transformationToXmlFileWriter;
     }
 }
