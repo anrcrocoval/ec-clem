@@ -40,8 +40,10 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
 
         Matrix R = getR(clonedSourceDataset, clonedTargetDataset);
         //fixture
+        if (R.getColumnDimension()>2) {
         if(R.get(2, 2)==-1)
         	R.set(2, 2, 1);
+        }
         Matrix S = getS(clonedSourceDataset.getMatrix(), clonedTargetDataset.getMatrix(), R);
         Matrix T = getT(sourceBarycentre.getMatrix(), targetBarycentre.getMatrix(), R, S);
         /*System.out.println("source barycentre is :");
