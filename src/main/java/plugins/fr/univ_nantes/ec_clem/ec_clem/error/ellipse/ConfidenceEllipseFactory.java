@@ -39,6 +39,11 @@ public class ConfidenceEllipseFactory {
                 .times(hotellingEstimator.getFrom(fiducialSet, alpha))
                 .times((double) fiducialSet.getN() / (double) (fiducialSet.getN() - fiducialSet.getSourceDataset().getDimension() - 1))
         );
+        System.out.println("d= "+ fiducialSet.getSourceDataset().getDimension());
+        System.out.println("x y z= "+ fiducialSet.getSourceDataset().getPoint(0).get(0)+" " +fiducialSet.getSourceDataset().getPoint(0).get(1));
+        System.out.println("e0"+eigenValueDecomposition.getRealEigenvalues()[0]);
+        System.out.println("e1"+eigenValueDecomposition.getRealEigenvalues()[1]);
+        //System.out.println("e2"+eigenValueDecomposition.getRealEigenvalues()[2]);
         return new Ellipse(
             eigenValueDecomposition.getRealEigenvalues(),
             eigenValueDecomposition.getV(),
