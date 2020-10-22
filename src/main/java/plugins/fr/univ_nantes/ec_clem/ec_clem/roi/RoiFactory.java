@@ -19,6 +19,7 @@ import icy.type.point.Point3D;
 import plugins.adufour.roi.mesh.polygon.ROI3DPolygonalMesh;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.Ellipse;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import icy.roi.BooleanMask2D;
 import icy.roi.ROI;
 import icy.type.point.Point5D;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.PointFactory;
@@ -126,9 +127,11 @@ public class RoiFactory {
 
         vtkTransformPolyDataFilter TransformFilter1 = new vtkTransformPolyDataFilter();
         TransformFilter1.SetInputConnection(parametricFunctionSource.GetOutputPort());
-        TransformFilter1.SetTransform(vtkAbstractTransformFactory.getFrom(
-            new AffineTransformation(ellipse.getEigenVectors().inverse(), new Matrix(dimension, 1, 0))
-        ));
+       vtkAbstractTransform transform = vtkAbstractTransformFactory.getFrom(
+                new AffineTransformation(ellipse.getEigenVectors().inverse(), new Matrix(dimension, 1, 0)));
+       
+       TransformFilter1.SetTransform(transform);
+        
         TransformFilter1.Update();
             
         ROI3DPolygonalMesh mesh = new ROI3DPolygonalMesh(TransformFilter1.GetOutput());
@@ -140,6 +143,7 @@ public class RoiFactory {
             toPixel.get(1) - mesh.getBounds3D().getSizeY() / 2d,
             toPixel.get(2) - mesh.getBounds3D().getSizeZ() / 2d
         );
+        
         mesh.setPosition3D(position3D);
         mesh.setProperty(POINT_TYPE_PROPERTY, PointType.PREDICTED_ERROR.name());
         mesh.setColor(PointType.PREDICTED_ERROR.getColor());

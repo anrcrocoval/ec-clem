@@ -55,6 +55,7 @@ public class VtkAbstractTransformFactory {
                     vtkMatrix.SetElement(i, j, matrixInverse.get(i, j));
                 }
             }
+            vtkMatrix.SetElement(2, 2, 1);
             vtkTransform.SetMatrix(vtkMatrix);
            
             return vtkTransform;
