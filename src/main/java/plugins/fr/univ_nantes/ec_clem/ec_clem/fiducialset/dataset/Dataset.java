@@ -62,12 +62,21 @@ public class Dataset implements Cloneable {
         this.pointType = pointType;
         n = points.length;
         if (checkcoplanarity(points)) {
-        	dimension = 2;
+        	this.dimension = 2;
+        	
+        	double[][] points2D=new double[n][2] ;
+        	for (int i=0;i<n;i++)
+        		for (int j=0;j<2;j++) {
+        			points2D[i][j]=points[i][j];
+        		}
+        	this.points = new Matrix(points2D);
         }else
         {
-        dimension = points[0].length;
-        }
+        this.dimension = points[0].length;
+       
         this.points = new Matrix(points);
+        }
+       
     }
 
     private boolean checkcoplanarity(double[][] points) {

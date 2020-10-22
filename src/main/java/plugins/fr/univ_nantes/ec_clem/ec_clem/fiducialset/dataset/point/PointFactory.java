@@ -58,6 +58,7 @@ public class PointFactory {
 
     public Point toPixel(Point point, SequenceSize sequenceSize) {
         Matrix M = point.getMatrix().copy();
+        
         for(int d = 0; d < point.getDimension(); d++) {
             if(d == 0) {
                 M.set(d, 0, M.get(d, 0) / sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer());
@@ -69,6 +70,28 @@ public class PointFactory {
                 M.set(d, 0, M.get(d, 0) / sequenceSize.get(DimensionId.Z).getPixelSizeInMicrometer());
             }
         }
+       
         return new Point(M);
+    }
+    public Point toPixel3D(Point point, SequenceSize sequenceSize) {
+       if (point.getDimension()==3) {
+    	   return toPixel(point,sequenceSize);
+       }
+       else {
+    	   Matrix M = new Matrix(3,1);
+    	   M.set(2, 0, 0.5);
+    	   for(int d = 0; d < point.getDimension(); d++) {
+               if(d == 0) {
+                   M.set(d, 0, point.get(d) / sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer());
+               }
+               if(d == 1) {
+                   M.set(d, 0, point.get(d) / sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer());
+               }
+              
+           }
+    	   
+    	   return new Point(M);
+       }
+
     }
 }

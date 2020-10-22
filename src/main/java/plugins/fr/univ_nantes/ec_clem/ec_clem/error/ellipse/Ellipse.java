@@ -11,7 +11,7 @@ public class Ellipse {
     public Ellipse(double[] eigenValues, Matrix eigenVectors, Point center) {
         this.eigenValues = eigenValues;
         this.eigenVectors = eigenVectors;
-        this.center = center;
+        this.center = center;      
     }
 
     public double[] getEigenValues() {

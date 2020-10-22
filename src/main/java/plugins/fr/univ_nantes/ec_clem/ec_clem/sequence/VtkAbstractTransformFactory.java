@@ -36,8 +36,17 @@ public class VtkAbstractTransformFactory {
     public vtkAbstractTransform getFrom(Transformation transformation) {
         if(transformation instanceof AffineTransformation) {
             Matrix matrixInverse = matrixUtil.pseudoInverse(((AffineTransformation) transformation).getHomogeneousMatrix());
+            
             if (matrixInverse.getRowDimension() != 4) {
-                throw new RuntimeException("Use this class for 3D transformation only");
+               Matrix correctedmatrixinverse=new Matrix(4, 4); 
+               for(int i=0;i<2;i++)
+            	   for(int j=0;j<2;j++)
+            		   correctedmatrixinverse.set(i, j, matrixInverse.get(i, j));
+               correctedmatrixinverse.set(0, 3,matrixInverse.get(0, 2));
+               correctedmatrixinverse.set(1, 3,matrixInverse.get(1, 2));
+               correctedmatrixinverse.set(3, 3,1);
+               
+               matrixInverse=correctedmatrixinverse.copy();
             }
             vtkTransform vtkTransform = new vtkTransform();
             vtkMatrix4x4 vtkMatrix = new vtkMatrix4x4();
@@ -47,6 +56,7 @@ public class VtkAbstractTransformFactory {
                 }
             }
             vtkTransform.SetMatrix(vtkMatrix);
+           
             return vtkTransform;
         }
 
