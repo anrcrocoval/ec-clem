@@ -12,5 +12,13 @@ This project is an [Icy](http://icy.bioimageanalysis.org/) plugin for point base
 
 ## Code Organisation
 + Note that some injection of code is used (using Dagger) , so some code is generated while compiling with Maven. Do not edit any code in generated source directory.
-+ The code is organized in packages:
-- storage 
++ The code is organized in packages and provide some unit tests during compilation for code integrity.
+
+
+### Validation
+the project cli-tools https://github.com/anrcrocoval/cli_tools/ provides tools for testing and validation the error and transform estimations.
+
+### Documentation
+Online tutorials are available on the icy webpage http://icy.bioimageanalysis.org/plugin/ec-clem/
+Further tutorial including on error estimation are available here:
+https://youtu.be/qDQLAgci8xo
