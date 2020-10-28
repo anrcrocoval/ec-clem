@@ -1,3 +1,6 @@
 lib/icy
 setting.xml
 target/
+*.prefs
+.project
+.classpath

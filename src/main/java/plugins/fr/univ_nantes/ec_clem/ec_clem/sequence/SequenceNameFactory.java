@@ -34,8 +34,10 @@ public class SequenceNameFactory {
         }
         else 
         	{
-        	sequenceName.setName(Paths.get(sequence.getFilename()).getFileName().toString());
-        	sequenceName.setPath(Paths.get(sequence.getFilename()).getParent().toString());
+        	if (Paths.get(sequence.getFilename()).getParent()!=null) {
+        		sequenceName.setName(Paths.get(sequence.getFilename()).getFileName().toString());
+        		sequenceName.setPath(Paths.get(sequence.getFilename()).getParent().toString());
+        	}
         	
         	}
 

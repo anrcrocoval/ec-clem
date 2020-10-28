@@ -37,7 +37,7 @@ public class UpdateTransformationButton extends JButton {
         WorkspaceTransformer workspaceTransformer = new WorkspaceTransformer(workspace);
         progressBarManager.subscribe(workspaceTransformer);
         CompletableFuture.runAsync(workspaceTransformer).exceptionally(e -> {
-        	//e.printStackTrace();
+        	e.printStackTrace();
         	MessageDialog.showDialog("Something went wrong: "+e.getCause().getMessage(), MessageDialog.ERROR_MESSAGE);
             return null;
         });

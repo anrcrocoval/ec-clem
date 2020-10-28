@@ -95,6 +95,7 @@ public class DatasetFactory {
 
     private Dataset toMicroMeter(Dataset dataset, Sequence sequence) {
         Matrix M = dataset.getMatrix().copy();
+        
         for(int d = 0; d < dataset.getDimension(); d++) {
             if(d == 0) {
                 M.setMatrix(0, dataset.getN() - 1, d, d, M.getMatrix(0, dataset.getN() - 1, d, d).times(sequence.getPixelSizeX()));

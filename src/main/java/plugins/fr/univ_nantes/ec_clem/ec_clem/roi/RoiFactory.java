@@ -19,6 +19,7 @@ import icy.type.point.Point3D;
 import plugins.adufour.roi.mesh.polygon.ROI3DPolygonalMesh;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.Ellipse;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import icy.roi.BooleanMask2D;
 import icy.roi.ROI;
 import icy.type.point.Point5D;
 import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.PointFactory;
@@ -30,6 +31,7 @@ import plugins.kernel.roi.roi2d.ROI2DLine;
 import plugins.kernel.roi.roi2d.ROI2DPoint;
 import plugins.kernel.roi.roi3d.ROI3DLine;
 import plugins.kernel.roi.roi3d.ROI3DPoint;
+import vtk.vtkAbstractTransform;
 import vtk.vtkParametricEllipsoid;
 import vtk.vtkParametricFunctionSource;
 import vtk.vtkTransformPolyDataFilter;
@@ -99,6 +101,15 @@ public class RoiFactory {
 
     public ROI getFrom(Ellipse ellipse, SequenceSize sequenceSize) {
         double[] eigenValues = ellipse.getEigenValues();
+        int dimension=3;
+        if (eigenValues.length<3) {
+        	double[] corrected_eigenvalues=new double[3];
+        	corrected_eigenvalues[0]=eigenValues[0];
+        	corrected_eigenvalues[1]=eigenValues[1];
+        	corrected_eigenvalues[2]=1;
+        	eigenValues= corrected_eigenvalues;
+        	dimension=2;
+        }
         if(
             Math.sqrt(eigenValues[0]) / sequenceSize.get(DimensionId.X).getPixelSizeInMicrometer() > sequenceSize.get(DimensionId.X).getSize() * 2 ||
             Math.sqrt(eigenValues[1]) / sequenceSize.get(DimensionId.Y).getPixelSizeInMicrometer() > sequenceSize.get(DimensionId.Y).getSize() * 2 ||
@@ -116,23 +127,27 @@ public class RoiFactory {
 
         vtkTransformPolyDataFilter TransformFilter1 = new vtkTransformPolyDataFilter();
         TransformFilter1.SetInputConnection(parametricFunctionSource.GetOutputPort());
-        TransformFilter1.SetTransform(vtkAbstractTransformFactory.getFrom(
-            new AffineTransformation(ellipse.getEigenVectors().inverse(), new Matrix(3, 1, 0))
-        ));
+       vtkAbstractTransform transform = vtkAbstractTransformFactory.getFrom(
+                new AffineTransformation(ellipse.getEigenVectors().inverse(), new Matrix(dimension, 1, 0)));
+       
+       TransformFilter1.SetTransform(transform);
+        
         TransformFilter1.Update();
-
+            
         ROI3DPolygonalMesh mesh = new ROI3DPolygonalMesh(TransformFilter1.GetOutput());
-        Point toPixel = pointFactory.toPixel(ellipse.getCenter(), sequenceSize);
+      
+        Point toPixel = pointFactory.toPixel3D(ellipse.getCenter(), sequenceSize);
         Point3D position3D = mesh.getPosition3D();
         position3D.setLocation(
             toPixel.get(0) - mesh.getBounds3D().getSizeX() / 2d,
             toPixel.get(1) - mesh.getBounds3D().getSizeY() / 2d,
             toPixel.get(2) - mesh.getBounds3D().getSizeZ() / 2d
         );
+        
         mesh.setPosition3D(position3D);
         mesh.setProperty(POINT_TYPE_PROPERTY, PointType.PREDICTED_ERROR.name());
         mesh.setColor(PointType.PREDICTED_ERROR.getColor());
-
+        
         return mesh;
     }
 
