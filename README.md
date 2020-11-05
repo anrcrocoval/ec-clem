@@ -10,6 +10,14 @@ This project is an [Icy](http://icy.bioimageanalysis.org/) plugin for point base
 + Copy the artifact `target/ec-clem-<version>.jar` to `lib/icy/plugins/perrine/easyclemv0`
 + Run icy and use `easyclemv0` plugin
 
+## Install for Beta-test
+Ec-clem should be installed from ICY directly http://icy.bioimageanalysis.org/plugin/ec-clem/ 
+HOWEVER this is the dev version, not released yet under ICY plugin repository.
+To test it, download the .jar under binary https://github.com/anrcrocoval/ec-clem/raw/master/binary/ec_clem-2.0.1-SNAPSHOT.jar and copy it under 
+`<your-icy-directory>/plugins/perrine/easyclemv0` 
+
+Both official icy ec-clem and this test version can coexist: call the old version by search ec-clem and the new one easyclem in the icy search bar.
+
 ## Code Organisation
 + Note that some injection of code is used (using Dagger) , so some code is generated while compiling with Maven. Do not edit any code in generated source directory.
 + The code is organized in packages and provide some unit tests during compilation for code integrity.
