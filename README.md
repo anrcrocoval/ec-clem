@@ -20,5 +20,9 @@ the project cli-tools https://github.com/anrcrocoval/cli_tools/ provides tools f
 
 ### Documentation
 Online tutorials are available on the icy webpage http://icy.bioimageanalysis.org/plugin/ec-clem/
-Further tutorial including on error estimation are available here:
+Further tutorials are available here:
++  on error estimation at 95% ofconfidence
 https://youtu.be/Rz1_MLqn6-k
++ on creating a cascaded transform
+https://youtu.be/5yNuP8hQuJM
+
