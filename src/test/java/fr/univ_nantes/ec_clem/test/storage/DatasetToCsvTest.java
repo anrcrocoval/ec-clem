@@ -3,10 +3,10 @@ package fr.univ_nantes.ec_clem.test.storage;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.perrine.ec_clem.ec_clem.roi.PointType;
-import plugins.perrine.ec_clem.ec_clem.storage.dataset.CsvToDatasetFileReader;
-import plugins.perrine.ec_clem.ec_clem.storage.dataset.DatasetToCsvFileWriter;
+import plugins.perrine.easyclemv0.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.easyclemv0.ec_clem.roi.PointType;
+import plugins.perrine.easyclemv0.ec_clem.storage.dataset.CsvToDatasetFileReader;
+import plugins.perrine.easyclemv0.ec_clem.storage.dataset.DatasetToCsvFileWriter;
 
 import javax.inject.Inject;
 import java.io.File;

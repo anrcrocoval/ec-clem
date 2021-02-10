@@ -170,6 +170,72 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <parallel>methods</parallel>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                        <minimizeJar>true</minimizeJar>
+                              <artifactSet>
+                				<excludes>
+                					<exclude>org.bioimageanalysis.icy:icy-*</exclude>
+                					<exclude>net.imagej:*</exclude>
+                					<exclude>org.jogamp.*</exclude>
+                					<exclude>org.bioimageanalysis.icy:protocols*</exclude>
+                					<exclude>org.bioimageanalysis.icy:ezplug*</exclude>
+                					<exclude>org.bioimageanalysis.icy:ezplug*</exclude>
+                					<exclude>org.bioimageanalysis.icy:color-bar*</exclude>
+                					<exclude>org.bioimageanalysis.icy:3d-mesh-roi*</exclude>
+                					<exclude>org.bioimageanalysis.icy:quickhull*</exclude>
+                					<exclude>org.bioimageanalysis.icy:vecmath*</exclude>
+                  					<exclude>fr.univ-nantes:tv*</exclude>
+                  					<exclude>javax.media:jai*</exclude>
+                  					<exclude>net.sf.ehcache:*</exclude>
+                  					<exclude>fr.univ-nantes:filtertool*</exclude>
+                					<exclude>gov.nist.math:*</exclude>
+                					<exclude>nativelibs4java*</exclude>
+                					</excludes>
+              </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
           </plugins>
     </build>
 

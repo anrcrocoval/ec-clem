@@ -14,12 +14,12 @@ package fr.univ_nantes.ec_clem.test.registration;
 
 import Jama.Matrix;
 import org.testng.annotations.Test;
-import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.perrine.ec_clem.ec_clem.registration.AffineRegistrationParameterComputer;
-import plugins.perrine.ec_clem.ec_clem.roi.PointType;
-import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.perrine.easyclemv0.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.easyclemv0.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.easyclemv0.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.easyclemv0.ec_clem.registration.AffineRegistrationParameterComputer;
+import plugins.perrine.easyclemv0.ec_clem.roi.PointType;
+import plugins.perrine.easyclemv0.ec_clem.transformation.AffineTransformation;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;

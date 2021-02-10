@@ -4,9 +4,9 @@ import Jama.Matrix;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import plugins.perrine.ec_clem.ec_clem.storage.transformation.csv.CsvToMatrixFileReader;
-import plugins.perrine.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
-import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.perrine.easyclemv0.ec_clem.storage.transformation.csv.CsvToMatrixFileReader;
+import plugins.perrine.easyclemv0.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
+import plugins.perrine.easyclemv0.ec_clem.transformation.AffineTransformation;
 
 import javax.inject.Inject;
 import java.io.File;
