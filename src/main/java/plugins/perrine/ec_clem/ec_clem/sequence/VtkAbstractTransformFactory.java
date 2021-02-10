@@ -10,14 +10,14 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.sequence;
+package plugins.perrine.ec_clem.ec_clem.sequence;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixUtil;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.SplineTransformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Transformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixUtil;
+import plugins.perrine.ec_clem.ec_clem.matrix.MatrixUtil;
+import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.SplineTransformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.Transformation;
+import plugins.perrine.ec_clem.ec_clem.matrix.MatrixUtil;
 import vtk.vtkAbstractTransform;
 import vtk.vtkMatrix4x4;
 import vtk.vtkTransform;

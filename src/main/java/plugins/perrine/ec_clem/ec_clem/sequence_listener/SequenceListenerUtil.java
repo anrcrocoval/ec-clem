@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.sequence_listener;
+package plugins.perrine.ec_clem.ec_clem.sequence_listener;
 
 import icy.sequence.Sequence;
 import icy.sequence.SequenceListener;

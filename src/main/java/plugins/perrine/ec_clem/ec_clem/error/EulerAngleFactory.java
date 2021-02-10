@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error;
+package plugins.perrine.ec_clem.ec_clem.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;

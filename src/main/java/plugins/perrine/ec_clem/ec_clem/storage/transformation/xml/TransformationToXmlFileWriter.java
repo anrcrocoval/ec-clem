@@ -1,16 +1,16 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.xml;
+package plugins.perrine.ec_clem.ec_clem.storage.transformation.xml;
 
 import Jama.Matrix;
 import icy.sequence.DimensionId;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer.XmlTransformationWriter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.SplineTransformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Transformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSize;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.writer.XmlTransformationWriter;
+import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.SplineTransformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.Transformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 
 import javax.inject.Inject;
 import java.io.File;

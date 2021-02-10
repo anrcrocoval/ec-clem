@@ -21,7 +21,7 @@
 	<name>Ec-CLEM</name>
     <description>Align multidimensional images in 2D or 3D, rigidly or with warping, whatever the difference in scale. Provide also a set of tools for error estimation in Correlative Light Electron Microscopy, but can be used for registration/alignement of any correlative imaging.</description>
     <url>https://github.com/anrcrocoval/ec-clem/</url>
-    <inceptionYear>2015</inceptionYear>
+    <inceptionYear>2016</inceptionYear>
     
      <organization>
         <name>fr.univ-nantes.anrcrocoval</name>
@@ -81,7 +81,96 @@
 
     <!-- Project build configuration -->
     <build>
-
+		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.google.dagger</groupId>
+                            <artifactId>dagger-compiler</artifactId>
+                            <version>2.24</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            
+         
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <executions>
+                    <execution>
+                        <id>install-tvdenoising</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>fr.univ-nantes</groupId>
+                            <artifactId>tvdenoising</artifactId>
+                            <version>0.0.0</version>
+                            <file>${project.basedir}/lib/icy/plugins/nchenouard/tvdenoising/TVDenoising.jar</file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>install-filtertoolbox</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <groupId>fr.univ-nantes</groupId>
+                            <artifactId>filtertoolbox</artifactId>
+                            <version>0.0.0</version>
+                            <file>${project.basedir}/lib/icy/plugins/adufour/filtering/FilterToolbox.jar</file>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/target/generated-sources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/target/generated-test-sources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+          </plugins>
     </build>
 
      <!-- List of project's dependencies -->
@@ -97,11 +186,11 @@
             <groupId>org.bioimageanalysis.icy</groupId>
             <artifactId>ezplug</artifactId>
         </dependency>
-        <!--  dependency>
-            <groupId>fr.univ-nantes</groupId>
-            <artifactId>colorbar</artifactId>
-            <version>0.0.0</version>
-        </dependency> -->
+        <dependency>
+            <groupId>org.bioimageanalysis.icy</groupId>
+            <artifactId>color-bar</artifactId>
+            <version>1.0.2</version>
+        </dependency>
        
         <dependency>
             <groupId>fr.univ-nantes</groupId>
@@ -113,6 +202,7 @@
             <artifactId>filtertoolbox</artifactId>
             <version>0.0.0</version>
         </dependency>
+        <!--  
         <dependency>
             <groupId>fr.univ-nantes</groupId>
             <artifactId>bioformats</artifactId>
@@ -132,38 +222,40 @@
             <groupId>fr.univ-nantes</groupId>
             <artifactId>vtk</artifactId>
             <version>0.0.0</version>
-        </dependency>
+        </dependency> -->
         <dependency>
-            <groupId>fr.univ-nantes</groupId>
-            <artifactId>roi-3d-mesh</artifactId>
-            <version>0.0.0</version>
+            <groupId>org.bioimageanalysis.icy</groupId>
+            <artifactId>3d-mesh-roi</artifactId>
+            <version>1.4.7</version>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.bioimageanalysis.icy</groupId>
             <artifactId>quickhull</artifactId>
             <version>1.0.2</version>
-        </dependency>
+        </dependency>-->
 
-        <dependency>
+      <dependency>
             <groupId>gov.nist.math</groupId>
             <artifactId>jama</artifactId>
             <version>1.0.3</version>
         </dependency>
-        <dependency>
+        
+          <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.0.19</version>
         </dependency>
-        <dependency>
+        
+        <!--  <dependency>
             <groupId>net.imagej</groupId>
             <artifactId>ij</artifactId>
-            <version>1.52n</version>
+            <version>1.52n</version>__>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
-        </dependency>
+        </dependency> -->
        <!-- <dependency>
             <groupId>org.openmicroscopy</groupId>
             <artifactId>ome-xml</artifactId>
@@ -173,7 +265,7 @@
             <groupId>org.openmicroscopy</groupId>
             <artifactId>ome-common</artifactId>
             <version>6.0.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
@@ -184,17 +276,17 @@
             <artifactId>commons-csv</artifactId>
             <version>1.7</version>
         </dependency>
-        <dependency>
+        <!--  <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
             <version>2.7.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.0.0</version>
             <scope>test</scope>
-        </dependency> -->
+        </dependency> 
         <dependency>
             <groupId>com.google.dagger</groupId>
             <artifactId>dagger</artifactId>
@@ -227,5 +319,4 @@
             <url>server's url</url>
         </repository>
     </distributionManagement>
-</project>
 </project>

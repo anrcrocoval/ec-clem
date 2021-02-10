@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.sequence;
+package plugins.perrine.ec_clem.ec_clem.sequence;
 
 import icy.gui.viewer.Viewer;
 import icy.image.colormap.IcyColorMap;
@@ -21,14 +21,14 @@ import icy.main.Icy;
 import icy.sequence.SequenceUtil;
 import icy.type.DataType;
 import icy.vtk.VtkUtil;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackable;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackable;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Transformation;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackable;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackable;
+import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.Transformation;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
 import vtk.vtkAbstractTransform;
 import vtk.vtkImageData;
 import vtk.vtkImageReslice;

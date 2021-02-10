@@ -1,15 +1,15 @@
-package plugins.fr.univ_nantes.ec_clem.transformation_schema_loader;
+package plugins.perrine.ec_clem.transformation_schema_loader;
 
 import plugins.adufour.blocks.lang.Block;
 import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
 import plugins.adufour.ezplug.EzVarSequence;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiUpdater;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiUpdater;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
 
 public class EcClemTransformationSchemaLoader extends EzPlug implements Block {

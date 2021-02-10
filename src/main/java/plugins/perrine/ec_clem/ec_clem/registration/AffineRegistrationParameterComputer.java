@@ -10,12 +10,12 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.registration;
+package plugins.perrine.ec_clem.ec_clem.registration;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixUtil;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.matrix.MatrixUtil;
+import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
 import javax.inject.Inject;
 import static java.lang.Math.*;
 

@@ -10,14 +10,14 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset;
+package plugins.perrine.ec_clem.ec_clem.fiducialset.dataset;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
 import java.util.List;
 import java.util.stream.IntStream;
 

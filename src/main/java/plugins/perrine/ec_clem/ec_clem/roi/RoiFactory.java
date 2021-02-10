@@ -10,22 +10,22 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.roi;
+package plugins.perrine.ec_clem.ec_clem.roi;
 
 import Jama.Matrix;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
 import icy.type.point.Point3D;
 import plugins.adufour.roi.mesh.polygon.ROI3DPolygonalMesh;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.Ellipse;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.Ellipse;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
 import icy.roi.BooleanMask2D;
 import icy.roi.ROI;
 import icy.type.point.Point5D;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.PointFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.VtkAbstractTransformFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.PointFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSize;
+import plugins.perrine.ec_clem.ec_clem.sequence.VtkAbstractTransformFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
 import plugins.kernel.roi.roi2d.ROI2DEllipse;
 import plugins.kernel.roi.roi2d.ROI2DLine;
 import plugins.kernel.roi.roi2d.ROI2DPoint;

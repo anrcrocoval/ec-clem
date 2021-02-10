@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.cascade_transform;
+package plugins.perrine.ec_clem.cascade_transform;
 
 import plugins.adufour.vars.gui.swing.SwingVarEditor;
 import plugins.adufour.vars.lang.Var;

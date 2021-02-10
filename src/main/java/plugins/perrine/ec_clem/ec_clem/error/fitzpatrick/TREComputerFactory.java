@@ -10,15 +10,15 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick;
+package plugins.perrine.ec_clem.ec_clem.error.fitzpatrick;
 
 import Jama.Matrix;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchemaFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchemaFactory;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
 import javax.inject.Inject;
 
 public class TREComputerFactory {

@@ -10,20 +10,20 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.workspace;
+package plugins.perrine.ec_clem.ec_clem.workspace;
 
 import icy.gui.viewer.Viewer;
 import icy.image.colormodel.IcyColorModel;
 import icy.image.lut.LUT;
 import icy.sequence.Sequence;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ChildProgressReport;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressManager;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressReport;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackable;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.ec_clem.ec_clem.progress.ChildProgressReport;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressManager;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressReport;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackable;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiUpdater;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;

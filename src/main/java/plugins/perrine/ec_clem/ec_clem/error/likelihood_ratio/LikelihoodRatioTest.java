@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.likelihood_ratio;
+package plugins.perrine.ec_clem.ec_clem.error.likelihood_ratio;
 
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 

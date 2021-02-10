@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick;
+package plugins.perrine.ec_clem.ec_clem.error.fitzpatrick;
 /**
  * Copyright 2010-2018 Perrine Paul-Gilloteaux <Perrine.Paul-Gilloteaux@univ-nantes.fr>, CNRS.
  * Copyright 2019 Guillaume Potier <guillaume.potier@univ-nantes.fr>, INSERM.
@@ -13,8 +13,8 @@ package plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick;
  **/
 import Jama.Matrix;
 import org.apache.commons.math3.util.CombinatoricsUtils;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
 
 import javax.inject.Inject;
 import java.util.Iterator;

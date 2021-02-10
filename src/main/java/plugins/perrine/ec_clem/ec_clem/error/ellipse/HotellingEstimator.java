@@ -1,7 +1,7 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse;
 
 import org.apache.commons.math3.distribution.FDistribution;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
 import javax.inject.Inject;
 
 public class HotellingEstimator {

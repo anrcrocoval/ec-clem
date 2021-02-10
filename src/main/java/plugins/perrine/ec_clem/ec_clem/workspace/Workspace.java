@@ -10,11 +10,11 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.workspace;
+package plugins.perrine.ec_clem.ec_clem.workspace;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.monitor.MonitorTargetPoint;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.configuration.TransformationConfiguration;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.monitor.MonitorTargetPoint;
+import plugins.perrine.ec_clem.ec_clem.transformation.configuration.TransformationConfiguration;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import icy.sequence.Sequence;
 import java.io.File;
 import java.util.LinkedList;

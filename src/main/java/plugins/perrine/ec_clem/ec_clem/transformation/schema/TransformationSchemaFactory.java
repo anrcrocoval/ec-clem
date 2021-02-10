@@ -10,17 +10,17 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema;
+package plugins.perrine.ec_clem.ec_clem.transformation.schema;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceNameFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSizeFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSizeFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSetFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceNameFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSizeFactory;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSizeFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSetFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
 
 import javax.inject.Inject;
 

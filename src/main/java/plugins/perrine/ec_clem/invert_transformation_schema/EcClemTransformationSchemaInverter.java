@@ -1,15 +1,15 @@
-package plugins.fr.univ_nantes.ec_clem.invert_transformation_schema;
+package plugins.perrine.ec_clem.invert_transformation_schema;
 
 import plugins.adufour.blocks.lang.Block;
 import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RegistrationParameter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.xml.TransformationToXmlFileWriter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.registration.RegistrationParameter;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation.xml.TransformationToXmlFileWriter;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
+import plugins.perrine.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 
 import java.io.File;
 

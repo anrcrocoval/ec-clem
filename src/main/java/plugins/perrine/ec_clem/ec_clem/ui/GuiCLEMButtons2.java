@@ -17,12 +17,12 @@
  * this will read the checkbox for fiducial localisation error and for predicted FRE,
  * as well as launching the computation of the error map.
  */
-package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
+package plugins.perrine.ec_clem.ec_clem.ui;
 
 import javax.inject.Inject;
 import javax.swing.JPanel;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.ui.overlay.ErrorInPositionOverlay;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.ui.overlay.ErrorInPositionOverlay;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
 
 public class GuiCLEMButtons2 extends JPanel {
 

@@ -1,11 +1,11 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.dimension2;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.dimension2;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.JacobianMatrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.JacobianMatrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RegistrationParameter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.JacobianMatrix;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.JacobianMatrix;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.registration.RegistrationParameter;
+import plugins.perrine.ec_clem.ec_clem.transformation.Similarity;
 
 import javax.inject.Inject;
 

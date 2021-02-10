@@ -1,8 +1,8 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer;
+package plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.writer;
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
 import java.io.File;
 

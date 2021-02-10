@@ -10,13 +10,13 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.fixtures.transformation;
+package plugins.perrine.ec_clem.ec_clem.fixtures.transformation;
 
 import Jama.Matrix;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.SynchronizedRandomGenerator;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
+import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.Similarity;
 import javax.inject.Inject;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;

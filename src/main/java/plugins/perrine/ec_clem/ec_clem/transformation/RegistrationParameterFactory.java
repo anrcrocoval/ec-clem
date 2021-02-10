@@ -10,15 +10,15 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.transformation;
+package plugins.perrine.ec_clem.ec_clem.transformation;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.*;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.AffineRegistrationParameterComputer;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.SimilarityRegistrationParameterComputer;
+import plugins.perrine.ec_clem.ec_clem.registration.*;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.registration.AffineRegistrationParameterComputer;
+import plugins.perrine.ec_clem.ec_clem.registration.SimilarityRegistrationParameterComputer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

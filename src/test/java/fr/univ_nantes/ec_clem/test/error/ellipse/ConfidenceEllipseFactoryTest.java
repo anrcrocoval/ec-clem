@@ -2,11 +2,11 @@ package fr.univ_nantes.ec_clem.test.error.ellipse;
 
 import Jama.Matrix;
 import org.testng.annotations.Test;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.ConfidenceEllipseFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.Ellipse;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.ConfidenceEllipseFactory;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.Ellipse;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.fixtures.fiducialset.TestFiducialSetFactory;
 import javax.inject.Inject;
 
 import static org.testng.Assert.assertEquals;

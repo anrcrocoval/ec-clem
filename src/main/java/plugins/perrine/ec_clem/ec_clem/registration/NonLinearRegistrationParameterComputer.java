@@ -10,14 +10,14 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.registration;
+package plugins.perrine.ec_clem.ec_clem.registration;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.VtkPointsFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.DaggerSplineTransformationComponent;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.SplineTransformationComponent;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.sequence.VtkPointsFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.DaggerSplineTransformationComponent;
+import plugins.perrine.ec_clem.ec_clem.transformation.SplineTransformationComponent;
 import vtk.vtkThinPlateSplineTransform;
 import javax.inject.Inject;
 

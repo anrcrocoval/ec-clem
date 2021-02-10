@@ -10,18 +10,18 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.transformation;
+package plugins.perrine.ec_clem.ec_clem.transformation;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.PointFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.VtkPointsFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.PointFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.VtkPointsFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.PointFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.VtkPointsFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.PointFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.VtkPointsFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
 import vtk.*;
 
 import javax.inject.Inject;

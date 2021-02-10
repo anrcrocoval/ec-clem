@@ -1,7 +1,7 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.registration;
+package plugins.perrine.ec_clem.ec_clem.registration;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Transformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.Transformation;
 
 public class RegistrationParameter {
     private Transformation transformation;

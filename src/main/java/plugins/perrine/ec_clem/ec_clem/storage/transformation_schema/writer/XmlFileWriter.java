@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer;
+package plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.writer;
 
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;

@@ -1,6 +1,6 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.dimension2;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.dimension2;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
+import plugins.perrine.ec_clem.ec_clem.transformation.Similarity;
 import javax.inject.Inject;
 
 public class RotationParameters2D {

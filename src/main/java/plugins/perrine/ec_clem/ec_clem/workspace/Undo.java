@@ -10,19 +10,19 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.workspace;
+package plugins.perrine.ec_clem.ec_clem.workspace;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence_listener.FiducialRoiListener;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiUpdater;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.sequence_listener.FiducialRoiListener;
 import icy.sequence.SequenceListener;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence_listener.SequenceListenerUtil;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiUpdater;
+import plugins.perrine.ec_clem.ec_clem.sequence_listener.SequenceListenerUtil;
 
 import javax.inject.Inject;
 import java.util.List;

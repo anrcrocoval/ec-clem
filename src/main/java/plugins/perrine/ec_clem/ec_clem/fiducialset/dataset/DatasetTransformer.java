@@ -10,11 +10,11 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset;
+package plugins.perrine.ec_clem.ec_clem.fiducialset.dataset;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.AffineTransformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
+import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.Similarity;
 
 public class DatasetTransformer {
 

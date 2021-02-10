@@ -10,12 +10,12 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer;
+package plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.writer;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlTransformationElementListReader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlTransformationElementListReader;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.reader.XmlTransformationElementListReader;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.reader.XmlTransformationElementListReader;
 
 import javax.inject.Inject;
 

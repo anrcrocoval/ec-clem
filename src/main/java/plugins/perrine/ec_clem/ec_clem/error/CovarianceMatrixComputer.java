@@ -10,12 +10,12 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error;
+package plugins.perrine.ec_clem.ec_clem.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.RealMatrixFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixFactory;
+import plugins.perrine.ec_clem.ec_clem.matrix.RealMatrixFactory;
+import plugins.perrine.ec_clem.ec_clem.matrix.MatrixFactory;
 
 import javax.inject.Inject;
 

@@ -1,7 +1,7 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.dimension2.InverseFisherInformationMatrix2DEstimator;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.dimension3.InverseFisherInformationMatrix3DEstimator;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.dimension2.InverseFisherInformationMatrix2DEstimator;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.dimension3.InverseFisherInformationMatrix3DEstimator;
 import javax.inject.Inject;
 
 public class InverseFisherInformationMatrixEstimatorFactory {

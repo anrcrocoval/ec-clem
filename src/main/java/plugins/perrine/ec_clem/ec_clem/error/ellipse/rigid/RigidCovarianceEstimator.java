@@ -1,12 +1,12 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.CovarianceEstimator;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.CovarianceEstimator;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RegistrationParameter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.CovarianceEstimator;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.CovarianceEstimator;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.registration.RegistrationParameter;
+import plugins.perrine.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
 
 public class RigidCovarianceEstimator implements CovarianceEstimator {

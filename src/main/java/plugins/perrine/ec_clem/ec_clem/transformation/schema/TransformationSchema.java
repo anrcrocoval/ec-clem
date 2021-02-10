@@ -10,14 +10,14 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema;
+package plugins.perrine.ec_clem.ec_clem.transformation.schema;
 
 import icy.sequence.DimensionId;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceName;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceName;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSize;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSize;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
 
 public class TransformationSchema {
     private FiducialSet fiducialSet;

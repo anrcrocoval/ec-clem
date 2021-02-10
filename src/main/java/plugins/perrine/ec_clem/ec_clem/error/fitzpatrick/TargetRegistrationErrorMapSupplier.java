@@ -10,15 +10,15 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick;
+package plugins.perrine.ec_clem.ec_clem.error.fitzpatrick;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackableChildTask;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableChildTask;
 import icy.image.IcyBufferedImage;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSize;
 import plugins.stef.tools.overlay.ColorBarOverlay;
 import javax.inject.Inject;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.dimension2.JacobianMatrix2D;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.dimension3.JacobianMatrix3D;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.dimension2.JacobianMatrix2D;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.dimension3.JacobianMatrix3D;
 import javax.inject.Inject;
 
 public class JacobianMatrixFactory {

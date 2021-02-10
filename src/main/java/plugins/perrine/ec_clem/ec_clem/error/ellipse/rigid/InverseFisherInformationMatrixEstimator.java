@@ -1,9 +1,9 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixUtil;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RegistrationParameter;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.matrix.MatrixUtil;
+import plugins.perrine.ec_clem.ec_clem.registration.RegistrationParameter;
 
 public abstract class InverseFisherInformationMatrixEstimator {
 

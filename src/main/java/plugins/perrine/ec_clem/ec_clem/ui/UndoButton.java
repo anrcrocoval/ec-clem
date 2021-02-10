@@ -10,10 +10,10 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
+package plugins.perrine.ec_clem.ec_clem.ui;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Undo;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.workspace.Undo;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
 
 import javax.inject.Inject;
 import javax.swing.*;

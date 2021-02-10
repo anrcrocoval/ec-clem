@@ -10,20 +10,20 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.roi;
+package plugins.perrine.ec_clem.ec_clem.roi;
 
 import icy.canvas.IcyCanvas;
 import icy.gui.viewer.Viewer;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.ConfidenceEllipseFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSizeFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence_listener.RoiListenerManager;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence_listener.SequenceListenerUtil;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.ConfidenceEllipseFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSizeFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence_listener.RoiListenerManager;
+import plugins.perrine.ec_clem.ec_clem.sequence_listener.SequenceListenerUtil;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceListener;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;

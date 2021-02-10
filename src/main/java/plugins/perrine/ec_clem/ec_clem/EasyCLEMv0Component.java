@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem;
+package plugins.perrine.ec_clem.ec_clem;
 
 import dagger.Component;
 import javax.inject.Singleton;

@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.roi;
+package plugins.perrine.ec_clem.ec_clem.roi;
 
 import icy.roi.ROI;
 import plugins.kernel.roi.roi3d.ROI3DPoint;

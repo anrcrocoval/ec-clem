@@ -10,12 +10,12 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
+package plugins.perrine.ec_clem.ec_clem.ui;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressManager;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackable;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressManager;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackable;
 import icy.gui.frame.progress.ProgressFrame;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressReport;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressReport;
 
 import javax.inject.Inject;
 import java.util.HashMap;

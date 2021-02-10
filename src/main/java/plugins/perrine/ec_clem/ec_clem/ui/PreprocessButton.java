@@ -10,11 +10,11 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
+package plugins.perrine.ec_clem.ec_clem.ui;
 
 import icy.plugin.PluginLauncher;
 import icy.plugin.PluginLoader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.misc.Preprocess3Dstackto2D;
+import plugins.perrine.ec_clem.ec_clem.misc.Preprocess3Dstackto2D;
 import javax.inject.Inject;
 import javax.swing.*;
 

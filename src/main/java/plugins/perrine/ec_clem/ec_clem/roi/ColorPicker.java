@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.roi;
+package plugins.perrine.ec_clem.ec_clem.roi;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

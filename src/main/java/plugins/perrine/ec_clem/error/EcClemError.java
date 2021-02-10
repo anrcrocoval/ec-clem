@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.error;
+package plugins.perrine.ec_clem.error;
 
 import icy.gui.viewer.Viewer;
 import icy.image.colormap.FireColorMap;
@@ -9,14 +9,14 @@ import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
 import plugins.adufour.vars.lang.VarFile;
 import plugins.adufour.vars.lang.VarSequence;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapSupplier;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.registration.RegistrationParameter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFormatter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapFactory;
+import plugins.perrine.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapSupplier;
+import plugins.perrine.ec_clem.ec_clem.registration.RegistrationParameter;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFormatter;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
+import plugins.perrine.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
 import java.io.File;
 

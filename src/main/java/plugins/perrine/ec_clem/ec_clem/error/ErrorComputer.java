@@ -10,17 +10,17 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error;
+package plugins.perrine.ec_clem.ec_clem.error;
 
 import Jama.Matrix;
 import org.apache.commons.math3.analysis.differentiation.DerivativeStructure;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.SplineTransformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Transformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.matrix.MatrixUtil;
+import plugins.perrine.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.transformation.Similarity;
+import plugins.perrine.ec_clem.ec_clem.transformation.SplineTransformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.Transformation;
+import plugins.perrine.ec_clem.ec_clem.matrix.MatrixUtil;
 
 import javax.inject.Inject;
 

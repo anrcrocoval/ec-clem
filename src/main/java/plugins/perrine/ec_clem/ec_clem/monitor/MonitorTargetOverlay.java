@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.monitor;
+package plugins.perrine.ec_clem.ec_clem.monitor;
 
 import Jama.Matrix;
 import icy.canvas.IcyCanvas;
@@ -19,7 +19,7 @@ import icy.main.Icy;
 import icy.painter.Overlay;
 import icy.sequence.Sequence;
 import icy.type.point.Point5D;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 

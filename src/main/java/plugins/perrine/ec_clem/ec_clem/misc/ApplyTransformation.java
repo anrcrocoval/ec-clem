@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.misc;
+package plugins.perrine.ec_clem.ec_clem.misc;
 
 import java.io.File;
 
@@ -31,11 +31,11 @@ import icy.system.thread.ThreadUtil;
 import plugins.adufour.blocks.lang.Block;
 import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.EzLabel;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.XmlTransformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlFileReader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlTransformationReader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceUpdater;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.XmlTransformation;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.reader.XmlFileReader;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.reader.XmlTransformationReader;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 
 import javax.inject.Inject;
 

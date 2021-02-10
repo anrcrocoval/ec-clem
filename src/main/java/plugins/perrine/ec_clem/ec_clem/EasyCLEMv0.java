@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem;
+package plugins.perrine.ec_clem.ec_clem;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -26,24 +26,28 @@ import java.time.format.DateTimeFormatter;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import plugins.adufour.ezplug.*;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.configuration.TransformationConfigurationFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.NoiseModel;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.ui.GuiCLEMButtons;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.ui.GuiCLEMButtons2;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.transformation.configuration.TransformationConfigurationFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.NoiseModel;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationType;
+import plugins.perrine.ec_clem.ec_clem.ui.GuiCLEMButtons;
+import plugins.perrine.ec_clem.ec_clem.ui.GuiCLEMButtons2;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
+
 import icy.main.Icy;
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
+import icy.common.Version;
 import icy.file.FileUtil;
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.ToolTipFrame;
 import icy.gui.util.FontUtil;
 import icy.painter.Overlay;
+import icy.plugin.PluginLauncher;
+import icy.plugin.PluginLoader;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceUtil;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.misc.AdvancedmodulesButton;
+import plugins.perrine.ec_clem.ec_clem.misc.AdvancedmodulesButton;
 import javax.inject.Inject;
 
 public class EasyCLEMv0 extends EzPlug implements EzStoppable {
@@ -98,19 +102,8 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	}
 
 	private String getVersionString() {
-		String className = this.getClass().getSimpleName() + ".class";
-		String classPath = this.getClass().getResource(className).toString();
-		String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
-		Manifest manifest = null;
-		try {
-			manifest = new Manifest(new URL(manifestPath).openStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Attributes attributes = manifest.getMainAttributes();
-		return String.format("Version : %s",
-			attributes.getValue("Implementation-Version")
-		);
+		Version version= PluginLoader.getPlugin( EasyCLEMv0.class.getName()).getVersion();
+		return "version "+ version.toString();
 	}
 
 	@Override
@@ -280,5 +273,17 @@ public class EasyCLEMv0 extends EzPlug implements EzStoppable {
 	@Inject
 	public void setRigidspecificbutton(GuiCLEMButtons2 rigidspecificbutton) {
 		this.rigidspecificbutton = rigidspecificbutton;
+	}
+	
+	public static void main( final String[] args )
+	{
+		// Launch the application.
+		Icy.main( args );
+
+		/*
+		 * Programmatically launch a plugin, as if the user had clicked its
+		 * button.
+		 */
+		PluginLauncher.start( PluginLoader.getPlugin( EasyCLEMv0.class.getName() ) );
 	}
 }

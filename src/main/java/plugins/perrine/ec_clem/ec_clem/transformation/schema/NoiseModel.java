@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema;
+package plugins.perrine.ec_clem.ec_clem.transformation.schema;
 
 import java.util.Arrays;
 import java.util.List;

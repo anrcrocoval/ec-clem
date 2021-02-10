@@ -10,13 +10,13 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.sequence;
+package plugins.perrine.ec_clem.ec_clem.sequence;
 
 import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
 import icy.type.DataType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackableChildTask;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackableChildTask;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableChildTask;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableChildTask;
 import java.lang.reflect.Array;
 import java.util.function.Supplier;
 

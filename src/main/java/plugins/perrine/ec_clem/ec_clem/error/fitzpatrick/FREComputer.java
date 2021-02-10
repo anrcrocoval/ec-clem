@@ -10,10 +10,10 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick;
+package plugins.perrine.ec_clem.ec_clem.error.fitzpatrick;
 
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
 
 import javax.inject.Inject;
 

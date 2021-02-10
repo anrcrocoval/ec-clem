@@ -10,12 +10,12 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.configuration;
+package plugins.perrine.ec_clem.ec_clem.transformation.configuration;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.NoiseModel;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.NoiseModel;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationType;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.NoiseModel;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationType;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.NoiseModel;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationType;
 
 public class TransformationConfiguration {
     private TransformationType transformationType;

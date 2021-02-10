@@ -1,7 +1,7 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.dimension3;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.dimension3;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Similarity;
+import plugins.perrine.ec_clem.ec_clem.transformation.Similarity;
 
 import javax.inject.Inject;
 

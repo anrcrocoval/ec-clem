@@ -16,10 +16,10 @@
  * one set of button: this one is to call the apply transform plugin 
  * and rename correctly the file in the Easyclem workflow
  */
-package plugins.fr.univ_nantes.ec_clem.ec_clem.misc;
+package plugins.perrine.ec_clem.ec_clem.misc;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.ui.PreprocessButton;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.ui.PreprocessButton;
+import plugins.perrine.ec_clem.ec_clem.ui.PreprocessButton;
+import plugins.perrine.ec_clem.ec_clem.ui.PreprocessButton;
 
 import javax.swing.JPanel;
 

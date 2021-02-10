@@ -10,7 +10,7 @@
  * (at your option) any later version.
  * 
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.misc;
+package plugins.perrine.ec_clem.ec_clem.misc;
 
 import icy.gui.frame.progress.ToolTipFrame;
 import icy.plugin.PluginDescriptor;
@@ -20,11 +20,11 @@ import icy.system.thread.ThreadUtil;
 import plugins.adufour.ezplug.EzLabel;
 import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarText;
-import plugins.fr.univ_nantes.ec_clem.cascade_transform.EcClemCascadeTransform;
-import plugins.fr.univ_nantes.ec_clem.error.EcClemError;
-import plugins.fr.univ_nantes.ec_clem.invert_transformation_schema.EcClemTransformationSchemaInverter;
-import plugins.fr.univ_nantes.ec_clem.transform.EcClemTransform;
-import plugins.fr.univ_nantes.ec_clem.transformation_schema_loader.EcClemTransformationSchemaLoader;
+import plugins.perrine.ec_clem.cascade_transform.EcClemCascadeTransform;
+import plugins.perrine.ec_clem.error.EcClemError;
+import plugins.perrine.ec_clem.invert_transformation_schema.EcClemTransformationSchemaInverter;
+import plugins.perrine.ec_clem.transform.EcClemTransform;
+import plugins.perrine.ec_clem.transformation_schema_loader.EcClemTransformationSchemaLoader;
 
 public class AdvancedEcClemOptions extends EzPlug  {
 //	private final String AUTOFINDER = "AutoFinder (help me to find my cell from EM to LM)";

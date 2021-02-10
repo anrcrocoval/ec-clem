@@ -1,0 +1,41 @@
+<root description="System workspace" name="sys">
+<task name="Plugins">
+<band name="Setup"/>
+<band name="New">
+<item classname="plugins.perrine.easyclemv0.AdvancedEcClemOptions" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.ApplyTransformation" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.ApplyTransformationtoRoi" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.ApplyTransfotoScaledImage" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.ComputeLeaveOneOut" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.EasyCLEMv0" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.ImportRoiPointsFromFile" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.MonitorTargetPoint" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.MonteCarloTREstudy" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.MonteCarloTREStudy_Validation" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.Preprocess3Dstackto2D" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.StudyLandmarksConfagainstN" priority="top"/>
+<item classname="plugins.perrine.easyclemv0.TransformBasedonCameraView" priority="top"/>
+<item classname="plugins.perrine.ecclemautofinder.AutoFinderWizard" priority="top"/>
+<item classname="plugins.perrine.ecclemautofinder.ConvertBinarytoPointRoi" priority="top"/>
+<item classname="plugins.perrine.ecclemautofinder.EcclemAutoFinder" priority="top"/>
+</band>
+<band name="Others">
+<item classname="plugins.perrine.ec_clem.ec_clem.misc.AdvancedEcClemOptions" priority="low"/>
+<item classname="plugins.perrine.ec_clem.ec_clem.misc.ApplyTransformation" priority="low"/>
+<item classname="plugins.perrine.ec_clem.ec_clem.misc.ApplyTransformationtoRoi" priority="low"/>
+<item classname="plugins.stef.tools.overlay.ColorBar" priority="low"/>
+<item classname="plugins.perrine.ec_clem.ec_clem.EasyCLEMv0" priority="low"/>
+<item classname="plugins.perrine.ec_clem.cascade_transform.EcClemCascadeTransform" priority="low"/>
+<item classname="plugins.perrine.ec_clem.error.EcClemError" priority="low"/>
+<item classname="plugins.perrine.ec_clem.transform.EcClemTransform" priority="low"/>
+<item classname="plugins.perrine.ec_clem.invert_transformation_schema.EcClemTransformationSchemaInverter" priority="low"/>
+<item classname="plugins.perrine.ec_clem.transformation_schema_loader.EcClemTransformationSchemaLoader" priority="low"/>
+<item classname="plugins.adufour.filtering.FilterToolbox" priority="low"/>
+<item classname="plugins.perrine.ec_clem.ec_clem.misc.ImportRoiPointsFromFile" priority="low"/>
+<item classname="plugins.perrine.ec_clem.ec_clem.monitor.MonitorTargetPoint" priority="low"/>
+<item classname="plugins.perrine.ec_clem.ec_clem.misc.Preprocess3Dstackto2D" priority="low"/>
+<item classname="plugins.adufour.protocols.Protocols" priority="low"/>
+<item classname="plugins.nchenouard.tvdenoising.TVDenoising" priority="low"/>
+</band>
+</task>
+</root>

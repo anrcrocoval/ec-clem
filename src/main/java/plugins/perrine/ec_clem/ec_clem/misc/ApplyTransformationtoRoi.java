@@ -17,7 +17,7 @@
  * will apply the transform described in an storage file produced by ec-clem to an ICY ROI.
  * It only takes the storage file and the destinatin file as input and the source file with the ROIs to be transformed.
  */
-package plugins.fr.univ_nantes.ec_clem.ec_clem.misc;
+package plugins.perrine.ec_clem.ec_clem.misc;
 import java.awt.geom.Point2D;
 
 import java.util.ArrayList;

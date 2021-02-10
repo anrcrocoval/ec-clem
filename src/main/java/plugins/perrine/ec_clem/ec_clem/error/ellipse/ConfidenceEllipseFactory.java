@@ -1,12 +1,12 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse;
 
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Transformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.transformation.Transformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import javax.inject.Inject;
 
 public class ConfidenceEllipseFactory {

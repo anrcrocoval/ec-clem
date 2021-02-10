@@ -10,10 +10,10 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.workspace;
+package plugins.perrine.ec_clem.ec_clem.workspace;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
 
 public class WorkspaceState {
 

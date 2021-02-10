@@ -10,17 +10,17 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point;
+package plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point;
 
 import Jama.Matrix;
 import icy.roi.ROI;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiProcessor;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiProcessor;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiProcessor;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSize;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiProcessor;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSize;
 import vtk.vtkPolyData;
 
 import javax.inject.Inject;

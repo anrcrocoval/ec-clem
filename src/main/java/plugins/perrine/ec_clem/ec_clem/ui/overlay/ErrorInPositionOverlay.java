@@ -10,16 +10,16 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.ui.overlay;
+package plugins.perrine.ec_clem.ec_clem.ui.overlay;
 
 import icy.canvas.IcyCanvas;
 import icy.canvas.IcyCanvas2D;
 import icy.painter.Overlay;
 import icy.sequence.Sequence;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.Dataset;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.FiducialSet;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSetFactory;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.FiducialSet;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
 import javax.inject.Inject;
 import java.awt.*;
 

@@ -10,22 +10,22 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.workspace;
+package plugins.perrine.ec_clem.ec_clem.workspace;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick.TREComputer;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick.TREComputerFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.monitor.MonitorTargetPoint;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation.xml.TransformationToXmlFileWriter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchemaFactory;
+import plugins.perrine.ec_clem.ec_clem.error.fitzpatrick.TREComputer;
+import plugins.perrine.ec_clem.ec_clem.error.fitzpatrick.TREComputerFactory;
+import plugins.perrine.ec_clem.ec_clem.monitor.MonitorTargetPoint;
+import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiUpdater;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceUpdater;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation.csv.TransformationToCsvFileWriter;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation.xml.TransformationToXmlFileWriter;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchemaFactory;
 import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;

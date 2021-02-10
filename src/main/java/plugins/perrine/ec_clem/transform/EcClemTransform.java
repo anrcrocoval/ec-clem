@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.transform;
+package plugins.perrine.ec_clem.transform;
 
 import icy.main.Icy;
 import icy.sequence.DimensionId;
@@ -9,12 +9,12 @@ import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
 import plugins.adufour.ezplug.EzVarSequence;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSize;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceSizeFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.sequence.SequenceUpdater;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchemaFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSize;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSizeFactory;
+import plugins.perrine.ec_clem.ec_clem.sequence.SequenceUpdater;
+import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.reader.XmlToTransformationSchemaFileReader;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchemaFactory;
 
 import javax.inject.Inject;
 

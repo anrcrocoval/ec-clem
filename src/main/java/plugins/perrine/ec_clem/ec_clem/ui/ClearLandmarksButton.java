@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
+package plugins.perrine.ec_clem.ec_clem.ui;
 
 import icy.gui.dialog.MessageDialog;
 import icy.gui.frame.progress.AnnounceFrame;
@@ -18,7 +18,7 @@ import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.util.XMLUtil;
 import org.w3c.dom.Document;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
 import javax.inject.Inject;
 import javax.swing.*;
 import java.util.List;

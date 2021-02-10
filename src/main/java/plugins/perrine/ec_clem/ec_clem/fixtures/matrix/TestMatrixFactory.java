@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.fixtures.matrix;
+package plugins.perrine.ec_clem.ec_clem.fixtures.matrix;
 
 import Jama.Matrix;
 import javax.inject.Inject;

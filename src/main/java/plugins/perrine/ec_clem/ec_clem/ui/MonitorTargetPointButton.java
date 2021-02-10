@@ -10,14 +10,14 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
+package plugins.perrine.ec_clem.ec_clem.ui;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.monitor.MonitorTargetOverlay;
+import plugins.perrine.ec_clem.ec_clem.monitor.MonitorTargetOverlay;
 import icy.plugin.PluginDescriptor;
 import icy.plugin.PluginLauncher;
 import icy.plugin.PluginLoader;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.monitor.MonitorTargetPoint;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.monitor.MonitorTargetPoint;
 import javax.inject.Inject;
 import javax.swing.*;
 

@@ -1,4 +1,4 @@
-package plugins.fr.univ_nantes.ec_clem.error;
+package plugins.perrine.ec_clem.error;
 
 import dagger.Component;
 import javax.inject.Singleton;

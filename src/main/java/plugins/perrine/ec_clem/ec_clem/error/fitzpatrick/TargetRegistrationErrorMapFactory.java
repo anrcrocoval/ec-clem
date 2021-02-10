@@ -10,10 +10,10 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick;
+package plugins.perrine.ec_clem.ec_clem.error.fitzpatrick;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
 import javax.inject.Inject;
 
 public class TargetRegistrationErrorMapFactory {

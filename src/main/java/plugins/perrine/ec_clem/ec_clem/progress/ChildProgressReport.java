@@ -10,7 +10,7 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.progress;
+package plugins.perrine.ec_clem.ec_clem.progress;
 
 public class ChildProgressReport extends ProgressReport implements Cloneable {
     private int total;

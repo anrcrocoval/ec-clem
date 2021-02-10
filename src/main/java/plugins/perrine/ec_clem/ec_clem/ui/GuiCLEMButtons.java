@@ -16,11 +16,11 @@
  * one second set of button: this one is to call the update transformation
  *  and the clear landmarks methods
  */
-package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
+package plugins.perrine.ec_clem.ec_clem.ui;
 
 import javax.inject.Inject;
 import javax.swing.JPanel;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
 
 import java.awt.*;
 

@@ -10,20 +10,20 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset;
+package plugins.perrine.ec_clem.ec_clem.fiducialset.dataset;
 
 import Jama.Matrix;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiProcessor;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.fiducialset.dataset.point.Point;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.Transformation;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationSchema;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiFactory;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiProcessor;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.Transformation;
+import plugins.perrine.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchema;
 import icy.sequence.Sequence;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiProcessor;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiProcessor;
 import vtk.vtkPolyData;
 import javax.inject.Inject;
 import java.util.ArrayList;

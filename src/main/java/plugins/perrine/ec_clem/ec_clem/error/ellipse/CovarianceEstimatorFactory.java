@@ -1,8 +1,8 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse;
+package plugins.perrine.ec_clem.ec_clem.error.ellipse;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.affine.AffineCovarianceEstimator;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.ellipse.rigid.RigidCovarianceEstimator;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.transformation.schema.TransformationType;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.affine.AffineCovarianceEstimator;
+import plugins.perrine.ec_clem.ec_clem.error.ellipse.rigid.RigidCovarianceEstimator;
+import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationType;
 import javax.inject.Inject;
 
 public class CovarianceEstimatorFactory {

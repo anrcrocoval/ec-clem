@@ -10,15 +10,15 @@
  * (at your option) any later version.
  *
  **/
-package plugins.fr.univ_nantes.ec_clem.ec_clem.ui;
+package plugins.perrine.ec_clem.ec_clem.ui;
 
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapFactory;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapSupplier;
+import plugins.perrine.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapFactory;
+import plugins.perrine.ec_clem.ec_clem.error.fitzpatrick.TargetRegistrationErrorMapSupplier;
 import icy.gui.dialog.MessageDialog;
 import icy.gui.viewer.Viewer;
 import icy.image.colormap.FireColorMap;
 import icy.system.thread.ThreadUtil;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.workspace.Workspace;
+import plugins.perrine.ec_clem.ec_clem.workspace.Workspace;
 
 import javax.inject.Inject;
 import javax.swing.*;

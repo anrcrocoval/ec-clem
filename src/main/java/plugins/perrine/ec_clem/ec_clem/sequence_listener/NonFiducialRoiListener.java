@@ -1,12 +1,12 @@
-package plugins.fr.univ_nantes.ec_clem.ec_clem.sequence_listener;
+package plugins.perrine.ec_clem.ec_clem.sequence_listener;
 
 import icy.main.Icy;
 import icy.roi.ROI;
 import icy.sequence.Sequence;
 import icy.sequence.SequenceEvent;
 import icy.sequence.SequenceListener;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.PointType;
-import plugins.fr.univ_nantes.ec_clem.ec_clem.roi.RoiFactory;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiFactory;
 import plugins.kernel.roi.roi2d.plugin.ROI2DPointPlugin;
 import plugins.kernel.roi.roi3d.plugin.ROI3DPointPlugin;
 import javax.inject.Inject;
