@@ -38,7 +38,7 @@ public class ComputeErrorMapButton extends JButton {
         super("Compute the whole predicted error map ");
         this.targetRegistrationErrorMapFactory = targetRegistrationErrorMapFactory;
         this.progressBarManager = progressBarManager;
-        setToolTipText(" This will compute a new image were each pixel value stands for the statistical registration error (called Target Registration Error");
+        setToolTipText(" This will compute a new image were each pixel value stands for the statistical expected average registration error (called Target Registration Error");
         addActionListener((arg0) -> action());
     }
 
