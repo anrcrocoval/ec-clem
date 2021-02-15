@@ -63,6 +63,12 @@
   <build>
     <plugins>
       <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <outputDirectory>C:\icy\plugins\perrine\ecclem</outputDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.0</version>
         <configuration>
@@ -92,21 +98,6 @@
               <artifactId>tvdenoising</artifactId>
               <version>0.0.0</version>
               <file>${project.basedir}/lib/icy/plugins/nchenouard/tvdenoising/TVDenoising.jar</file>
-              <packaging>jar</packaging>
-              <generatePom>true</generatePom>
-            </configuration>
-          </execution>
-          <execution>
-            <id>install-filtertoolbox</id>
-            <phase>clean</phase>
-            <goals>
-              <goal>install-file</goal>
-            </goals>
-            <configuration>
-              <groupId>fr.univ-nantes</groupId>
-              <artifactId>filtertoolbox</artifactId>
-              <version>0.0.0</version>
-              <file>${project.basedir}/lib/icy/plugins/adufour/filtering/FilterToolbox.jar</file>
               <packaging>jar</packaging>
               <generatePom>true</generatePom>
             </configuration>
@@ -234,12 +225,6 @@
     <dependency>
       <groupId>fr.univ-nantes</groupId>
       <artifactId>tvdenoising</artifactId>
-      <version>0.0.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>fr.univ-nantes</groupId>
-      <artifactId>filtertoolbox</artifactId>
       <version>0.0.0</version>
       <scope>compile</scope>
     </dependency>

@@ -14,10 +14,10 @@ package fr.univ_nantes.ec_clem.test.error;
 
 import Jama.Matrix;
 import org.testng.annotations.Test;
-import plugins.perrine.easyclemv0.ec_clem.error.fitzpatrick.InertiaMatrixComputer;
-import plugins.perrine.easyclemv0.ec_clem.fiducialset.dataset.Dataset;
-import plugins.perrine.easyclemv0.ec_clem.fiducialset.dataset.point.Point;
-import plugins.perrine.easyclemv0.ec_clem.roi.PointType;
+import plugins.perrine.ec_clem.ec_clem.error.fitzpatrick.InertiaMatrixComputer;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.Dataset;
+import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.point.Point;
+import plugins.perrine.ec_clem.ec_clem.roi.PointType;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

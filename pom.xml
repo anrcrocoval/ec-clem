@@ -76,12 +76,19 @@
 
     <!-- Project properties -->
     <properties>
-
+	
     </properties>
 
     <!-- Project build configuration -->
     <build>
 		<plugins>
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-jar-plugin</artifactId>
+        		<configuration>
+          		<outputDirectory>C:\icy\plugins\perrine\ecclem</outputDirectory>
+        		</configuration>
+      		</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -121,21 +128,7 @@
                             <goal>install-file</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>install-filtertoolbox</id>
-                        <phase>clean</phase>
-                        <configuration>
-                            <groupId>fr.univ-nantes</groupId>
-                            <artifactId>filtertoolbox</artifactId>
-                            <version>0.0.0</version>
-                            <file>${project.basedir}/lib/icy/plugins/adufour/filtering/FilterToolbox.jar</file>
-                            <packaging>jar</packaging>
-                            <generatePom>true</generatePom>
-                        </configuration>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                    </execution>
+                   
                 </executions>
             </plugin>
             
@@ -264,9 +257,9 @@
             <version>0.0.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.univ-nantes</groupId>
-            <artifactId>filtertoolbox</artifactId>
-            <version>0.0.0</version>
+            <groupId>org.bioimageanalysis.icy</groupId>
+            <artifactId>filter-toolbox</artifactId>
+            <version>4.3.1</version>
         </dependency>
         <!--  
         <dependency>
