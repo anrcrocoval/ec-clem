@@ -12,6 +12,7 @@
  **/
 package plugins.perrine.ec_clem.ec_clem.workspace;
 
+import plugins.perrine.correlativeview.TestVisu;
 import plugins.perrine.ec_clem.ec_clem.error.fitzpatrick.TREComputer;
 import plugins.perrine.ec_clem.ec_clem.error.fitzpatrick.TREComputerFactory;
 import plugins.perrine.ec_clem.ec_clem.monitor.MonitorTargetPoint;
@@ -24,8 +25,11 @@ import plugins.perrine.ec_clem.ec_clem.storage.transformation.csv.Transformation
 import plugins.perrine.ec_clem.ec_clem.storage.transformation.xml.TransformationToXmlFileWriter;
 import plugins.perrine.ec_clem.ec_clem.storage.transformation_schema.writer.TransformationSchemaToXmlFileWriter;
 import plugins.perrine.ec_clem.ec_clem.fiducialset.dataset.DatasetFactory;
+import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
 import plugins.perrine.ec_clem.ec_clem.transformation.RegistrationParameterFactory;
 import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationSchemaFactory;
+import icy.canvas.Canvas2D;
+import icy.canvas.IcyCanvas;
 import icy.gui.viewer.Viewer;
 import icy.sequence.Sequence;
 import icy.system.thread.ThreadUtil;
@@ -51,7 +55,8 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
         this.workspace = workspace;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void run() {
         ResetOriginalImage resetOriginalImage = new ResetOriginalImage(workspace);
         super.add(resetOriginalImage);
@@ -90,7 +95,7 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
             workspace.getTransformationSchema(),
             workspace.getXmlTransformationOutputFile()
         );
-
+        
         for(MonitorTargetPoint monitorTargetPoint : workspace.getMonitorTargetPoints()) {
             if(monitorTargetPoint.getMonitoringPoint() != null) {
                 TREComputer treComputer = treComputerFactory.getFrom(workspace);
@@ -100,6 +105,17 @@ public class WorkspaceTransformer extends ProgressTrackableMasterTask implements
                 );
             }
         }
+        /*workspace.getTargetSequence().getOverlays();
+       // workspace.getTargetSequence().getFirstViewer().setCanvas(workspace.getSourceSequence().getFirstViewer().getCanvas().getName());
+        if(registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation() instanceof AffineTransformation) {
+            
+        	AffineTransformation transfomatrix=(AffineTransformation) registrationParameterFactory.getFrom(workspace.getTransformationSchema()).getTransformation();
+        	
+        	workspace.getTargetSequence().getFirstViewer().setCanvas(new TestVisu(workspace.getTargetSequence().getFirstViewer(),workspace.getSourceBackup().getFirstImage(), 
+        		transfomatrix.getHomogeneousMatrix4x4().getArray(), 
+        		workspace.getTransformationSchema().getTargetSize().getDimensions().get(0).getPixelSizeInMicrometer(),
+        		workspace.getTransformationSchema().getSourceSize().getDimensions().get(0).getPixelSizeInMicrometer()));
+        }*/
     }
 
     @Inject

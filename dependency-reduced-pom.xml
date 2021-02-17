@@ -102,6 +102,20 @@
               <generatePom>true</generatePom>
             </configuration>
           </execution>
+          <execution>
+            <id>install-correlativeview</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+            <configuration>
+              <groupId>fr.univ-nantes</groupId>
+              <artifactId>correlativeview</artifactId>
+              <version>1.0.0.0</version>
+              <file>${project.basedir}/lib/icy/plugins/perrine/correlativeview/CorrelativeView-1.0.0.0.jar</file>
+              <packaging>jar</packaging>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -183,6 +197,7 @@
                   <exclude>org.bioimageanalysis.icy:quickhull*</exclude>
                   <exclude>org.bioimageanalysis.icy:vecmath*</exclude>
                   <exclude>fr.univ-nantes:tv*</exclude>
+                  <exclude>fr.univ-nantes:corre*</exclude>
                   <exclude>javax.media:jai*</exclude>
                   <exclude>net.sf.ehcache:*</exclude>
                   <exclude>fr.univ-nantes:filtertool*</exclude>
@@ -226,6 +241,12 @@
       <groupId>fr.univ-nantes</groupId>
       <artifactId>tvdenoising</artifactId>
       <version>0.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>fr.univ-nantes</groupId>
+      <artifactId>correlativeview</artifactId>
+      <version>1.0.0.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

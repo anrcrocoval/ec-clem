@@ -74,6 +74,24 @@ public class AffineTransformation implements Transformation {
         Matrix M = new Matrix(H.getRowDimension() + 1, H.getColumnDimension(), 0);
         M.setMatrix(0, H.getRowDimension() - 1, 0, H.getColumnDimension() - 1, H);
         M.set(M.getRowDimension() - 1, M.getColumnDimension() - 1, 1);
+       
+        return M;
+    }
+    public Matrix getHomogeneousMatrix4x4() {
+        Matrix H = getMatrixRight();
+        Matrix M = new Matrix(H.getRowDimension() + 1, H.getColumnDimension(), 0);
+        M.setMatrix(0, H.getRowDimension() - 1, 0, H.getColumnDimension() - 1, H);
+        M.set(M.getRowDimension() - 1, M.getColumnDimension() - 1, 1);
+        if (M.getRowDimension()==3)//2d only..
+        {
+        	Matrix correctedM=new Matrix(4,4,0);
+        	correctedM.setMatrix(0, 1, 0,1,M.getMatrix(0, 1, 0, 1));
+        	correctedM.set(2, 2, 1.0);
+        	correctedM.setMatrix(0,1,3,3,M.getMatrix(0, 1,2,2));
+        	correctedM.set(3, 3, 1.0);
+        	M=correctedM;
+        	
+        }
         return M;
     }
 }
