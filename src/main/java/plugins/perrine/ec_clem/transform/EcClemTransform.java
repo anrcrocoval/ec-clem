@@ -9,6 +9,7 @@ import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.EzPlug;
 import plugins.adufour.ezplug.EzVarFile;
 import plugins.adufour.ezplug.EzVarSequence;
+import plugins.adufour.vars.lang.VarSequence;
 import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSize;
 import plugins.perrine.ec_clem.ec_clem.sequence.SequenceSizeFactory;
 import plugins.perrine.ec_clem.ec_clem.sequence.SequenceUpdater;
@@ -23,7 +24,7 @@ public class EcClemTransform extends EzPlug implements Block {
     private XmlToTransformationSchemaFileReader xmlToTransformationSchemaFileReader;
     private EzVarFile inputFiducialFile = new EzVarFile("transformation schema file", null);
     private EzVarSequence inputSequence = new EzVarSequence("input sequence");
-
+    private VarSequence out= new VarSequence("output sequence", null);
     public EcClemTransform() {
         DaggerEcClemTransformComponent.builder().build().inject(this);
     }
@@ -44,7 +45,9 @@ public class EcClemTransform extends EzPlug implements Block {
     }
 
     @Override
-    public void declareOutput(VarList varList) {}
+    public void declareOutput(VarList varList) {
+    	varList.add("Transformed Sequence", out);
+    }
 
     @Override
     public void execute() {
@@ -72,7 +75,7 @@ public class EcClemTransform extends EzPlug implements Block {
         
         SequenceUpdater sequenceUpdater = new SequenceUpdater(copy, transformationSchema);
         sequenceUpdater.run();
-        
+        out.setValue(copy);
     }
 
     @Inject
