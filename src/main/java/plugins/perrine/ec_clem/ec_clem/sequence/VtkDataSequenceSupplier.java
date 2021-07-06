@@ -16,7 +16,7 @@ import icy.image.IcyBufferedImage;
 import icy.sequence.Sequence;
 import icy.type.DataType;
 import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableChildTask;
-import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableChildTask;
+
 import java.lang.reflect.Array;
 import java.util.function.Supplier;
 

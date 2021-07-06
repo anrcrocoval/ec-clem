@@ -23,12 +23,12 @@ import icy.type.DataType;
 import icy.vtk.VtkUtil;
 import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackable;
 import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
-import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackable;
+
 import plugins.perrine.ec_clem.ec_clem.transformation.AffineTransformation;
 import plugins.perrine.ec_clem.ec_clem.transformation.Transformation;
 import icy.sequence.DimensionId;
 import icy.sequence.Sequence;
-import plugins.perrine.ec_clem.ec_clem.progress.ProgressTrackableMasterTask;
+
 import vtk.vtkAbstractTransform;
 import vtk.vtkImageData;
 import vtk.vtkImageReslice;
