@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ec_clem</artifactId>
   <name>Ec-CLEM</name>
-  <version>2.1.0-SNAPSHOT</version>
+  <version>2.2.0</version>
   <description>Align multidimensional images in 2D or 3D, rigidly or with warping, whatever the difference in scale. Provide also a set of tools for error estimation in Correlative Light Electron Microscopy, but can be used for registration/alignement of any correlative imaging.</description>
   <url>https://github.com/anrcrocoval/ec-clem/</url>
   <inceptionYear>2016</inceptionYear>
@@ -65,7 +65,7 @@
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
-          <outputDirectory>C:\icy\plugins\perrine\ecclem</outputDirectory>
+          <outputDirectory>${project.basedir}/lib/icy/plugins/perrine/ecclem</outputDirectory>
         </configuration>
       </plugin>
       <plugin>
@@ -208,6 +208,12 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <outputDirectory>${project.basedir}/lib/icy/plugins/perrine/ec_clem</outputDirectory>
+        </configuration>
       </plugin>
     </plugins>
   </build>

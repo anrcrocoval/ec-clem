@@ -150,7 +150,7 @@ public class Ec_clem extends EzPlug implements EzStoppable {
 		choiceinputsection.setEnabled(false);
 		noiseModel.setEnabled(false);
 		showgrid.setEnabled(false);
-
+		//TODO add a loop on existing ROI, testing if they have a property set otherwise set one roi.setProperty(POINT_TYPE_PROPERTY, "FIDUCIAL");
 		workspace = new Workspace();
 		workspace.setSourceSequence(sourceSequence);
 		workspace.setTargetSequence(targetSequence);
