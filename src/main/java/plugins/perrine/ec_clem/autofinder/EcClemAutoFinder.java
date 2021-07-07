@@ -56,7 +56,9 @@ import plugins.adufour.vars.lang.VarInteger;
 import plugins.adufour.vars.lang.VarSequence;
 import plugins.kernel.roi.descriptor.measure.ROIMassCenterDescriptorsPlugin;
 import plugins.kernel.roi.roi2d.ROI2DPoint;
+import plugins.kernel.roi.roi3d.ROI3DPoint;
 import plugins.perrine.ec_clem.autofinder.helpButton;
+import plugins.perrine.ec_clem.ec_clem.roi.RoiFactory;
 import plugins.perrine.ec_clem.ec_clem.transformation.configuration.TransformationConfigurationFactory;
 import plugins.perrine.ec_clem.ec_clem.transformation.schema.NoiseModel;
 import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationType;
@@ -137,6 +139,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 	private vtkPoints icppointtarget;
 	private Sequence sequence4;
 	private TransformationConfigurationFactory transformationConfigurationFactory;
+	private vtkPoints icppointsource_nr;
 	
 	
 	public EcClemAutoFinder() {
@@ -291,7 +294,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 					mybesttransform=AutoFinder(targetpoint,dist); 
 					System.out.println( "The distance now is:"+this.distance);
 					myvtktransform.SetMatrix(mybesttransform);
-					applyTransformtosequenceandROIworkspace();
+					applyTransformtosequenceandROIworkspace(myvtktransform);
 					tobewritten.DeepCopy(myvtktransform);
 					if ((showtargetTransformed)||(this.isHeadLess())){
 						applyInverseTransformtoTarget(myvtktransform);
@@ -336,6 +339,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 								System.out.println("not reverse kept");
 						}
 						//Put back inlier point on Cos of taregt and of registred source
+						
 						transformVtkInlierTargetPoints(reorientingTargetPoint);
 						transformVtkInlierSourcePoints(reorientingTargetPoint);
 						vtkTransform myvtktransformtmp=new vtkTransform();
@@ -355,7 +359,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 						
 						if (distance<Double.POSITIVE_INFINITY){
 							System.out.println("I will apply transfo now"); 
-							applyTransformtosequenceandROIworkspace();
+							applyTransformtosequenceandROIworkspace(aligned);
 							tobewritten.DeepCopy(aligned);
 							if ((showtargetTransformed)||(this.isHeadLess())){
 								applyInverseTransformtoTarget(aligned);
@@ -431,8 +435,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 
 							trup.SetTransform(reorientingTargetPoint);
 							trup.Update(); 
-							//CreateRoifromPoints(target.getValue(),trup.GetOutput()); 
-							// now reorient newsetofTargetpoints
+							
 							mybesttransform=new vtkMatrix4x4(); //To test reorientation 
 							MyCandidatesOverlay mycandidate=new MyCandidatesOverlay(cand);
 							mycandidate.setParameters(candidates.GetPoint(cand)[0] / imagetarget.getPixelSizeX(), candidates.GetPoint(cand)[1] / imagetarget.getPixelSizeY(), (radius*2)/ imagetarget.getPixelSizeY());
@@ -454,6 +457,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 								distance_max=distance;
 								myvtktransform.DeepCopy(myvtktransformtmp);
 								mycandidate.setHot();
+								
 								transformVtkInlierTargetPoints(reorientingTargetPoint);
 								transformVtkInlierSourcePoints(reorientingTargetPoint);
 								writeCSVfile(icppointsource,"inlierregisteredsourcepointsinnm.csv");
@@ -472,7 +476,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 
 
 							System.out.println("I will apply transfo now"); 
-					        applyTransformtosequenceandROIworkspace();
+					        applyTransformtosequenceandROIworkspace(aligned);
 							tobewritten.DeepCopy(aligned);
 							if ((showtargetTransformed)||(this.isHeadLess())){
 								applyInverseTransformtoTarget(aligned);
@@ -566,6 +570,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 							distance_max=distance;
 							myvtktransform.DeepCopy(myvtktransformtmp);
 							mycandidate.setHot();
+							
 							transformVtkInlierTargetPoints(reorientingTargetPoint);
 							transformVtkInlierSourcePoints(reorientingTargetPoint);
 							writeCSVfile(icppointsource,"inlierregisteredsourcepointsinnm.csv");
@@ -581,7 +586,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 
 
 						System.out.println("I will apply transfo now"); 
-						applyTransformtosequenceandROIworkspace();
+						applyTransformtosequenceandROIworkspace(aligned);
 						tobewritten.DeepCopy(aligned);
 						if ((showtargetTransformed)||(this.isHeadLess())||(prepareexport)){
 							applyInverseTransformtoTarget(aligned);
@@ -594,6 +599,7 @@ public class EcClemAutoFinder extends EzPlug implements Block,EzStoppable{
 					}
 				}}
 				}
+		
 		transformVtkInlierTargetPoints(tobewritten);
 		transformVtkInlierSourcePoints(tobewritten);
 		writeCSVfile(icppointsource,"inversetransfoinlierregisteredsourcepointsinnm.csv");
@@ -718,14 +724,16 @@ vtkImageData converttoVtkImageData(int posC, Sequence seq,boolean affectfield) {
  * 
  * @param seq (sequence on whick created ROI2Dpoints
  * @param points vtkpolydata (unit of position in micrometers)
- * TODO: chnage ROI2Dpoint to my own myROI3D
+ 
  */
 		protected void CreateRoifromPoints(Sequence seq, vtkPolyData points,Color mycolor, String Name) {
+			String POINT_TYPE_PROPERTY = "point_type";
+			
 			vtkPoints listofpoints = points.GetPoints();
 			// seq.removeAllROI();
 			for (int i = 0; i < points.GetNumberOfPoints(); i++) {
-
-				ROI roi = new ROI2DPoint();
+				
+				ROI roi = new ROI3DPoint();
 
 				Point5D position = roi.getPosition5D();
 				position.setX(listofpoints.GetPoint(i)[0] / seq.getPixelSizeX());
@@ -734,6 +742,8 @@ vtkImageData converttoVtkImageData(int posC, Sequence seq,boolean affectfield) {
 				roi.setPosition5D(position);
 				roi.setName(Name+" Point " + i);
 				roi.setColor(mycolor);
+				
+				roi.setProperty(POINT_TYPE_PROPERTY, "FIDUCIAL");
 				seq.addROI(roi);
 
 			}
@@ -759,13 +769,14 @@ private void setData() {
 
 /**
  * apply the aligned transform to the source image (to take into account any prealignment, and my vtk transform to roi
+ * @param transform 
  * @param aligned
  * @param distance_max given by distance after closest point after ICP
  * @param myvtktransform
  */
 
 
-private void applyTransformtosequenceandROIworkspace() {
+private void applyTransformtosequenceandROIworkspace(vtkAbstractTransform transform) {
 	String transformationtype="RIGID";
 	if (affine.getValue()==true) {
 		transformationtype="SIMILARITY";
@@ -785,14 +796,29 @@ private void applyTransformtosequenceandROIworkspace() {
 	workspace.setTargetSequence(imagetarget);
 	//load matched points
 	vtkPolyData mypoints = new vtkPolyData();
-	mypoints.SetPoints(icppointsource); 
+	mypoints.SetPoints(icppointtarget); 
 	
 	CreateRoifromPoints(imagetarget, mypoints, Color.YELLOW, "ICP target");
+	
+	vtkPolyData mytmppoints = new vtkPolyData();
+	mytmppoints.SetPoints(icppointsource); 
+	vtkVertexGlyphFilter vertexfilter=new vtkVertexGlyphFilter(); 
+	vertexfilter.SetInputData(mytmppoints);
+	vtkPolyData newsetoftargetpoints=new vtkPolyData();
+	vertexfilter.Update();
+	newsetoftargetpoints.ShallowCopy(vertexfilter.GetOutput());
+	
+	vtkTransformPolyDataFilter trup=new  vtkTransformPolyDataFilter();
+	trup.SetInputData(newsetoftargetpoints);
+
+	trup.SetTransform(transform.GetInverse());
+	trup.Update(); 
+	icppointsource_nr = trup.GetOutput().GetPoints();
 	
 	
 	
 	vtkPolyData mypoints2 = new vtkPolyData();
-	mypoints2.SetPoints(icppointtarget); 
+	mypoints2.SetPoints(icppointsource_nr); 
 	CreateRoifromPoints(result, mypoints2, Color.YELLOW, "ICP source");
 	addSequence(result);
 	Path parent= Paths.get(FileUtil.getApplicationDirectory());
@@ -836,8 +862,8 @@ private void applyTransformtosequenceandROIworkspace() {
     	MessageDialog.showDialog("Something went wrong: "+e.getCause().getMessage(), MessageDialog.ERROR_MESSAGE);
         return null;
     });
-	imagetarget.removeAllROI();
-	imagetarget.addROIs(roitargetlist, true);
+	//imagetarget.removeAllROI();
+	//imagetarget.addROIs(roitargetlist, true);
 }
 @Inject
 public void setTransformationConfigurationFactory(TransformationConfigurationFactory transformationConfigurationFactory) {
