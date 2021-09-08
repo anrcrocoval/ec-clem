@@ -94,18 +94,18 @@ public class EcClemCascadeTransform extends EzPlug implements Block {
         } else {
             result = getNewTransformationSchema(schemas);
         }
-//        JFileChooser jFileChooser = new JFileChooser();
-//        int r = jFileChooser.showSaveDialog(null);
-//        if(r == JFileChooser.APPROVE_OPTION) {
-//            transformationSchemaToXmlFileWriter.save(result, jFileChooser.getSelectedFile());
-//        }
-
-        transformationSchemaToXmlFileWriter.save(result, outputFile.getValue(true));
+        File correctedoutputFile = outputFile.getValue(true);
+        // Check if xml was added to the file name, otherwise add .xml.
+        if (!(outputFile.getValue().getPath().endsWith(".xml"))){
+        	correctedoutputFile =new File(outputFile.getValue().getPath()+".xml");
+        }
+      
+        transformationSchemaToXmlFileWriter.save(result, correctedoutputFile);
         RegistrationParameter from = registrationParameterFactory.getFrom(result);
         transformationToXmlFileWriter.save(
                 from.getTransformation(),
                 result,
-                new File(outputFile.getValue().getPath().replace(".xml", "matrix.xml"))
+                new File(correctedoutputFile.getPath().replace(".xml", "matrix.xml"))
             );
         fileList.setEnabled(true);
         keepSelection.setEnabled(true);
