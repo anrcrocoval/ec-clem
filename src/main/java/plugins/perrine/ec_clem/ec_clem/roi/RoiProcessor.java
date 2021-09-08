@@ -47,17 +47,18 @@ public class RoiProcessor {
 
     public double[] getPointFromRoi(ROI roi) {
         double[] result = new double[3];
-        for(int i = 0; i < roi.getDimension(); i++) {
-            if(i == 0) {
-                result[i] = roi.getPosition5D().getX();
-            }
-            if(i == 1) {
-                result[i] = roi.getPosition5D().getY();
-            }
-            if(i == 2) {
-                result[i] = roi.getPosition5D().getZ();
-            }
+        result[0] = roi.getPosition5D().getX();
+        result[1] = roi.getPosition5D().getY();
+        // in case the Roi was 2D, (ALL Z, which returns in ICY rois -Infinity), then we place it on the first slice (slice 0).
+        if (roi.getPosition5D().getZ()==Double.NEGATIVE_INFINITY) {
+        	result[2] = 0; 
+        }else {
+        	result[2] = roi.getPosition5D().getZ();
         }
+       
+        	
+            
+      
         return result;
     }
 
