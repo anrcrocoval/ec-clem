@@ -97,7 +97,8 @@ public class SimilarityRegistrationParameterComputer extends AffineRegistrationP
         Matrix S = target.getMatrix().transpose().times(source.getMatrix());
         SingularValueDecomposition svd = S.svd();
         Matrix E = Matrix.identity(svd.getS().getRowDimension(), svd.getS().getColumnDimension());
-        E.set(E.getRowDimension() - 1, E.getColumnDimension() - 1, Math.signum(svd.getU().times(svd.getV().transpose()).det()));
+        //remove to allow reflection to support flipping
+       // E.set(E.getRowDimension() - 1, E.getColumnDimension() - 1, Math.signum(svd.getU().times(svd.getV().transpose()).det()));
         return svd.getU().times(E).times(svd.getV().transpose());
     }
 
