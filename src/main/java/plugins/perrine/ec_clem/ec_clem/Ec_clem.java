@@ -25,7 +25,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
+
+import plugins.adufour.blocks.lang.Block;
+import plugins.adufour.blocks.util.VarList;
 import plugins.adufour.ezplug.*;
+import plugins.adufour.vars.lang.Var;
+import plugins.adufour.vars.lang.VarFile;
 import plugins.perrine.ec_clem.ec_clem.transformation.configuration.TransformationConfigurationFactory;
 import plugins.perrine.ec_clem.ec_clem.transformation.schema.NoiseModel;
 import plugins.perrine.ec_clem.ec_clem.transformation.schema.TransformationType;
@@ -53,7 +58,7 @@ import plugins.perrine.ec_clem.ec_clem.misc.AdvancedmodulesButton;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
 
-public class Ec_clem extends EzPlug implements EzStoppable {
+public class Ec_clem extends EzPlug implements EzStoppable, Block {
 
 	private MessageOverlay messageSource = new MessageOverlay("Source");
 	private MessageOverlay messageTarget = new MessageOverlay("Target");
@@ -77,6 +82,9 @@ public class Ec_clem extends EzPlug implements EzStoppable {
 	private EzVarSequence target = new EzVarSequence("Target sequence");
 	private EzVarSequence source = new EzVarSequence("Source sequence");
 	private EzGroup inputGroup = new EzGroup("Images to process", source, target, choiceinputsection, noiseModel, showgrid);
+	private VarFile vartransformationSchemaOutputFile;
+	private VarFile varcsvTransformationFile;
+	private VarFile varXmlTransformationFile;
 
 	public Ec_clem() {
 		DaggerEc_clemComponent.builder().build().inject(this);
@@ -180,14 +188,17 @@ public class Ec_clem extends EzPlug implements EzStoppable {
 		File transformationSchemaOutputFile = new File(String.format("%s/%s_to_%s_%s.transformation_schema.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
 		System.out.println(String.format("Transformation schema saved at : %s", transformationSchemaOutputFile.toString()));
 		workspace.setTransformationSchemaOutputFile(transformationSchemaOutputFile);
-
+		vartransformationSchemaOutputFile.setValue(transformationSchemaOutputFile);
+		
 		File csvTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.csv", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
 		System.out.println(String.format("CSV format transformation saved at : %s", csvTransformationFile.toString()));
 		workspace.setCsvTransformationOutputFile(csvTransformationFile);
+		varcsvTransformationFile.setValue(csvTransformationFile);
 		
 		File XmlTransformationFile = new File(String.format("%s/%s_to_%s_%s.transformation.xml", parent.toString(), sourceSequence.getName(), targetSequence.getName(), date));
 		System.out.println(String.format("XML format transformation saved at : %s", XmlTransformationFile.toString()));
 		workspace.setXmlTransformationOutputFile(XmlTransformationFile);
+		varXmlTransformationFile.setValue(XmlTransformationFile);
 
 		workspace.setTransformationConfiguration(
 			transformationConfigurationFactory.getFrom(
@@ -299,5 +310,24 @@ public class Ec_clem extends EzPlug implements EzStoppable {
 			} );
 		 */
 		PluginLauncher.start( PluginLoader.getPlugin( Ec_clem.class.getName() ) );
+	}
+
+	@Override
+	public void declareInput(VarList inputMap) {
+		// TODO Auto-generated method stub
+		inputMap.add("Source Image",source.getVariable());
+		inputMap.add("Target Image",target.getVariable());
+		inputMap.add("Transformation Mode",choiceinputsection.getVariable());
+		
+	}
+
+	@Override
+	public void declareOutput(VarList outputMap) {
+		// TODO Auto-generated method stub
+		outputMap.add("Source Transformed on Target", source.getVariable());
+		outputMap.add("transformation Schema",vartransformationSchemaOutputFile);
+		outputMap.add("transformation Matrix",varXmlTransformationFile);
+		outputMap.add("transformation csv",varcsvTransformationFile);
+		
 	}
 }
