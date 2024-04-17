@@ -789,11 +789,15 @@ private void applyTransformtosequenceandROIworkspace(vtkAbstractTransform transf
 	
 	imagetarget.removeAllROI();
 	// reload original roi on source and target 
-	Sequence result=SequenceUtil.getCopy(imagesource);
+	Sequence result;
+	try {
+		result = SequenceUtil.getCopy(imagesource);
+	
 	result.removeAllROI();
 	workspace.setSourceSequence(result);
 	
 	workspace.setTargetSequence(imagetarget);
+	
 	//load matched points
 	vtkPolyData mypoints = new vtkPolyData();
 	mypoints.SetPoints(icppointtarget); 
@@ -821,6 +825,10 @@ private void applyTransformtosequenceandROIworkspace(vtkAbstractTransform transf
 	mypoints2.SetPoints(icppointsource_nr); 
 	CreateRoifromPoints(result, mypoints2, Color.YELLOW, "ICP source");
 	addSequence(result);
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	Path parent= Paths.get(FileUtil.getApplicationDirectory());
 	String warningmessagestorage="All saved files will be under "+FileUtil.getApplicationDirectory();
 	if (imagesource.getFilename()==null ){
@@ -1542,7 +1550,10 @@ private vtkTransform ReorientSourcepointandComputeRadius(boolean reverse) {
 				
 				
 private void LaunchReadytoUseEcCLEM() {
-					Sequence newtarget=SequenceUtil.getCopy(source.getValue());
+					Sequence newtarget;
+					try {
+						newtarget = SequenceUtil.getCopy(source.getValue());
+					
 					vtkPolyData mypoints = new vtkPolyData();
 					mypoints.SetPoints(icppointsource); 
 					CreateRoifromPoints(newtarget, mypoints, Color.YELLOW, "ICP target");
@@ -1554,6 +1565,10 @@ private void LaunchReadytoUseEcCLEM() {
 					mypoints2.SetPoints(icppointtarget); 
 					CreateRoifromPoints(newsource, mypoints2, Color.YELLOW, "ICP source");
 					addSequence(newsource);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					new ToolTipFrame(    			
 			    			"<html>"+
 			    			"<br> Use source and target as named. Loaded points are the paired point actually used for the registration. "+

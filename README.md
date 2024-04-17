@@ -24,11 +24,12 @@ https://youtu.be/ZVB1mUZXGA4
 https://github.com/anrcrocoval/CorrelativeView
 
 ## Install for development
-+ Install `java` and [maven](https://maven.apache.org/install.html)
++ Install [java 8 jdk] (https://icy.bioimageanalysis.org/upload/OpenJDK8U-jdk_x64_windows_hotspot_8u242b08.msi) . If you have several java, set JAVA_HOM env variable to java 8 path
++ Install [maven](https://maven.apache.org/install.html)
 + Download Icy from [here](http://icy.bioimageanalysis.org/download/)
-+ [STEP TO BE KEPT until tv denoising and filterToolbox are deposited by ICY team on their MAVEN repository] Create a shortcut to the icy directory under the `lib` folder : `lib/icy -> <your-icy-directory>` (NOTE: under Windows OS, use mklink under the prompt command as administrator, not shortcut)
++ [STEP TO BE KEPT until tv denoising and filterToolbox are deposited by ICY team on their MAVEN repository] Create a shortcut to the icy directory under the `lib` folder of the ec-clem directory: `lib/icy -> <your-icy-directory>` (NOTE: under Windows OS, use mklink under the prompt command as administrator, not shortcut). Install Tvdenoising and filterToolbox from Icy interface directly so they will appear in the list of plugins. 
 + Run `mvn` in a command line (if you use ELCIPSE IDE you can import the project as an existing MAVEN project , 
-further details on http://icy.bioimageanalysis.org/developer/setting-icy-development-environment/ and Building section of http://icy.bioimageanalysis.org/developer/create-a-new-icy-plugin/. (use Maven Install)
+further details on http://icy.bioimageanalysis.org/developer/setting-icy-development-environment/ and Building section of http://icy.bioimageanalysis.org/developer/create-a-new-icy-plugin/. (use Maven Install from Run As)
 + There is a  `main` class in EasyClemv0.java, which is useless but allow you to run it directly as a standalone application for testing (on Eclipse, right click on the class and Debug as or run as .. a stand alone application)
 
 ### Code Organisation
