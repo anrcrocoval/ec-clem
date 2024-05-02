@@ -234,6 +234,10 @@
                   					<exclude>fr.univ-nantes:filtertool*</exclude>
                 					<exclude>gov.nist.math:*</exclude>
                 					<exclude>nativelibs4java*</exclude>
+                					<exclude>com.nativelibs4java</exclude>
+                					<exclude>org.testng:*</exclude>
+                					<exclude>org.jogamp.*</exclude>
+                					
                 					</excludes>
               </artifactSet>
                         </configuration>
