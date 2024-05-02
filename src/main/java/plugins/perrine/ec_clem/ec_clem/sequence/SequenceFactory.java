@@ -31,15 +31,21 @@ public class SequenceFactory {
 
     public Sequence getMergeSequence(Sequence source, Sequence target) {
         ProgressFrame progressFrame = new ProgressFrame("Merge sequence");
-        Sequence result = SequenceUtil.concatC(
-            new Sequence[] {
-                SequenceUtil.convertToType(source, target.getDataType_(), true),
-                target
-            },
-            false,
-            false,
-            progressFrame
-        );
+        Sequence result = null;
+		try {
+			result = SequenceUtil.concatC(
+			    new Sequence[] {
+			        SequenceUtil.convertToType(source, target.getDataType_(), true),
+			        target
+			    },
+			    false,
+			    false,
+			    progressFrame
+			);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         result.setName("Merged");
         progressFrame.close();
         return result;

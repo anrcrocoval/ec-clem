@@ -182,7 +182,12 @@ public class ConvertBinarytoPointRoi extends EzPlug implements Block{
 				// set value from ROI(s)
 				for (ROI roi : rois)
 					if (!roi.getBounds5D().isEmpty())
-						DataIteratorUtil.set(new SequenceDataIterator(out, roi), 255);
+						try {
+							DataIteratorUtil.set(new SequenceDataIterator(out, roi), 255);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
 				// notify data changed
 				out.dataChanged();

@@ -154,7 +154,14 @@ public class Ec_clem extends EzPlug implements EzStoppable {
 		workspace = new Workspace();
 		workspace.setSourceSequence(sourceSequence);
 		workspace.setTargetSequence(targetSequence);
-		Sequence copy = SequenceUtil.getCopy(sourceSequence);
+		Sequence copy = null;
+				
+		try {
+			copy=SequenceUtil.getCopy(sourceSequence);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		workspace.setSourceBackup(copy);
 		Path parent= Paths.get(FileUtil.getApplicationDirectory());
 		String warningmessagestorage="All saved files will be under "+FileUtil.getApplicationDirectory();
