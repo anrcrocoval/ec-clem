@@ -896,7 +896,7 @@ public void setTransformationConfigurationFactory(TransformationConfigurationFac
 
 			// IMPLEMENT pseudo RANSAC PROCEDURE (on subblock of the image)
 			int max_iter_icp = 100;
-			int max_iter_ransac = Math.max(100,Math.min(3*sourcepoint.GetNumberOfPoints(), 1000));
+			int max_iter_ransac = (int) Math.max(100,Math.min(3*sourcepoint.GetNumberOfPoints(), 1000));
 			if (sourcepoint.GetNumberOfPoints()<100){
 				max_iter_ransac=500;
 				max_iter_icp = 500;
@@ -938,7 +938,7 @@ public void setTransformationConfigurationFactory(TransformationConfigurationFac
 				//myicp.SetTarget(mymask.GetOutput());
 				
 				//List<Integer> listidx=generateRandomPointsList(nbpointransac,subtargetpoint.GetNumberOfPoints());
-				List<Integer> listidx=generateSmartRandomPointsList(subtargetpoint,nbpointransac,subtargetpoint.GetNumberOfPoints());
+				List<Integer> listidx=generateSmartRandomPointsList(subtargetpoint,nbpointransac,(int) subtargetpoint.GetNumberOfPoints());
 				vtkPoints mypointsransac = new vtkPoints();
 				mypointsransac.Initialize();
 				mypointsransac.SetDataTypeToDouble();
@@ -974,8 +974,8 @@ public void setTransformationConfigurationFactory(TransformationConfigurationFac
 				transform.DeepCopy(myicp.GetMatrix());
 
 				if (transform.GetElement(3, 3)!=1){
-					int tmp=maskedset.GetNumberOfPoints();
-					int tmp2= sourcepoint.GetNumberOfPoints();	
+					int tmp=(int) maskedset.GetNumberOfPoints();
+					int tmp2= (int) sourcepoint.GetNumberOfPoints();	
 					System.out.println(tmp+" " +tmp2);
 					System.out.println("problem singular transform "+subtargetpoint.GetNumberOfPoints()+" selected "+maskedset.GetNumberOfPoints());
 
@@ -1007,7 +1007,7 @@ public void setTransformationConfigurationFactory(TransformationConfigurationFac
 				double mybestd = 0;
 				//System.out.println("Below I should find partly the same than landmark target");
 				for (int ip = 0; ip < subtargetpoint.GetNumberOfPoints(); ip++) {
-					int closestpointid = plocator.FindClosestPoint(tr.GetOutput().GetPoint(ip));
+					int closestpointid = (int) plocator.FindClosestPoint(tr.GetOutput().GetPoint(ip));
 
 					double myd = Math.sqrt(mat.Distance2BetweenPoints(sourcepoint.GetPoint(closestpointid),
 							tr.GetOutput().GetPoint(ip)));
@@ -1073,11 +1073,11 @@ public void setTransformationConfigurationFactory(TransformationConfigurationFac
 						/*myicp.GetLandmarkTransform().SetModeToSimilarity();
 						myicp.Modified();
 						myicp.Update();*/
-						keptpoint=Math.max(keptpoint,myicp.GetLandmarkTransform().GetSourceLandmarks().GetNumberOfPoints());
+						keptpoint=(int) Math.max(keptpoint,myicp.GetLandmarkTransform().GetSourceLandmarks().GetNumberOfPoints());
 						mybesttransform.DeepCopy(myicp.GetMatrix());
 						mybesttotald=mytotald;
 						//minscore=score;
-						nbpoints=test.GetNumberOfPoints();
+						nbpoints=(int) test.GetNumberOfPoints();
 						System.out.println(" Nb points kept" + nbpoints);
 						icppointsource.DeepCopy(myicp.GetLandmarkTransform().GetSourceLandmarks());
 						icppointtarget.DeepCopy(myicp.GetLandmarkTransform().GetTargetLandmarks());
@@ -1251,11 +1251,11 @@ private vtkTransform ReorientSourcepointandComputeRadius(boolean reverse) {
 
 	vtkIdList listofpoints = new vtkIdList();
 	vtkIdList listofpoints2 = new vtkIdList();
-	int mypointcenter = plocator.FindClosestPoint(center2);
+	int mypointcenter = (int) plocator.FindClosestPoint(center2);
 	plocator.FindPointsWithinRadius(radius, sourcepoint.GetPoint(mypointcenter), listofpoints);
 	plocator.FindPointsWithinRadius(radius / 2, sourcepoint.GetPoint(mypointcenter), listofpoints2);
-	sourcenbpointsradius1 = listofpoints.GetNumberOfIds();
-	sourcenbpointsradius2 = listofpoints2.GetNumberOfIds();
+	sourcenbpointsradius1 = (int) listofpoints.GetNumberOfIds();
+	sourcenbpointsradius2 = (int) listofpoints2.GetNumberOfIds();
 	//System.out.println("Ref Source Pattern " + sourcenbpointsradius1 + " " + sourcenbpointsradius2);
 	
 
@@ -1451,8 +1451,8 @@ private vtkTransform ReorientSourcepointandComputeRadius(boolean reverse) {
 				vtkIdList listofpoints2 = new vtkIdList();
 				plocator.FindPointsWithinRadius(radius, targetpoint.GetPoint(ip), listofpoints);
 				plocator.FindPointsWithinRadius((radius) / 2, targetpoint.GetPoint(ip), listofpoints2);
-				int ctarget1 = listofpoints.GetNumberOfIds();
-				int ctarget2 = listofpoints2.GetNumberOfIds();
+				int ctarget1 = (int) listofpoints.GetNumberOfIds();
+				int ctarget2 = (int) listofpoints2.GetNumberOfIds();
 				//System.out.println(
 				//		(double) (ctarget1) / ctarget2 + " " + (double) sourcenbpointsradius1 / sourcenbpointsradius2);
 				boolean tobeadded = true;
@@ -1509,8 +1509,8 @@ private vtkTransform ReorientSourcepointandComputeRadius(boolean reverse) {
 						vtkIdList listofpoints2 = new vtkIdList();
 						plocator.FindPointsWithinRadius(radius, targetpoint.GetPoint(ip), listofpoints);
 						plocator.FindPointsWithinRadius(radius / 2, targetpoint.GetPoint(ip), listofpoints2);
-						int ctarget1 = listofpoints.GetNumberOfIds();
-						int ctarget2 = listofpoints2.GetNumberOfIds();
+						int ctarget1 = (int) listofpoints.GetNumberOfIds();
+						int ctarget2 = (int) listofpoints2.GetNumberOfIds();
 
 						//System.out.println(ctarget1 + " " + ctarget2);
 						boolean tobeadded = true;
@@ -1686,7 +1686,7 @@ int orinbpoint) {
 						continue;
 					}
 				
-					myCoords.add(result.GetId(i));
+					myCoords.add((int) result.GetId(i));
 				}
 			}
 		}

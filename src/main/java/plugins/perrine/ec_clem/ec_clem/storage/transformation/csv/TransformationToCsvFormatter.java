@@ -32,6 +32,6 @@ public class TransformationToCsvFormatter implements Formatter<Transformation> {
     }
 
     private String format(SplineTransformation transformation) {
-        throw new RuntimeException("Not implemented");
+        return "all information in the xml, not in csv for now";
     }
 }

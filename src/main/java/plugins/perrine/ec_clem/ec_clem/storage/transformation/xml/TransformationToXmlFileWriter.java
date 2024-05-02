@@ -25,7 +25,7 @@ public class TransformationToXmlFileWriter {
         if(transformation instanceof AffineTransformation) {
             format((AffineTransformation) transformation, transformationSchema, xmlFile);
         } else if(transformation instanceof SplineTransformation) {
-            throw new RuntimeException("Not implemented");
+            
         } else {
             throw new RuntimeException("Missing binding");
         }
