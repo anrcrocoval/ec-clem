@@ -52,7 +52,13 @@ public class EcClemTransform extends EzPlug implements Block {
     @Override
     public void execute() {
         TransformationSchema transformationSchema = xmlToTransformationSchemaFileReader.read(inputFiducialFile.getValue());
-        Sequence copy = SequenceUtil.getCopy(inputSequence.getValue(), true, true, true);
+        Sequence copy = null;
+		try {
+			copy = SequenceUtil.getCopy(inputSequence.getValue(), true, true, true);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         Icy.getMainInterface().addSequence(copy);
         if (copy.getSizeX()!=transformationSchema.getSourceSize().get(DimensionId.X).getSize())
         {

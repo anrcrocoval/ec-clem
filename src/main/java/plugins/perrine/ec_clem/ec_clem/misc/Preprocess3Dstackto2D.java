@@ -84,7 +84,13 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			String extractedchannelname =tobeprocessed.getChannelName(indc);
 			tobeprocessed.beginUpdate();
 			try{
-			Sequence channelextracted=SequenceUtil.extractChannel(tobeprocessed,indc);
+			Sequence channelextracted = null;
+			try {
+				channelextracted = SequenceUtil.extractChannel(tobeprocessed,indc);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			tobeprocessed.removeAllImages();
 			for (int t=0; t<sizet; t++){
@@ -111,7 +117,13 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 
 			double objectdiameter=choiceobjectsize.getValue();
 
-			 Sequence duplicate1=SequenceUtil.getCopy(tobeprocessed);
+			 Sequence duplicate1 = null;
+			try {
+				duplicate1 = SequenceUtil.getCopy(tobeprocessed);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 			 duplicate1.beginUpdate();
 			Kernels1D gaussianXY = Kernels1D.CUSTOM_GAUSSIAN.createGaussianKernel1D(objectdiameter);
@@ -138,7 +150,13 @@ public class Preprocess3Dstackto2D extends EzPlug  {
             finally{
             	tobeprocessed.endUpdate();
             }
-            Sequence duplicate2=SequenceUtil.getCopy(tobeprocessed);
+            Sequence duplicate2 = null;
+			try {
+				duplicate2 = SequenceUtil.getCopy(tobeprocessed);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			tobeprocessed.beginUpdate();
 			//Sequence denoised=new Sequence();
 			try{
@@ -196,7 +214,13 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 							&& (flatten.getValue() == true))
 		{
 			tobeprocessed.removeAllROI();
-			Sequence duplicate=SequenceUtil.getCopy(tobeprocessed);
+			Sequence duplicate = null;
+			try {
+				duplicate = SequenceUtil.getCopy(tobeprocessed);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			boolean max=true;
 			tobeprocessed.removeAllImages();
 			tobeprocessed.beginUpdate();
@@ -221,7 +245,13 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 									&& (flatten.getValue() == true))
 				{
 					tobeprocessed.removeAllROI();
-					Sequence duplicate=SequenceUtil.getCopy(tobeprocessed);
+					Sequence duplicate = null;
+					try {
+						duplicate = SequenceUtil.getCopy(tobeprocessed);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					boolean max=false;
 					tobeprocessed.removeAllImages();
 					tobeprocessed.beginUpdate();
@@ -266,16 +296,22 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			tobeprocessed.removeAllROI();
 			Sequence[] arrayofimage= new Sequence[tobeprocessed.getSizeC()];
 			for (int c=0; c<tobeprocessed.getSizeC(); c++){
-			ImagePlus test = ImageJUtil.convertToImageJImage(SequenceUtil.extractChannel(tobeprocessed, c),
-					new ProgressListener() {
+			ImagePlus test = null;
+			try {
+				test = ImageJUtil.convertToImageJImage(SequenceUtil.extractChannel(tobeprocessed, c),
+						new ProgressListener() {
 
-						@Override
-						public boolean notifyProgress(double position,
-								double length) {
-							// TODO Auto-generated method stub
-							return false;
-						}
-					});
+							@Override
+							public boolean notifyProgress(double position,
+									double length) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+						});
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			test.show();
 			//TODO check installation and install if needed
 			/*File fichierClient = new File("../../ij/pluginsmonFichier.properties");
@@ -334,17 +370,23 @@ public class Preprocess3Dstackto2D extends EzPlug  {
 			// show the sequence
 
 			ImagePlus test4 = IJ.getImage();
-			Sequence test2 = ImageJUtil.convertToIcySequence(test4,
-					new ProgressListener() {
+			Sequence test2 = null;
+			try {
+				test2 = ImageJUtil.convertToIcySequence(test4,
+						new ProgressListener() {
 
-						@Override
-						public boolean notifyProgress(double position,
-								double length) {
-							// TODO Auto-generated method stub
-							return false;
-						}
+							@Override
+							public boolean notifyProgress(double position,
+									double length) {
+								// TODO Auto-generated method stub
+								return false;
+							}
 
-					});
+						});
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			test4.close();
 			test.close();
 			progress.setPosition(c/tobeprocessed.getSizeC());

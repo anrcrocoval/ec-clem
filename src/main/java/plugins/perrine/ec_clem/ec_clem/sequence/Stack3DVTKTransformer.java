@@ -104,7 +104,12 @@ public class Stack3DVTKTransformer extends ProgressTrackableMasterTask implement
 		sequence.beginUpdate();
 		List<Sequence> channels = new LinkedList<>();
 		for(int c = 0; c < sequence.getSizeC(); c++) {
-			channels.add(SequenceUtil.extractChannel(sequence, c));
+			try {
+				channels.add(SequenceUtil.extractChannel(sequence, c));
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		sequence.removeAllImages();
 		List<ProgressTrackable> taskList = super.getTaskList();
