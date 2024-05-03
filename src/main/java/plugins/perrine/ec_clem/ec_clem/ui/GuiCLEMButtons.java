@@ -26,7 +26,8 @@ import java.awt.*;
 
 public class GuiCLEMButtons extends JPanel {
 
-    private SelectPointTypeBox selectPointTypeBox;
+    private ReadRoisAsFiducialsButton readRoisAsFiducialsButton;
+	private SelectPointTypeBox selectPointTypeBox;
     private UpdateTransformationButton updateTransformationButton;
     private ClearLandmarksButton clearLandmarksButton;
     private UndoButton undoButton;
@@ -40,17 +41,20 @@ public class GuiCLEMButtons extends JPanel {
         UndoButton undoButton,
         ShowPointsButton showPointsButton,
         SelectPointTypeBox selectPointTypeBox,
-        MergeButton mergeButton
+        MergeButton mergeButton,
+        ReadRoisAsFiducialsButton readRoisAsFiducialsButton
     ) {
         this.selectPointTypeBox = selectPointTypeBox;
         this.updateTransformationButton = updateTransformationButton;
         this.clearLandmarksButton = clearLandmarksButton;
+        this.readRoisAsFiducialsButton =readRoisAsFiducialsButton;
         this.undoButton = undoButton;
         this.showPointsButton = showPointsButton;
         this.mergeButton = mergeButton;
         add(selectPointTypeBox);
         add(updateTransformationButton);
         add(clearLandmarksButton);
+        add(readRoisAsFiducialsButton);
         add(undoButton);
         add(showPointsButton);
         add(mergeButton);
@@ -59,6 +63,7 @@ public class GuiCLEMButtons extends JPanel {
     public void setworkspace(Workspace workspace) {
         updateTransformationButton.setWorkspace(workspace);
         clearLandmarksButton.setWorkspace(workspace);
+        readRoisAsFiducialsButton.setWorkspace(workspace);
         undoButton.setWorkspace(workspace);
         showPointsButton.setWorkspace(workspace);
         selectPointTypeBox.setWorkspace(workspace);

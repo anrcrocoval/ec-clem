@@ -98,6 +98,10 @@ public class RoiFactory {
     public List<ROI> getFrom(Sequence sequence, PointType pointType) {
         return sequence.getROIs().stream().filter(roi -> pointType.name().equals(roi.getProperty(POINT_TYPE_PROPERTY))).collect(Collectors.toList());
     }
+    
+    public List<ROI> getFrom(Sequence sequence) {
+        return sequence.getROIs();
+    }
 
     public ROI getFrom(Ellipse ellipse, SequenceSize sequenceSize) {
         double[] eigenValues = ellipse.getEigenValues();
