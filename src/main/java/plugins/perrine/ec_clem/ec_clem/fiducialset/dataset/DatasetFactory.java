@@ -42,6 +42,20 @@ public class DatasetFactory {
         this.transformationFactory = transformationFactory;
     }
 
+    public Dataset getFrom(Sequence sequence) {
+        Dataset dataset;
+        try {
+            dataset = new Dataset(
+                roiProcessor.getPointsFromRoi(
+                    roiFactory.getFrom(sequence)
+                ),
+                PointType.FIDUCIAL
+            );
+        } catch (RuntimeException e) {
+            dataset = new Dataset(0, PointType.FIDUCIAL);
+        }
+        return toMicroMeter(dataset, sequence);
+    }
     public Dataset getFrom(Sequence sequence, PointType pointType) {
         Dataset dataset;
         try {
