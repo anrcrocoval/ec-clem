@@ -20,7 +20,8 @@ public enum TransformationType {
     AFFINE,
     RIGID,
     SIMILARITY,
-    SPLINE;
+    SPLINE,
+    TRANSLATION;
 
     public static String[] toArray() {
         List<String> collect = Arrays.stream(TransformationType.values()).map(Enum::name).collect(Collectors.toList());

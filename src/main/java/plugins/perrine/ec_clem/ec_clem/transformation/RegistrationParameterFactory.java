@@ -29,6 +29,7 @@ public class RegistrationParameterFactory {
     private SimilarityRegistrationParameterComputer similarityTransformationComputer;
     private NonLinearRegistrationParameterComputer nonLinearTransformationComputer;
     private AffineRegistrationParameterComputer affineTransformationComputer;
+    private TranslationRegistrationParameterComputer translationTransformationComputer;
 
     private LoadingCache<TransformationSchema, RegistrationParameter> cache = CacheBuilder.newBuilder()
         .maximumSize(1000)
@@ -44,12 +45,14 @@ public class RegistrationParameterFactory {
         RigidRegistrationParameterComputer rigidTransformationComputer,
         SimilarityRegistrationParameterComputer similarityTransformationComputer,
         NonLinearRegistrationParameterComputer nonLinearTransformationComputer,
-        AffineRegistrationParameterComputer affineTransformationComputer
+        AffineRegistrationParameterComputer affineTransformationComputer,
+        TranslationRegistrationParameterComputer translationTransformationComputer
     ) {
         this.rigidTransformationComputer = rigidTransformationComputer;
         this.similarityTransformationComputer = similarityTransformationComputer;
         this.nonLinearTransformationComputer = nonLinearTransformationComputer;
         this.affineTransformationComputer = affineTransformationComputer;
+        this.translationTransformationComputer= translationTransformationComputer;
     }
 
     public RegistrationParameter getFrom(TransformationSchema transformationSchema) {
@@ -62,6 +65,7 @@ public class RegistrationParameterFactory {
             case SIMILARITY: return similarityTransformationComputer.compute(transformationSchema.getFiducialSet());
             case AFFINE: return affineTransformationComputer.compute(transformationSchema.getFiducialSet());
             case SPLINE: return  nonLinearTransformationComputer.compute(transformationSchema.getFiducialSet());
+            case TRANSLATION: return translationTransformationComputer.compute(transformationSchema.getFiducialSet());
             default : throw new RuntimeException("Case not implemented");
         }
     }
